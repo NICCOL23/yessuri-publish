@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="부산 우리 동네 집수리 전문가를 찾는 쉬운 방법, YESSURI">
+  <title>YESSURI | 부산 우리 동네 집수리</title>
+  <link rel="stylesheet" href="styles.css?v=11">
+  <script src="data.js?v=6" defer></script>
+  <script src="regions.js?v=1" defer></script>
+  <script src="favorites.js?v=1" defer></script>
+  <script src="app.js?v=12" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">본문 바로가기</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="YESSURI 홈"><span class="brand-mark" aria-hidden="true">Y</span><span>YES<span class="brand-accent">SURI</span><small>우리 동네 집수리</small></span></a>
+      <nav class="desktop-nav" aria-label="주요 메뉴">
+        <a href="find.html">우리동네 기술자</a><a href="favorites.html">관심 기술자</a><a href="cases.html">작업사례</a><a href="register.html">기술자 등록</a>
+      </nav>
+      <button class="text-button login-button" type="button" data-toast="로그인 기능은 다음 단계에서 준비됩니다.">로그인</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow"><span class="eyebrow-dot"></span> 부산 집수리, 가까운 전문가부터</span>
+          <h1>우리 동네 집수리 전문가를 <em>바로 만나세요</em></h1>
+          <p class="hero-description">타일 · 누수 · 하수구 · 페인트 · 목공 · 청소 · 에어컨 · 컴퓨터 수리까지<br class="desktop-break"> 부산 지역의 집수리 분야를 둘러보세요. 첫 출시는 기술자 찾기와 전화 문의를 목표로 합니다. 현재 프로필은 화면 예시입니다.</p>
+          <form class="search-panel" id="search-form" action="find.html" method="get">
+            <label><span>지역 선택</span><select id="hero-region" name="region" aria-label="부산 지역 선택" data-busan-regions></select></label>
+            <label><span>수리 종류</span><select id="hero-category" name="category" aria-label="수리 종류 선택"><option value="전체">어떤 수리가 필요하세요?</option><option>누수·수도</option><option>하수구·변기</option><option>타일</option><option>페인트</option><option>목공</option><option>에어컨</option><option>청소</option><option>철거</option><option>전기·조명</option><option>문·창호</option><option>컴퓨터·IT</option></select></label>
+            <button class="button button-primary search-button" type="submit">우리 동네 기술자 찾기 <span aria-hidden="true">→</span></button>
+          </form>
+          <p class="hero-preview-note">현재 기술자 프로필은 화면 예시이며, 실제 전화 문의는 준비 중입니다.</p>
+        </div>
+        <div class="hero-art"><img src="assets/images/hero.webp" alt="밝은 부산의 집에서 수리 작업을 하는 기술자 일러스트" width="1672" height="941" fetchpriority="high"></div>
+      </div>
+    </section>
+
+    <section class="section" id="categories"><div class="container"><div class="section-head"><div><span class="section-kicker">수리 카테고리</span><h2>어떤 도움이 필요하세요?</h2><p>필요한 분야를 선택하면 관련 기술자를 볼 수 있어요.</p></div></div><div class="category-grid" id="category-grid"></div></div></section>
+
+    <section class="section experts-section" id="experts"><div class="container"><div class="section-head"><div><span class="section-kicker">LOCAL EXPERTS</span><h2>부산 우리 동네 전문가</h2><p>가까운 곳에서 활동하는 전문가를 찾아보세요.</p></div><span class="demo-label">화면 구성 예시</span></div><div class="filter-row" id="region-filters" role="group" aria-label="지역 필터"></div><p class="demo-note">아래 이름·경력·개인/업체 유형은 모두 가상 예시이며 실제 등록·사업자 인증 정보가 아닙니다. 첫 모집 지역과 분야도 아직 정해지지 않았습니다.</p><div class="expert-grid" id="expert-grid"></div><p class="empty-state" id="expert-empty" hidden></p></div></section>
+
+    <section class="launch-note" aria-label="사진 수리 요청 안내"><div class="container launch-note-inner"><p>사진 수리 요청은 첫 출시에서 제공하지 않습니다. 고객 사진은 YESSURI에 접수하거나 저장하지 않습니다.</p></div></section>
+
+    <section class="section" id="cases"><div class="container"><div class="section-head"><div><span class="section-kicker">WORK STORIES</span><h2>작업사례 미리보기</h2><p>어떤 상황에서 무엇을 살펴보는지 예시로 확인해 보세요.</p></div><a class="case-all-link" href="cases.html">전체 예시 보기 <span aria-hidden="true">→</span></a></div><div class="case-grid"><a class="case-card" href="case.html?id=bathroom-tile"><div class="case-visual"><img src="assets/images/case-tile.webp" alt="욕실 타일 보수 장면을 표현한 예시 일러스트" loading="lazy" width="1448" height="1086"></div><div class="case-content"><span class="case-tag">타일 · 예시</span><h3>욕실 타일 보수 예시</h3><p>가상 상황 · 실제 작업 아님</p></div></a><a class="case-card" href="case.html?id=sink-pipe"><div class="case-visual"><img src="assets/images/case-water.webp" alt="싱크대 배관 점검 장면을 표현한 예시 일러스트" loading="lazy" width="1448" height="1086"></div><div class="case-content"><span class="case-tag">누수·수도 · 예시</span><h3>싱크대 배관 점검 예시</h3><p>가상 상황 · 실제 작업 아님</p></div></a><a class="case-card" href="case.html?id=room-light"><div class="case-visual"><img src="assets/images/case-light.webp" alt="실내 조명 교체 장면을 표현한 예시 일러스트" loading="lazy" width="1448" height="1086"></div><div class="case-content"><span class="case-tag">전기·조명 · 예시</span><h3>실내 조명 교체 예시</h3><p>가상 상황 · 실제 작업 아님</p></div></a></div><p class="demo-note">이미지와 설명은 생성된 예시입니다. 실제 완료 작업이나 고객 후기가 아닙니다.</p></div></section>
+
+    <section class="section how-section" id="how"><div class="container"><div class="section-head"><div><span class="section-kicker">HOW IT WORKS</span><h2>YESSURI 시안 둘러보기</h2><p>현재는 예시 프로필 검색과 상세정보 보기를 체험할 수 있습니다.</p></div></div><div class="steps"><div class="step"><span class="step-number">01</span><span class="step-icon">⌕</span><h3>분야와 지역 선택하기</h3><p>부산 지역과 수리 종류로 예시 프로필을 찾아보세요.</p></div><div class="step"><span class="step-number">02</span><span class="step-icon">▣</span><h3>예시 프로필 살펴보기</h3><p>개인/업체 유형과 분야를 구분해 볼 수 있습니다. 실제 기술자 정보는 아직 없습니다.</p></div><div class="step"><span class="step-number">03</span><span class="step-icon">↗</span><h3>전화 문의 준비 중</h3><p>첫 출시는 기술자에게 전화로 문의하는 방향입니다. 현재 예시 프로필에는 번호가 연결되지 않습니다.</p></div></div></div></section>
+
+    <section class="trust-section"><div class="container"><div class="section-head centered"><div><span class="section-kicker">TRUST & SAFETY</span><h2>안심하고 선택할 수 있도록</h2><p>앞으로 YESSURI가 마련할 신뢰 기능입니다.</p></div></div><div class="trust-grid"><div><span>♧</span><h3>전화번호 인증</h3><p>연락 가능한 번호인지 확인합니다.</p></div><div><span>▤</span><h3>사업자 인증</h3><p>업체의 사업자 정보를 확인합니다.</p></div><div><span>▧</span><h3>실제 작업사진</h3><p>완료한 작업을 사진으로 살펴봅니다.</p></div><div><span>♡</span><h3>실제 이용후기</h3><p>이용 경험을 참고해 선택합니다.</p></div><div><span>⚑</span><h3>신고 및 관리</h3><p>문제를 신고하고 관리할 수 있습니다.</p></div></div><p class="trust-disclaimer">위 기능은 향후 제공 예정이며 현재 인증·후기·신고 시스템은 운영되지 않습니다.</p></div></section>
+
+    <section class="register-section" id="register"><div class="container register-inner"><div><span class="register-kicker">부산의 집수리 기술자라면</span><h2>우리 동네 고객을<br>YESSURI에서 만나보세요</h2><p>기술자 등록은 무료로 시작할 예정입니다. 정식 등록 기능은 준비 중입니다.</p></div><a class="button button-white" href="register.html">기술자 무료 등록 안내 <span aria-hidden="true">→</span></a></div></section>
+  </main>
+
+  <footer class="footer"><div class="container footer-inner"><div><a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true">Y</span><span>YES<span class="brand-accent">SURI</span><small>우리 동네 집수리</small></span></a><p>부산 우리 동네 집수리 연결 플랫폼</p></div><div class="footer-links"><a href="#categories">수리 카테고리</a><a href="find.html">기술자 찾기</a><a href="cases.html">작업사례</a><a href="register.html">기술자 등록</a></div></div><div class="container footer-bottom">© 2026 YESSURI. 현재 페이지는 서비스 시안입니다.</div></footer>
+  <nav class="mobile-nav" aria-label="모바일 메뉴"><a href="#top" aria-current="page"><span>⌂</span>홈</a><a href="find.html" class="mobile-request"><span>⌕</span>기술자찾기</a><a href="favorites.html"><span>♡</span>관심</a><a href="cases.html"><span>▧</span>작업사례</a><a href="register.html"><span>♙</span>등록 안내</a></nav>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="YESSURI 수리 요청 작성 시안">
+  <title>수리 요청 시안 | YESSURI</title>
+  <link rel="stylesheet" href="styles.css?v=7">
+  <link rel="stylesheet" href="request.css?v=1">
+  <script src="regions.js?v=1" defer></script>
+  <script src="request.js?v=1" defer></script>
+</head>
+<body class="request-page">
+  <a class="skip-link" href="#main">본문 바로가기</a>
+  <header class="site-header"><div class="container header-inner"><a class="brand" href="index.html" aria-label="YESSURI 홈"><span class="brand-mark" aria-hidden="true">Y</span><span>YES<span class="brand-accent">SURI</span><small>우리 동네 집수리</small></span></a><a class="request-header-link" href="index.html">메인으로 <span aria-hidden="true">→</span></a></div></header>
+
+  <main id="main" class="request-page-main"><div class="container request-page-container">
+    <a class="request-back" href="index.html"><span aria-hidden="true">←</span> 메인페이지로 돌아가기</a>
+    <div class="request-page-heading"><span class="section-kicker">FUTURE REQUEST PREVIEW</span><h1>추후 제공 예정인 수리 요청 시안</h1><p>사진과 상황을 입력하고, 요청 내용이 어떻게 보일지 확인해 보세요.</p></div>
+    <div class="prototype-notice" role="note"><span aria-hidden="true">ⓘ</span><span>사진 수리 요청은 첫 출시 기능에 포함되지 않습니다. 이 화면은 시안이며 입력한 내용과 사진은 전송·게시·저장되지 않습니다.</span></div>
+
+    <div class="request-page-grid">
+      <div class="request-flow">
+        <form id="repair-form" class="request-panel" novalidate>
+          <div class="panel-heading"><div><span class="step-chip">STEP 01</span><h2>수리 내용을 알려주세요</h2></div><span class="required-note">* 필수 입력</span></div>
+          <div class="field-block"><label class="field-label" for="repair-photo">수리할 곳의 사진 <span>*</span></label><label class="photo-picker" for="repair-photo"><span class="photo-picker-symbol" aria-hidden="true">＋</span><strong>사진 선택하기</strong><small>JPG, PNG, WEBP · 1장 · 최대 10MB</small><input id="repair-photo" type="file" accept="image/jpeg,image/png,image/webp" required aria-describedby="photo-error"></label><p class="field-error" id="photo-error" role="alert" hidden></p><div class="photo-preview" id="photo-preview" hidden><img id="photo-preview-image" src="" alt="선택한 수리 사진 미리보기"><div><strong id="photo-file-name"></strong><span>선택한 사진은 이 브라우저 화면에서만 미리 보여줍니다.</span></div><button id="remove-photo" type="button" aria-label="선택한 사진 제거">×</button></div></div>
+          <div class="request-field-row"><div class="field-block"><label class="field-label" for="repair-type">수리 종류 <span>*</span></label><select id="repair-type" required><option value="">선택해 주세요</option><option>누수·수도</option><option>하수구·변기</option><option>타일</option><option>페인트</option><option>목공</option><option>에어컨</option><option>청소</option><option>철거</option><option>전기·조명</option><option>문·창호</option><option>컴퓨터·IT</option></select></div><div class="field-block"><label class="field-label" for="repair-region">부산 지역 <span>*</span></label><select id="repair-region" required data-busan-regions><option value="">선택해 주세요</option></select></div></div>
+          <div class="field-block"><label class="field-label" for="repair-description">문제 설명 <span>*</span></label><textarea id="repair-description" rows="6" minlength="10" maxlength="500" required placeholder="예: 싱크대 아래에서 어제부터 물이 새고 있습니다. 배관 연결 부근이 젖어 있어요." aria-describedby="description-hint description-error"></textarea><div class="field-hint"><span id="description-hint">상태와 시작 시점을 10자 이상 적어주세요.</span><span id="description-count">0 / 500</span></div><p class="field-error" id="description-error" role="alert" hidden></p></div>
+          <button class="button button-primary full-width flow-button" type="submit">작성 내용 확인하기 <span aria-hidden="true">→</span></button>
+        </form>
+
+        <section id="review-panel" class="request-panel" aria-labelledby="review-heading" hidden><div class="panel-heading"><div><span class="step-chip">STEP 02</span><h2 id="review-heading">작성 내용을 확인해 주세요</h2></div></div><p class="review-help">아래 내용은 이 화면에서만 보입니다. 확인을 마쳐도 전송되지 않습니다.</p><div class="review-photo"><img id="review-photo-image" src="" alt="수리 요청 사진 미리보기"></div><dl class="review-list"><div><dt>수리 종류</dt><dd id="review-type"></dd></div><div><dt>부산 지역</dt><dd id="review-region"></dd></div><div><dt>문제 설명</dt><dd id="review-description"></dd></div></dl><div class="review-actions"><button id="edit-request" class="review-edit" type="button">내용 수정하기</button><button id="finish-request" class="button button-primary" type="button">시안 확인 마치기 <span aria-hidden="true">→</span></button></div></section>
+
+        <section id="result-panel" class="request-panel result-panel" aria-labelledby="result-heading" hidden><span class="result-symbol" aria-hidden="true">✓</span><h2 id="result-heading">입력 내용을 확인했습니다</h2><p>현재는 시안이므로 <strong>수리 요청이 전송되거나 게시되지 않았습니다.</strong> 사진과 입력 내용도 저장되지 않습니다.</p><button id="back-to-edit" class="button button-primary" type="button">작성 화면으로 돌아가기</button></section>
+      </div>
+
+      <aside class="request-guide"><div class="guide-card"><span class="section-kicker">간단하게 시작하세요</span><h2>이렇게 적어주시면 좋아요</h2><ol><li><span>01</span><div><strong>문제가 보이는 사진</strong><p>수리할 곳이 잘 보이는 사진을 선택하세요.</p></div></li><li><span>02</span><div><strong>필요한 수리 종류</strong><p>가장 가까운 분야 하나를 골라 주세요.</p></div></li><li><span>03</span><div><strong>현재 상태 설명</strong><p>언제부터, 어떤 문제가 생겼는지 적어 주세요.</p></div></li></ol></div><p class="guide-disclaimer">정식 요청·사진 업로드 기능은 준비 중입니다.</p></aside>
+    </div>
+  </div></main>
+
+  <footer class="footer request-page-footer"><div class="container footer-inner"><div><a class="brand footer-brand" href="index.html"><span class="brand-mark" aria-hidden="true">Y</span><span>YES<span class="brand-accent">SURI</span><small>우리 동네 집수리</small></span></a><p>부산 우리 동네 집수리 연결 플랫폼</p></div><div class="footer-links"><a href="find.html">기술자 찾기</a><a href="cases.html">작업사례</a><a href="register.html">기술자 등록</a></div></div><div class="container footer-bottom">© 2026 YESSURI. 현재 페이지는 서비스 시안입니다.</div></footer>
+</body>
+</html>

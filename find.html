@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="부산 지역과 수리 종류로 YESSURI 기술자 예시 프로필을 찾아보세요.">
+  <title>우리 동네 기술자 찾기 | YESSURI</title>
+  <link rel="stylesheet" href="styles.css?v=12">
+  <link rel="stylesheet" href="find.css?v=9">
+  <script src="data.js?v=6" defer></script>
+  <script src="regions.js?v=1" defer></script>
+  <script src="favorites.js?v=1" defer></script>
+  <script src="compare.js?v=1" defer></script>
+  <script src="find.js?v=12" defer></script>
+</head>
+<body class="find-page">
+  <a class="skip-link" href="#main">본문 바로가기</a>
+  <header class="site-header"><div class="container header-inner"><a class="brand" href="index.html" aria-label="YESSURI 홈"><span class="brand-mark" aria-hidden="true">Y</span><span>YES<span class="brand-accent">SURI</span><small>우리 동네 집수리</small></span></a><nav class="find-header-nav" aria-label="주요 메뉴"><a href="find.html" aria-current="page">기술자찾기</a><a href="favorites.html">관심 기술자</a><a href="cases.html">작업사례</a><a href="register.html">기술자 등록</a></nav><a class="find-home-link" href="index.html">홈으로 <span aria-hidden="true">→</span></a></div></header>
+
+  <main id="main" class="find-main">
+    <section class="find-intro"><div class="container"><span class="section-kicker">LOCAL EXPERTS IN BUSAN</span><h1>우리 동네 기술자 찾기</h1><p>이름이나 수리 분야를 검색하고 부산 지역·기술자 유형을 선택해 예시 프로필을 살펴보세요.</p></div></section>
+    <div class="container find-content"><div class="find-notice"><span aria-hidden="true">ⓘ</span><span>아래 이름·경력·개인/업체 유형은 가상 예시입니다. 실제 등록 기술자·사업자 인증·후기 정보가 아니며 전화번호도 연결되지 않습니다.</span></div>
+      <form class="find-filter-panel" id="find-filter-form"><div class="find-filter-title"><h2>조건 선택</h2><button id="reset-filters" type="button">조건 초기화</button></div><div class="find-filter-fields"><label for="find-query" class="find-query-field">이름 또는 수리 분야<input id="find-query" name="q" type="search" maxlength="80" autocomplete="off" placeholder="예: 타일, 누수, 집수리"></label><label for="find-region">부산 지역<select id="find-region" name="region" data-busan-regions></select></label><label for="find-category">수리 종류<select id="find-category" name="category"><option value="전체">전체 분야</option><option>누수·수도</option><option>하수구·변기</option><option>타일</option><option>페인트</option><option>목공</option><option>에어컨</option><option>청소</option><option>철거</option><option>전기·조명</option><option>문·창호</option><option>컴퓨터·IT</option></select></label><label for="find-type">기술자 유형<select id="find-type" name="type"><option value="전체">전체</option><option value="개인 기술자 유형">개인 기술자</option><option value="사업자·업체 유형">사업자·업체</option></select></label><button class="button button-primary" type="submit">기술자 찾기 <span aria-hidden="true">→</span></button></div></form>
+      <p class="find-region-hint" id="find-region-hint">빠른 지역 선택: 좌우로 넘겨 부산의 모든 구·군을 볼 수 있습니다. 키보드에서는 Tab으로 버튼을 선택하세요.</p>
+      <div class="find-region-chips" id="find-region-chips" role="group" aria-label="빠른 지역 선택" aria-describedby="find-region-hint"></div>
+      <div class="find-results-heading"><div><span class="section-kicker">SEARCH RESULTS</span><h2>검색 결과 <strong id="result-count" aria-live="polite">0</strong>개</h2></div><div class="find-results-actions"><label for="find-sort">결과 정렬<select id="find-sort" name="sort"><option value="default">기본순</option><option value="name">이름순</option><option value="areas">출동 가능 지역 수순</option></select></label><span class="find-demo-badge">예시 프로필</span></div></div>
+      <div class="compare-toolbar"><a href="compare.html">비교 보기 <strong id="compare-count">0</strong>/3 <span aria-hidden="true">→</span></a><p id="compare-status" role="status" aria-live="polite"></p></div>
+      <p class="find-current-conditions" id="find-current-conditions"></p><p class="find-results-live sr-only" id="find-results-live" role="status" aria-live="polite" aria-atomic="true"></p>
+      <div class="find-grid" id="find-grid"></div>
+      <div class="find-empty" id="find-empty" hidden><span aria-hidden="true">⌕</span><h3 id="find-empty-heading">조건에 맞는 예시 프로필이 없습니다</h3><p>검색어·지역·수리 종류·기술자 유형을 바꾸거나 조건을 초기화해 보세요.</p><button id="empty-reset" class="button button-primary" type="button">전체 기술자 보기</button></div>
+    </div>
+  </main>
+
+  <footer class="footer find-footer"><div class="container footer-inner"><div><a class="brand footer-brand" href="index.html"><span class="brand-mark" aria-hidden="true">Y</span><span>YES<span class="brand-accent">SURI</span><small>우리 동네 집수리</small></span></a><p>부산 우리 동네 집수리 연결 플랫폼</p></div><div class="footer-links"><a href="index.html">홈</a><a href="cases.html">작업사례</a><a href="register.html">기술자 등록</a></div></div><div class="container footer-bottom">© 2026 YESSURI. 현재 페이지는 서비스 시안입니다.</div></footer>
+  <nav class="mobile-nav" aria-label="모바일 메뉴"><a href="index.html"><span>⌂</span>홈</a><a href="find.html" class="mobile-request" aria-current="page"><span>⌕</span>기술자찾기</a><a href="favorites.html"><span>♡</span>관심</a><a href="cases.html"><span>▧</span>작업사례</a><a href="register.html"><span>♙</span>등록 안내</a></nav>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
