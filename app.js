@@ -3,19 +3,6 @@ const categories = [
   ['목공','⌑'], ['에어컨','❄'], ['청소','✧'], ['철거','▧'],
   ['전기·조명','✳'], ['문·창호','▣'], ['컴퓨터·IT','⌘'], ['전체보기','＋']
 ];
-const categoryImages = {
-  '누수·수도':'expert-water.webp',
-  '하수구·변기':'case-water.webp',
-  '타일':'expert-tile.webp',
-  '페인트':'expert-paintwood.webp',
-  '목공':'expert-paintwood.webp',
-  '에어컨':'category-aircon.webp',
-  '청소':'expert-clean.webp',
-  '철거':'category-demolition.webp',
-  '전기·조명':'expert-light.webp',
-  '문·창호':'category-door.webp',
-  '컴퓨터·IT':'expert-it.webp'
-};
 const regions = window.YESSURI_REGIONS;
 const experts = window.YESSURI_PUBLIC_EXPERTS;
 const categoryGrid = document.querySelector('#category-grid');
@@ -30,9 +17,7 @@ let selectedCategory = '전체';
 categories.forEach(([name, icon]) => {
   const button = document.createElement('button');
   button.type = 'button'; button.className = 'category-card';
-  const visual = categoryImages[name]
-    ? `<img src="assets/images/${categoryImages[name]}" alt="" loading="lazy" width="1448" height="1086">`
-    : icon;
+  const visual = `<img src="assets/images/service-icons.svg#icon${categories.findIndex(([label])=>label===name)+1}" alt="" width="160" height="160" loading="lazy">`;
   button.innerHTML = `<span class="category-icon" aria-hidden="true">${visual}</span><span>${name}</span>`;
   button.addEventListener('click', () => {
     const query = new URLSearchParams({region:heroRegion.value, category:name === '전체보기' ? '전체' : name});
