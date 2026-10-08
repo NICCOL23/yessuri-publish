@@ -17,9 +17,17 @@ const compareCount = document.querySelector('#compare-count');
 const currentConditions = document.querySelector('#find-current-conditions');
 const resultsLive = document.querySelector('#find-results-live');
 let announcementTimer;
+let requestedCategories = [];
+let requestedService = '';
+const serviceNotice = document.createElement('p');
+serviceNotice.className = 'demo-note';
+serviceNotice.setAttribute('role','status');
+document.querySelector('#find-filter-form').after(serviceNotice);
 function updateCompareCount() { compareCount.textContent = String(window.YESSURI_COMPARE.selectedExperts().length); }
 function loadFiltersFromUrl() {
   const params = new URLSearchParams(window.location.search);
+  requestedCategories = (params.get('categories') || '').split(',').filter(field => validCategories.includes(field) && field !== '전체');
+  requestedService = (params.get('service') || '').slice(0, 80);
   queryInput.value = (params.get('q') || '').slice(0, 80);
   regionSelect.value = validRegions.includes(params.get('region')) ? params.get('region') : '전체';
   categorySelect.value = validCategories.includes(params.get('category')) ? params.get('category') : '전체';
@@ -29,7 +37,9 @@ function loadFiltersFromUrl() {
 
 function updateUrl() {
   const url = new URL(window.location.href);
-  for (const key of ['q', 'region', 'category', 'type', 'sort']) url.searchParams.delete(key);
+  for (const key of ['q', 'region', 'category', 'type', 'sort', 'categories', 'service']) url.searchParams.delete(key);
+  if (requestedCategories.length) url.searchParams.set('categories', requestedCategories.join(','));
+  if (requestedService) url.searchParams.set('service', requestedService);
   const query = queryInput.value.trim().replace(/\s+/g, ' ');
   if (query) url.searchParams.set('q', query);
   if (regionSelect.value !== '전체') url.searchParams.set('region', regionSelect.value);
@@ -66,7 +76,7 @@ function renderDirectory(syncUrl = true, focusRegion = false) {
   const query = queryInput.value.trim().replace(/\s+/g, ' ').normalize('NFKC').toLocaleLowerCase('ko-KR');
   const matches = directoryExperts().filter(expert =>
     window.YESSURI_SERVES_REGION(expert, regionSelect.value) &&
-    (categorySelect.value === '전체' || expert.fields.includes(categorySelect.value)) &&
+    (requestedCategories.length ? requestedCategories.some(field => expert.fields.includes(field)) : (categorySelect.value === '전체' || expert.fields.includes(categorySelect.value))) &&
     (typeSelect.value === '전체' || expert.profileType === typeSelect.value) &&
     (!query || [expert.name, ...expert.fields].join(' ').normalize('NFKC').toLocaleLowerCase('ko-KR').includes(query))
   );
@@ -75,6 +85,8 @@ function renderDirectory(syncUrl = true, focusRegion = false) {
   } else if (sortSelect.value === 'areas') {
     matches.sort((a, b) => (b.serviceAreas?.length || 0) - (a.serviceAreas?.length || 0));
   }
+  serviceNotice.hidden = !requestedService;
+  serviceNotice.textContent = requestedService ? `선택한 수리: ${requestedService}. 세부 작업 가능 여부는 전문가에게 확인해 주세요. 상위 분야 기준으로 검색합니다.` : '';
   resultGrid.replaceChildren();
   resultCount.textContent = String(matches.length);
   emptyState.hidden = matches.length !== 0;
@@ -147,6 +159,7 @@ function renderDirectory(syncUrl = true, focusRegion = false) {
 }
 
 function resetFilters() {
+  requestedCategories = []; requestedService = '';
   queryInput.value = '';
   regionSelect.value = '전체';
   categorySelect.value = '전체';
@@ -161,7 +174,7 @@ document.querySelector('#find-filter-form').addEventListener('submit', event => 
   document.querySelector('.find-results-heading').scrollIntoView({behavior:'smooth',block:'start'});
 });
 regionSelect.addEventListener('change', () => renderDirectory());
-categorySelect.addEventListener('change', () => renderDirectory());
+categorySelect.addEventListener('change', () => { requestedCategories = []; requestedService = ''; renderDirectory(); });
 typeSelect.addEventListener('change', () => renderDirectory());
 sortSelect.addEventListener('change', () => renderDirectory());
 queryInput.addEventListener('input', event => { if (!event.isComposing) renderDirectory(); });
