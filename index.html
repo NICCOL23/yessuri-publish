@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="styles.css?v=11">
   <link rel="stylesheet" href="home-refresh.css?v=1">
   <script src="home-refresh.js?v=1" defer></script>
+  <link rel="stylesheet" href="service-picker.css?v=1">
+  <script src="service-picker.js?v=1" defer></script>
   <script src="data.js?v=6" defer></script>
   <script src="regions.js?v=1" defer></script>
   <script src="favorites.js?v=1" defer></script>
@@ -45,9 +47,10 @@
         <div class="home-hero-controls">
           <form class="home-search" id="search-form" action="find.html" method="get">
             <label class="home-region"><span class="visually-hidden">부산 지역 선택</span><select id="hero-region" name="region" data-busan-regions><option value="">부산 지역 선택</option></select></label>
-            <div class="home-query"><label class="visually-hidden" for="hero-query">수리명 검색</label><input id="hero-query" name="q" type="search" maxlength="80" placeholder="어디를 수리하고 싶으세요?"><button type="submit">검색</button></div>
+            <div class="home-query"><label class="visually-hidden" for="hero-query">수리명 검색</label><input id="hero-query" name="q" type="search" maxlength="80" placeholder="어디를 수리하고 싶으세요?" autocomplete="off" aria-haspopup="dialog" aria-controls="service-panel" aria-expanded="false"><button type="submit">검색</button></div>
           </form>
           <a class="home-quote" href="request.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h4l2-3h4l2 3h4v15H4Z"/><circle cx="12" cy="13" r="4"/></svg> 사진으로 집수리 견적 요청 <span aria-hidden="true">›</span></a>
+          <p id="service-selection" class="service-selection" role="status" hidden></p>
           <p class="home-service-note">현재 예시 프로필 검색과 사진 요청 시안을 이용할 수 있습니다. 실제 견적 접수·로그인은 준비 중입니다.</p>
         </div>
       </div>
@@ -70,6 +73,15 @@
 
   <footer class="footer"><div class="container footer-inner"><div><a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true">Y</span><span>YES<span class="brand-accent">SURI</span><small>우리 동네 집수리</small></span></a><p>부산 우리 동네 집수리 연결 플랫폼</p></div><div class="footer-links"><a href="#categories">수리 카테고리</a><a href="find.html">기술자 찾기</a><a href="cases.html">작업사례</a><a href="register.html">기술자 등록</a></div></div><div class="container footer-bottom">© 2026 YESSURI. 현재 페이지는 서비스 시안입니다.</div></footer>
   <nav class="mobile-nav" aria-label="모바일 메뉴"><a href="#top" aria-current="page"><span>⌂</span>홈</a><a href="find.html" class="mobile-request"><span>⌕</span>기술자찾기</a><a href="favorites.html"><span>♡</span>관심</a><a href="cases.html"><span>▧</span>작업사례</a><a href="register.html"><span>♙</span>등록 안내</a></nav>
+  <div class="service-backdrop" hidden></div>
+  <section id="service-panel" class="service-panel" role="dialog" aria-labelledby="service-panel-title" hidden>
+    <header class="service-panel-head"><div><span>집수리 분야 선택</span><h2 id="service-panel-title">어디를 수리하고 싶으세요?</h2></div><button class="service-close" type="button" aria-label="수리 분야 선택 닫기">×</button></header>
+    <label class="service-mobile-query">직접 입력<input id="service-mobile-query" type="search" maxlength="80" placeholder="수리명이나 증상을 입력하세요" autocomplete="off"></label>
+    <div class="service-tools"><button class="service-back" type="button" hidden>← 전체 분야</button><button class="service-clear" type="button">선택 지우기</button></div>
+    <p class="service-panel-note" role="status"></p>
+    <div class="service-options"></div>
+    <button class="service-apply" type="button">선택 완료</button>
+  </section>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
