@@ -7,6 +7,8 @@
   <meta name="description" content="부산 우리 동네 집수리 전문가를 찾는 쉬운 방법, YESSURI">
   <title>YESSURI | 부산 우리 동네 집수리</title>
   <link rel="stylesheet" href="styles.css?v=11">
+  <link rel="stylesheet" href="home-refresh.css?v=1">
+  <script src="home-refresh.js?v=1" defer></script>
   <script src="data.js?v=6" defer></script>
   <script src="regions.js?v=1" defer></script>
   <script src="favorites.js?v=1" defer></script>
@@ -14,31 +16,40 @@
 </head>
 <body>
   <a class="skip-link" href="#main">본문 바로가기</a>
-  <header class="site-header">
+  <header class="site-header home-header">
     <div class="container header-inner">
-      <a class="brand" href="#top" aria-label="YESSURI 홈"><span class="brand-mark" aria-hidden="true">Y</span><span>YES<span class="brand-accent">SURI</span><small>우리 동네 집수리</small></span></a>
-      <nav class="desktop-nav" aria-label="주요 메뉴">
-        <a href="find.html">우리동네 기술자</a><a href="favorites.html">관심 기술자</a><a href="cases.html">작업사례</a><a href="register.html">기술자 등록</a>
+      <a class="brand home-brand" href="#top" aria-label="YESSURI 예스수리 홈">YESSURI <span>예스수리</span></a>
+      <button class="menu-toggle" type="button" aria-controls="home-menu" aria-expanded="false" aria-label="메뉴 열기">☰</button>
+      <nav id="home-menu" class="home-menu" aria-label="주요 메뉴">
+        <a href="request.html">집수리 견적 요청</a>
+        <a href="find.html">전문가 찾기</a>
+        <a class="technician-link" href="register.html">기술자 등록</a>
+        <a href="#how">이용 안내</a>
+        <button class="text-button home-login" type="button" data-toast="로그인 기능은 다음 단계에서 준비됩니다.">로그인</button>
       </nav>
-      <button class="text-button login-button" type="button" data-toast="로그인 기능은 다음 단계에서 준비됩니다.">로그인</button>
     </div>
   </header>
 
   <main id="main">
-    <section class="hero" id="top">
-      <div class="container hero-grid">
+    <section class="hero home-hero" id="top" aria-labelledby="hero-heading">
+      <div class="container home-hero-grid">
         <div class="hero-copy">
-          <span class="eyebrow"><span class="eyebrow-dot"></span> 부산 집수리, 가까운 전문가부터</span>
-          <h1>우리 동네 집수리 전문가를 <em>바로 만나세요</em></h1>
-          <p class="hero-description">타일 · 누수 · 하수구 · 페인트 · 목공 · 청소 · 에어컨 · 컴퓨터 수리까지<br class="desktop-break"> 부산 지역의 집수리 분야를 둘러보세요. 첫 출시는 기술자 찾기와 전화 문의를 목표로 합니다. 현재 프로필은 화면 예시입니다.</p>
-          <form class="search-panel" id="search-form" action="find.html" method="get">
-            <label><span>지역 선택</span><select id="hero-region" name="region" aria-label="부산 지역 선택" data-busan-regions></select></label>
-            <label><span>수리 종류</span><select id="hero-category" name="category" aria-label="수리 종류 선택"><option value="전체">어떤 수리가 필요하세요?</option><option>누수·수도</option><option>하수구·변기</option><option>타일</option><option>페인트</option><option>목공</option><option>에어컨</option><option>청소</option><option>철거</option><option>전기·조명</option><option>문·창호</option><option>컴퓨터·IT</option></select></label>
-            <button class="button button-primary search-button" type="submit">우리 동네 기술자 찾기 <span aria-hidden="true">→</span></button>
-          </form>
-          <p class="hero-preview-note">현재 기술자 프로필은 화면 예시이며, 실제 전화 문의는 준비 중입니다.</p>
+          <span class="eyebrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> 부산 우리 동네 집수리</span>
+          <h1 id="hero-heading">집에 문제가 생겼나요?<br><span>예스수리</span>에서 해결하세요</h1>
+          <p class="hero-description">작은 보수부터 생활 속 수리까지,<br class="mobile-break"> 부산 집수리 전문가 연결</p>
         </div>
-        <div class="hero-art"><img src="assets/images/hero.webp" alt="밝은 부산의 집에서 수리 작업을 하는 기술자 일러스트" width="1672" height="941" fetchpriority="high"></div>
+        <div class="home-hero-art">
+          <img class="hero-main-photo" src="assets/images/hero-repair-photo.svg" alt="밝은 주방에서 싱크대 배관을 점검하는 기술자를 표현한 생성 사진" width="1536" height="1024" fetchpriority="high">
+          <img class="hero-inset-photo" src="assets/images/hero-tile-photo.svg" alt="욕실 타일을 보수하는 기술자를 표현한 생성 사진" width="1536" height="1024">
+        </div>
+        <div class="home-hero-controls">
+          <form class="home-search" id="search-form" action="find.html" method="get">
+            <label class="home-region"><span class="visually-hidden">부산 지역 선택</span><select id="hero-region" name="region" data-busan-regions><option value="">부산 지역 선택</option></select></label>
+            <div class="home-query"><label class="visually-hidden" for="hero-query">수리명 검색</label><input id="hero-query" name="q" type="search" maxlength="80" placeholder="어디를 수리하고 싶으세요?"><button type="submit">검색</button></div>
+          </form>
+          <a class="home-quote" href="request.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h4l2-3h4l2 3h4v15H4Z"/><circle cx="12" cy="13" r="4"/></svg> 사진으로 집수리 견적 요청 <span aria-hidden="true">›</span></a>
+          <p class="home-service-note">현재 예시 프로필 검색과 사진 요청 시안을 이용할 수 있습니다. 실제 견적 접수·로그인은 준비 중입니다.</p>
+        </div>
       </div>
     </section>
 
