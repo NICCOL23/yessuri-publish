@@ -1,0 +1,12 @@
+.category-card{min-height:142px;justify-content:center;padding:18px 10px;gap:14px;border-color:#dce8e9}.category-card:nth-child(n) .category-icon{width:64px;height:64px;border-radius:20px;background:#eaf7f6;color:#008b95}.category-card:nth-child(2n) .category-icon{background:#eef2f7;color:#13294b}.category-icon svg{width:36px;height:36px}.category-card:hover,.category-card:focus-visible{border-color:#008b95;box-shadow:0 8px 24px #008b9514}.category-card:focus-visible{outline:3px solid #008b95;outline-offset:3px}.category-helper{display:flex;align-items:center;gap:18px;padding:14px 24px;margin-bottom:24px;border-radius:18px;background:#f0f9f8}.category-helper img{width:80px;height:80px;object-fit:contain;flex:none}.category-helper strong{font-size:18px;color:#13294b}.category-helper p{margin:6px 0 0;color:#526a7c;font-size:13px}.category-helper a{margin-left:auto;color:#008b95;font-size:13px;font-weight:800;white-space:nowrap}.category-helper a:focus-visible{outline:3px solid #008b95;outline-offset:5px}@media(max-width:760px){.category-card{min-height:122px;padding:14px 5px;gap:10px}.category-card:nth-child(n) .category-icon{width:50px;height:50px;border-radius:16px}.category-icon svg{width:30px;height:30px}.category-helper{padding:14px 12px;gap:12px;flex-wrap:wrap}.category-helper img{width:60px;height:60px}.category-helper>div{flex:1;min-width:0}.category-helper strong{font-size:15px}.category-helper p{font-size:12px}.category-helper a{margin-left:72px}}
+#categories .section-kicker{font-family:inherit;color:#008b95}
+@media(max-width:760px){.category-helper>div{flex:1 1 calc(100% - 84px)}.category-helper a{flex:0 0 calc(100% - 72px)}}
+
+/* Let the colored objects carry the visual hierarchy. */
+.category-card:nth-child(n){min-height:142px;border:1px solid #e9edf2;background:white;box-shadow:none;padding:12px 8px;gap:8px}
+.category-card:nth-child(n) .category-icon{width:88px;height:88px;border:0;background:white;box-shadow:none;border-radius:0;overflow:visible}
+.category-icon:before{display:none}.category-card .category-icon img{width:100%;height:100%;object-fit:contain;border-radius:0}
+.category-card:hover{border-color:#008b95;background:#f7fcfc;box-shadow:0 5px 16px #13294b08}
+@media(max-width:760px){.category-card:nth-child(n){min-height:122px;padding:8px 4px;gap:6px}.category-card:nth-child(n) .category-icon{width:74px;height:74px}}
+
+.category-helper{background:linear-gradient(110deg,#eafaf6,#ecf4ff 65%,#f4eeff);border:1px solid #d6e9eb}
