@@ -58,11 +58,12 @@
     if (!panel.hidden) return;
     panel.hidden = false;
     query.setAttribute('aria-expanded','true');
+    document.querySelector('.service-query-toggle').setAttribute('aria-expanded','true');
     mobileQuery.value = query.value;
     panel.setAttribute('aria-modal',String(mobile.matches));
     backdrop.hidden = !mobile.matches;
     if (mobile.matches) { lockBackground(); panel.querySelector('.service-close').focus(); }
-    currentField = null;
+    currentField = selected && selected.details.length ? selected : null;
     render();
     positionPanel();
   }
@@ -71,6 +72,7 @@
     if (inertNodes.length) unlockBackground();
     panel.hidden = true; backdrop.hidden = true;
     query.setAttribute('aria-expanded','false');
+    document.querySelector('.service-query-toggle').setAttribute('aria-expanded','false');
     if (restore) { ignoreFocus = true; query.focus({preventScroll:true}); ignoreFocus = false; }
   }
   function choose(field, sub = '', keepOpen = false) {
@@ -80,9 +82,19 @@
     if (keepOpen) { currentField = field; render(); options.querySelector('button')?.focus(); }
     else closePanel();
   }
-  function button(label, action, active = false, unsupported = false) {
+  function button(label, action, active = false, unsupported = false, hasDetails = false) {
     const el = document.createElement('button'); el.type = 'button'; el.className = 'service-option';
-    el.textContent = label; el.setAttribute('aria-pressed',String(active));
+    const text = document.createElement('span'); text.textContent = label; el.append(text);
+    el.setAttribute('aria-pressed',String(active));
+    if (hasDetails) {
+      el.classList.add('service-option-parent');
+      el.setAttribute('aria-label',label + ', 세부 항목 보기');
+      const icon = document.createElementNS('http://www.w3.org/2000/svg','svg');
+      icon.setAttribute('viewBox','0 0 20 20'); icon.setAttribute('aria-hidden','true');
+      icon.setAttribute('focusable','false'); icon.classList.add('service-option-chevron');
+      const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('d','M5 7.5 10 12.5 15 7.5'); icon.append(path); el.append(icon);
+    }
     if (unsupported) { const hint=document.createElement('small'); hint.textContent='검색 지원 준비 중'; el.append(hint); }
     el.addEventListener('click',action);options.append(el);
   }
@@ -91,14 +103,14 @@
     if (currentField) {
       panel.querySelector('h2').textContent = currentField.label;
       note.textContent = currentField.categories.length ? '세부 선택은 선택 사항입니다. 전체 분야로 검색해도 됩니다.' : '이 분야는 현재 기술자 검색 지원 준비 중입니다.';
-      button('이 분야 전체',()=>choose(currentField),selected===currentField&&!detail);
+      button('이 분야 전체',()=>choose(currentField,'',true),selected===currentField&&!detail);
       currentField.details.forEach(sub=>button(sub,()=>choose(currentField,sub),selected===currentField&&detail===sub));
     } else {
       panel.querySelector('h2').textContent = '어디를 수리하고 싶으세요?';
       note.textContent = '분야를 선택하거나 수리명을 직접 입력하세요.';
       const term = selected && query.value===selectedText() ? '' : normalize(query.value);
       const ranked = fields.map((f,index)=>({f,index,match:!!term&&normalize([f.label,...f.details].join(' ')).includes(term)})).sort((a,b)=>Number(b.match)-Number(a.match)||a.index-b.index);
-      ranked.forEach(({f})=>button(f.label,()=>choose(f,'',f.details.length>0),selected===f,!f.categories.length));
+      ranked.forEach(({f})=>button(f.label,()=>choose(f,'',f.details.length>0),selected===f,!f.categories.length,f.details.length>0));
     }
   }
   function edit(source) {
@@ -108,6 +120,7 @@
   }
   query.addEventListener('focus',()=>{if(!ignoreFocus)openPanel();});
   query.addEventListener('click',openPanel);
+  document.querySelector('.service-query-trigger').addEventListener('click',openPanel);
   query.addEventListener('input',()=>edit(query));
   mobileQuery.addEventListener('input',()=>edit(mobileQuery));
   for (const input of [query,mobileQuery]) {
@@ -125,7 +138,7 @@
   panel.querySelector('.service-close').addEventListener('click',()=>closePanel());
   panel.querySelector('.service-apply').addEventListener('click',()=>closePanel());
   backdrop.addEventListener('click',()=>closePanel());
-  document.addEventListener('pointerdown',event=>{if(!panel.hidden&&!mobile.matches&&!panel.contains(event.target)&&!query.contains(event.target))closePanel(false);});
+  document.addEventListener('pointerdown',event=>{if(!panel.hidden&&!mobile.matches&&!panel.contains(event.target)&&!document.querySelector('.service-query-trigger').contains(event.target))closePanel(false);});
   document.addEventListener('keydown',event=>{
     if(panel.hidden)return;
     if(event.key==='Escape'){event.preventDefault();closePanel();return;}
