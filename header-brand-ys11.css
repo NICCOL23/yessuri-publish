@@ -1,0 +1,6 @@
+/* Page-scoped brand replacement. Original shared header styles remain intact. */
+.home-header .ys11-brand{position:relative;display:block;flex:none;width:235px;height:68px;min-width:0}
+.ys11-brand .ys11-lockup{position:absolute;left:0;top:-5px;display:block;width:100%;height:auto}
+.home-header .ys11-brand .ys11-korean{position:absolute;left:28.3%;right:7%;top:53px;text-align:center;font-family:Arial,'Noto Sans KR',sans-serif;font-size:11px;font-weight:700;letter-spacing:.3px;line-height:14px;color:#008b95}
+@media(max-width:900px){.home-header .ys11-brand{width:190px;height:58px}.ys11-brand .ys11-lockup{top:-3px}.home-header .ys11-brand .ys11-korean{top:44px;font-size:10px;line-height:12px}}
+@media(max-width:359px){.home-header .ys11-brand{width:175px}.home-header .ys11-brand .ys11-korean{top:41px}}
