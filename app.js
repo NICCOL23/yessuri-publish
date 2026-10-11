@@ -26,47 +26,32 @@ categories.forEach(([name, icon]) => {
   categoryGrid.append(button);
 });
 
-function renderRegions() {
-  filterRow.replaceChildren();
-  let activeButton;
-  regions.forEach(region => {
-    const button = document.createElement('button');
-    button.type = 'button'; button.className = `filter-chip${selectedRegion === region ? ' active' : ''}`;
-    button.textContent = region === '전체' ? '부산 전체' : region;
-    button.setAttribute('aria-pressed', String(selectedRegion === region));
-    button.addEventListener('click', () => { selectedRegion = region; heroRegion.value = region; renderRegions(); renderExperts(); });
-    filterRow.append(button);
-    if (selectedRegion === region) activeButton = button;
-  });
-  if (selectedRegion !== '전체' && activeButton) {
-    filterRow.scrollLeft = activeButton.offsetLeft - filterRow.offsetLeft - (filterRow.clientWidth - activeButton.clientWidth) / 2;
-  }
+
+function renderRegions(){
+ filterRow.replaceChildren();
+ const addSelect=(labelText,values,value,change)=>{
+  const label=document.createElement('label');label.textContent=labelText;
+  const select=document.createElement('select');select.setAttribute('aria-label',labelText);
+  values.forEach(([v,t])=>{const option=document.createElement('option');option.value=v;option.textContent=t;select.append(option)});
+  select.value=value;select.addEventListener('change',()=>change(select.value));label.append(select);filterRow.append(label);
+ };
+ addSelect('활동 지역',regions.map(r=>[r,r==='전체'?'부산 전체':r]),selectedRegion,value=>{selectedRegion=value;heroRegion.value=value;renderExperts()});
+ addSelect('수리 분야',[['전체','수리 분야 전체'],...categories.filter(([n])=>n!=='전체보기').map(([n])=>[n,n])],selectedCategory,value=>{selectedCategory=value;renderExperts()});
 }
-function renderExperts() {
-  const shown = experts().filter(person => window.YESSURI_SERVES_REGION(person, selectedRegion) && (selectedCategory === '전체' || person.fields.includes(selectedCategory)));
-  expertGrid.replaceChildren(); emptyState.hidden = shown.length > 0;
-  if (!shown.length) {
-    const hasRegionExperts = experts().some(person => window.YESSURI_SERVES_REGION(person, selectedRegion));
-    emptyState.textContent = hasRegionExperts
-      ? '선택한 조건에 맞는 예시 프로필이 없습니다. 다른 지역이나 수리 종류를 선택해 주세요.'
-      : '해당 지역의 예시 프로필이 없습니다. 다른 지역을 선택해 주세요.';
-  }
-  shown.forEach(person => {
-    const phoneHref = window.YESSURI_PHONE_HREF(person);
-    const card = document.createElement('article'); card.className = 'expert-card';
-    card.innerHTML = `<div class="expert-main"><div class="expert-top"><div class="avatar" aria-hidden="true">${person.icon}</div><div><div class="expert-name">${person.name}</div><div class="expert-region">예시 출동 가능 지역: 부산 ${window.YESSURI_AREAS_LABEL(person)} · ${person.profileType} 예시</div></div></div><div class="expert-tags">${person.fields.map(field => `<span>${field}</span>`).join('')}</div><div class="expert-meta"><span>${person.career}</span><span>평점·후기 등록 예정</span></div></div><div class="expert-photo"><img src="assets/images/${person.image}" alt="${person.imageAlt}" loading="lazy" width="1448" height="1086"></div><div class="expert-actions"><a href="expert.html?id=${encodeURIComponent(person.id)}" class="outline-button profile-button">프로필 보기</a><button type="button" class="solid-button call-button">${phoneHref ? '전화 연결하기' : '전화 연결 준비 중'}</button></div>`;
-    card.querySelector('.call-button').addEventListener('click', () => {
-      if (phoneHref) window.location.href = phoneHref;
-      else showToast('예시 프로필에는 실제 전화번호가 연결되지 않았습니다.');
-    });
-    const favoriteButton = document.createElement('button');
-    favoriteButton.type = 'button';
-    favoriteButton.className = 'favorite-button';
-    window.YESSURI_FAVORITES.bindButton(favoriteButton, person.id);
-    card.querySelector('.expert-main').append(favoriteButton);
-    expertGrid.append(card);
-  });
+function renderExperts(){
+ const sampleItems=[['누수·수도',0],['하수구·변기',0],['타일',1],['페인트',3],['목공',3],['에어컨',2],['청소',4],['철거',3],['전기·조명',2],['문·창호',3],['컴퓨터·IT',5],['종합 집수리',0]];
+ const source=experts();
+ const shown=sampleItems.map(([field,index])=>({...source[index],name:field,fields:[field],sampleCategory:field})).filter(p=>window.YESSURI_SERVES_REGION(p,selectedRegion)&&(selectedCategory==='전체'||p.fields.includes(selectedCategory)));
+ expertGrid.replaceChildren();emptyState.hidden=shown.length>0;emptyState.textContent='선택한 조건에 맞는 가상 프로필이 없습니다. 다른 지역이나 수리 분야를 선택해주세요.';
+ shown.forEach(person=>{
+  const card=document.createElement('article');card.className='expert-card';
+  card.innerHTML=`<div class="expert-photo"><img src="assets/images/${person.image}" alt="${person.imageAlt}" loading="lazy"><span class="ai-image-label">AI 예시 이미지</span></div><div class="expert-main"><h3 class="expert-name">${person.name}</h3><p class="fiction-label">가상 프로필</p><p class="compact-area">${window.YESSURI_AREAS_LABEL(person)}</p></div><div class="expert-actions"><a class="profile-button" href="expert.html?id=${encodeURIComponent(person.id)}">프로필 보기</a></div>`;
+  const favorite=document.createElement('button');favorite.type='button';favorite.className='favorite-button';window.YESSURI_FAVORITES.bindButton(favorite,person.id);card.querySelector('.expert-photo').append(favorite);expertGrid.append(card);
+ });
+ refreshHearts();
 }
+function refreshHearts(){document.querySelectorAll('#expert-grid .favorite-button').forEach(b=>{const saved=b.getAttribute('aria-pressed')==='true';b.setAttribute('aria-label',saved?'관심 해제':'관심 저장');b.textContent=saved?'♥':'♡'})}
+window.addEventListener('yessuri:favorites-changed',refreshHearts);window.addEventListener('storage',refreshHearts);
 renderRegions(); renderExperts();
 
 let toastTimer;
