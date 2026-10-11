@@ -10,3 +10,12 @@
 @media(max-width:760px){.category-card:nth-child(n){min-height:122px;padding:8px 4px;gap:6px}.category-card:nth-child(n) .category-icon{width:74px;height:74px}}
 
 .category-helper{background:linear-gradient(110deg,#eafaf6,#ecf4ff 65%,#f4eeff);border:1px solid #d6e9eb}
+
+/* Compact category layout on desktop and mobile. */
+.category-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.category-card:nth-child(n){height:96px;min-height:96px;min-width:0;padding:8px;gap:8px;border-color:#e4e9f0;border-radius:14px;font-size:14px;font-weight:700;line-height:20px;transition:border-color .2s,background-color .2s}
+.category-card:nth-child(n) .category-icon{width:48px;height:48px;flex-shrink:0;background:transparent}
+.category-card:hover,.category-card:focus-visible{border-color:#b4c9e8;background:#f7faff;transform:none;box-shadow:none}
+@media(max-width:1000px){.category-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:760px){.category-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:359px){.category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
