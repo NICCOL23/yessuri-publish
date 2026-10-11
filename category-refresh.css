@@ -13,9 +13,9 @@
 
 /* Compact category layout on desktop and mobile. */
 .category-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
-.category-card:nth-child(n){height:96px;min-height:96px;min-width:0;padding:8px;gap:8px;border-color:#e4e9f0;border-radius:14px;font-size:14px;font-weight:700;line-height:20px;transition:border-color .2s,background-color .2s}
-.category-card:nth-child(n) .category-icon{width:48px;height:48px;flex-shrink:0;background:transparent}
-.category-card:hover,.category-card:focus-visible{border-color:#b4c9e8;background:#f7faff;transform:none;box-shadow:none}
+.category-card:nth-child(n){height:80px;min-height:80px;min-width:0;padding:8px;gap:6px;border-color:#e4e9f0;border-radius:12px;font-size:13px;font-weight:700;line-height:20px;transition:border-color .2s,background-color .2s}
+.category-card:nth-child(n) .category-icon{width:36px;height:36px;flex-shrink:0;background:transparent}
+.category-card:hover,.category-card:focus-visible{border-color:#008b95;background:#f2fbfa;transform:none;box-shadow:none}
 @media(max-width:1000px){.category-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:760px){.category-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:359px){.category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
