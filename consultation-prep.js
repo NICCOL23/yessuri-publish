@@ -1,0 +1,1 @@
+(()=>{const root=document.querySelector('.consult-prep');if(!root)return;root.querySelector('.replay').addEventListener('click',()=>{root.querySelectorAll('.card').forEach(c=>{c.style.animation='none';void c.offsetWidth;c.style.animation=''})})})();
