@@ -40,3 +40,37 @@
 .find-card-link:focus-visible{outline-offset:-4px}
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 @media(max-width:760px){.find-region-hint{font-size:12px}.find-region-chips{margin-right:-20px;padding-right:20px}}
+
+/* Scoped directory presentation; original navigation and filter behavior remain intact. */
+.find-page{background:#fff}
+.find-page .find-intro{background:#fff;padding:32px 0 16px}
+.find-page .directory-breadcrumb{font-size:12px;margin:0 0 18px;color:#657a88}
+.find-page .find-intro h1{font-size:36px}
+.find-page .find-content{padding-top:12px}
+.find-page .find-notice{background:#e7f7f5;color:#007e80;border-color:#d4eeea;font-size:13px}
+.find-page .find-filter-panel{box-shadow:none;background:#f6f9fb;border-radius:12px;padding:18px}
+.find-page .find-filter-fields{grid-template-columns:1fr 1fr 1.6fr auto}
+.find-page .find-query-field{grid-column:auto;grid-row:1;grid-column:3}
+.find-page label[for="find-region"]{grid-column:1;grid-row:1}
+.find-page label[for="find-category"]{grid-column:2;grid-row:1}
+.find-page label[for="find-type"]{grid-column:1/3;grid-row:2}
+.find-page .find-filter-fields>.button{grid-column:4;grid-row:1;background:#008b95}
+.find-page .find-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.find-page .find-card{box-shadow:none;border-radius:12px;border-color:#dfe8ee;padding:12px;transform:none}
+.find-page .find-card-link{display:grid;grid-template-columns:38% minmax(0,1fr);grid-template-rows:1fr auto;gap:10px}
+.find-page .directory-photo{position:relative;grid-row:1/3;min-width:0}
+.find-page .directory-photo img{height:100%;min-height:160px;border-radius:8px;object-fit:cover}
+.find-page .directory-photo-label{position:absolute;left:6px;bottom:6px;background:#173353db;color:#fff;border-radius:5px;padding:3px 5px;font-size:10px}
+.find-page .find-card-body{padding:0;display:flex;flex-direction:column;gap:8px}
+.find-page .find-card-name{order:-2;font-size:16px;margin:0;word-break:keep-all}
+.find-page .find-card-fields{order:-1}
+.find-page .find-card-fields span{background:transparent;padding:0;color:#526781;font-size:12px}
+.find-page .find-card-kicker{margin:0;color:#526781;font-size:11px;font-weight:400}
+.find-page .find-card-meta{margin:0;color:#526781;font-size:11px}
+.find-page .find-card-action{border:1px solid #008b95;border-radius:7px;padding:8px;color:#008b95;min-height:38px;font-size:11px}
+.find-page .find-card-controls{padding:12px 0 0;gap:8px}
+.find-page .directory-recruit-note{text-align:center;color:#657a88;font-size:13px;margin:24px 0}
+.find-page .find-current-conditions{padding:12px;background:#f4f8fa;border-radius:8px}
+@media(max-width:1100px){.find-page .find-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.find-page .find-filter-fields{grid-template-columns:1fr 1fr}.find-page .find-query-field{grid-column:1/-1;grid-row:2}.find-page label[for="find-type"]{grid-column:1;grid-row:3}.find-page .find-filter-fields>.button{grid-column:2;grid-row:3}}
+@media(max-width:760px){.find-page .find-grid{grid-template-columns:1fr}.find-page .find-intro h1{font-size:30px}.find-page .find-card-link{display:flex;gap:12px}.find-page .directory-photo img{height:190px;min-height:0;width:100%}.find-page .find-card-name{font-size:18px}.find-page .find-card-kicker,.find-page .find-card-meta{font-size:12px}.find-page .find-card-action{font-size:13px}}
+@media(max-width:390px){.find-page .find-filter-fields{grid-template-columns:1fr}.find-page label[for="find-region"],.find-page label[for="find-category"],.find-page label[for="find-type"],.find-page .find-query-field,.find-page .find-filter-fields>.button{grid-column:1;grid-row:auto}}

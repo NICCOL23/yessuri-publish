@@ -1,4 +1,13 @@
-const directoryExperts = window.YESSURI_PUBLIC_EXPERTS;
+// Presentation-only examples retain original IDs, fields and profile destinations.
+const directoryPresentation = {
+  'bada-repair': {name:'누수·수도 업체명', image:'ai-water.png', keywords:'수도꼭지 배관 누수 점검'},
+  'tile-studio': {name:'타일·문창호 업체명', image:'ai-tile.png', keywords:'욕실 타일 부분 보수 문 창호'},
+  'bright-home': {name:'전기·조명 업체명', image:'ai-light.png', keywords:'전등 스위치 콘센트 에어컨'},
+  'busan-home-repair': {name:'목공·페인트 업체명', image:'ai-wood.png', keywords:'가구 선반 목공 페인트 도장'},
+  'clean-day': {name:'청소 업체명', image:'ai-clean.png', keywords:'입주 생활 청소 철거'},
+  'local-it': {name:'컴퓨터·IT 업체명', image:'ai-it.png', keywords:'부팅 속도 컴퓨터 점검'}
+};
+const directoryExperts = () => window.YESSURI_PUBLIC_EXPERTS().map(expert => ({...expert, ...directoryPresentation[expert.id]}));
 const validRegions = window.YESSURI_REGIONS;
 const validCategories = ['전체','누수·수도','하수구·변기','타일','페인트','목공','에어컨','청소','철거','전기·조명','문·창호','컴퓨터·IT'];
 const validTypes = ['전체','개인 기술자 유형','사업자·업체 유형'];
@@ -78,7 +87,7 @@ function renderDirectory(syncUrl = true, focusRegion = false) {
     window.YESSURI_SERVES_REGION(expert, regionSelect.value) &&
     (requestedCategories.length ? requestedCategories.some(field => expert.fields.includes(field)) : (categorySelect.value === '전체' || expert.fields.includes(categorySelect.value))) &&
     (typeSelect.value === '전체' || expert.profileType === typeSelect.value) &&
-    (!query || [expert.name, ...expert.fields].join(' ').normalize('NFKC').toLocaleLowerCase('ko-KR').includes(query))
+    (!query || [expert.name, expert.keywords || '', ...expert.fields].join(' ').normalize('NFKC').toLocaleLowerCase('ko-KR').includes(query))
   );
   if (sortSelect.value === 'name') {
     matches.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
@@ -98,7 +107,7 @@ function renderDirectory(syncUrl = true, focusRegion = false) {
   }
   const regionName = regionSelect.value === '전체' ? '부산 전체' : regionSelect.value;
   const sortName = sortSelect.selectedOptions[0].textContent;
-  currentConditions.textContent = `현재 지역: ${regionName} · 정렬: ${sortName}`;
+  currentConditions.textContent = `선택 조건: ${regionName} · ${categorySelect.value === '전체' ? '전체 분야' : categorySelect.value}${query ? ` · 검색: ${queryInput.value.trim()}` : ''} · 정렬: ${sortName}`;
   clearTimeout(announcementTimer);
   announcementTimer = window.setTimeout(() => {
     resultsLive.textContent = matches.length
@@ -121,7 +130,7 @@ function renderDirectory(syncUrl = true, focusRegion = false) {
     body.className = 'find-card-body';
     const kicker = document.createElement('span');
     kicker.className = 'find-card-kicker';
-    kicker.textContent = `예시 출동 가능 지역: 부산 ${window.YESSURI_AREAS_LABEL(expert)} · ${expert.profileType} 예시`;
+    kicker.textContent = `출장 지역: ${window.YESSURI_AREAS_LABEL(expert)} (예시)`;
     const name = document.createElement('strong');
     name.className = 'find-card-name';
     name.textContent = expert.name;
@@ -134,12 +143,18 @@ function renderDirectory(syncUrl = true, focusRegion = false) {
     });
     const meta = document.createElement('span');
     meta.className = 'find-card-meta';
-    meta.textContent = `${expert.career} · 평점·후기 등록 예정`;
+    meta.textContent = '출장·진단비: 상담 시 확인';
     body.append(kicker, name, fields, meta);
     const action = document.createElement('span');
     action.className = 'find-card-action';
-    action.innerHTML = '프로필 보기 <span aria-hidden="true">→</span>';
-    profileLink.append(image, body, action);
+    action.innerHTML = '프로필 예시 보기 <span aria-hidden="true">→</span>';
+    const photo = document.createElement('span');
+    photo.className = 'directory-photo';
+    const photoLabel = document.createElement('span');
+    photoLabel.className = 'directory-photo-label';
+    photoLabel.textContent = '예시 사진';
+    photo.append(image, photoLabel);
+    profileLink.append(photo, body, action);
     const favoriteButton = document.createElement('button');
     favoriteButton.type = 'button';
     favoriteButton.className = 'favorite-button find-favorite';
