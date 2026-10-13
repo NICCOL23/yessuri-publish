@@ -26,9 +26,9 @@ categories.forEach(([name, icon], index) => {
 function renderExperts(){
  const source=experts();
  const featured=[
-  {id:'bada-repair',name:'누수·수도 업체명',field:'수도꼭지·배관·누수 점검',image:'ai-water.png'},
-  {id:'bright-home',name:'전기·조명 업체명',field:'전등·스위치·콘센트',image:'ai-light.png'},
-  {id:'tile-studio',name:'타일·문창호 업체명',field:'타일·문·창호 보수',image:'ai-tile.png'}
+  {id:'bada-repair',name:'누수·수도 업체명',field:'수도꼭지·배관·누수 점검',image:'ai-water-yessuri.png'},
+  {id:'bright-home',name:'전기·조명 업체명',field:'전등·스위치·콘센트',image:'ai-light-yessuri.png'},
+  {id:'tile-studio',name:'타일·문창호 업체명',field:'타일·문·창호 보수',image:'ai-tile-yessuri.png'}
  ];
  expertGrid.replaceChildren();
  featured.forEach(example=>{
