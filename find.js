@@ -36,7 +36,14 @@ const serviceNotice = document.createElement('p');
 serviceNotice.className = 'demo-note';
 serviceNotice.setAttribute('role','status');
 document.querySelector('#find-filter-form').after(serviceNotice);
-function updateCompareCount() { compareCount.textContent = String(window.YESSURI_COMPARE.selectedExperts().length); }
+function updateCompareCount() {
+  const count = window.YESSURI_COMPARE.selectedExperts().length;
+  compareCount.textContent = String(count);
+  document.querySelector('#compare-toolbar').hidden = count === 0;
+  document.querySelector('#compare-link').hidden = count < 2;
+  document.querySelector('#compare-guidance').textContent = count === 1 ? '비교할 업체를 한 곳 더 선택하세요' : count ? '최대 3곳까지 비교할 수 있습니다.' : '';
+  refreshCardControls();
+}
 function loadFiltersFromUrl() {
   const params = new URLSearchParams(window.location.search);
   requestedCategories = (params.get('categories') || '').split(',').filter(field => validCategories.includes(field) && field !== '전체');
@@ -83,85 +90,21 @@ function renderDirectory(syncUrl = true) {
   resultGrid.replaceChildren();
   resultCount.textContent = String(matches.length);
   emptyState.hidden = matches.length !== 0;
+  document.querySelector('#results-refine').hidden = matches.length === 0;
   if (!matches.length) {
-    const hasRegionExperts = directoryExperts().some(expert => servesRegion(expert, appliedFilters.region));
-    emptyHeading.textContent = appliedFilters.citywide
-      ? '조건에 맞는 부산 전 지역 출장 전문가가 없습니다'
-      : hasRegionExperts
-      ? '조건에 맞는 예시 프로필이 없습니다'
-      : '해당 지역의 예시 프로필이 없습니다';
+    emptyHeading.textContent = appliedFilters.citywide ? '조건에 맞는 부산 전 지역 출장 전문가가 없습니다' : '조건에 맞는 전문가가 없습니다';
   }
   const regionName = appliedFilters.region === '전체' ? '부산 전체' : appliedFilters.region;
   const sortName = sortSelect.selectedOptions[0].textContent;
-  const categoryName = requestedCategories.length ? requestedCategories.join(' · ') : (appliedFilters.category === '전체' ? '전체 분야' : appliedFilters.category);
-  currentConditions.textContent = `선택 조건: ${regionName} · ${categoryName}${query ? ` · 검색: ${appliedFilters.query}` : ''}${appliedFilters.citywide ? ' · 부산 전 지역 출장 가능' : ''} · 정렬: ${sortName}`;
+  renderConditionChips();
   clearTimeout(announcementTimer);
   announcementTimer = window.setTimeout(() => {
     resultsLive.textContent = matches.length
-      ? `${regionName}, ${sortName}. 예시 프로필 ${matches.length}개 검색됨.`
+      ? `${regionName}, ${sortName}. 검색 결과 ${matches.length}곳.`
       : `${regionName}, ${sortName}. ${emptyHeading.textContent}`;
   }, 250);
-  matches.forEach(expert => {
-    const card = document.createElement('article');
-    card.className = 'find-card';
-    const profileLink = document.createElement('a');
-    profileLink.className = 'find-card-link';
-    profileLink.href = `expert.html?id=${encodeURIComponent(expert.id)}`;
-    const image = document.createElement('img');
-    image.src = `assets/images/${expert.image}`;
-    image.alt = expert.imageAlt;
-    image.loading = 'lazy';
-    image.width = 1448;
-    image.height = 1086;
-    const body = document.createElement('span');
-    body.className = 'find-card-body';
-    const kicker = document.createElement('span');
-    kicker.className = 'find-card-kicker';
-    kicker.textContent = `주요 출장 지역: ${window.YESSURI_AREAS_LABEL(expert)} (예시)`;
-    const name = document.createElement('strong');
-    name.className = 'find-card-name';
-    name.textContent = expert.name;
-    const fields = document.createElement('span');
-    fields.className = 'find-card-fields';
-    expert.fields.forEach(field => {
-      const tag = document.createElement('span');
-      tag.textContent = field;
-      fields.append(tag);
-    });
-    const meta = document.createElement('span');
-    meta.className = 'find-card-meta';
-    meta.textContent = '출장·진단비: 상담 시 확인';
-    body.append(kicker, name, fields, meta);
-    if (servesAllBusan(expert)) {
-      const coverage = document.createElement('span');
-      coverage.className = 'find-card-coverage';
-      coverage.textContent = '부산 전 지역 출장 가능';
-      body.insertBefore(coverage, meta);
-    }
-    const action = document.createElement('span');
-    action.className = 'find-card-action';
-    action.innerHTML = '프로필 예시 보기 <span aria-hidden="true">→</span>';
-    const photo = document.createElement('span');
-    photo.className = 'directory-photo';
-    const photoLabel = document.createElement('span');
-    photoLabel.className = 'directory-photo-label';
-    photoLabel.textContent = '예시 사진';
-    photo.append(image, photoLabel);
-    profileLink.append(photo, body, action);
-    const favoriteButton = document.createElement('button');
-    favoriteButton.type = 'button';
-    favoriteButton.className = 'favorite-button find-favorite';
-    window.YESSURI_FAVORITES.bindButton(favoriteButton, expert.id);
-    const compareButton = document.createElement('button');
-    compareButton.type = 'button';
-    compareButton.className = 'compare-button';
-    window.YESSURI_COMPARE.bindButton(compareButton, expert.id, compareStatus);
-    const controls = document.createElement('div');
-    controls.className = 'find-card-controls';
-    controls.append(favoriteButton, compareButton);
-    card.append(profileLink, controls);
-    resultGrid.append(card);
-  });
+  matches.forEach(expert => resultGrid.append(createExpertCard(expert)));
+  refreshCardControls();
   if (syncUrl) updateUrl();
 }
 
@@ -198,3 +141,61 @@ document.querySelectorAll('[data-toast]').forEach(button => button.addEventListe
 renderDirectory(false);
 updateUrl("replace");
 updateCompareCount();
+
+function syncInputsToApplied() {
+  queryInput.value = appliedFilters.query;
+  regionSelect.value = appliedFilters.region;
+  categorySelect.value = appliedFilters.category;
+  citywideCheckbox.checked = appliedFilters.citywide;
+  sortSelect.value = appliedFilters.sort;
+}
+function renderConditionChips() {
+  currentConditions.replaceChildren();
+  const chip = (text, clear, accessibleName) => {
+    const element = document.createElement(clear ? 'button' : 'span');
+    element.className = 'result-condition-chip';
+    element.textContent = text + (clear ? ' ×' : '');
+    if (clear) {
+      element.type = 'button';
+      element.setAttribute('aria-label', accessibleName);
+      element.addEventListener('click', () => {clear(); syncInputsToApplied(); renderDirectory(); document.querySelector('#directory-results-title').focus({preventScroll:true});});
+    }
+    currentConditions.append(element);
+  };
+  chip(appliedFilters.region === '전체' ? '부산 전체' : appliedFilters.region, appliedFilters.region !== '전체' ? () => {appliedFilters.region='전체';} : null, '지역 조건 해제');
+  if (requestedCategories.length) chip(requestedCategories.join(' · '), () => {requestedCategories=[];requestedService='';appliedFilters.category='전체';}, '선택한 수리 분야 조건 해제');
+  else if (appliedFilters.category !== '전체') chip(appliedFilters.category, () => {appliedFilters.category='전체';requestedService='';}, '수리 분야 조건 해제');
+  if (appliedFilters.query) chip('검색: '+appliedFilters.query, () => {appliedFilters.query='';}, '검색어 조건 해제');
+  if (appliedFilters.citywide) chip('부산 전 지역 출장 가능', () => {appliedFilters.citywide=false;}, '부산 전 지역 출장 조건 해제');
+}
+function createExpertCard(expert) {
+  const card = document.createElement('article');
+  card.className='find-card result-list-card';
+  const href='expert.html?id='+encodeURIComponent(expert.id);
+  const photo=document.createElement('a');photo.className='directory-photo';photo.href=href;photo.setAttribute('aria-label',expert.name+' 프로필 예시 보기');
+  const image=document.createElement('img');image.src='assets/images/'+expert.image;image.alt=expert.imageAlt;image.loading='lazy';image.width=1536;image.height=1024;
+  const photoLabel=document.createElement('span');photoLabel.className='directory-photo-label';photoLabel.textContent='예시 사진';photo.append(image,photoLabel);
+  const info=document.createElement('div');info.className='find-card-body';
+  const title=document.createElement('h3');title.className='find-card-name';
+  const titleLink=document.createElement('a');titleLink.href=href;titleLink.textContent=expert.name;title.append(titleLink);info.append(title);
+  const facts=document.createElement('dl');facts.className='result-card-facts';
+  const fact=(label,value)=>{const row=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=value;row.append(dt,dd);facts.append(row);return dd;};
+  const fieldValue= fact('전문 분야',expert.fields.join(' · '));
+  if (expert.keywords) {const work=document.createElement('span');work.className='result-work-keywords';work.textContent=expert.keywords;fieldValue.append(work);}
+  fact('주요 출장 지역',window.YESSURI_AREAS_LABEL(expert)+' (예시)');info.append(facts);
+  if(servesAllBusan(expert)){const badge=document.createElement('span');badge.className='find-card-coverage';badge.textContent='부산 전 지역 출장 가능';info.append(badge);}
+  const cost=document.createElement('p');cost.className='result-card-cost';cost.textContent='출장·진단비: 상담 시 확인';info.append(cost);
+  const note=document.createElement('p');note.className='result-card-note';note.textContent='주요 지역 외 방문 가능 여부와 출장비는 상담 시 확인하세요.';info.append(note);
+  const actions=document.createElement('div');actions.className='result-card-actions';
+  const profile=document.createElement('a');profile.className='result-profile-link';profile.href=href;profile.textContent='프로필 예시 보기';profile.setAttribute('aria-label',expert.name+' 프로필 예시 보기');
+  const controls=document.createElement('div');controls.className='result-card-controls';
+  const favorite=document.createElement('button');favorite.type='button';favorite.className='favorite-button find-favorite';favorite.dataset.expertId=expert.id;favorite.dataset.expertName=expert.name;window.YESSURI_FAVORITES.bindButton(favorite,expert.id);
+  const compare=document.createElement('button');compare.type='button';compare.className='compare-button';compare.dataset.expertId=expert.id;compare.dataset.expertName=expert.name;compare.setAttribute('role','checkbox');window.YESSURI_COMPARE.bindButton(compare,expert.id,compareStatus);
+  controls.append(favorite,compare);actions.append(profile,controls);card.append(photo,info,actions);return card;
+}
+function refreshCardControls() {
+  resultGrid.querySelectorAll('.find-favorite').forEach(button=>{const saved=window.YESSURI_FAVORITES.saved(button.dataset.expertId);button.textContent=saved?'♥':'♡';const label=button.dataset.expertName+(saved?' 관심 해제':' 관심 저장');button.setAttribute('aria-label',label);button.title=button.disabled?button.title:label;});
+  resultGrid.querySelectorAll('.compare-button').forEach(button=>{const selected=window.YESSURI_COMPARE.selected(button.dataset.expertId);button.textContent='비교 선택';button.setAttribute('aria-checked',String(selected));button.removeAttribute('aria-pressed');button.setAttribute('aria-label',button.dataset.expertName+' 비교 선택');});
+}
+window.addEventListener('yessuri:favorites-changed',refreshCardControls);
+document.querySelectorAll('[data-edit-search]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();document.querySelector('#find-filter-form').scrollIntoView({behavior:'smooth',block:'start'});regionSelect.focus({preventScroll:true});}));

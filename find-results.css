@@ -1,0 +1,51 @@
+/* Result section only. Search, shared page styles, header and footer are preserved. */
+#directory-results [hidden]{display:none!important}
+#directory-results{margin-top:28px;color:#13294b}
+#directory-results .find-results-heading{align-items:center;gap:24px;margin:0 0 16px}
+#directory-results .find-results-heading h2{font-size:1.625rem;font-weight:700;letter-spacing:-.02em;line-height:1.4;margin:0}
+#directory-results #result-count{color:#00767e}
+#directory-results .results-example-note{font-size:.875rem;color:#52657a;line-height:1.65;margin:6px 0 0}
+#directory-results .find-results-actions{flex:none}
+#directory-results .find-results-actions label{font-size:.875rem;color:#52657a}
+#directory-results #find-sort{min-height:44px;font:inherit}
+#directory-results .find-current-conditions{display:flex;flex-wrap:wrap;gap:8px;padding:0;background:none;margin:0 0 16px}
+#directory-results .result-condition-chip{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;border:1px solid #d3e9e5;border-radius:10px;background:#edf8f5;color:#00767e;font:500 .875rem/1.6 'Noto Sans KR',sans-serif;letter-spacing:0;white-space:normal;overflow-wrap:anywhere}
+#directory-results button.result-condition-chip{cursor:pointer}
+#directory-results #find-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+#directory-results .result-list-card{display:grid;grid-template-columns:220px minmax(0,1fr) 190px;align-items:center;gap:24px;min-height:240px;padding:18px;border:1px solid #e1e9ef;border-radius:14px;background:#fff;box-shadow:0 3px 12px #13294b05;overflow:visible;transform:none}
+#directory-results .directory-photo{display:block;position:relative;width:100%;min-width:0;align-self:center}
+#directory-results .directory-photo img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:contain;object-position:center;border-radius:10px;background:#f4f7f7}
+#directory-results .directory-photo-label{font-size:.8125rem;line-height:1.5}
+#directory-results .find-card-body{padding:0;min-width:0}
+#directory-results .find-card-name{font-size:1.25rem;font-weight:700;line-height:1.4;letter-spacing:-.02em;margin:0 0 12px;overflow-wrap:anywhere}
+#directory-results .find-card-name a{color:inherit}
+#directory-results .result-card-facts{margin:0;font-size:.9375rem;line-height:1.65}
+#directory-results .result-card-facts>div{display:flex;gap:12px;margin:4px 0;flex-wrap:wrap}
+#directory-results dt{font-weight:600;color:#52657a;flex:none;min-width:95px}
+#directory-results dd{margin:0;min-width:0;overflow-wrap:anywhere}
+#directory-results .result-work-keywords{display:block;font-size:.8125rem;color:#52657a;line-height:1.65;margin-top:2px}
+#directory-results .result-card-cost{font-size:.9375rem;line-height:1.65;color:#52657a;margin:8px 0 0}
+#directory-results .result-card-note{font-size:.8125rem;line-height:1.65;color:#52657a;margin:10px 0 0}
+#directory-results .result-card-actions{display:flex;flex-direction:column;gap:12px;min-width:0}
+#directory-results .result-profile-link{display:flex;align-items:center;justify-content:center;min-height:48px;padding:10px 14px;border-radius:9px;background:#00767e;color:#fff;font-size:.9375rem;font-weight:600;line-height:1.6;text-align:center}
+#directory-results .result-card-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#directory-results .find-favorite{position:static;min-width:44px;min-height:44px;width:44px;height:44px;border:1px solid #dce5ec;border-radius:9px;background:#fff;color:#00767e;padding:0;font-size:24px;line-height:1;cursor:pointer}
+#directory-results .compare-button{display:inline-flex;align-items:center;gap:8px;min-height:44px;border:0;background:none;color:#52657a;padding:8px;font:500 .875rem/1.6 'Noto Sans KR',sans-serif;cursor:pointer}
+#directory-results .compare-button:before{content:'';display:block;flex:none;width:16px;height:16px;border:1px solid #7993a1;border-radius:4px;background:#fff}
+#directory-results .compare-button[aria-checked=true]:before{content:'✓';display:grid;place-items:center;background:#00767e;border-color:#00767e;color:#fff;font-size:12px;line-height:1}
+#directory-results .compare-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 16px;border:1px solid #d3e9e5;border-radius:10px;background:#edf8f5;margin:0 0 16px;font-size:.875rem;line-height:1.65}
+#directory-results .compare-toolbar p{margin:0;color:#52657a}
+#directory-results #compare-link{display:inline-flex;align-items:center;gap:4px;min-height:44px;color:#00767e;font-weight:600}
+#directory-results .compare-status:empty{display:none}
+#directory-results .compare-status{font-size:.875rem;line-height:1.65;color:#52657a;margin:8px 0 16px}
+#directory-results .results-refine{margin:16px 0 0;font-size:.875rem;line-height:1.65}
+#directory-results [data-edit-search]{display:inline-flex;align-items:center;min-height:44px;color:#00767e;text-decoration:underline;text-underline-offset:4px}
+#directory-results .find-empty{padding:32px 20px;border:1px solid #e1e9ef;border-radius:14px;background:#f6f8fa}
+#directory-results .find-empty h3{font-size:1.25rem;line-height:1.5}
+#directory-results .find-empty p{font-size:1rem;line-height:1.65;color:#52657a}
+#directory-results .empty-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+#directory-results .empty-actions .button{min-height:44px;line-height:1.6;font-size:.9375rem;padding:10px 16px}
+#directory-results .empty-actions .button-primary{background:#00767e}
+#directory-results :is(a,button,select):focus-visible{outline:3px solid #00767e;outline-offset:3px}
+@media(max-width:1000px){#directory-results .result-list-card{grid-template-columns:180px minmax(0,1fr) 165px;gap:18px}}
+@media(max-width:820px){#directory-results .result-list-card{grid-template-columns:minmax(0,1fr);gap:16px;min-height:0;padding:16px}#directory-results .directory-photo{max-width:400px;justify-self:center}#directory-results .result-card-actions{gap:10px}#directory-results .result-card-controls{justify-content:flex-end}#directory-results .find-results-heading{align-items:flex-start;flex-direction:column;gap:12px}#directory-results .compare-toolbar{align-items:flex-start;flex-direction:column}#directory-results .result-card-facts>div{gap:4px 10px}#directory-results .find-results-heading h2{font-size:1.5rem}}

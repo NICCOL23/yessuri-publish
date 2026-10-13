@@ -12,13 +12,14 @@
   <script src="regions.js?v=1" defer></script>
   <script src="favorites.js?v=1" defer></script>
   <script src="compare.js?v=1" defer></script>
-  <script src="find.js?v=17" defer></script>
+  <script src="find.js?v=18" defer></script>
   <link rel="icon" href="assets/icons/favicon.ico?v=1" sizes="any">
   <link rel="icon" type="image/png" href="assets/icons/favicon-32.png?v=1" sizes="32x32">
   <link rel="apple-touch-icon" href="assets/icons/favicon-180.png?v=1" sizes="180x180">
   <link rel="stylesheet" href="find-header-brand.css?v=1">
   <script src="home-refresh.js?v=1" defer></script>
   <link rel="stylesheet" href="find-search.css?v=1">
+  <link rel="stylesheet" href="find-results.css?v=1">
 </head>
 <body class="find-page">
   <a class="skip-link" href="#main">본문 바로가기</a>
@@ -38,11 +39,11 @@
 <label for="find-query" class="find-query-field">업체명 또는 작업 내용 검색 (선택)<input id="find-query" name="q" type="search" maxlength="80" autocomplete="off" placeholder="예: 누수, 싱크대, 업체명" aria-describedby="find-query-help"><small id="find-query-help">직접 입력해도 되고, 비워두고 지역·분야만 선택해도 됩니다.</small></label>
 <button class="button button-primary" type="submit">전문가 찾기</button></div><label class="find-coverage-option" for="find-citywide"><input type="checkbox" id="find-citywide" name="citywide" value="1">부산 전 지역 출장 가능 업체만 보기</label></form>
 <div class="find-search-support"><a href="index.html#guide-symptoms">어떤 분야인지 모르겠어요? 상담 준비 안내 →</a><button id="reset-filters" type="button">초기화</button></div>
-      <div class="find-results-heading"><div><span class="section-kicker">SEARCH RESULTS</span><h2>예시 프로필 <strong id="result-count" aria-live="polite">0</strong>개</h2></div><div class="find-results-actions"><label for="find-sort">결과 정렬<select id="find-sort" name="sort"><option value="default">기본순</option><option value="name">이름순</option><option value="areas">출동 가능 지역 수순</option></select></label><span class="find-demo-badge">예시 프로필</span></div></div>
-      <div class="compare-toolbar"><a href="compare.html">비교 보기 <strong id="compare-count">0</strong>/3 <span aria-hidden="true">→</span></a><p id="compare-status" role="status" aria-live="polite"></p></div>
-      <p class="find-current-conditions" id="find-current-conditions"></p><p class="find-results-live sr-only" id="find-results-live" role="status" aria-live="polite" aria-atomic="true"></p>
-      <div class="find-grid" id="find-grid"></div><p class="directory-recruit-note">첫 참여 업체 12곳 모집을 목표로 한 목록 구성입니다.</p>
-      <div class="find-empty" id="find-empty" hidden><span aria-hidden="true">⌕</span><h3 id="find-empty-heading">검색 조건을 바꿔보세요</h3><p>검색어·지역·수리 분야를 바꾸거나 조건을 초기화해 보세요.</p><button id="empty-reset" class="button button-primary" type="button">조건 초기화</button></div>
+      <section id="directory-results" aria-labelledby="directory-results-title"><div class="find-results-heading"><div><h2 id="directory-results-title" tabindex="-1">검색 결과 <strong id="result-count">0</strong>곳</h2><p class="results-example-note">현재 표시된 업체 정보와 사진은 예시입니다.</p></div><div class="find-results-actions"><label for="find-sort">결과 정렬<select id="find-sort" name="sort"><option value="default">기본순</option><option value="name">이름순</option><option value="areas">출동 가능 지역 수순</option></select></label></div></div>
+      <div class="compare-toolbar" id="compare-toolbar" hidden><p id="compare-guidance"></p><a href="compare.html" id="compare-link" hidden>선택한 <strong id="compare-count">0</strong>곳 비교 →</a></div><p id="compare-status" class="compare-status" role="status" aria-live="polite"></p>
+      <div class="find-current-conditions" id="find-current-conditions" role="group" aria-label="적용된 검색 조건"></div><p class="find-results-live sr-only" id="find-results-live" role="status" aria-live="polite" aria-atomic="true"></p>
+      <div class="find-grid" id="find-grid"></div><p class="results-refine" id="results-refine"><a href="#find-filter-form" data-edit-search>검색 조건 변경</a></p>
+      <div class="find-empty" id="find-empty" hidden><span aria-hidden="true">⌕</span><h3 id="find-empty-heading">검색 조건을 바꿔보세요</h3><p>지역이나 수리 분야를 바꾸거나 검색어를 지워 다시 찾아보세요.</p><div class="empty-actions"><a class="button" href="#find-filter-form" data-edit-search>검색 조건 변경</a><button id="empty-reset" class="button button-primary" type="button">초기화</button></div></div></section>
     </div>
   </main>
 
