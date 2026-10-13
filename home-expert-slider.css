@@ -1,0 +1,12 @@
+/* Only the homepage profile carousel changes; card styling stays intact. */
+#experts #home-expert-slider{overflow:hidden;padding:4px;margin:-4px;min-width:0}
+#experts #expert-grid.swiper-wrapper{display:flex;gap:0;align-items:stretch}
+#experts #expert-grid .swiper-slide{height:auto;flex-shrink:0;box-sizing:border-box}
+#experts .expert-slider-controls{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:12px;margin-top:20px}
+#experts .expert-slider-controls[hidden]{display:none}
+#experts .expert-slider-controls button{min-width:44px;min-height:44px;border:1px solid #cddfdf;border-radius:9px;background:#fff;color:#00767e;font:inherit;cursor:pointer;padding:8px 12px}
+#experts .expert-slider-controls button:hover{background:#e8f5f2}
+#experts .expert-slider-pagination{width:auto;display:flex;align-items:center;gap:2px}
+#experts .swiper-pagination-bullet{background:#00767e;width:10px;height:10px}
+#experts .expert-slider-toggle{font-size:.875rem}
+@media(prefers-reduced-motion:reduce){#experts .swiper-wrapper{transition-duration:0ms!important}}
