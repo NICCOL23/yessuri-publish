@@ -18,7 +18,7 @@ body.home-modern{--home-heading:clamp(1.5rem,2.3vw,2rem);--home-title:1.1875rem;
 .home-modern .home-quote{background:var(--home-accent);color:#fff}
 .home-modern .revised-hero .hero-find-link{color:var(--home-accent);border-color:var(--home-accent)}
 .home-modern .home-service-note{font-size:var(--home-small);line-height:1.65;color:var(--home-muted);max-width:none}
-.home-modern .revised-hero-photo figcaption{font-size:.8125rem;line-height:1.5;color:#425770}
+.home-modern .revised-hero-photo figcaption{font-size:.75rem;line-height:1.5;color:#425770;background:rgba(255,255,255,.5);border:0;box-shadow:none;opacity:1}
 .home-modern :is(#categories,#experts,#home-guide,#home-faq){padding:48px 0}
 .home-modern :is(#categories,#experts) .section-head h2,.home-modern #home-guide h2,.home-modern #home-faq h2{font-size:var(--home-heading);line-height:1.4;margin:8px 0 12px;letter-spacing:-.02em}
 .home-modern :is(#categories,#experts) .section-head p,.home-modern #home-guide .guide-heading p,.home-modern #home-faq .faq-heading p{font-size:var(--home-body);line-height:1.7;color:var(--home-muted);margin:0}
