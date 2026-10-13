@@ -23,32 +23,25 @@ categories.forEach(([name, icon], index) => {
 });
 
 
-function renderRegions(){
- filterRow.replaceChildren();
- const addSelect=(labelText,values,value,change)=>{
-  const label=document.createElement('label');label.textContent=labelText;
-  const select=document.createElement('select');select.setAttribute('aria-label',labelText);
-  values.forEach(([v,t])=>{const option=document.createElement('option');option.value=v;option.textContent=t;select.append(option)});
-  select.value=value;select.addEventListener('change',()=>change(select.value));label.append(select);filterRow.append(label);
- };
- addSelect('활동 지역',regions.map(r=>[r,r==='전체'?'부산 전체':r]),selectedRegion,value=>{selectedRegion=value;renderExperts()});
- addSelect('수리 분야',[['전체','수리 분야 전체'],...categories.filter(([n])=>n!=='전체보기').map(([n])=>[n,n])],selectedCategory,value=>{selectedCategory=value;renderExperts()});
-}
 function renderExperts(){
- const sampleItems=[['누수·수도',0],['하수구·변기',0],['타일',1],['페인트',3],['목공',3],['에어컨',2],['청소',4],['철거',3],['전기·조명',2],['문·창호',3],['컴퓨터·IT',5],['종합 집수리',0]];
  const source=experts();
- const shown=sampleItems.map(([field,index])=>({...source[index],name:field,fields:[field],sampleCategory:field})).filter(p=>window.YESSURI_SERVES_REGION(p,selectedRegion)&&(selectedCategory==='전체'||p.fields.includes(selectedCategory)));
- expertGrid.replaceChildren();emptyState.hidden=shown.length>0;emptyState.textContent='선택한 조건에 맞는 가상 프로필이 없습니다. 다른 지역이나 수리 분야를 선택해주세요.';
- shown.forEach(person=>{
+ const featured=[
+  {id:'bada-repair',name:'누수·수도 업체명',field:'수도꼭지·배관·누수 점검',image:'ai-water.png'},
+  {id:'bright-home',name:'전기·조명 업체명',field:'전등·스위치·콘센트',image:'ai-light.png'},
+  {id:'tile-studio',name:'타일·문창호 업체명',field:'타일·문·창호 보수',image:'ai-tile.png'}
+ ];
+ expertGrid.replaceChildren();
+ featured.forEach(example=>{
+  const person=source.find(p=>p.id===example.id);if(!person)return;
   const card=document.createElement('article');card.className='expert-card';
-  card.innerHTML=`<div class="expert-photo"><img src="assets/images/${person.image}" alt="${person.imageAlt}" loading="lazy"><span class="ai-image-label">AI 예시 이미지</span></div><div class="expert-main"><h3 class="expert-name">${person.name}</h3><p class="fiction-label">가상 프로필</p><p class="compact-area">${window.YESSURI_AREAS_LABEL(person)}</p></div><div class="expert-actions"><a class="profile-button" href="expert.html?id=${encodeURIComponent(person.id)}">프로필 보기</a></div>`;
+  card.innerHTML=`<div class="expert-photo"><img src="assets/images/${example.image}" alt="${example.field} 작업을 표현한 예시 사진" loading="lazy"><span class="ai-image-label">예시 사진</span></div><div class="expert-main"><h3 class="expert-name">${example.name}</h3><dl class="expert-facts"><div><dt>전문 분야</dt><dd>${example.field}</dd></div><div><dt>출장 지역</dt><dd>${window.YESSURI_AREAS_LABEL(person)} (예시)</dd></div></dl><p class="featured-cost">출장·진단비: 상담 시 확인</p></div><div class="expert-actions"><a class="profile-button" href="expert.html?id=${encodeURIComponent(person.id)}">프로필 예시 보기</a></div>`;
   const favorite=document.createElement('button');favorite.type='button';favorite.className='favorite-button';window.YESSURI_FAVORITES.bindButton(favorite,person.id);card.querySelector('.expert-photo').append(favorite);expertGrid.append(card);
  });
  refreshHearts();
 }
 function refreshHearts(){document.querySelectorAll('#expert-grid .favorite-button').forEach(b=>{const saved=b.getAttribute('aria-pressed')==='true';b.setAttribute('aria-label',saved?'관심 해제':'관심 저장');b.textContent=saved?'♥':'♡'})}
 window.addEventListener('yessuri:favorites-changed',refreshHearts);window.addEventListener('storage',refreshHearts);
-renderRegions(); renderExperts();
+renderExperts();
 
 let toastTimer;
 function showToast(message) {
