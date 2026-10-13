@@ -1,0 +1,20 @@
+/* Directory header only. Shared page styles are left untouched. */
+.find-page .directory-header{height:auto;min-height:80px;background:#fff;border-bottom:1px solid #e4eaf2;color:#13294b}
+.directory-header .header-inner{width:min(100% - 64px,1160px);min-height:80px;position:relative;gap:24px}
+.directory-header .directory-brand{position:relative;display:block;flex:none;width:235px;height:68px}
+.directory-header .directory-brand img{position:absolute;left:0;top:-5px;width:100%;height:auto}
+.directory-header .directory-korean{position:absolute;left:30.110497%;width:62.891344%;top:53px;text-align:center;font-size:11px;font-weight:700;line-height:14px;letter-spacing:.3px;color:#00767e}
+.directory-header .directory-menu{display:flex;align-items:center;flex:1;gap:24px;margin-left:10px;font-size:15px;font-weight:600;line-height:1.5;letter-spacing:0}
+.directory-header .directory-menu a{display:flex;align-items:center;min-height:44px;white-space:nowrap;color:#13294b}
+.directory-header .directory-menu a:hover{color:#00767e}
+.directory-header .directory-menu [aria-current=page]{color:#00767e;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:9px}
+.directory-header .directory-menu .directory-register{margin-left:auto;font-size:14px;color:#52657a}
+.directory-header .directory-home{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;border:1px solid #dce5ec;border-radius:10px;padding:10px 14px;white-space:nowrap;font-size:14px;font-weight:600;line-height:1.5;letter-spacing:0;color:#52657a}
+.directory-header .directory-home:hover{background:#f3faf8;color:#00767e}
+.directory-header .menu-toggle{display:none;background:transparent;border:0;color:#13294b;font-size:25px;min-width:44px;min-height:44px;padding:8px}
+.directory-header .directory-mobile-home{display:none!important}
+.directory-header :is(a,button):focus-visible{outline:3px solid #00767e;outline-offset:4px}
+@media(max-width:1100px){.directory-header .directory-menu{gap:16px;margin-left:0;font-size:14px}.directory-header .header-inner{gap:16px}}
+@media(max-width:900px){.directory-header .directory-brand{width:190px;height:58px}.directory-header .directory-brand img{top:-3px}.directory-header .directory-korean{top:44px;font-size:10px;line-height:12px}.directory-header .menu-toggle{display:block;margin-left:auto}.directory-header .directory-home{display:none}.directory-header .directory-menu{display:none;position:absolute;top:100%;left:0;right:0;margin:0;padding:12px;background:#fff;border:1px solid #e4eaf2;border-radius:0 0 14px 14px;box-shadow:0 16px 24px #13294b14;flex-direction:column;align-items:stretch;gap:0;font-size:15px}.directory-header .directory-menu.is-open{display:flex}.directory-header .directory-menu a{padding:12px 14px;white-space:normal}.directory-header .directory-menu .directory-register{margin-left:0;font-size:15px}.directory-header .directory-mobile-home{display:flex!important}}
+@media(max-width:760px){.find-page .directory-header,.directory-header .header-inner{min-height:72px}.directory-header .header-inner{width:min(100% - 32px,560px)}}
+@media(max-width:359px){.directory-header .directory-brand{width:175px}.directory-header .directory-korean{top:41px}}
