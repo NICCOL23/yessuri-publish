@@ -1,0 +1,23 @@
+/* Expert content panels only: align with the YESSURI directory palette. */
+.detail-page .detail-main{background:#fff}
+.detail-page .detail-main :is(.profile-hero,.detail-card,.contact-card){border:1px solid #dfe8ee;border-radius:14px;box-shadow:none;background:#fff}
+.detail-page .detail-main .profile-hero{background:#f4faf8;padding:28px 30px;border-color:#dfe9e6}
+.detail-page .detail-main .detail-card{padding:28px 30px}
+.detail-page .detail-main .detail-notice{background:#edf8f5;border-color:#d3e9e5;color:#006770;border-radius:10px;font-weight:500}
+.detail-page .detail-main .detail-avatar{background:#e1f3f1;border-radius:12px;color:#00767e}
+.detail-page .detail-main :is(.section-kicker,.profile-eyebrow,.contact-card-kicker){color:#00767e}
+.detail-page .detail-main .profile-tags span{background:#e8f5f2;color:#006770;border-radius:7px;font-weight:600}
+.detail-page .detail-main :is(.favorite-button,.compare-button){border-color:#cddfdf;color:#00767e;background:#fff;border-radius:8px}
+.detail-page .detail-main :is(.favorite-button,.compare-button)[aria-pressed=true]{background:#e5f4f1;border-color:#00767e}
+.detail-page .detail-main :is(.back-link,.compare-detail-link){color:#00767e}
+.detail-page .detail-main .contact-card{background:#f3faf8;border-color:#d3e9e5;padding:24px}
+.detail-page .detail-main .contact-card p{color:#52657a}
+.detail-page .detail-main .contact-card .button-primary{background:#00767e;border-radius:9px;box-shadow:none}
+.detail-page .detail-main .contact-card .button-primary:hover{background:#00636b;transform:none;box-shadow:none}
+.detail-page .detail-main .pending-grid>div{background:#f5faf8;border:1px solid #e0ece8;border-radius:10px;padding:20px}
+.detail-page .detail-main .pending-grid span{color:#00767e}
+.detail-page .detail-main .fact-list,.detail-page .detail-main .fact-list div{border-color:#e3ecea}
+.detail-page .detail-main .work-figure img{border-radius:10px}
+.detail-page .detail-main .not-found{border-color:#dfe8ee;border-radius:14px;box-shadow:none}
+.detail-page .detail-main :is(a,button):focus-visible{outline:3px solid #00767e;outline-offset:3px}
+@media(max-width:760px){.detail-page .detail-main :is(.profile-hero,.detail-card,.contact-card){padding:22px 20px;border-radius:12px}}
