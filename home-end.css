@@ -1,0 +1,36 @@
+#home-faq{padding:48px 0;background:#fff}
+#home-faq .faq-heading{text-align:center;margin-bottom:26px}
+#home-faq .section-kicker{color:#008b95}
+#home-faq h2{font-size:30px;margin:0 0 10px}
+#home-faq .faq-heading p{font-size:14px;color:#60758c;margin:0}
+#home-faq .faq-list{border:1px solid #dfe7ed;border-radius:12px;overflow:hidden}
+#home-faq details+details{border-top:1px solid #dfe7ed}
+#home-faq summary{display:flex;align-items:center;gap:16px;list-style:none;padding:22px 24px;font-size:16px;font-weight:700;color:#173353;cursor:pointer}
+#home-faq summary::-webkit-details-marker{display:none}
+#home-faq summary:after{content:'＋';margin-left:auto;color:#008b95;font-size:24px;flex:none}
+#home-faq details[open]>summary:after{content:'－'}
+#home-faq .faq-answer{padding:16px 24px;background:#f0f9f7;color:#526781;font-size:14px;line-height:1.85}
+#home-faq .faq-answer p{margin:0 0 10px}#home-faq .faq-answer p:last-child{margin-bottom:0}
+#home-faq summary:focus-visible{outline:3px solid #f0a942;outline-offset:-4px}
+#home-closing{background:#fff;padding:0 0 32px}
+#home-closing .closing-inner{background:linear-gradient(110deg,#132e4b,#008b95);border-radius:14px;padding:32px;display:flex;align-items:center;justify-content:space-between;gap:32px;color:#fff}
+#home-closing h2{font-size:28px;color:#fff;margin:0 0 12px;max-width:620px}
+#home-closing p{font-size:14px;color:#e5f4f3;margin:0;line-height:1.8}
+#home-closing .closing-actions{flex:none;display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;max-width:370px}
+#home-closing a{display:inline-flex;justify-content:center;align-items:center;min-height:48px;border-radius:9px;padding:12px 18px;font-size:14px;font-weight:700;white-space:nowrap}
+#home-closing .closing-primary{background:#fff;color:#00838b}#home-closing .closing-secondary{border:1px solid #d2eceb;color:#fff}
+#home-closing .closing-actions p{width:100%;font-size:12px;text-align:right}
+#home-footer{background:#f5f7fa;padding:32px 0 0;color:#526781}
+#home-footer .end-footer-top{display:flex;align-items:center;justify-content:space-between;gap:24px}
+#home-footer .end-brand{position:relative;display:block;width:235px;height:70px}
+#home-footer .end-brand img{display:block;position:absolute;top:-5px;left:0;width:235px;height:auto}
+/* Original image wordmark bounds: x=654..2019 of width 2172. Korean uses that same box. */
+#home-footer .end-korean{position:absolute;left:30.110497%;width:62.891344%;top:53px;text-align:center;font-size:11px;font-weight:700;color:#008b95;letter-spacing:.3px;line-height:14px}
+#home-footer .end-wordmark-bounds{position:absolute;left:30.110497%;width:62.891344%;height:1px;top:0;pointer-events:none}
+#home-footer .end-brand-description{font-size:12px;margin:10px 0 0}
+#home-footer .end-footer-links{display:flex;flex-wrap:wrap;gap:24px;font-size:13px;font-weight:700}
+#home-footer .end-footer-bottom{border-top:1px solid #dfe7ed;margin-top:24px;padding:20px 0;display:flex;justify-content:space-between;gap:20px;font-size:11px;line-height:1.8}
+#home-footer .end-footer-bottom p{margin:0}
+#home-footer a:focus-visible,#home-closing a:focus-visible{outline:3px solid #f0a942;outline-offset:4px}
+@media(max-width:900px){#home-closing .closing-inner{flex-direction:column;align-items:flex-start}#home-closing .closing-actions{justify-content:flex-start;max-width:none}#home-closing .closing-actions p{text-align:left}}
+@media(max-width:760px){#home-faq{padding:36px 0}#home-faq h2{font-size:25px}#home-faq summary{padding:18px 16px;font-size:14px}#home-faq .faq-answer{padding:16px;font-size:13px}#home-closing .closing-inner{padding:24px}#home-closing h2{font-size:24px}#home-closing .closing-actions{width:100%;flex-direction:column}#home-closing a{white-space:normal}#home-footer{padding-bottom:66px}#home-footer .end-footer-top,#home-footer .end-footer-bottom{flex-direction:column;align-items:flex-start}#home-footer .end-footer-links{gap:16px}}
