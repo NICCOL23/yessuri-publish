@@ -17,18 +17,16 @@
   <script src="regions.js?v=1" defer></script>
   <script src="favorites.js?v=1" defer></script>
 
-<link rel="stylesheet" href="expert-sample.css?v=3"><script src="sample-images.js?v=1" defer></script><script src="app.js?v=17" defer></script><link rel="stylesheet" href="home-guide.css?v=1"><link rel="stylesheet" href="home-end.css?v=1"></head>
-<body>
+<link rel="stylesheet" href="expert-sample.css?v=3"><script src="sample-images.js?v=1" defer></script><script src="app.js?v=17" defer></script><link rel="stylesheet" href="home-guide.css?v=1"><link rel="stylesheet" href="home-end.css?v=1"><link rel="stylesheet" href="home-modern.css?v=1"><script src="home-modern.js?v=1" defer></script></head>
+<body class="home-modern">
   <a class="skip-link" href="#main">본문 바로가기</a>
   <header class="site-header home-header">
     <div class="container header-inner">
       <a class="brand home-brand ys11-brand" href="#top" aria-label="YESSURI 예스수리 홈"><img class="ys11-lockup" src="assets/images/yessuri-ys11-brand-color.png" alt="YESSURI"><span class="ys11-korean" aria-hidden="true">예스수리</span></a>
       <button class="menu-toggle" type="button" aria-controls="home-menu" aria-expanded="false" aria-label="메뉴 열기">☰</button>
       <nav id="home-menu" class="home-menu" aria-label="주요 메뉴">
-        <a class="estimate-link" href="request.html">수리 견적요청</a>
-        <a href="find.html">전문가 찾기</a>
-        <button class="text-button" type="button" data-toast="비용·이용안내는 준비 중입니다.">비용·이용안내</button>
-        <button class="text-button home-login" type="button" data-toast="로그인 기능은 다음 단계에서 준비됩니다.">로그인</button>
+        <a class="estimate-link" href="find.html">전문가 찾기</a>
+        <a href="#home-guide">비용·이용안내</a>
         <a class="register-utility" href="register.html">기술자 등록</a>
       </nav>
     </div>
@@ -46,17 +44,17 @@
       <div class="container revised-hero-grid">
         <div class="hero-copy">
           <span class="eyebrow local-service-badge"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>부산 우리 동네 집수리</span>
-          <h1 id="hero-heading">집에 문제가 생겼나요?<span>우리 동네 전문가에게 문의하세요.</span></h1>
-          <p class="hero-description">어디가 고장인지 몰라도 괜찮아요.<br>증상과 사진으로 상담을 준비하세요.</p>
-          <div class="revised-hero-actions"><a class="home-quote" href="request.html">수리 견적요청</a><a class="hero-find-link" href="find.html">전문가 직접 찾기</a></div>
-          <p class="home-service-note">견적요청 기능은 준비 중입니다.</p>
+          <h1 id="hero-heading">집에 문제가 생겼나요?<span>우리 동네 전문가부터 찾아보세요.</span></h1>
+          <p class="hero-description">어디가 고장인지 몰라도 괜찮아요.<br>필요한 수리 분야와 출장 가능 지역을 살펴보세요.</p>
+          <div class="revised-hero-actions"><a class="home-quote" href="find.html">부산 전문가 찾기</a><a class="hero-find-link" href="#categories">수리 분야 보기</a></div>
+          <p class="home-service-note">현재는 예시 프로필을 살펴볼 수 있습니다. 실제 문의·접수는 준비 중입니다.</p>
         </div>
         <figure class="revised-hero-photo"><img src="assets/images/hero-yessuri-branded-centered.png" alt="YESSURI 상호가 새겨진 네이비 작업복을 입고 싱크대 배관을 점검하는 기술자의 브랜드 연출 이미지" width="1536" height="1024" fetchpriority="high"><figcaption>브랜드 연출 이미지</figcaption></figure>
       </div>
     </section>
-<section class="section" id="categories"><div class="container"><div class="section-head centered"><div><span class="section-kicker">수리 분야 선택</span><h2>어떤 수리가 필요하세요?</h2><p>분야를 고르면 우리 동네 전문가를 찾아볼 수 있어요.</p></div></div><div class="category-grid" id="category-grid"></div></div></section>
+<section class="section" id="categories"><div class="container"><div class="section-head centered"><div><span class="section-kicker">수리 분야 선택</span><h2>어떤 수리가 필요하세요?</h2><p>분야를 고르면 우리 동네 전문가를 찾아볼 수 있어요.</p></div></div><div class="category-grid" id="category-grid"></div><p class="category-help"><a href="#guide-symptoms">어떤 분야인지 모르겠어요? 상담 준비 안내 →</a></p></div></section>
 
-    <section class="section experts-section" id="experts"><div class="container"><div class="section-head centered"><div><span class="section-kicker">부산 지역 전문가</span><h2>우리 동네 전문가를 만나보세요</h2><p>전문 분야와 출장 지역을 확인하고 직접 문의하세요.</p></div></div><p class="demo-note">업체명·사진·프로필은 배치 예시이며 실제 등록 정보가 아닙니다.</p><div class="expert-grid" id="expert-grid"></div><div class="featured-directory-link"><a href="find.html">부산 전문가 모두 보기 →</a><p>첫 참여 업체 12곳 모집을 목표로 준비하고 있습니다.</p></div></div></section>
+    <section class="section experts-section" id="experts"><div class="container"><div class="section-head centered"><div><span class="section-kicker">부산 지역 전문가</span><h2>우리 동네 전문가를 만나보세요</h2><p>전문 분야와 출장 가능 지역을 살펴보세요.</p></div></div><p class="demo-note">업체명·사진·프로필은 배치 예시이며 실제 등록 정보가 아닙니다.</p><div class="expert-grid" id="expert-grid"></div><div class="featured-directory-link"><a href="find.html">부산 전문가 모두 보기 →</a></div></div></section>
 
     <section id="home-guide" aria-labelledby="home-guide-title"><span id="how"></span><span id="cases"></span><div class="container">
       <div class="guide-heading"><h2 id="home-guide-title">집수리, 이렇게 준비하세요</h2><p>문의 방법부터 비용 확인까지, 필요한 내용을 한눈에 확인하세요.</p></div>
@@ -73,10 +71,10 @@
           <p class="guide-additional">추가 작업은 내용과 금액을 확인한 뒤 결정하세요.</p>
         </section>
         <section class="guide-panel" aria-labelledby="guide-prep-title"><h3 id="guide-prep-title">문의 전에 무엇을 준비할까요?</h3><p>필요한 항목을 눌러 확인하세요.</p>
-          <details><summary><span class="guide-icon guide-home" aria-hidden="true"></span>문제 위치와 증상</summary><div class="guide-detail"><ul><li>어느 공간인가요? — 주방·욕실·거실 등</li><li>어느 부분인가요? — 싱크대·수도꼭지·벽 등</li><li>언제부터 문제가 생겼나요?</li><li>어떤 모습인가요? — 물이 떨어져요·젖어 있어요 등</li></ul><p class="guide-example"><strong>설명 예시</strong><br>주방 싱크대 아래에서 물이 떨어져요.<br>어제부터 물을 사용할 때 생깁니다.</p><p>원인을 몰라도 보이는 증상만 알려주세요.</p></div></details>
+          <details id="guide-symptoms"><summary><span class="guide-icon guide-home" aria-hidden="true"></span>문제 위치와 증상</summary><div class="guide-detail"><ul><li>어느 공간인가요? — 주방·욕실·거실 등</li><li>어느 부분인가요? — 싱크대·수도꼭지·벽 등</li><li>언제부터 문제가 생겼나요?</li><li>어떤 모습인가요? — 물이 떨어져요·젖어 있어요 등</li></ul><p class="guide-example"><strong>설명 예시</strong><br>주방 싱크대 아래에서 물이 떨어져요.<br>어제부터 물을 사용할 때 생깁니다.</p><p>원인을 몰라도 보이는 증상만 알려주세요.</p></div></details>
           <details><summary><span class="guide-icon guide-camera" aria-hidden="true"></span>전체 모습과 문제 부위 사진</summary><div class="guide-detail"><div class="guide-photo-grid"><figure><span class="guide-photo" role="img" aria-label="싱크대와 하부 수납장의 전체 모습을 보여주는 연출 예시"></span><figcaption>전체 사진 · 연출 예시</figcaption></figure><figure><span class="guide-photo guide-close-photo" role="img" aria-label="물이 떨어지는 배관 연결 부위를 가까이 찍은 연출 예시"></span><figcaption>가까운 사진 · 연출 예시</figcaption></figure></div><ul><li>주변이 보이는 전체 사진 한 장</li><li>문제 부위를 가까이 찍은 사진 한 장</li><li>흐리거나 어두우면 다시 촬영</li></ul><p>집 주소·얼굴 등 불필요한 개인정보가 보이지 않게 확인하세요.</p><p class="guide-example">사진은 전문가와 직접 상담할 때 활용하세요.<br>이 안내는 사이트 사진 업로드 기능이 아닙니다.</p></div></details>
           <details><summary><span class="guide-icon guide-calendar" aria-hidden="true"></span>방문 지역과 희망 일정</summary><div class="guide-detail"><ul><li>부산 구·군과 동·읍·면</li><li>가능한 날짜·시간을 두 가지 정도</li><li>일정 협의 가능 여부</li><li>주차·출입·작업 공간 등 현장 조건</li></ul><p class="guide-example"><strong>전달 예시</strong><br>해운대구 좌동 / 평일 오후 또는 토요일 오전 / 일정 협의 가능</p><p>상세 주소는 방문을 협의할 때 전달하세요.<br>희망 일정은 예약 확정이 아닙니다.</p></div></details>
-          <p class="guide-photo-note">사진은 전문가와 직접 상담할 때 활용하세요.</p>
+
         </section>
       </div>
     </div></section>
@@ -88,7 +86,7 @@
     <section id="home-closing" aria-labelledby="home-closing-title"><div class="container closing-inner"><div><h2 id="home-closing-title">부산 집수리, 우리 동네 전문가부터 찾아보세요.</h2><p>필요한 수리 분야와 출장 가능 지역을 확인해보세요.</p></div><div class="closing-actions"><a class="closing-primary" href="find.html">부산 전문가 찾기 →</a><a class="closing-secondary" href="#categories">수리 분야 보기</a><p>현재 프로필은 예시입니다.</p></div></div></section>
   </main>
   <footer id="home-footer"><div class="container"><div class="end-footer-top"><div><a class="end-brand" href="#top" aria-label="YESSURI 예스수리 홈"><img src="assets/images/yessuri-ys11-brand-color.png" alt="YESSURI"><span class="end-wordmark-bounds" aria-hidden="true"></span><span class="end-korean">예스수리</span></a><p class="end-brand-description">부산 우리 동네 집수리 연결 플랫폼</p></div><nav class="end-footer-links" aria-label="하단 메뉴"><a href="#top">홈</a><a href="find.html">전문가 찾기</a><a href="#home-guide">비용·이용안내</a><a href="register.html">기술자 등록</a></nav></div><div class="end-footer-bottom"><p>현재는 예시 프로필을 확인하는 시안입니다. 실제 접수·연락 기능은 준비 중입니다.</p><p>© 2026 YESSURI</p></div></div></footer>
-  <nav class="mobile-nav" aria-label="모바일 메뉴"><a href="#top" aria-current="page"><span>⌂</span>홈</a><a href="find.html" class="mobile-request"><span>⌕</span>기술자찾기</a><a href="favorites.html"><span>♡</span>관심</a><a href="cases.html"><span>▧</span>작업사례</a><a href="register.html"><span>♙</span>등록 안내</a></nav>
+  <nav class="mobile-nav" aria-label="모바일 메뉴"><a href="#top" aria-current="page"><span aria-hidden="true">⌂</span>홈</a><a href="find.html" class="mobile-request"><span aria-hidden="true">⌕</span>전문가 찾기</a><a href="favorites.html"><span aria-hidden="true">♡</span>관심</a><a href="#home-guide"><span aria-hidden="true">ⓘ</span>이용안내</a></nav>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>

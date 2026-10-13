@@ -1,0 +1,75 @@
+/* Homepage-only type roles. Existing shared CSS and image assets remain intact. */
+body.home-modern{--home-heading:clamp(1.5rem,2.3vw,2rem);--home-title:1.1875rem;--home-body:1rem;--home-label:.9375rem;--home-small:.875rem;--home-muted:#52657a;--home-accent:#00767e;color:#13294b;font-size:var(--home-body);line-height:1.65;letter-spacing:0}
+.home-modern :is(p,li,dd,dt,a,button,summary,small){letter-spacing:0;overflow-wrap:anywhere}
+.home-modern :is(h1,h2,h3,h4){word-break:keep-all;overflow-wrap:anywhere;font-weight:700;letter-spacing:-.02em}
+.home-modern :is(a,button,summary):focus-visible{outline:3px solid #00767e;outline-offset:4px}
+.home-modern .home-header{height:auto;min-height:80px}
+.home-modern .home-header .header-inner{min-height:80px;gap:16px}
+.home-modern .home-menu{font-size:var(--home-label);line-height:1.5;gap:24px}
+.home-modern .home-header #home-menu a{white-space:normal;min-height:44px;display:flex;align-items:center;font-weight:600}
+.home-modern .home-header #home-menu .estimate-link{background:var(--home-accent);color:white;padding:12px 18px}
+.home-modern .home-header #home-menu .register-utility{margin-left:auto;font-size:var(--home-small);color:var(--home-muted)}
+.home-modern .menu-toggle{min-width:44px;min-height:44px}
+.home-modern .revised-hero h1{font-size:clamp(1.875rem,3.1vw,2.75rem);line-height:1.3;letter-spacing:-.025em;font-weight:800;margin:22px 0 20px}
+.home-modern .revised-hero h1>span{color:var(--home-accent)}
+.home-modern .revised-hero .hero-description{font-size:var(--home-body);line-height:1.7;color:var(--home-muted);margin:0 0 24px}
+.home-modern .revised-hero .local-service-badge{height:auto;min-height:34px;font-size:var(--home-small);line-height:1.5;font-weight:600;color:var(--home-accent)}
+.home-modern .revised-hero-actions>a{font-size:var(--home-label);line-height:1.5;white-space:normal;font-weight:700;min-height:48px}
+.home-modern .home-quote{background:var(--home-accent);color:#fff}
+.home-modern .revised-hero .hero-find-link{color:var(--home-accent);border-color:var(--home-accent)}
+.home-modern .home-service-note{font-size:var(--home-small);line-height:1.65;color:var(--home-muted);max-width:none}
+.home-modern .revised-hero-photo figcaption{font-size:.8125rem;line-height:1.5;color:#425770}
+.home-modern :is(#categories,#experts,#home-guide,#home-faq){padding:48px 0}
+.home-modern :is(#categories,#experts) .section-head h2,.home-modern #home-guide h2,.home-modern #home-faq h2{font-size:var(--home-heading);line-height:1.4;margin:8px 0 12px;letter-spacing:-.02em}
+.home-modern :is(#categories,#experts) .section-head p,.home-modern #home-guide .guide-heading p,.home-modern #home-faq .faq-heading p{font-size:var(--home-body);line-height:1.7;color:var(--home-muted);margin:0}
+.home-modern .section-kicker{font-size:var(--home-small);font-weight:600;line-height:1.5;letter-spacing:0;color:var(--home-accent)}
+.home-modern #categories .section-kicker,.home-modern #experts .section-kicker,.home-modern #home-faq .section-kicker,.home-modern #home-footer .end-korean{color:var(--home-accent)}
+.home-modern #categories .category-card:nth-child(n){height:auto;min-height:148px;font-size:var(--home-label);line-height:1.5;font-weight:700;padding:16px 8px}
+.home-modern #categories .category-description{font-size:.8125rem;line-height:1.6;color:var(--home-muted);font-weight:400}
+.home-modern .category-help{text-align:center;margin:22px 0 0;font-size:var(--home-small)}
+.home-modern .category-help a{display:inline-flex;align-items:center;min-height:44px;color:var(--home-accent);text-decoration:underline;text-underline-offset:4px}
+.home-modern #experts .demo-note{font-size:var(--home-small);line-height:1.65;color:var(--home-muted)}
+.home-modern #experts #expert-grid .expert-name{font-size:var(--home-title);line-height:1.45}
+.home-modern #experts .expert-facts{font-size:var(--home-small);line-height:1.65}
+.home-modern #experts .expert-facts>div{flex-wrap:wrap;gap:4px 10px}
+.home-modern #experts .expert-facts dd{color:var(--home-muted);line-height:1.65}
+.home-modern #experts .featured-cost{font-size:var(--home-small);line-height:1.65;color:var(--home-muted)}
+.home-modern #experts #expert-grid .profile-button,.home-modern #experts .featured-directory-link a{font-size:var(--home-label);line-height:1.5;min-height:44px;white-space:normal}
+.home-modern #experts #expert-grid .profile-button{background:var(--home-accent)}
+.home-modern #experts .featured-directory-link a{color:var(--home-accent);border-color:var(--home-accent)}
+.home-modern #experts .ai-image-label{font-size:.8125rem;line-height:1.5;padding:3px 7px}
+.home-modern #experts #expert-grid .favorite-button{width:44px;height:44px;font-size:26px;color:var(--home-accent)}
+.home-modern #home-guide p{font-size:var(--home-body);line-height:1.7;color:var(--home-muted)}
+.home-modern #home-guide .guide-steps{gap:24px}
+.home-modern #home-guide .guide-steps h3{font-size:var(--home-label);line-height:1.5}
+.home-modern #home-guide .guide-steps p{font-size:var(--home-small);line-height:1.6}
+.home-modern #home-guide .guide-number{font-size:.8125rem;line-height:1.5;color:var(--home-accent)}
+.home-modern #home-guide .guide-service-note{font-size:var(--home-small);line-height:1.65}
+.home-modern #home-guide .guide-panel h3{font-size:var(--home-title);line-height:1.45}
+.home-modern #home-guide .guide-panel>p{font-size:var(--home-body);line-height:1.7}
+.home-modern #home-guide .guide-costs h4{font-size:var(--home-label);line-height:1.5}
+.home-modern #home-guide .guide-costs p{font-size:var(--home-small);line-height:1.65}
+.home-modern #home-guide .guide-panel .guide-additional{font-size:var(--home-small);line-height:1.65;color:var(--home-accent)}
+.home-modern #home-guide summary,.home-modern #home-faq summary{font-size:var(--home-body);line-height:1.5;font-weight:600;min-height:56px}
+.home-modern #home-guide .guide-detail,.home-modern #home-guide .guide-detail p,.home-modern #home-faq .faq-answer{font-size:var(--home-body);line-height:1.75;color:var(--home-muted)}
+.home-modern #home-guide .guide-detail p,.home-modern #home-faq .faq-answer p{margin:0 0 1em}
+.home-modern #home-faq .faq-answer p{max-width:65ch}
+.home-modern #home-guide figcaption{font-size:.8125rem;line-height:1.6;color:var(--home-muted)}
+.home-modern #home-guide details,.home-modern #home-faq .faq-list{overflow:visible}
+.home-modern #guide-symptoms{scroll-margin-top:100px}
+.home-modern #home-closing h2{font-size:var(--home-heading);line-height:1.4;color:white}
+.home-modern #home-closing .closing-inner{background:linear-gradient(110deg,#132e4b,#00767e)}
+.home-modern #home-closing p{font-size:var(--home-body);line-height:1.7}
+.home-modern #home-closing a{font-size:var(--home-label);line-height:1.5;white-space:normal;min-height:48px}
+.home-modern #home-closing .closing-primary{color:var(--home-accent)}
+.home-modern #home-closing .closing-actions p{font-size:var(--home-small);line-height:1.65}
+.home-modern #home-footer .end-brand-description,.home-modern #home-footer .end-footer-links,.home-modern #home-footer .end-footer-bottom{font-size:var(--home-small);line-height:1.65;color:var(--home-muted)}
+.home-modern #home-footer .end-footer-links a{min-height:44px;display:inline-flex;align-items:center}
+.home-modern .mobile-nav{height:auto;min-height:66px;align-items:stretch}
+.home-modern .mobile-nav a{font-size:.8125rem;line-height:1.5;min-height:66px;padding:7px 2px;color:var(--home-muted);white-space:normal;text-align:center}
+.home-modern .mobile-nav .mobile-request{color:var(--home-accent)}
+.home-modern .mobile-nav .mobile-request span{background:var(--home-accent);margin-top:0}
+@media(max-width:1100px){.home-modern #home-guide .guide-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.home-modern #home-guide .guide-steps li:after{display:none}}
+@media(max-width:900px){.home-modern .home-menu{gap:0}.home-modern .home-header #home-menu .register-utility{margin-left:0}.home-modern .revised-hero h1{font-size:2.125rem}.home-modern #home-guide .guide-panels{grid-template-columns:1fr}}
+@media(max-width:760px){.home-modern{--home-heading:1.5rem}.home-modern .home-header,.home-modern .home-header .header-inner{min-height:72px}.home-modern :is(#categories,#experts,#home-guide,#home-faq){padding:36px 0}.home-modern .revised-hero h1{font-size:1.875rem}.home-modern #categories .category-card:nth-child(n){min-height:144px}.home-modern #home-guide .guide-steps{grid-template-columns:1fr}.home-modern #home-footer{padding-bottom:96px}.home-modern .revised-hero-actions>a{flex:1 1 180px}.home-modern #home-guide .guide-panel{padding:18px}}
+@media(max-width:359px){.home-modern #home-guide .guide-costs{grid-template-columns:1fr;gap:18px}.home-modern #home-guide .guide-costs li+li{border-left:0;border-top:1px solid #d4e9e4;padding-top:18px}.home-modern #home-guide .guide-photo-grid{grid-template-columns:1fr}}
