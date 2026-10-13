@@ -25,13 +25,20 @@
       <a class="brand home-brand ys11-brand" href="#top" aria-label="YESSURI 예스수리 홈"><img class="ys11-lockup" src="assets/images/yessuri-ys11-brand-color.png" alt="YESSURI"><span class="ys11-korean" aria-hidden="true">예스수리</span></a>
       <button class="menu-toggle" type="button" aria-controls="home-menu" aria-expanded="false" aria-label="메뉴 열기">☰</button>
       <nav id="home-menu" class="home-menu" aria-label="주요 메뉴">
-        <a href="request.html">집수리 견적 요청</a>
+        <a class="estimate-link" href="request.html">수리 견적요청</a>
         <a href="find.html">전문가 찾기</a>
-        <a class="technician-link" href="register.html">기술자 등록</a>
-        <a href="#how">이용 안내</a>
+        <button class="text-button" type="button" data-toast="비용·이용안내는 준비 중입니다.">비용·이용안내</button>
         <button class="text-button home-login" type="button" data-toast="로그인 기능은 다음 단계에서 준비됩니다.">로그인</button>
+        <a class="register-utility" href="register.html">기술자 등록</a>
       </nav>
     </div>
+    <style>
+      .home-header #home-menu .estimate-link{background:#008b95;color:#fff;padding:11px 18px;border-radius:11px;white-space:nowrap}
+      .home-header #home-menu .estimate-link:hover{background:#006d76;color:#fff}
+      .home-header #home-menu>button{font:inherit;white-space:nowrap;padding:11px 0}
+      .home-header #home-menu .home-login,.home-header #home-menu .register-utility{color:#526781;font-size:13px;font-weight:600}
+      .home-header #home-menu .register-utility{white-space:nowrap}
+    </style>
   </header>
 
   <main id="main">
