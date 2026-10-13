@@ -4,7 +4,6 @@
 #home-guide p{font-size:14px;color:#60758c;line-height:1.8}
 #home-guide .guide-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;list-style:none;margin:0;padding:0}
 #home-guide .guide-steps li{display:flex;align-items:center;gap:14px;position:relative;min-width:0}
-#home-guide .guide-steps li:not(:last-child):after{content:'→';position:absolute;right:-22px;color:#008b95;font-size:22px}
 #home-guide .guide-icon{display:inline-block;flex:none;width:48px;height:48px;background-image:url('assets/images/guide-3d-icons.png');background-size:400% 200%;background-repeat:no-repeat}
 #home-guide .guide-original{background-image:url('assets/images/journey-3d-icons.png');background-size:400% 100%;height:64px}
 #home-guide .guide-tool{background-position:0% center}#home-guide .guide-profile{background-position:33.333333% center}
@@ -43,5 +42,5 @@
 #home-guide .guide-close-photo{background-position:100% 0}
 #home-guide figcaption{font-size:11px;text-align:center;margin-top:5px;color:#60758c}
 #home-guide .guide-panel .guide-photo-note{font-size:12px;margin:14px 0 0}
-@media(max-width:1000px){#home-guide .guide-steps{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}#home-guide .guide-steps li:after{display:none}#home-guide .guide-panel{padding:20px}#home-guide .guide-panel h3{font-size:20px}}
+@media(max-width:1000px){#home-guide .guide-steps{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}#home-guide .guide-panel{padding:20px}#home-guide .guide-panel h3{font-size:20px}}
 @media(max-width:760px){#home-guide{padding:36px 0}#home-guide h2{font-size:25px}#home-guide .guide-panels{grid-template-columns:1fr}#home-guide .guide-steps{grid-template-columns:1fr;gap:18px}#home-guide .guide-costs li{padding:4px 6px}#home-guide .guide-costs h4{font-size:13px}#home-guide summary{font-size:13px;padding:10px}#home-guide .guide-panel{padding:18px}#home-guide .guide-heading p{font-size:13px}}
