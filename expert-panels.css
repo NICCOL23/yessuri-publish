@@ -1,4 +1,8 @@
 /* Expert content panels only: align with the YESSURI directory palette. */
+.detail-page .expert-page-actions{display:flex;justify-content:flex-end;margin-bottom:24px}
+.detail-page .expert-page-actions .expert-back{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 16px;border:1px solid #cddfdf;border-radius:9px;background:#fff;color:#13294b;font-size:.875rem;font-weight:600;line-height:1.5;letter-spacing:0}
+.detail-page .expert-page-actions .expert-back:hover{background:#f3faf8}
+.detail-page .expert-page-actions .expert-back:focus-visible{outline:3px solid #00767e;outline-offset:3px}
 .detail-page .detail-main{background:#fff}
 .detail-page .detail-main :is(.profile-hero,.detail-card,.contact-card){border:1px solid #dfe8ee;border-radius:14px;box-shadow:none;background:#fff}
 .detail-page .detail-main .profile-hero{background:#f4faf8;padding:28px 30px;border-color:#dfe9e6}
