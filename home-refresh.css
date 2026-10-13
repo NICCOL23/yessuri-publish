@@ -37,6 +37,8 @@
 /* Branded hero only. Navigation and all lower sections retain their existing styles. */
 .revised-hero .revised-hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:44px;align-items:center;padding:52px 0;background:transparent}
 .revised-hero .hero-copy{min-width:0}
+.revised-hero .local-service-badge{background:#e2f4ef;color:#007e80;border:1px solid #b4ddd5;font-size:14px;font-weight:800;line-height:20.140625px;height:34.140625px;padding:6px 14px;border-radius:999px;white-space:nowrap;gap:7px;max-width:100%}
+.revised-hero .local-service-badge svg{display:block;flex:none}
 .revised-hero h1{font-size:clamp(30px,3vw,43px);letter-spacing:-1.7px;line-height:1.35;max-width:none;margin:22px 0 20px}
 .revised-hero h1>span{display:block;color:#008c95}
 .revised-hero .hero-description{margin-bottom:24px;font-size:16px;line-height:1.85}
