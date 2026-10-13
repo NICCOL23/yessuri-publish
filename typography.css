@@ -1,0 +1,74 @@
+/* Opt-in content typography. Shared navigation, footer, images and data are untouched. */
+.typography-page #main{--type-body:1rem;--type-small:.875rem;--type-muted:#52657a;font-size:var(--type-body);line-height:1.7;letter-spacing:0}
+.typography-page #main :is(h1,h2,h3){font-weight:700;word-break:keep-all;overflow-wrap:anywhere}
+.typography-page #main h1{line-height:1.35;letter-spacing:-.02em}
+.typography-page #main h2{line-height:1.4;letter-spacing:-.02em}
+.typography-page #main h3{line-height:1.5;letter-spacing:-.01em}
+.typography-page #main :is(p,li,dt,dd,label,small){letter-spacing:0;word-break:keep-all;overflow-wrap:anywhere}
+.typography-page #main p{font-size:var(--type-body);line-height:1.7}
+.typography-page #main :is(button,.button){font-weight:600;letter-spacing:0;line-height:1.5;white-space:normal;overflow-wrap:anywhere;min-height:44px;height:auto}
+.typography-page #main :is(.button,.result-profile-link,#guide-copy){font-size:1rem;line-height:1.5;font-weight:600}
+.typography-page #main :is(.favorite-button,.compare-button){font-size:.875rem;font-weight:600;line-height:1.5;min-height:44px}
+.typography-page #main :is(.section-kicker,.profile-eyebrow){font-size:.8125rem;font-weight:600;line-height:1.6;letter-spacing:.06em}
+.typography-page #main :is(.find-notice,.detail-notice,.demo-note){font-size:.875rem;font-weight:500;line-height:1.65}
+.typography-page #main :is(.find-empty,.not-found) p{font-size:1rem;line-height:1.7}
+.typography-page #main :is(.find-empty,.not-found) h1{font-size:2rem}
+.typography-page #main :is(.find-empty h3,.find-card-name,.compare-card h3){font-size:1.25rem;line-height:1.5;letter-spacing:-.01em}
+.typography-page #main .find-intro p{color:var(--type-muted)}
+.typography-page #main .find-intro h1{font-weight:700}
+.typography-page #main :is(.find-results-heading,.compare-heading) h2{font-size:1.625rem}
+.typography-page #main :is(.result-card-facts,.result-card-cost){font-size:1rem;line-height:1.65}
+.typography-page #main :is(.results-example-note,.result-card-note,.result-work-keywords,.compare-status,.compare-toolbar p,.compare-share-note,.compare-share-status){font-size:.875rem;line-height:1.65}
+.typography-page #main :is(.find-card-kicker,.find-card-meta,.find-card-fields span,.find-demo-badge){font-size:.875rem;line-height:1.65;color:var(--type-muted)}
+.typography-page #main .find-card-kicker{font-weight:400}
+.typography-page #main .find-card-action{font-size:.875rem;font-weight:600;line-height:1.5;min-height:44px;gap:8px;flex-wrap:wrap}
+.typography-page #main :is(.compare-heading a,.compare-detail-link,.compare-toolbar a,.back-link){font-size:.875rem;line-height:1.5;font-weight:600;min-height:44px;display:inline-flex;align-items:center;flex-wrap:wrap}
+.typography-page #main :is(.compare-heading,.compare-share-actions){flex-wrap:wrap}
+.typography-page #main .compare-card-note{font-size:.875rem;line-height:1.65;color:var(--type-muted)}
+.typography-page #main .compare-card dt{font-size:.875rem;line-height:1.65;font-weight:600;color:var(--type-muted)}
+.typography-page #main .compare-card dd{font-size:1rem;line-height:1.7;font-weight:500}
+.typography-page #main .compare-card-actions a{font-size:.875rem;line-height:1.5;font-weight:600;min-height:44px;white-space:normal}
+.typography-page #main .profile-heading h1{font-weight:700}
+.typography-page #main .profile-heading p{font-size:1rem;line-height:1.7;color:var(--type-muted)}
+.typography-page #main :is(.profile-tags span,.contact-card-kicker){font-size:.875rem;line-height:1.6;font-weight:600}
+.typography-page #main .detail-card h2{font-size:1.625rem}
+.typography-page #main .contact-card h2{font-size:1.5rem}
+.typography-page #main .detail-intro{max-width:65ch}
+.typography-page #main .fact-list div{font-size:1rem;line-height:1.7}
+.typography-page #main .fact-list dt{font-weight:600;color:var(--type-muted)}
+.typography-page #main .fact-list dd{font-weight:500}
+.typography-page #main :is(.detail-footnote,.work-figure figcaption,.contact-card small,.pending-grid p,.compare-detail-status){font-size:.875rem;line-height:1.65;color:var(--type-muted)}
+.typography-page #main .pending-grid strong{font-size:1.125rem;line-height:1.5;font-weight:600}
+.typography-page #main .profile-hero>.compare-button{margin-left:0}
+.typography-page #main .profile-hero>:is(.favorite-button,.compare-button,.compare-detail-link){margin-right:8px;margin-bottom:8px}
+.typography-page #main .guide-checks h3{font-size:1.25rem}
+.typography-page #main :is(.guide-cost-help,.guide-price-note,.guide-sample,.guide-copy-status){font-size:.875rem;line-height:1.65}
+.typography-page #main .guide-consult h2{font-size:1.25rem;line-height:1.5;letter-spacing:-.01em}
+.typography-page #main .guide-art-slogan{font-size:.875rem;line-height:1.6}
+.typography-page #main .guide-art-brand{font-size:.8125rem;line-height:1.65}
+.typography-page #main .guide-art{min-height:230px}
+.typography-page #main .guide-faq summary{font-size:1rem;line-height:1.5;letter-spacing:0;font-weight:600;word-break:keep-all;overflow-wrap:anywhere}
+.typography-page #main .reg-main h1,.typography-page #main.reg-main h1{font-size:2.5rem}
+.typography-page #main.reg-main :is(.reg-note,.reg-preview-body p,.reg-field,.reg-example,.reg-pending,.reg-kicker,.reg-notice){font-size:.875rem;line-height:1.65}
+.typography-page #main.reg-main .reg-faq summary{font-size:1rem;line-height:1.5;letter-spacing:0;overflow-wrap:anywhere}
+.typography-page #main.reg-main .reg-pending{white-space:normal;flex-shrink:0;max-width:100%}
+.typography-page #main :is(.guide-art-slogan,.guide-art-brand){position:static;transform:none}
+.typography-page #main .guide-art{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.5fr) minmax(0,.55fr);gap:8px;padding:0}
+.typography-page #main .guide-art img{grid-column:2;grid-row:1}
+.typography-page #main .guide-art-slogan{grid-column:1;grid-row:1}
+.typography-page #main .guide-art-brand{grid-column:3;grid-row:1}
+.typography-page>.toast{font-size:.875rem;line-height:1.65;letter-spacing:0;max-width:calc(100vw - 32px);white-space:normal;overflow-wrap:anywhere}
+@media(max-width:760px){
+ .typography-page #main .find-intro h1,.typography-page #main .profile-heading h1,.typography-page #main.reg-main h1{font-size:1.875rem}
+ .typography-page #main :is(.detail-card,.contact-card) h2{font-size:1.5rem}
+ .typography-page #main :is(.find-results-heading,.compare-heading) h2{font-size:1.5rem}
+ .typography-page #main :is(input:not([type=checkbox]),select,textarea){font-size:1rem;height:auto;min-height:48px}
+ .typography-page #main .find-results-actions label{white-space:normal;flex-wrap:wrap}
+ .typography-page #main .find-results-actions select{max-width:100%}
+ .typography-page #main .guide-art{grid-template-columns:minmax(0,.8fr) minmax(0,1.4fr);min-height:0;gap:12px}
+ .typography-page #main .guide-art img{grid-column:2;grid-row:1/3}
+ .typography-page #main .guide-art-slogan{grid-column:1;grid-row:1}
+ .typography-page #main .guide-art-brand{grid-column:1;grid-row:2}
+ .typography-page #main .guide-prices .guide-price{white-space:normal}
+ .typography-page #main .profile-heading{align-items:flex-start;flex-wrap:wrap}
+}
