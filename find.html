@@ -12,12 +12,13 @@
   <script src="regions.js?v=1" defer></script>
   <script src="favorites.js?v=1" defer></script>
   <script src="compare.js?v=1" defer></script>
-  <script src="find.js?v=16" defer></script>
+  <script src="find.js?v=17" defer></script>
   <link rel="icon" href="assets/icons/favicon.ico?v=1" sizes="any">
   <link rel="icon" type="image/png" href="assets/icons/favicon-32.png?v=1" sizes="32x32">
   <link rel="apple-touch-icon" href="assets/icons/favicon-180.png?v=1" sizes="180x180">
   <link rel="stylesheet" href="find-header-brand.css?v=1">
   <script src="home-refresh.js?v=1" defer></script>
+  <link rel="stylesheet" href="find-search.css?v=1">
 </head>
 <body class="find-page">
   <a class="skip-link" href="#main">본문 바로가기</a>
@@ -29,16 +30,19 @@
   </div></header>
 
   <main id="main" class="find-main">
-    <section class="find-intro"><div class="container"><p class="directory-breadcrumb"><a href="index.html">홈</a> &gt; 전문가 찾기</p><h1>부산 전문가 찾기</h1><p>수리 분야와 출장 가능 지역을 확인해보세요.</p></div></section>
-    <div class="container find-content"><div class="find-notice"><span aria-hidden="true">ⓘ</span><span>모집 후 화면 구성 예시입니다. 아래 업체명·사진·지역은 실제 등록 정보가 아닙니다.</span></div>
-      <form class="find-filter-panel" id="find-filter-form"><div class="find-filter-title"><h2>조건 선택</h2><button id="reset-filters" type="button">조건 초기화</button></div><div class="find-filter-fields"><label for="find-query" class="find-query-field">업체명 또는 수리 내용<input id="find-query" name="q" type="search" maxlength="80" autocomplete="off" placeholder="업체명 또는 수리 내용 검색"></label><label for="find-region">방문 지역<select id="find-region" name="region" data-busan-regions></select></label><label for="find-category">수리 분야<select id="find-category" name="category"><option value="전체">전체 분야</option><option>누수·수도</option><option>하수구·변기</option><option>타일</option><option>페인트</option><option>목공</option><option>에어컨</option><option>청소</option><option>철거</option><option>전기·조명</option><option>문·창호</option><option>컴퓨터·IT</option></select></label><label for="find-type">기술자 유형<select id="find-type" name="type"><option value="전체">전체</option><option value="개인 기술자 유형">개인 기술자</option><option value="사업자·업체 유형">사업자·업체</option></select></label><button class="button button-primary" type="submit">검색 <span aria-hidden="true">→</span></button></div></form>
-      <p class="find-region-hint" id="find-region-hint">빠른 지역 선택: 좌우로 넘겨 부산의 모든 구·군을 볼 수 있습니다. 키보드에서는 Tab으로 버튼을 선택하세요.</p>
-      <div class="find-region-chips" id="find-region-chips" role="group" aria-label="빠른 지역 선택" aria-describedby="find-region-hint"></div>
+    <section class="find-intro"><div class="container"><h1>부산 전문가 찾기</h1><p>수리받을 지역과 필요한 수리 분야를 선택해보세요.</p></div></section>
+    <div class="container find-content">
+      <form class="find-filter-panel compact-search" id="find-filter-form"><div class="find-filter-fields">
+<label for="find-region">수리받을 지역<select id="find-region" name="region" data-busan-regions></select></label>
+<label for="find-category">수리 분야<select id="find-category" name="category"><option value="전체">전체 분야</option><option>누수·수도</option><option>하수구·변기</option><option>타일</option><option>페인트</option><option>목공</option><option>에어컨</option><option>청소</option><option>철거</option><option>전기·조명</option><option>문·창호</option><option>컴퓨터·IT</option></select></label>
+<label for="find-query" class="find-query-field">업체명 또는 작업 내용 검색 (선택)<input id="find-query" name="q" type="search" maxlength="80" autocomplete="off" placeholder="예: 누수, 싱크대, 업체명" aria-describedby="find-query-help"><small id="find-query-help">직접 입력해도 되고, 비워두고 지역·분야만 선택해도 됩니다.</small></label>
+<button class="button button-primary" type="submit">전문가 찾기</button></div><label class="find-coverage-option" for="find-citywide"><input type="checkbox" id="find-citywide" name="citywide" value="1">부산 전 지역 출장 가능 업체만 보기</label></form>
+<div class="find-search-support"><a href="index.html#guide-symptoms">어떤 분야인지 모르겠어요? 상담 준비 안내 →</a><button id="reset-filters" type="button">초기화</button></div>
       <div class="find-results-heading"><div><span class="section-kicker">SEARCH RESULTS</span><h2>예시 프로필 <strong id="result-count" aria-live="polite">0</strong>개</h2></div><div class="find-results-actions"><label for="find-sort">결과 정렬<select id="find-sort" name="sort"><option value="default">기본순</option><option value="name">이름순</option><option value="areas">출동 가능 지역 수순</option></select></label><span class="find-demo-badge">예시 프로필</span></div></div>
       <div class="compare-toolbar"><a href="compare.html">비교 보기 <strong id="compare-count">0</strong>/3 <span aria-hidden="true">→</span></a><p id="compare-status" role="status" aria-live="polite"></p></div>
       <p class="find-current-conditions" id="find-current-conditions"></p><p class="find-results-live sr-only" id="find-results-live" role="status" aria-live="polite" aria-atomic="true"></p>
       <div class="find-grid" id="find-grid"></div><p class="directory-recruit-note">첫 참여 업체 12곳 모집을 목표로 한 목록 구성입니다.</p>
-      <div class="find-empty" id="find-empty" hidden><span aria-hidden="true">⌕</span><h3 id="find-empty-heading">검색 조건을 바꿔보세요</h3><p>검색어·지역·수리 종류·기술자 유형을 바꾸거나 조건을 초기화해 보세요.</p><button id="empty-reset" class="button button-primary" type="button">조건 초기화</button></div>
+      <div class="find-empty" id="find-empty" hidden><span aria-hidden="true">⌕</span><h3 id="find-empty-heading">검색 조건을 바꿔보세요</h3><p>검색어·지역·수리 분야를 바꾸거나 조건을 초기화해 보세요.</p><button id="empty-reset" class="button button-primary" type="button">조건 초기화</button></div>
     </div>
   </main>
 

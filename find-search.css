@@ -1,0 +1,21 @@
+/* Intro and search only; cards, header and footer keep existing styles. */
+.find-page .find-intro{padding:36px 0 20px}
+.find-page .find-intro h1{font-size:2rem;font-weight:700;line-height:1.4;letter-spacing:-.02em;margin:0 0 10px;word-break:keep-all}
+.find-page .find-intro p{font-size:1rem;line-height:1.7;letter-spacing:0;color:#52657a;margin:0}
+.find-page .find-content{padding-top:0}
+.find-page .compact-search{padding:24px;background:#f6f8fa;border:1px solid #e4eaf2;border-radius:14px;margin:0}
+.find-page .compact-search .find-filter-fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,2.1fr) auto;gap:16px;align-items:start}
+.find-page .compact-search label{display:flex;flex-direction:column;gap:8px;min-width:0;font-size:.875rem;font-weight:600;line-height:1.6;letter-spacing:0;color:#52657a}
+.find-page .compact-search .find-query-field{grid-column:auto}
+.find-page .compact-search :is(input,select){width:100%;min-width:0;height:3rem;margin-top:0;padding:10px 12px;border:1px solid #dce5ec;border-radius:10px;background:#fff;color:#13294b;font:400 1rem/1.6 'Noto Sans KR',sans-serif;letter-spacing:0}
+.find-page #find-query-help{font-size:.875rem;line-height:1.65;font-weight:400;color:#52657a;overflow-wrap:anywhere}
+.find-page .compact-search .button{grid-column:auto;margin-top:calc(.875rem * 1.6 + 8px);min-height:3rem;padding:10px 20px;background:#00767e;color:#fff;font-size:1rem;line-height:1.6;letter-spacing:0;white-space:normal}
+.find-page .find-search-support{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:12px 0 24px;font-size:.875rem;line-height:1.65}
+.find-page .find-search-support a{color:#00767e;text-decoration:underline;text-underline-offset:4px;min-height:44px;display:inline-flex;align-items:center}
+.find-page .find-search-support button{border:0;background:transparent;color:#52657a;font:inherit;min-height:44px;padding:8px;cursor:pointer;text-decoration:underline;text-underline-offset:4px;flex:none}
+.find-page .compact-search .find-coverage-option{display:flex;flex-direction:row;align-items:center;gap:10px;margin-top:14px;min-height:44px;font-size:.875rem;font-weight:400;color:#13294b;cursor:pointer}
+.find-page .compact-search .find-coverage-option input{width:18px;height:18px;flex:none;padding:0;margin:0;accent-color:#00767e}
+.find-page .find-card-coverage{display:inline-flex;align-self:flex-start;max-width:100%;padding:4px 8px;margin:6px 0;border-radius:7px;background:#e2f4ef;color:#00767e;font-size:.8125rem;line-height:1.6;font-weight:600}
+.find-page :is(.compact-search,.find-search-support) :is(a,button,input,select):focus-visible{outline:3px solid #00767e;outline-offset:3px}
+@media(max-width:1000px){.find-page .compact-search .find-filter-fields{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+@media(max-width:760px){.find-page .find-intro{padding:28px 0 20px}.find-page .find-intro h1{font-size:1.625rem}.find-page .compact-search{padding:18px}.find-page .compact-search .find-filter-fields{grid-template-columns:minmax(0,1fr)}.find-page .compact-search .button{margin-top:0;width:100%}.find-page .find-search-support{align-items:flex-start;gap:12px}.find-page .find-search-support a{min-width:0;flex:1}}

@@ -1,22 +1,24 @@
 // Presentation-only examples retain original IDs, fields and profile destinations.
 const directoryPresentation = {
-  'bada-repair': {name:'누수·수도 업체명', image:'ai-water-yessuri-v2.png', keywords:'수도꼭지 배관 누수 점검'},
+  'bada-repair': {name:'누수·수도 업체명', image:'ai-water-yessuri-v2.png', keywords:'수도꼭지 배관 누수 점검 싱크대'},
   'tile-studio': {name:'타일·문창호 업체명', image:'ai-tile-yessuri-v2.png', keywords:'욕실 타일 부분 보수 문 창호'},
   'bright-home': {name:'전기·조명 업체명', image:'ai-light-yessuri-v2.png', keywords:'전등 스위치 콘센트 에어컨'},
   'busan-home-repair': {name:'목공·페인트 업체명', image:'ai-wood.png', keywords:'가구 선반 목공 페인트 도장'},
   'clean-day': {name:'청소 업체명', image:'ai-clean.png', keywords:'입주 생활 청소 철거'},
   'local-it': {name:'컴퓨터·IT 업체명', image:'ai-it.png', keywords:'부팅 속도 컴퓨터 점검'}
 };
+// A provider's confirmed coverage flag is separate from their primary service areas.
+// Missing coverage data defaults to false; broad coverage is never inferred from an address.
+const servesAllBusan = expert => expert.serviceAllBusan === true || expert.serviceAreas?.includes('전체') === true;
+const servesRegion = (expert, region) => servesAllBusan(expert) || window.YESSURI_SERVES_REGION(expert, region);
 const directoryExperts = () => window.YESSURI_PUBLIC_EXPERTS().map(expert => ({...expert, ...directoryPresentation[expert.id]}));
 const validRegions = window.YESSURI_REGIONS;
 const validCategories = ['전체','누수·수도','하수구·변기','타일','페인트','목공','에어컨','청소','철거','전기·조명','문·창호','컴퓨터·IT'];
-const validTypes = ['전체','개인 기술자 유형','사업자·업체 유형'];
 const queryInput = document.querySelector('#find-query');
 const regionSelect = document.querySelector('#find-region');
 const categorySelect = document.querySelector('#find-category');
-const typeSelect = document.querySelector('#find-type');
+const citywideCheckbox = document.querySelector('#find-citywide');
 const sortSelect = document.querySelector('#find-sort');
-const regionChips = document.querySelector('#find-region-chips');
 const resultGrid = document.querySelector('#find-grid');
 const resultCount = document.querySelector('#result-count');
 const emptyState = document.querySelector('#find-empty');
@@ -26,6 +28,8 @@ const compareCount = document.querySelector('#compare-count');
 const currentConditions = document.querySelector('#find-current-conditions');
 const resultsLive = document.querySelector('#find-results-live');
 let announcementTimer;
+let appliedFilters;
+const readFilters = () => ({query:queryInput.value.trim().replace(/\s+/g," "),region:regionSelect.value,category:categorySelect.value,sort:sortSelect.value,citywide:citywideCheckbox.checked});
 let requestedCategories = [];
 let requestedService = '';
 const serviceNotice = document.createElement('p');
@@ -40,58 +44,38 @@ function loadFiltersFromUrl() {
   queryInput.value = (params.get('q') || '').slice(0, 80);
   regionSelect.value = validRegions.includes(params.get('region')) ? params.get('region') : '전체';
   categorySelect.value = validCategories.includes(params.get('category')) ? params.get('category') : '전체';
-  typeSelect.value = validTypes.includes(params.get('type')) ? params.get('type') : '전체';
+  citywideCheckbox.checked = params.get('citywide') === '1';
   sortSelect.value = ['default', 'name', 'areas'].includes(params.get('sort')) ? params.get('sort') : 'default';
+  appliedFilters = readFilters();
 }
 
-function updateUrl() {
+function updateUrl(mode = "push") {
   const url = new URL(window.location.href);
-  for (const key of ['q', 'region', 'category', 'type', 'sort', 'categories', 'service']) url.searchParams.delete(key);
+  for (const key of ['q', 'region', 'category', 'type', 'sort', 'categories', 'service', 'citywide']) url.searchParams.delete(key);
   if (requestedCategories.length) url.searchParams.set('categories', requestedCategories.join(','));
   if (requestedService) url.searchParams.set('service', requestedService);
-  const query = queryInput.value.trim().replace(/\s+/g, ' ');
+  const query = appliedFilters.query;
   if (query) url.searchParams.set('q', query);
-  if (regionSelect.value !== '전체') url.searchParams.set('region', regionSelect.value);
-  if (categorySelect.value !== '전체') url.searchParams.set('category', categorySelect.value);
-  if (typeSelect.value !== '전체') url.searchParams.set('type', typeSelect.value);
-  if (sortSelect.value !== 'default') url.searchParams.set('sort', sortSelect.value);
-  try { window.history.replaceState(null, '', url); } catch { /* 일부 로컬 파일 브라우저는 주소 변경을 제한합니다. */ }
+  if (appliedFilters.region !== '전체') url.searchParams.set('region', appliedFilters.region);
+  if (appliedFilters.category !== '전체') url.searchParams.set('category', appliedFilters.category);
+  if (appliedFilters.sort !== 'default') url.searchParams.set('sort', appliedFilters.sort);
+  if (appliedFilters.citywide) url.searchParams.set('citywide', '1');
+  try { if (url.href !== location.href) window.history[mode === 'replace' ? 'replaceState' : 'pushState'](null, '', url); } catch { /* 일부 로컬 파일 브라우저는 주소 변경을 제한합니다. */ }
 }
 
 loadFiltersFromUrl();
 
-function renderChips(focusSelected = false) {
-  regionChips.replaceChildren();
-  let activeChip;
-  validRegions.forEach(region => {
-    const chip = document.createElement('button');
-    chip.type = 'button';
-    chip.textContent = region === '전체' ? '부산 전체' : region;
-    chip.setAttribute('aria-pressed', String(regionSelect.value === region));
-    chip.addEventListener('click', () => {
-      regionSelect.value = region;
-      renderDirectory(true, true);
-    });
-    regionChips.append(chip);
-    if (regionSelect.value === region) activeChip = chip;
-  });
-  if (regionSelect.value !== '전체' && activeChip) {
-    regionChips.scrollLeft = activeChip.offsetLeft - regionChips.offsetLeft - (regionChips.clientWidth - activeChip.clientWidth) / 2;
-  }
-  if (focusSelected && activeChip) activeChip.focus();
-}
-
-function renderDirectory(syncUrl = true, focusRegion = false) {
-  const query = queryInput.value.trim().replace(/\s+/g, ' ').normalize('NFKC').toLocaleLowerCase('ko-KR');
+function renderDirectory(syncUrl = true) {
+  const query = appliedFilters.query.normalize('NFKC').toLocaleLowerCase('ko-KR');
   const matches = directoryExperts().filter(expert =>
-    window.YESSURI_SERVES_REGION(expert, regionSelect.value) &&
-    (requestedCategories.length ? requestedCategories.some(field => expert.fields.includes(field)) : (categorySelect.value === '전체' || expert.fields.includes(categorySelect.value))) &&
-    (typeSelect.value === '전체' || expert.profileType === typeSelect.value) &&
-    (!query || [expert.name, expert.keywords || '', ...expert.fields].join(' ').normalize('NFKC').toLocaleLowerCase('ko-KR').includes(query))
+    servesRegion(expert, appliedFilters.region) &&
+    (!appliedFilters.citywide || servesAllBusan(expert)) &&
+    (requestedCategories.length ? requestedCategories.some(field => expert.fields.includes(field)) : (appliedFilters.category === '전체' || expert.fields.includes(appliedFilters.category))) &&
+    (!query || query.split(' ').every(term => [expert.name, expert.keywords || '', ...expert.fields].join(' ').normalize('NFKC').toLocaleLowerCase('ko-KR').includes(term)))
   );
-  if (sortSelect.value === 'name') {
+  if (appliedFilters.sort === 'name') {
     matches.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
-  } else if (sortSelect.value === 'areas') {
+  } else if (appliedFilters.sort === 'areas') {
     matches.sort((a, b) => (b.serviceAreas?.length || 0) - (a.serviceAreas?.length || 0));
   }
   serviceNotice.hidden = !requestedService;
@@ -100,14 +84,17 @@ function renderDirectory(syncUrl = true, focusRegion = false) {
   resultCount.textContent = String(matches.length);
   emptyState.hidden = matches.length !== 0;
   if (!matches.length) {
-    const hasRegionExperts = directoryExperts().some(expert => window.YESSURI_SERVES_REGION(expert, regionSelect.value));
-    emptyHeading.textContent = hasRegionExperts
+    const hasRegionExperts = directoryExperts().some(expert => servesRegion(expert, appliedFilters.region));
+    emptyHeading.textContent = appliedFilters.citywide
+      ? '조건에 맞는 부산 전 지역 출장 전문가가 없습니다'
+      : hasRegionExperts
       ? '조건에 맞는 예시 프로필이 없습니다'
       : '해당 지역의 예시 프로필이 없습니다';
   }
-  const regionName = regionSelect.value === '전체' ? '부산 전체' : regionSelect.value;
+  const regionName = appliedFilters.region === '전체' ? '부산 전체' : appliedFilters.region;
   const sortName = sortSelect.selectedOptions[0].textContent;
-  currentConditions.textContent = `선택 조건: ${regionName} · ${categorySelect.value === '전체' ? '전체 분야' : categorySelect.value}${query ? ` · 검색: ${queryInput.value.trim()}` : ''} · 정렬: ${sortName}`;
+  const categoryName = requestedCategories.length ? requestedCategories.join(' · ') : (appliedFilters.category === '전체' ? '전체 분야' : appliedFilters.category);
+  currentConditions.textContent = `선택 조건: ${regionName} · ${categoryName}${query ? ` · 검색: ${appliedFilters.query}` : ''}${appliedFilters.citywide ? ' · 부산 전 지역 출장 가능' : ''} · 정렬: ${sortName}`;
   clearTimeout(announcementTimer);
   announcementTimer = window.setTimeout(() => {
     resultsLive.textContent = matches.length
@@ -130,7 +117,7 @@ function renderDirectory(syncUrl = true, focusRegion = false) {
     body.className = 'find-card-body';
     const kicker = document.createElement('span');
     kicker.className = 'find-card-kicker';
-    kicker.textContent = `출장 지역: ${window.YESSURI_AREAS_LABEL(expert)} (예시)`;
+    kicker.textContent = `주요 출장 지역: ${window.YESSURI_AREAS_LABEL(expert)} (예시)`;
     const name = document.createElement('strong');
     name.className = 'find-card-name';
     name.textContent = expert.name;
@@ -145,6 +132,12 @@ function renderDirectory(syncUrl = true, focusRegion = false) {
     meta.className = 'find-card-meta';
     meta.textContent = '출장·진단비: 상담 시 확인';
     body.append(kicker, name, fields, meta);
+    if (servesAllBusan(expert)) {
+      const coverage = document.createElement('span');
+      coverage.className = 'find-card-coverage';
+      coverage.textContent = '부산 전 지역 출장 가능';
+      body.insertBefore(coverage, meta);
+    }
     const action = document.createElement('span');
     action.className = 'find-card-action';
     action.innerHTML = '프로필 예시 보기 <span aria-hidden="true">→</span>';
@@ -169,7 +162,6 @@ function renderDirectory(syncUrl = true, focusRegion = false) {
     card.append(profileLink, controls);
     resultGrid.append(card);
   });
-  renderChips(focusRegion);
   if (syncUrl) updateUrl();
 }
 
@@ -178,22 +170,20 @@ function resetFilters() {
   queryInput.value = '';
   regionSelect.value = '전체';
   categorySelect.value = '전체';
-  typeSelect.value = '전체';
+  citywideCheckbox.checked = false;
   sortSelect.value = 'default';
+  appliedFilters = readFilters();
   renderDirectory();
 }
 
 document.querySelector('#find-filter-form').addEventListener('submit', event => {
   event.preventDefault();
+  if (categorySelect.value !== appliedFilters.category) { requestedCategories = []; requestedService = ''; }
+  appliedFilters = readFilters();
   renderDirectory();
   document.querySelector('.find-results-heading').scrollIntoView({behavior:'smooth',block:'start'});
 });
-regionSelect.addEventListener('change', () => renderDirectory());
-categorySelect.addEventListener('change', () => { requestedCategories = []; requestedService = ''; renderDirectory(); });
-typeSelect.addEventListener('change', () => renderDirectory());
-sortSelect.addEventListener('change', () => renderDirectory());
-queryInput.addEventListener('input', event => { if (!event.isComposing) renderDirectory(); });
-queryInput.addEventListener('compositionend', () => renderDirectory());
+sortSelect.addEventListener('change', () => { appliedFilters.sort = sortSelect.value; renderDirectory(); });
 document.querySelector('#reset-filters').addEventListener('click', resetFilters);
 document.querySelector('#empty-reset').addEventListener('click', resetFilters);
 window.addEventListener('popstate', () => { loadFiltersFromUrl(); renderDirectory(false); });
@@ -205,5 +195,6 @@ document.querySelectorAll('[data-toast]').forEach(button => button.addEventListe
   toast.classList.add('show');
   window.setTimeout(() => toast.classList.remove('show'), 3500);
 }));
-renderDirectory();
+renderDirectory(false);
+updateUrl("replace");
 updateCompareCount();
