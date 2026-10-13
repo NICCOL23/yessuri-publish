@@ -1,4 +1,28 @@
 .guide-page{--guide-accent:#00767e;--guide-muted:#425770;font-size:1rem;line-height:1.7;letter-spacing:0}
+/* Final guide additions: every selector is restricted to this page. */
+.guide-page .guide-intro{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:24px;min-height:220px}
+.guide-page .guide-art{position:relative;min-height:220px;display:flex;align-items:center;justify-content:center;padding:0 58px 0 74px}
+.guide-page .guide-art img{display:block;width:100%;max-width:348px;height:auto}
+.guide-page .guide-art-slogan{position:absolute;left:0;top:48px;font-size:clamp(.75rem,1.05vw,.95rem);color:#527089;font-style:italic;transform:rotate(-7deg)}
+.guide-page .guide-art-brand{position:absolute;right:0;top:40px;font-size:.8rem;color:#527089;line-height:1.65}
+.guide-page .guide-art-brand::after{content:'';display:block;width:28px;height:2px;background:#00878b;margin-top:10px}
+.guide-page .guide-checks article{display:flex;gap:20px;background:#f1f9f9;border-color:#e0eeee;border-radius:12px}
+.guide-page .guide-check-icon{display:flex;align-items:center;justify-content:center;flex:none;width:64px;height:64px;border-radius:50%;background:#d9f0f0;color:#00878b}
+.guide-page .guide-check-icon svg{width:34px;height:34px}
+.guide-page .guide-checks li{padding-left:28px}
+.guide-page .guide-checks li::before{width:18px;height:18px;top:5px;display:flex;align-items:center;justify-content:center;font-size:12px;border-radius:50%;background:#00878b;color:white}
+.guide-page .guide-consult{display:flex;gap:20px;background:#f1f9f9;border:1px solid #e0eeee;border-radius:12px;padding:24px}
+.guide-page .guide-consult-content{flex:1;min-width:0}
+.guide-page .guide-consult-heading{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.guide-page .guide-consult h2{font-size:1.125rem;margin:0 0 6px}
+.guide-page .guide-consult p{margin:0;color:var(--guide-muted)}
+.guide-page #guide-copy{flex:none;cursor:pointer;border:1px solid #00767e;border-radius:7px;background:white;color:#00767e;font:inherit;font-weight:700;padding:10px 16px;min-height:44px}
+.guide-page #guide-message{background:white;border:1px solid #e0e8ed;border-radius:7px;padding:14px 16px;margin-top:14px;user-select:text}
+.guide-page #guide-copy-status:not(:empty){margin-top:10px;color:#006770}
+.guide-page .guide-faq details p{max-width:none}
+@media(max-width:1000px){.guide-page .guide-intro{grid-template-columns:1fr 1.15fr}.guide-page .guide-art{padding-left:60px;padding-right:60px}.guide-page .guide-checks article{gap:12px}.guide-page .guide-check-icon{width:48px;height:48px}}
+@media(max-width:760px){.guide-page .guide-intro{grid-template-columns:1fr;gap:8px}.guide-page .guide-art{max-width:540px;width:100%;min-height:210px;margin:auto;padding:0 66px}.guide-page .guide-art-slogan{font-size:.8rem}.guide-page .guide-art-brand{font-size:.75rem}.guide-page .guide-consult{gap:12px;padding:20px}.guide-page .guide-consult-heading{align-items:flex-start;flex-direction:column;gap:12px}}
+@media(max-width:400px){.guide-page .guide-art{padding:0 52px;min-height:180px}.guide-page .guide-art-slogan{font-size:.65rem;top:38px}.guide-page .guide-art-brand{font-size:.65rem;top:30px}.guide-page .guide-consult{display:block}.guide-page .guide-consult>.guide-check-icon{margin-bottom:12px}}
 .guide-page .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .guide-main{padding-top:40px;padding-bottom:48px}
 .guide-intro{margin-bottom:40px}
