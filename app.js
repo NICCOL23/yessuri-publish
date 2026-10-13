@@ -1,28 +1,24 @@
 const categories = [
   ['누수·수도','◉'], ['하수구·변기','◌'], ['타일','▦'], ['페인트','▤'],
   ['목공','⌑'], ['에어컨','❄'], ['청소','✧'], ['철거','▧'],
-  ['전기·조명','✳'], ['문·창호','▣'], ['컴퓨터·IT','⌘'], ['전체보기','＋']
+  ['전기·조명','✳'], ['문·창호','▣'], ['컴퓨터·IT','⌘']
 ];
+const categoryDescriptions = ['수도꼭지·배관','변기·싱크대 막힘','깨짐·부분 보수','벽면·부분 도장','가구·선반 보수','수리·설치·청소','입주·생활 청소','부분 철거','전등·콘센트','문·방충망','부팅·속도 문제'];
 const regions = window.YESSURI_REGIONS;
 const experts = window.YESSURI_PUBLIC_EXPERTS;
 const categoryGrid = document.querySelector('#category-grid');
 const filterRow = document.querySelector('#region-filters');
 const expertGrid = document.querySelector('#expert-grid');
 const emptyState = document.querySelector('#expert-empty');
-const heroRegion = document.querySelector('#hero-region');
-const heroCategory = document.querySelector('#hero-category');
 let selectedRegion = '전체';
 let selectedCategory = '전체';
 
-categories.forEach(([name, icon]) => {
-  const button = document.createElement('button');
-  button.type = 'button'; button.className = 'category-card';
+categories.forEach(([name, icon], index) => {
+  const button = document.createElement('a');
+  button.className = 'category-card';
   const visual = `<img src="assets/images/service-icons.svg#icon${categories.findIndex(([label])=>label===name)+1}" alt="" width="160" height="160" loading="lazy">`;
-  button.innerHTML = `<span class="category-icon" aria-hidden="true">${visual}</span><span>${name}</span>`;
-  button.addEventListener('click', () => {
-    const query = new URLSearchParams({region:heroRegion.value, category:name === '전체보기' ? '전체' : name});
-    window.location.href = `find.html?${query.toString()}`;
-  });
+  button.innerHTML = `<span class="category-icon" aria-hidden="true">${visual}</span><span>${name}</span><small class="category-description">${categoryDescriptions[index]}</small>`;
+  button.href = `find.html?${new URLSearchParams({category:name}).toString()}`;
   categoryGrid.append(button);
 });
 
@@ -35,7 +31,7 @@ function renderRegions(){
   values.forEach(([v,t])=>{const option=document.createElement('option');option.value=v;option.textContent=t;select.append(option)});
   select.value=value;select.addEventListener('change',()=>change(select.value));label.append(select);filterRow.append(label);
  };
- addSelect('활동 지역',regions.map(r=>[r,r==='전체'?'부산 전체':r]),selectedRegion,value=>{selectedRegion=value;heroRegion.value=value;renderExperts()});
+ addSelect('활동 지역',regions.map(r=>[r,r==='전체'?'부산 전체':r]),selectedRegion,value=>{selectedRegion=value;renderExperts()});
  addSelect('수리 분야',[['전체','수리 분야 전체'],...categories.filter(([n])=>n!=='전체보기').map(([n])=>[n,n])],selectedCategory,value=>{selectedCategory=value;renderExperts()});
 }
 function renderExperts(){

@@ -19,3 +19,14 @@
 @media(max-width:1000px){.category-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:760px){.category-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:359px){.category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Category-only final layout; the original colored icon sprite is preserved. */
+#categories .category-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+#categories .category-card:nth-child(n){flex:0 0 calc((100% - 60px)/6);height:148px;min-height:148px;padding:16px 8px;gap:8px;border:1px solid #e4e9f0;border-radius:12px;background:#fff;text-align:center;color:#173353;font-size:14px;line-height:20px}
+#categories .category-card:nth-child(n) .category-icon{width:46px;height:46px}
+#categories .category-description{display:block;color:#657a88;font-size:12px;line-height:18px;font-weight:400;word-break:keep-all}
+#categories .category-card:hover,#categories .category-card:focus-visible{border-color:#008b95;background:#f2fbfa}
+#categories .section-head.centered{justify-content:center;text-align:center}
+@media(max-width:900px){#categories .category-card:nth-child(n){flex-basis:calc((100% - 24px)/3)}}
+@media(max-width:760px){#categories .category-card:nth-child(n){height:136px;min-height:136px;padding:12px 6px;font-size:13px}#categories .category-description{font-size:11px}}
+@media(max-width:359px){#categories .category-card:nth-child(n){flex-basis:calc((100% - 12px)/2)}}
