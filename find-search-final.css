@@ -1,0 +1,24 @@
+/* Final YESSURI search palette. Layout, typography and behavior stay original. */
+.find-page .compact-search{
+  background:#f6faf9;
+  border-color:#d7e7e5;
+  box-shadow:0 2px 8px rgba(23,50,77,.025);
+}
+.find-page .compact-search label{color:#17324d}
+.find-page .compact-search :is(input:not([type=checkbox]),select){
+  background:#fff;
+  border-color:#d7e1e8;
+  color:#17324d;
+}
+.find-page .compact-search input::placeholder{color:#66788a;opacity:1}
+.find-page .compact-search .button{
+  background:#00838a;
+  background-image:none;
+  color:#fff;
+  box-shadow:none;
+}
+.find-page .compact-search .button:hover{background:#007078;background-image:none;box-shadow:none}
+.find-page .compact-search .button:active{background:#00656d}
+.find-page .compact-search .find-coverage-option{color:#17324d}
+.find-page .compact-search .find-coverage-option input{accent-color:#00838a}
+.find-page .find-search-support a{color:#00767e}
