@@ -1,0 +1,11 @@
+.search-rotation-note,.search-page-range{font-size:.875rem;color:#52657a;line-height:1.6;margin:8px 0}
+.search-rotation-note[hidden],.search-pagination[hidden],.search-page-range[hidden]{display:none}
+.search-pagination{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px;margin:24px 0}
+.search-pagination a,.search-pagination span{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:8px 12px;border-radius:8px}
+.search-pagination a{border:1px solid #dce3eb;color:#00767e;background:#fff}
+.search-pagination [aria-current=page]{background:#00767e;color:#fff;border-color:#00767e}
+.search-pagination a:focus-visible,.search-return-bar a:focus-visible{outline:3px solid #00767e;outline-offset:3px}
+.search-return-bar{position:sticky;top:var(--search-header-height,80px);z-index:29;background:#fff;border-bottom:1px solid #dfe9e6}
+.search-return-bar[hidden]{display:none}
+.search-return-bar a{display:inline-flex;align-items:center;min-height:44px;padding:8px 0;color:#00767e;font-size:.9375rem;font-weight:500;line-height:1.6}
+html.has-search-return{scroll-padding-top:calc(var(--search-header-height,80px) + var(--search-return-height,44px) + 16px)}

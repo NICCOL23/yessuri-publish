@@ -28,6 +28,14 @@ const currentConditions = document.querySelector('#find-current-conditions');
 const resultsLive = document.querySelector('#find-results-live');
 let announcementTimer;
 let appliedFilters;
+const searchState=window.YESSURI_SEARCH_STATE;
+let searchHour=searchState.hour(), searchIds=null, resultPage=1;
+let pendingRestore=null;
+const captureSearch=()=>({url:location.href,applied:{...appliedFilters},categories:requestedCategories.slice(),service:requestedService,ids:searchIds?.slice(),hour:searchHour,page:resultPage,draft:{query:queryInput.value,region:regionSelect.value,category:categorySelect.value,sort:sortSelect.value},helpOpen:document.querySelector('#category-help').open,helpPending:helpCategoryPending,helpStatus:document.querySelector('#category-help-status').textContent,scroll:window.scrollY});
+function saveSearch(){const state=captureSearch();searchState.write('yessuri:search:'+searchState.keyFor(location.href),state);try{history.replaceState({yessuriSearch:state},'',location.href);}catch{}return state;}
+function restoreSearch(state){if(!state||!searchState.safeFind(state.url)||searchState.keyFor(state.url)!==searchState.keyFor(location.href)||!Array.isArray(state.ids)||!Number.isSafeInteger(state.hour))return false;searchIds=[...new Set(state.ids.filter(id=>typeof id==='string'))];searchHour=state.hour;pendingRestore=state;return true;}
+function freshSearch(){searchIds=null;searchHour=searchState.hour();resultPage=1;}
+
 const readFilters = () => ({query:queryInput.value.trim().replace(/\s+/g," "),region:regionSelect.value,category:categorySelect.value,sort:sortSelect.value});
 let requestedCategories = [];
 let requestedService = '';
@@ -46,6 +54,7 @@ function updateCompareCount() {
 }
 function loadFiltersFromUrl() {
   const params = new URLSearchParams(window.location.search);
+  resultPage=Math.max(1,Math.floor(Number(params.get('page'))||1));
   helpCategoryPending = false;
   requestedCategories = (params.get('categories') || '').split(',').filter(field => validCategories.includes(field) && field !== '전체');
   requestedService = (params.get('service') || '').slice(0, 80);
@@ -58,7 +67,7 @@ function loadFiltersFromUrl() {
 
 function updateUrl(mode = "push") {
   const url = new URL(window.location.href);
-  for (const key of ['q', 'region', 'category', 'type', 'sort', 'categories', 'service', 'citywide']) url.searchParams.delete(key);
+  for (const key of ['q', 'region', 'category', 'type', 'sort', 'categories', 'service', 'citywide', 'page']) url.searchParams.delete(key);
   if (requestedCategories.length) url.searchParams.set('categories', requestedCategories.join(','));
   if (requestedService) url.searchParams.set('service', requestedService);
   const query = appliedFilters.query;
@@ -66,10 +75,14 @@ function updateUrl(mode = "push") {
   if (appliedFilters.region !== '전체') url.searchParams.set('region', appliedFilters.region);
   if (appliedFilters.category !== '전체') url.searchParams.set('category', appliedFilters.category);
   if (appliedFilters.sort !== 'default') url.searchParams.set('sort', appliedFilters.sort);
+  if(resultPage>1)url.searchParams.set('page',String(resultPage));
   try { if (url.href !== location.href) window.history[mode === 'replace' ? 'replaceState' : 'pushState'](null, '', url); } catch { /* 일부 로컬 파일 브라우저는 주소 변경을 제한합니다. */ }
 }
 
 loadFiltersFromUrl();
+const returnState=searchState.read('yessuri:search-restore');
+if(!restoreSearch(returnState))restoreSearch(searchState.read('yessuri:search:'+searchState.keyFor(location.href)));
+searchState.write('yessuri:search-restore',null);
 
 function renderDirectory(syncUrl = true) {
   const query = appliedFilters.query.normalize('NFKC').toLocaleLowerCase('ko-KR');
@@ -78,6 +91,9 @@ function renderDirectory(syncUrl = true) {
     (requestedCategories.length ? requestedCategories.some(field => expert.fields.includes(field)) : (appliedFilters.category === '전체' || expert.fields.includes(appliedFilters.category))) &&
     (!query || query.split(' ').every(term => [expert.name, expert.keywords || '', ...expert.fields].join(' ').normalize('NFKC').toLocaleLowerCase('ko-KR').includes(term)))
   );
+  if(searchIds===null)searchIds=searchState.rotate(matches,searchHour).map(expert=>expert.id);
+  const current=new Map(matches.map(expert=>[expert.id,expert]));
+  matches.splice(0,matches.length,...searchIds.filter(id=>current.has(id)).map(id=>current.get(id)));
   if (appliedFilters.sort === 'name') {
     matches.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
   } else if (appliedFilters.sort === 'areas') {
@@ -101,12 +117,20 @@ function renderDirectory(syncUrl = true) {
       ? `${regionName}, ${sortName}. 검색 결과 ${matches.length}곳.`
       : `${regionName}, ${sortName}. ${emptyHeading.textContent}`;
   }, 250);
-  matches.forEach(expert => resultGrid.append(createExpertCard(expert)));
-  refreshCardControls();
+  const pages=Math.max(1,Math.ceil(matches.length/10));resultPage=Math.min(resultPage,pages);
+  const start=(resultPage-1)*10;
+  matches.slice(start,start+10).forEach(expert => resultGrid.append(createExpertCard(expert)));
+  document.querySelector('#search-rotation-note').hidden=appliedFilters.sort!=='default';
+  const range=document.querySelector('#search-page-range');range.hidden=!matches.length;range.textContent=matches.length ? (start+1)+'–'+Math.min(start+10,matches.length)+'곳 표시' : '';
   if (syncUrl) updateUrl();
+  renderPagination(pages);
+
+  refreshCardControls();
+  saveSearch();
 }
 
 function resetFilters() {
+  freshSearch();
   requestedCategories = []; requestedService = '';
   helpCategoryPending = false;
   document.querySelector('#category-help-status').textContent = '';
@@ -120,6 +144,7 @@ function resetFilters() {
 
 document.querySelector('#find-filter-form').addEventListener('submit', event => {
   event.preventDefault();
+  freshSearch();
   if (helpCategoryPending || categorySelect.value !== appliedFilters.category) { requestedCategories = []; requestedService = ''; }
   helpCategoryPending = false;
   document.querySelector('#category-help-status').textContent = '';
@@ -127,10 +152,10 @@ document.querySelector('#find-filter-form').addEventListener('submit', event => 
   renderDirectory();
   document.querySelector('.find-results-heading').scrollIntoView({behavior:'smooth',block:'start'});
 });
-sortSelect.addEventListener('change', () => { appliedFilters.sort = sortSelect.value; renderDirectory(); });
+sortSelect.addEventListener('change', () => { appliedFilters.sort = sortSelect.value; resultPage=1; renderDirectory(); });
 document.querySelector('#reset-filters').addEventListener('click', resetFilters);
 document.querySelector('#empty-reset').addEventListener('click', resetFilters);
-window.addEventListener('popstate', () => { loadFiltersFromUrl(); renderDirectory(false); });
+window.addEventListener('popstate', event => {loadFiltersFromUrl();searchIds=null;pendingRestore=null;restoreSearch(event.state?.yessuriSearch||searchState.read('yessuri:search:'+searchState.keyFor(location.href)));renderDirectory(false);applyRestoredDraft();});
 window.addEventListener('yessuri:compare-changed', updateCompareCount);
 window.addEventListener('storage', updateCompareCount);
 document.querySelectorAll('[data-toast]').forEach(button => button.addEventListener('click', () => {
@@ -141,6 +166,7 @@ document.querySelectorAll('[data-toast]').forEach(button => button.addEventListe
 }));
 renderDirectory(false);
 updateUrl("replace");
+applyRestoredDraft();
 updateCompareCount();
 
 function syncInputsToApplied() {
@@ -158,7 +184,7 @@ function renderConditionChips() {
     if (clear) {
       element.type = 'button';
       element.setAttribute('aria-label', accessibleName);
-      element.addEventListener('click', () => {clear(); syncInputsToApplied(); renderDirectory(); document.querySelector('#directory-results-title').focus({preventScroll:true});});
+      element.addEventListener('click', () => {clear(); freshSearch(); syncInputsToApplied(); renderDirectory(); document.querySelector('#directory-results-title').focus({preventScroll:true});});
     }
     currentConditions.append(element);
   };
@@ -205,3 +231,9 @@ document.querySelectorAll('[data-help-category]').forEach(button => button.addEv
   helpCategoryPending = true;
   document.querySelector('#category-help-status').textContent = button.dataset.helpCategory + '를 선택했습니다. 전문가 찾기를 눌러주세요.';
 }));
+
+function renderPagination(pages){const nav=document.querySelector('#search-pagination');nav.replaceChildren();nav.hidden=pages<=1;if(pages<=1)return;const values=[1,...Array.from({length:5},(_,i)=>resultPage-2+i),pages].filter(n=>n>=1&&n<=pages);const numbers=[...new Set(values)].sort((a,b)=>a-b);const link=(label,page)=>{const a=document.createElement('a'),u=new URL(location.href);u.searchParams.set('page',page);a.href=u.href;a.textContent=label;if(page===resultPage&&label===String(page))a.setAttribute('aria-current','page');a.addEventListener('click',event=>{if(event.button||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;event.preventDefault();resultPage=page;renderDirectory();const title=document.querySelector('#directory-results-title');title.focus({preventScroll:true});title.scrollIntoView({block:'start'});resultsLive.textContent='검색 결과 '+page+'페이지';});nav.append(a);};if(resultPage>1)link('이전',resultPage-1);let previous=0;for(const n of numbers){if(previous&&n-previous>1){const dots=document.createElement('span');dots.textContent='…';nav.append(dots);}link(String(n),n);previous=n;}if(resultPage<pages)link('다음',resultPage+1);}
+function applyRestoredDraft(){if(!pendingRestore)return;const state=pendingRestore;pendingRestore=null;const d=state.draft||{};queryInput.value=typeof d.query==='string'?d.query.slice(0,80):appliedFilters.query;regionSelect.value=validRegions.includes(d.region)?d.region:appliedFilters.region;categorySelect.value=validCategories.includes(d.category)?d.category:appliedFilters.category;helpCategoryPending=state.helpPending===true;document.querySelector('#category-help').open=state.helpOpen===true;document.querySelector('#category-help-status').textContent=typeof state.helpStatus==='string'?state.helpStatus:'';const restorePosition=()=>window.scrollTo({top:Math.max(0,Number(state.scroll)||0),behavior:'instant'});requestAnimationFrame(restorePosition);document.fonts.ready.then(restorePosition);saveSearch();}
+document.querySelector('.category-help-panel a').addEventListener('click',event=>{const link=event.currentTarget,state=captureSearch();saveSearch();const url=new URL('guide.html',location.href);url.hash='check-title';url.searchParams.set('fromSearch','1');url.searchParams.set('search',location.pathname+location.search);searchState.write('yessuri:search-return',{url:location.href,state,created:Date.now()});link.href=url.href;});
+window.addEventListener('pagehide',saveSearch);
+window.addEventListener('pageshow',event=>{if(event.persisted){renderDirectory(false);}});

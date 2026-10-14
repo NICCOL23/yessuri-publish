@@ -12,7 +12,7 @@
   <script src="regions.js?v=1" defer></script>
   <script src="favorites.js?v=1" defer></script>
   <script src="compare.js?v=1" defer></script>
-  <script src="find.js?v=20" defer></script>
+  <script src="search-state.js?v=1" defer></script><script src="find.js?v=21" defer></script>
   <link rel="icon" href="assets/icons/favicon.ico?v=1" sizes="any">
   <link rel="icon" type="image/png" href="assets/icons/favicon-32.png?v=1" sizes="32x32">
   <link rel="apple-touch-icon" href="assets/icons/favicon-180.png?v=1" sizes="180x180">
@@ -24,6 +24,7 @@
 <link rel="stylesheet" href="typography.css?v=1">
 <link rel="stylesheet" href="find-search-final.css?v=1">
 <link rel="stylesheet" href="find-help.css?v=1">
+<link rel="stylesheet" href="search-navigation.css?v=1">
 </head>
 <body class="typography-page find-page">
   <a class="skip-link" href="#main">본문 바로가기</a>
@@ -44,9 +45,9 @@
 <button class="button button-primary" type="submit">전문가 찾기</button></div><div class="search-reset-row"><button id="reset-filters" type="button">검색 조건 초기화</button></div></form>
 <details class="category-help" id="category-help"><summary>어떤 분야를 선택할지 모르겠나요?<span aria-hidden="true">⌄</span></summary><div class="category-help-panel"><h2>증상에 맞는 분야를 먼저 살펴보세요.</h2><p>분야 선택 후 ‘전문가 찾기’를 눌러주세요.</p><ul><li><span>물이 새요</span><button type="button" data-help-category="누수·수도">누수·수도 선택</button></li><li><span>싱크대·변기가 막혔어요</span><button type="button" data-help-category="하수구·변기">하수구·변기 선택</button></li><li><span>전등·콘센트에 문제가 있어요</span><button type="button" data-help-category="전기·조명">전기·조명 선택</button></li><li><span>타일이 깨졌어요</span><button type="button" data-help-category="타일">타일 선택</button></li><li><span>문·창문·방충망이 불편해요</span><button type="button" data-help-category="문·창호">문·창호 선택</button></li></ul><p class="category-help-note">증상에 따른 참고 분야입니다. 작업 가능 여부는 전문가에게 확인하세요.</p><a href="guide.html#check-title">상담 전 준비사항 보기 →</a><p id="category-help-status" role="status" aria-live="polite" aria-atomic="true"></p></div></details>
       <section id="directory-results" aria-labelledby="directory-results-title"><div class="find-results-heading"><div><h2 id="directory-results-title" tabindex="-1">검색 결과 <strong id="result-count">0</strong>곳</h2><p class="results-example-note">현재 표시된 업체 정보와 사진은 예시입니다.</p></div><div class="find-results-actions"><label for="find-sort">결과 정렬<select id="find-sort" name="sort"><option value="default">기본순</option><option value="name">이름순</option><option value="areas">출동 가능 지역 수순</option></select></label></div></div>
-      <div class="compare-toolbar" id="compare-toolbar" hidden><p id="compare-guidance"></p><a href="compare.html" id="compare-link" hidden>선택한 <strong id="compare-count">0</strong>곳 비교 →</a></div><p id="compare-status" class="compare-status" role="status" aria-live="polite"></p>
+      <p id="search-rotation-note" class="search-rotation-note">기본순은 시간대별로 순환하며, 검색 중에는 순서가 유지됩니다.</p><p id="search-page-range" class="search-page-range" hidden></p><div class="compare-toolbar" id="compare-toolbar" hidden><p id="compare-guidance"></p><a href="compare.html" id="compare-link" hidden>선택한 <strong id="compare-count">0</strong>곳 비교 →</a></div><p id="compare-status" class="compare-status" role="status" aria-live="polite"></p>
       <div class="find-current-conditions" id="find-current-conditions" role="group" aria-label="적용된 검색 조건"></div><p class="find-results-live sr-only" id="find-results-live" role="status" aria-live="polite" aria-atomic="true"></p>
-      <div class="find-grid" id="find-grid"></div><p class="results-refine" id="results-refine"><a href="#find-filter-form" data-edit-search>검색 조건 변경</a></p>
+      <div class="find-grid" id="find-grid"></div><nav id="search-pagination" class="search-pagination" aria-label="검색 결과 페이지" hidden></nav><p class="results-refine" id="results-refine"><a href="#find-filter-form" data-edit-search>검색 조건 변경</a></p>
       <div class="find-empty" id="find-empty" hidden><span aria-hidden="true">⌕</span><h3 id="find-empty-heading">검색 조건을 바꿔보세요</h3><p>지역이나 수리 분야를 바꾸거나 검색어를 지워 다시 찾아보세요.</p><div class="empty-actions"><a class="button" href="#find-filter-form" data-edit-search>검색 조건 변경</a><button id="empty-reset" class="button button-primary" type="button">초기화</button></div></div></section>
     </div>
   </main>
