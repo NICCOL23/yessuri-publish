@@ -9,4 +9,11 @@
 #experts .expert-slider-pagination{width:auto;display:flex;align-items:center;gap:2px}
 #experts .swiper-pagination-bullet{background:#00767e;width:10px;height:10px}
 #experts .expert-slider-toggle{font-size:.875rem}
+#experts .expert-slider-help{font-size:13px;font-weight:400;line-height:1.65;color:#52657a;text-align:center;margin:10px 0 0}
+#experts .expert-slider-pagination{gap:0}
+#experts .expert-slider-pagination .swiper-pagination-bullet{position:relative;width:44px;height:44px;margin:0;border:0;background:transparent;opacity:1;cursor:pointer;padding:0}
+#experts .expert-slider-pagination .swiper-pagination-bullet:before{content:'';position:absolute;left:17px;top:17px;width:10px;height:10px;border-radius:50%;background:#bddddd}
+#experts .expert-slider-pagination .swiper-pagination-bullet-active:before{background:#00767e}
+#experts :is(button,a):focus-visible{outline:3px solid #00767e;outline-offset:-3px}
+@media(min-width:1600px){#experts #home-expert-slider.wide-symmetric{width:min(1400px,calc(100vw - 96px));margin-left:calc((100% - min(1400px,100vw - 96px))/2);margin-right:0}}
 @media(prefers-reduced-motion:reduce){#experts .swiper-wrapper{transition-duration:0ms!important}}
