@@ -1,0 +1,10 @@
+@keyframes yessuri-hero-reveal {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-motion-first #hero-heading {
+  animation: yessuri-hero-reveal 500ms cubic-bezier(.22, 1, .36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-motion-first #hero-heading { animation: none; }
+}
