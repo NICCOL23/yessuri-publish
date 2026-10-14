@@ -29,9 +29,9 @@ function renderExperts(){
   {id:'bada-repair',name:'누수·수도 업체명',field:'수도꼭지·배관·누수 점검',image:'ai-water-yessuri-v2.png'},
   {id:'bright-home',name:'전기·조명 업체명',field:'전등·스위치·콘센트',image:'ai-light-yessuri-v2.png'},
   {id:'tile-studio',name:'타일·문창호 업체명',field:'타일·문·창호 보수',image:'ai-tile-yessuri-v2.png'},
-  {id:'busan-home-repair',name:'목공·페인트 업체명',field:'가구·선반·목공·페인트',image:'ai-wood.png'},
-  {id:'clean-day',name:'청소 업체명',field:'입주·생활 청소·철거',image:'ai-clean.png'},
-  {id:'local-it',name:'컴퓨터·IT 업체명',field:'부팅·속도·컴퓨터 점검',image:'ai-it.png'}
+  {id:'busan-home-repair',name:'목공·페인트 업체명',field:'가구·선반·목공·페인트',image:'ai-wood-yessuri-v2.png'},
+  {id:'clean-day',name:'청소 업체명',field:'입주·생활 청소·철거',image:'ai-clean-yessuri-v2.png'},
+  {id:'local-it',name:'컴퓨터·IT 업체명',field:'부팅·속도·컴퓨터 점검',image:'ai-it-yessuri-v2.png'}
  ];
  expertGrid.replaceChildren();
  featured.forEach(example=>{
