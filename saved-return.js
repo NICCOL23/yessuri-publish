@@ -1,0 +1,1 @@
+(() => {const api=window.YESSURI_SEARCH_STATE,state=api.read('yessuri:last-search'),url=state&&api.safeFind(state.url),link=document.getElementById('saved-search-return');if(!link)return;if(url){link.href=url.href;link.addEventListener('click',()=>api.write('yessuri:search-restore',state));}})();

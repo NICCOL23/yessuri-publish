@@ -16,7 +16,7 @@ function sharedExperts() {
 }
 
 function displayedExperts() {
-  return sharedMode ? sharedExperts() : window.YESSURI_COMPARE.selectedExperts();
+  return (sharedMode ? sharedExperts() : window.YESSURI_COMPARE.selectedExperts()).map(window.YESSURI_PRESENT_EXPERT);
 }
 
 function shareUrl(people) {
@@ -45,7 +45,10 @@ async function copyLink() {
     try { copied = document.execCommand('copy'); } catch { /* 복사가 차단될 수 있습니다. */ }
     field.remove();
     if (!copied) {
-      shareStatus.textContent = '링크를 복사하지 못했습니다. 브라우저의 주소를 직접 복사해 주세요.';
+      shareStatus.textContent = '자동 복사가 제한되어 있습니다. 아래 비교 링크를 직접 복사해 주세요.';
+      let manual = document.getElementById('compare-manual-link');
+      if (!manual) { manual = document.createElement('input');manual.id='compare-manual-link';manual.readOnly=true;manual.setAttribute('aria-label','직접 복사할 비교 링크');shareStatus.after(manual); }
+      manual.value=value;manual.focus();manual.select();
       return;
     }
   }
@@ -67,63 +70,34 @@ function renderComparison() {
     importButton.hidden = people.length === 0;
     importButton.disabled = !window.YESSURI_COMPARE.canStore();
   }
-  people.forEach(person => {
-    const card = document.createElement('article');
-    card.className = 'compare-card';
-    const image = document.createElement('img');
-    image.src = `assets/images/${person.image}`;
-    image.alt = person.imageAlt;
-    image.loading = 'lazy';
-    image.width = 1448;
-    image.height = 1086;
-    const body = document.createElement('div');
-    body.className = 'compare-card-body';
-    const name = document.createElement('h3');
-    name.textContent = person.name;
-    const note = document.createElement('p');
-    note.className = 'compare-card-note';
-    note.textContent = '화면 구성용 가상 예시 프로필';
-    const facts = document.createElement('dl');
-    const rows = [
-      ['기술자 유형', `${person.profileType} · 예시`],
-      ['전문 분야', person.fields.join(' · ')],
-      ['예시 출동 가능 지역', `부산 ${window.YESSURI_AREAS_LABEL(person)}`],
-      ['경력', `${person.career} · 확인되지 않은 예시`]
-    ];
-    rows.forEach(([label, value]) => {
-      const row = document.createElement('div');
-      const term = document.createElement('dt');
-      term.textContent = label;
-      const description = document.createElement('dd');
-      description.textContent = value;
-      row.append(term, description);
-      facts.append(row);
-    });
-    body.append(name, note, facts);
-    const actions = document.createElement('div');
-    actions.className = 'compare-card-actions';
-    const profileLink = document.createElement('a');
-    profileLink.href = `expert.html?id=${encodeURIComponent(person.id)}`;
-    profileLink.textContent = '프로필 보기';
-    const removeButton = document.createElement('button');
-    removeButton.type = 'button';
-    removeButton.className = 'compare-button';
-    if (!sharedMode) {
-      removeButton.textContent = '비교 해제';
-      removeButton.disabled = !window.YESSURI_COMPARE.canStore();
-      removeButton.addEventListener('click', () => window.YESSURI_COMPARE.toggle(person.id));
-    }
-    actions.append(profileLink);
-    if (!sharedMode) actions.append(removeButton);
-    card.append(image, body, actions);
-    compareGrid.append(card);
-  });
+  compareGrid.hidden = !people.length;
+  let notice=document.getElementById('compare-minimum');
+  if(!notice){notice=document.createElement('p');notice.id='compare-minimum';notice.setAttribute('role','status');compareGrid.before(notice);}
+  notice.textContent=people.length===1?'비교할 업체를 1곳 더 선택하세요.':'';
+  if(!people.length)return;
+  const table=document.createElement('table');table.className='saved-comparison';
+  const caption=document.createElement('caption');caption.textContent='선택한 업체의 전문 분야·주요 출장 지역·출장 진단비 비교';caption.className='sr-only';table.append(caption);
+  const head=document.createElement('thead'),heading=document.createElement('tr');
+  const corner=document.createElement('th');corner.textContent='비교 항목';corner.scope='col';heading.append(corner);
+  people.forEach(person=>{const cell=document.createElement('th');cell.scope='col';
+    const photo=document.createElement('img');photo.src='assets/images/'+person.image;photo.alt=person.imageAlt;photo.width=180;photo.height=120;
+    const name=document.createElement('h3');name.textContent=person.name;cell.append(photo,name);heading.append(cell);});
+  head.append(heading);table.append(head);
+  const body=document.createElement('tbody');
+  [['전문 분야',p=>p.fields.join(' · ')],['주요 출장 지역',p=>window.YESSURI_AREAS_LABEL(p)],['출장·진단비',()=> '상담 시 확인']].forEach(([label,value])=>{
+    const row=document.createElement('tr'),term=document.createElement('th');term.scope='row';term.textContent=label;row.append(term);
+    people.forEach(person=>{const cell=document.createElement('td');cell.textContent=value(person);row.append(cell);});body.append(row);});
+  const row=document.createElement('tr'),term=document.createElement('th');term.scope='row';term.textContent='상세 확인';row.append(term);
+  people.forEach(person=>{const cell=document.createElement('td'),link=document.createElement('a');link.className='find-card-action';link.href='expert.html?id='+encodeURIComponent(person.id);link.textContent='프로필 예시 보기';cell.append(link);
+    if(!sharedMode){const remove=document.createElement('button');remove.type='button';remove.className='comparison-remove';remove.textContent='비교 해제';remove.setAttribute('aria-label',person.name+' 비교 해제');remove.disabled=!window.YESSURI_COMPARE.canStore();remove.addEventListener('click',()=>window.YESSURI_COMPARE.toggle(person.id));cell.append(remove);}row.append(cell);});
+  body.append(row);table.append(body);compareGrid.append(table);
+
 }
 shareButton.addEventListener('click', copyLink);
 importButton.addEventListener('click', () => {
   const result = window.YESSURI_COMPARE.addMany(sharedExperts().map(person => person.id));
   shareStatus.textContent = result.reason === 'limit'
-    ? '내 비교 목록은 최대 3명입니다. 기존 목록에서 일부를 해제한 뒤 다시 담아 주세요.'
+    ? '내 비교 목록은 최대 3곳입니다. 기존 목록에서 일부를 해제한 뒤 다시 담아 주세요.'
     : result.reason === 'storage' ? '이 브라우저에서는 비교 목록을 저장할 수 없습니다.'
     : result.unchanged ? '이 프로필은 이미 내 비교 목록에 있습니다.'
     : '공유받은 프로필을 내 비교 목록에 담았습니다.';

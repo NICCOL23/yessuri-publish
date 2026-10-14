@@ -1,0 +1,53 @@
+/* Correct final advisory typography and secondary card actions. */
+.find-page #directory-results .saved-access #temporary-save-note{font-size:.875rem;font-weight:400;line-height:1.65;letter-spacing:0;color:#52657a}
+.find-page #directory-results .result-card-controls{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.find-page #directory-results .find-favorite{width:auto;min-width:44px;min-height:44px;padding:8px 10px;border:0;background:transparent;color:#00767e;font-size:.875rem;line-height:1.5;white-space:normal}
+.find-page #directory-results .compare-button{font-size:.875rem;min-height:44px}
+.saved-return{padding-top:20px}.saved-return a{display:inline-flex;align-items:center;min-height:44px;color:#00767e;font-size:.875rem}
+.saved-page .find-intro{padding:24px 0}.saved-page .find-intro h1{font-size:2rem;margin:0 0 12px}
+.saved-page .find-notice{font-size:.875rem;color:#425770;line-height:1.65}
+.saved-page .find-content{padding-top:12px}
+.saved-page #favorite-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.saved-page #favorite-grid .find-card{display:block;border-color:#dfe9e6}
+.saved-page #favorite-grid .find-card-link{display:grid;grid-template-columns:200px minmax(0,1fr) 180px;grid-template-rows:auto;align-items:center;gap:24px;padding:20px}
+.saved-page #favorite-grid .directory-photo{grid-row:auto}
+.saved-page #favorite-grid .directory-photo img{min-height:0}
+.saved-page #favorite-grid .find-card-name{font-size:20px;order:0}
+.saved-page #favorite-grid .find-card-fields{order:1}
+.saved-page #favorite-grid .find-card-fields span{font-size:15px}
+.saved-page #favorite-grid .find-card-kicker{font-size:14px;line-height:1.65;order:2}
+.saved-page #favorite-grid .find-card-action{font-size:14px;min-height:44px}
+.saved-page #favorite-grid img{width:200px;height:134px;object-fit:contain;border-radius:8px}
+.saved-page .find-card-controls{display:flex;justify-content:flex-end;gap:8px;padding:0 20px 16px}
+.saved-page .find-card-action,.saved-page .compare-card-actions a{background:#00767e;color:#fff;border-color:#00767e;padding:12px;border-radius:8px;text-align:center}
+.saved-page .compare-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.saved-page .compare-card img{width:100%;height:190px;object-fit:contain;background:#f5faf8}
+.saved-page .compare-card-body h3{font-size:1.25rem}.saved-page .compare-card-note{font-size:.875rem}
+.saved-page button{min-height:44px}.saved-page :is(a,button):focus-visible{outline:3px solid #00767e;outline-offset:3px}
+@media(max-width:760px){.saved-page #favorite-grid .find-card-link{grid-template-columns:110px minmax(0,1fr);gap:16px;padding:16px}.saved-page #favorite-grid img{width:110px;height:100px}.saved-page #favorite-grid .find-card-action{grid-column:1/-1}.saved-page .compare-grid{grid-template-columns:1fr}.saved-page .find-card-controls{flex-wrap:wrap}.saved-page .find-intro h1{font-size:1.75rem}}
+/* Shared secondary actions: identical icon and text columns. */
+.find-page #directory-results :is(.find-favorite,.compare-button),.saved-page #favorite-grid :is(.find-favorite,.compare-button){display:grid;grid-template-columns:20px minmax(0,1fr);gap:8px;align-items:center;text-align:left;min-height:44px;margin:0;padding:0;border:0;background:none;font-size:14px;font-weight:500;color:#00767e;border-radius:4px;width:100%}
+.find-page #directory-results .find-favorite:before,.saved-page #favorite-grid .find-favorite:before{content:'♡';width:20px;text-align:center;font-size:19px}
+.find-page #directory-results .find-favorite[data-saved=true]:before,.saved-page #favorite-grid .find-favorite[data-saved=true]:before{content:'♥'}
+.find-page #directory-results .compare-button:before,.saved-page #favorite-grid .compare-button:before{content:'';width:18px;height:18px;box-sizing:border-box;border:1px solid #7993a1;border-radius:4px;background:white}
+.find-page #directory-results .compare-button[aria-checked=true]:before,.saved-page #favorite-grid .compare-button[aria-checked=true]:before{content:'✓';display:grid;place-items:center;color:white;background:#00767e;border-color:#00767e;font-size:12px;line-height:1}
+.saved-page #favorite-grid .find-card{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:24px;padding:20px;align-items:center}
+.saved-page #favorite-grid .find-card-link{grid-template-columns:200px minmax(0,1fr);padding:0}
+.saved-page #favorite-grid .find-card-controls{padding:0;display:flex;flex-direction:column;gap:4px;align-items:stretch;margin-top:6px}
+.saved-page #favorite-grid .saved-card-actions .find-card-action{display:block}
+.saved-page #compare-grid{display:block;overflow-x:auto;border:1px solid #dfe8e6;border-radius:12px;max-width:100%}
+.saved-page #compare-grid[hidden]{display:none}
+.saved-comparison{width:100%;border-collapse:collapse;table-layout:fixed;min-width:650px}
+.saved-comparison th,.saved-comparison td{padding:18px;text-align:left;vertical-align:top;border-bottom:1px solid #e3ebe8;font-size:15px;line-height:1.65;overflow-wrap:anywhere}
+.saved-comparison tr>:first-child{width:150px;background:#f6faf8;color:#52657a}
+.saved-comparison thead th{background:#f3f9f7}
+.saved-comparison img{display:block;width:100%;height:120px;object-fit:contain;margin-bottom:12px}
+.saved-comparison h3{font-size:19px;margin:0}
+.saved-comparison tbody th{font-weight:500}
+.saved-comparison .find-card-action{display:block;font-size:14px}
+.comparison-remove{display:block;background:none;border:0;color:#52657a;font-size:14px;margin-top:6px;cursor:pointer;padding:8px 0}
+#compare-minimum{color:#52657a;font-size:14px}
+#compare-manual-link{display:block;width:100%;min-height:44px;padding:10px;border:1px solid #d8e1e4;border-radius:6px;margin-bottom:16px}
+.saved-page #compare-share{background:white;border:1px solid #d8e1e4;color:#132c47;font-size:14px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(max-width:760px){.saved-page #favorite-grid .find-card{grid-template-columns:minmax(0,1fr);gap:12px;padding:16px}.saved-page #favorite-grid .find-card-link{grid-template-columns:110px minmax(0,1fr);padding:0}.saved-page #favorite-grid .saved-card-actions{width:100%}.saved-comparison th,.saved-comparison td{padding:12px}.saved-comparison tr>:first-child{width:120px}}

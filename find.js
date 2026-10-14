@@ -1,12 +1,5 @@
 // Presentation-only examples retain original IDs, fields and profile destinations.
-const directoryPresentation = {
-  'bada-repair': {name:'누수·수도 업체명', image:'ai-water-yessuri-v2.png', keywords:'수도꼭지 배관 누수 점검 싱크대'},
-  'tile-studio': {name:'타일·문창호 업체명', image:'ai-tile-yessuri-v2.png', keywords:'욕실 타일 부분 보수 문 창호'},
-  'bright-home': {name:'전기·조명 업체명', image:'ai-light-yessuri-v2.png', keywords:'전등 스위치 콘센트 에어컨'},
-  'busan-home-repair': {name:'목공·페인트 업체명', image:'ai-wood.png', keywords:'가구 선반 목공 페인트 도장'},
-  'clean-day': {name:'청소 업체명', image:'ai-clean.png', keywords:'입주 생활 청소 철거'},
-  'local-it': {name:'컴퓨터·IT 업체명', image:'ai-it.png', keywords:'부팅 속도 컴퓨터 점검'}
-};
+const directoryPresentation = window.YESSURI_EXPERT_PRESENTATION;
 // A provider's confirmed coverage flag is separate from their primary service areas.
 // Missing coverage data defaults to false; broad coverage is never inferred from an address.
 const servesAllBusan = expert => expert.serviceAllBusan === true || expert.serviceAreas?.includes('전체') === true;
@@ -32,7 +25,7 @@ const searchState=window.YESSURI_SEARCH_STATE;
 let searchHour=searchState.hour(), searchIds=null, resultPage=1;
 let pendingRestore=null;
 const captureSearch=()=>({url:location.href,applied:{...appliedFilters},categories:requestedCategories.slice(),service:requestedService,ids:searchIds?.slice(),hour:searchHour,page:resultPage,draft:{query:queryInput.value,region:regionSelect.value,category:categorySelect.value,sort:sortSelect.value},helpOpen:document.querySelector('#category-help').open,helpPending:helpCategoryPending,helpStatus:document.querySelector('#category-help-status').textContent,scroll:window.scrollY});
-function saveSearch(){const state=captureSearch();searchState.write('yessuri:search:'+searchState.keyFor(location.href),state);try{history.replaceState({yessuriSearch:state},'',location.href);}catch{}return state;}
+function saveSearch(){const state=captureSearch();searchState.write('yessuri:last-search',state);searchState.write('yessuri:search:'+searchState.keyFor(location.href),state);try{history.replaceState({yessuriSearch:state},'',location.href);}catch{}return state;}
 function restoreSearch(state){if(!state||!searchState.safeFind(state.url)||searchState.keyFor(state.url)!==searchState.keyFor(location.href)||!Array.isArray(state.ids)||!Number.isSafeInteger(state.hour))return false;searchIds=[...new Set(state.ids.filter(id=>typeof id==='string'))];searchHour=state.hour;pendingRestore=state;return true;}
 function freshSearch(){searchIds=null;searchHour=searchState.hour();resultPage=1;}
 
@@ -220,7 +213,7 @@ function createExpertCard(expert) {
   controls.append(favorite,compare);actions.append(profile,controls);card.append(photo,info,actions);return card;
 }
 function refreshCardControls() {
-  resultGrid.querySelectorAll('.find-favorite').forEach(button=>{const saved=window.YESSURI_FAVORITES.saved(button.dataset.expertId);button.textContent=saved?'♥':'♡';const label=button.dataset.expertName+(saved?' 관심 해제':' 관심 저장');button.setAttribute('aria-label',label);button.title=button.disabled?button.title:label;});
+  resultGrid.querySelectorAll('.find-favorite').forEach(button=>{const saved=window.YESSURI_FAVORITES.saved(button.dataset.expertId);button.textContent=saved?'관심 저장됨':'관심 저장';button.dataset.saved=String(saved);const label=button.dataset.expertName+(saved?' 관심 해제':' 관심 저장');button.setAttribute('aria-label',label);button.title=button.disabled?button.title:label;});
   resultGrid.querySelectorAll('.compare-button').forEach(button=>{const selected=window.YESSURI_COMPARE.selected(button.dataset.expertId);button.textContent='비교 선택';button.setAttribute('aria-checked',String(selected));button.removeAttribute('aria-pressed');button.setAttribute('aria-label',button.dataset.expertName+' 비교 선택');});
 }
 window.addEventListener('yessuri:favorites-changed',refreshCardControls);
@@ -242,3 +235,5 @@ window.addEventListener('pageshow',event=>{if(event.persisted){renderDirectory(f
 function updateSavedAccess(){document.querySelector('#saved-access-count').textContent=String(window.YESSURI_FAVORITES.visibleExperts().length);if(!window.YESSURI_FAVORITES.canStore()||!window.YESSURI_COMPARE.canStore())document.querySelector('#temporary-save-note').textContent='현재 창에서는 임시 저장을 사용할 수 없습니다.';}
 window.addEventListener('yessuri:favorites-changed',updateSavedAccess);window.addEventListener('pageshow',()=>{updateSavedAccess();updateCompareCount();});updateSavedAccess();
 document.querySelector('#compare-access').addEventListener('click',event=>{if(window.YESSURI_COMPARE.selectedExperts().length<2){event.preventDefault();compareStatus.textContent='비교할 업체를 2곳 이상 선택하세요.';}});
+
+document.querySelectorAll('#favorites-access,#compare-access').forEach(link=>link.addEventListener('click',saveSearch));
