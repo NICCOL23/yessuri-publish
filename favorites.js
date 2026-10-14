@@ -4,7 +4,7 @@
   const boundButtons = new Map();
   function readIds() {
     try {
-      const value = JSON.parse(localStorage.getItem(key) || '[]');
+      const value = JSON.parse(sessionStorage.getItem(key) || '[]');
       return Array.isArray(value) ? value.filter(id => typeof id === 'string') : [];
     } catch {
       return [];
@@ -13,8 +13,8 @@
   function canStore() {
     try {
       const probe = `${key}-probe`;
-      localStorage.setItem(probe, '1');
-      localStorage.removeItem(probe);
+      sessionStorage.setItem(probe, '1');
+      sessionStorage.removeItem(probe);
       return true;
     } catch {
       return false;
@@ -31,7 +31,7 @@
     if (ids.has(id)) ids.delete(id);
     else ids.add(id);
     try {
-      localStorage.setItem(key, JSON.stringify([...ids]));
+      sessionStorage.setItem(key, JSON.stringify([...ids]));
       window.dispatchEvent(new Event('yessuri:favorites-changed'));
       return true;
     } catch {
@@ -48,7 +48,7 @@
       button.textContent = isSaved ? '♥ 관심 해제' : '♡ 관심 저장';
       button.setAttribute('aria-pressed', String(isSaved));
       button.disabled = !canStore();
-      if (button.disabled) button.title = '이 브라우저에서는 관심 목록을 저장할 수 없습니다.';
+      if (button.disabled) button.title = '현재 창에서는 관심 목록을 저장할 수 없습니다.';
     }
   }
   function bindButton(button, id) {
@@ -56,7 +56,7 @@
     button.textContent = saved(id) ? '♥ 관심 해제' : '♡ 관심 저장';
     button.setAttribute('aria-pressed', String(saved(id)));
     button.disabled = !canStore();
-    if (button.disabled) button.title = '이 브라우저에서는 관심 목록을 저장할 수 없습니다.';
+    if (button.disabled) button.title = '현재 창에서는 관심 목록을 저장할 수 없습니다.';
     button.addEventListener('click', () => toggle(id));
   }
   window.addEventListener('yessuri:favorites-changed', refreshButtons);

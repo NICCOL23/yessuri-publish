@@ -47,7 +47,8 @@ document.querySelector('#find-filter-form').after(serviceNotice);
 function updateCompareCount() {
   const count = window.YESSURI_COMPARE.selectedExperts().length;
   compareCount.textContent = String(count);
-  document.querySelector('#compare-toolbar').hidden = count === 0;
+  document.querySelector('#compare-toolbar').hidden = true;
+  document.querySelector('#selected-access-count').textContent=String(count);
   document.querySelector('#compare-link').hidden = count < 2;
   document.querySelector('#compare-guidance').textContent = count === 1 ? '비교할 업체를 한 곳 더 선택하세요' : count ? '최대 3곳까지 비교할 수 있습니다.' : '';
   refreshCardControls();
@@ -237,3 +238,7 @@ function applyRestoredDraft(){if(!pendingRestore)return;const state=pendingResto
 document.querySelector('.category-help-panel a').addEventListener('click',event=>{const link=event.currentTarget,state=captureSearch();saveSearch();const url=new URL('guide.html',location.href);url.hash='check-title';url.searchParams.set('fromSearch','1');url.searchParams.set('search',location.pathname+location.search);searchState.write('yessuri:search-return',{url:location.href,state,created:Date.now()});link.href=url.href;});
 window.addEventListener('pagehide',saveSearch);
 window.addEventListener('pageshow',event=>{if(event.persisted){renderDirectory(false);}});
+
+function updateSavedAccess(){document.querySelector('#saved-access-count').textContent=String(window.YESSURI_FAVORITES.visibleExperts().length);if(!window.YESSURI_FAVORITES.canStore()||!window.YESSURI_COMPARE.canStore())document.querySelector('#temporary-save-note').textContent='현재 창에서는 임시 저장을 사용할 수 없습니다.';}
+window.addEventListener('yessuri:favorites-changed',updateSavedAccess);window.addEventListener('pageshow',()=>{updateSavedAccess();updateCompareCount();});updateSavedAccess();
+document.querySelector('#compare-access').addEventListener('click',event=>{if(window.YESSURI_COMPARE.selectedExperts().length<2){event.preventDefault();compareStatus.textContent='비교할 업체를 2곳 이상 선택하세요.';}});

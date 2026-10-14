@@ -5,7 +5,7 @@
   const buttons = new Map();
   function readIds() {
     try {
-      const stored = JSON.parse(localStorage.getItem(key) || '[]');
+      const stored = JSON.parse(sessionStorage.getItem(key) || '[]');
       return Array.isArray(stored) ? [...new Set(stored.filter(id => typeof id === 'string'))] : [];
     } catch {
       return [];
@@ -14,8 +14,8 @@
   function canStore() {
     try {
       const probe = `${key}-probe`;
-      localStorage.setItem(probe, '1');
-      localStorage.removeItem(probe);
+      sessionStorage.setItem(probe, '1');
+      sessionStorage.removeItem(probe);
       return true;
     } catch {
       return false;
@@ -34,7 +34,7 @@
     else if (ids.length >= max) return { ok:false, reason:'limit' };
     else ids.push(id);
     try {
-      localStorage.setItem(key, JSON.stringify(ids));
+      sessionStorage.setItem(key, JSON.stringify(ids));
       window.dispatchEvent(new Event('yessuri:compare-changed'));
       return { ok:true };
     } catch {
@@ -52,7 +52,7 @@
     }
     if (next.length === current.length) return { ok:true, unchanged:true };
     try {
-      localStorage.setItem(key, JSON.stringify(next));
+      sessionStorage.setItem(key, JSON.stringify(next));
       window.dispatchEvent(new Event('yessuri:compare-changed'));
       return { ok:true };
     } catch {
@@ -66,7 +66,7 @@
       button.textContent = isSelected ? '비교 해제' : '비교 담기';
       button.setAttribute('aria-pressed', String(isSelected));
       button.disabled = !canStore();
-      if (button.disabled) button.title = '이 브라우저에서는 비교 목록을 저장할 수 없습니다.';
+      if (button.disabled) button.title = '현재 창에서는 비교 목록을 저장할 수 없습니다.';
     }
   }
   function bindButton(button, id, statusElement) {
@@ -76,14 +76,14 @@
       if (statusElement) {
         statusElement.textContent = result.reason === 'limit'
           ? '최대 3명까지 비교할 수 있습니다. 다른 기술자를 담으려면 한 명을 해제해 주세요.'
-          : result.reason === 'storage' ? '이 브라우저에서는 비교 목록을 저장할 수 없습니다.' : '';
+          : result.reason === 'storage' ? '현재 창에서는 비교 목록을 저장할 수 없습니다.' : '';
       }
     });
     const isSelected = selected(id);
     button.textContent = isSelected ? '비교 해제' : '비교 담기';
     button.setAttribute('aria-pressed', String(isSelected));
     button.disabled = !canStore();
-    if (button.disabled) button.title = '이 브라우저에서는 비교 목록을 저장할 수 없습니다.';
+    if (button.disabled) button.title = '현재 창에서는 비교 목록을 저장할 수 없습니다.';
   }
   window.addEventListener('yessuri:compare-changed', refreshButtons);
   window.addEventListener('storage', refreshButtons);
