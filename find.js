@@ -17,7 +17,6 @@ const validCategories = ['전체','누수·수도','하수구·변기','타일',
 const queryInput = document.querySelector('#find-query');
 const regionSelect = document.querySelector('#find-region');
 const categorySelect = document.querySelector('#find-category');
-const citywideCheckbox = document.querySelector('#find-citywide');
 const sortSelect = document.querySelector('#find-sort');
 const resultGrid = document.querySelector('#find-grid');
 const resultCount = document.querySelector('#result-count');
@@ -29,7 +28,7 @@ const currentConditions = document.querySelector('#find-current-conditions');
 const resultsLive = document.querySelector('#find-results-live');
 let announcementTimer;
 let appliedFilters;
-const readFilters = () => ({query:queryInput.value.trim().replace(/\s+/g," "),region:regionSelect.value,category:categorySelect.value,sort:sortSelect.value,citywide:citywideCheckbox.checked});
+const readFilters = () => ({query:queryInput.value.trim().replace(/\s+/g," "),region:regionSelect.value,category:categorySelect.value,sort:sortSelect.value});
 let requestedCategories = [];
 let requestedService = '';
 const serviceNotice = document.createElement('p');
@@ -51,7 +50,6 @@ function loadFiltersFromUrl() {
   queryInput.value = (params.get('q') || '').slice(0, 80);
   regionSelect.value = validRegions.includes(params.get('region')) ? params.get('region') : '전체';
   categorySelect.value = validCategories.includes(params.get('category')) ? params.get('category') : '전체';
-  citywideCheckbox.checked = params.get('citywide') === '1';
   sortSelect.value = ['default', 'name', 'areas'].includes(params.get('sort')) ? params.get('sort') : 'default';
   appliedFilters = readFilters();
 }
@@ -66,7 +64,6 @@ function updateUrl(mode = "push") {
   if (appliedFilters.region !== '전체') url.searchParams.set('region', appliedFilters.region);
   if (appliedFilters.category !== '전체') url.searchParams.set('category', appliedFilters.category);
   if (appliedFilters.sort !== 'default') url.searchParams.set('sort', appliedFilters.sort);
-  if (appliedFilters.citywide) url.searchParams.set('citywide', '1');
   try { if (url.href !== location.href) window.history[mode === 'replace' ? 'replaceState' : 'pushState'](null, '', url); } catch { /* 일부 로컬 파일 브라우저는 주소 변경을 제한합니다. */ }
 }
 
@@ -76,7 +73,6 @@ function renderDirectory(syncUrl = true) {
   const query = appliedFilters.query.normalize('NFKC').toLocaleLowerCase('ko-KR');
   const matches = directoryExperts().filter(expert =>
     servesRegion(expert, appliedFilters.region) &&
-    (!appliedFilters.citywide || servesAllBusan(expert)) &&
     (requestedCategories.length ? requestedCategories.some(field => expert.fields.includes(field)) : (appliedFilters.category === '전체' || expert.fields.includes(appliedFilters.category))) &&
     (!query || query.split(' ').every(term => [expert.name, expert.keywords || '', ...expert.fields].join(' ').normalize('NFKC').toLocaleLowerCase('ko-KR').includes(term)))
   );
@@ -92,7 +88,7 @@ function renderDirectory(syncUrl = true) {
   emptyState.hidden = matches.length !== 0;
   document.querySelector('#results-refine').hidden = matches.length === 0;
   if (!matches.length) {
-    emptyHeading.textContent = appliedFilters.citywide ? '조건에 맞는 부산 전 지역 출장 전문가가 없습니다' : '조건에 맞는 전문가가 없습니다';
+    emptyHeading.textContent = '조건에 맞는 전문가가 없습니다';
   }
   const regionName = appliedFilters.region === '전체' ? '부산 전체' : appliedFilters.region;
   const sortName = sortSelect.selectedOptions[0].textContent;
@@ -113,7 +109,6 @@ function resetFilters() {
   queryInput.value = '';
   regionSelect.value = '전체';
   categorySelect.value = '전체';
-  citywideCheckbox.checked = false;
   sortSelect.value = 'default';
   appliedFilters = readFilters();
   renderDirectory();
@@ -146,7 +141,6 @@ function syncInputsToApplied() {
   queryInput.value = appliedFilters.query;
   regionSelect.value = appliedFilters.region;
   categorySelect.value = appliedFilters.category;
-  citywideCheckbox.checked = appliedFilters.citywide;
   sortSelect.value = appliedFilters.sort;
 }
 function renderConditionChips() {
@@ -166,7 +160,6 @@ function renderConditionChips() {
   if (requestedCategories.length) chip(requestedCategories.join(' · '), () => {requestedCategories=[];requestedService='';appliedFilters.category='전체';}, '선택한 수리 분야 조건 해제');
   else if (appliedFilters.category !== '전체') chip(appliedFilters.category, () => {appliedFilters.category='전체';requestedService='';}, '수리 분야 조건 해제');
   if (appliedFilters.query) chip('검색: '+appliedFilters.query, () => {appliedFilters.query='';}, '검색어 조건 해제');
-  if (appliedFilters.citywide) chip('부산 전 지역 출장 가능', () => {appliedFilters.citywide=false;}, '부산 전 지역 출장 조건 해제');
 }
 function createExpertCard(expert) {
   const card = document.createElement('article');
