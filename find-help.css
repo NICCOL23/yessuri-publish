@@ -1,0 +1,19 @@
+.find-page .search-reset-row{display:flex;justify-content:flex-end;margin-top:8px}
+.find-page .search-reset-row button{border:0;background:transparent;color:#52657a;font-size:.875rem;min-height:44px;padding:8px 0;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.find-page .category-help{margin-top:16px;line-height:1.65;font-size:1rem}
+.find-page .category-help>summary{display:flex;align-items:center;gap:12px;list-style:none;width:fit-content;min-height:44px;color:#00767e;cursor:pointer;font-size:.875rem;font-weight:500}
+.category-help summary::-webkit-details-marker{display:none}
+.category-help summary span{font-size:1.2rem;transition:transform .15s}
+.category-help[open] summary span{transform:rotate(180deg)}
+.category-help-panel{padding:20px 24px;background:#f5faf8;border:1px solid #dfe9e6;border-radius:12px;margin-top:8px}
+.find-page .category-help-panel h2{font-size:1.125rem;line-height:1.5;letter-spacing:0;margin:0 0 8px}
+.category-help-panel p{margin:0;color:#425770;font-size:.875rem}
+.category-help-panel ul{list-style:none;padding:0;margin:12px 0}
+.category-help-panel li{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:8px 0}
+.category-help-panel li+li{border-top:1px solid #dfe9e6}
+.category-help-panel button{flex:none;min-height:44px;min-width:150px;padding:8px 12px;border:1px solid #00767e;border-radius:8px;background:#fff;color:#00767e;font-size:.875rem;font-weight:500;cursor:pointer}
+.category-help-panel a{display:inline-flex;align-items:center;min-height:44px;color:#00767e;font-size:.875rem;text-decoration:underline;text-underline-offset:4px}
+.find-page #category-help-status:empty{display:none}
+.find-page #category-help-status{color:#006770;margin-top:8px}
+.find-page :is(.category-help summary,.category-help button,.category-help a,.search-reset-row button):focus-visible{outline:3px solid #00767e;outline-offset:4px}
+@media(max-width:520px){.category-help-panel{padding:16px}.category-help-panel li{align-items:flex-start;flex-direction:column;gap:6px}.category-help-panel button{min-width:0;align-self:flex-start}.find-page .search-reset-row{margin-top:4px}}

@@ -31,6 +31,7 @@ let appliedFilters;
 const readFilters = () => ({query:queryInput.value.trim().replace(/\s+/g," "),region:regionSelect.value,category:categorySelect.value,sort:sortSelect.value});
 let requestedCategories = [];
 let requestedService = '';
+let helpCategoryPending = false;
 const serviceNotice = document.createElement('p');
 serviceNotice.className = 'demo-note';
 serviceNotice.setAttribute('role','status');
@@ -45,6 +46,7 @@ function updateCompareCount() {
 }
 function loadFiltersFromUrl() {
   const params = new URLSearchParams(window.location.search);
+  helpCategoryPending = false;
   requestedCategories = (params.get('categories') || '').split(',').filter(field => validCategories.includes(field) && field !== '전체');
   requestedService = (params.get('service') || '').slice(0, 80);
   queryInput.value = (params.get('q') || '').slice(0, 80);
@@ -106,6 +108,8 @@ function renderDirectory(syncUrl = true) {
 
 function resetFilters() {
   requestedCategories = []; requestedService = '';
+  helpCategoryPending = false;
+  document.querySelector('#category-help-status').textContent = '';
   queryInput.value = '';
   regionSelect.value = '전체';
   categorySelect.value = '전체';
@@ -116,7 +120,9 @@ function resetFilters() {
 
 document.querySelector('#find-filter-form').addEventListener('submit', event => {
   event.preventDefault();
-  if (categorySelect.value !== appliedFilters.category) { requestedCategories = []; requestedService = ''; }
+  if (helpCategoryPending || categorySelect.value !== appliedFilters.category) { requestedCategories = []; requestedService = ''; }
+  helpCategoryPending = false;
+  document.querySelector('#category-help-status').textContent = '';
   appliedFilters = readFilters();
   renderDirectory();
   document.querySelector('.find-results-heading').scrollIntoView({behavior:'smooth',block:'start'});
@@ -192,3 +198,10 @@ function refreshCardControls() {
 }
 window.addEventListener('yessuri:favorites-changed',refreshCardControls);
 document.querySelectorAll('[data-edit-search]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();document.querySelector('#find-filter-form').scrollIntoView({behavior:'smooth',block:'start'});regionSelect.focus({preventScroll:true});}));
+
+// Help changes draft inputs only; applied results and URL wait for form submission.
+document.querySelectorAll('[data-help-category]').forEach(button => button.addEventListener('click', () => {
+  categorySelect.value = button.dataset.helpCategory;
+  helpCategoryPending = true;
+  document.querySelector('#category-help-status').textContent = button.dataset.helpCategory + '를 선택했습니다. 전문가 찾기를 눌러주세요.';
+}));
