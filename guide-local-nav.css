@@ -1,4 +1,4 @@
-/* This stylesheet is loaded only by guide.html. The compact local nav stays in document flow. */
+/* Guide-only local navigation: sticky on desktop, document flow on mobile/tablet. */
 .guide-local-nav{background:#fff;border-bottom:1px solid #dfe7ec;color:#19334e}
 .guide-local-nav .container{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .guide-local-nav a{display:flex;align-items:center;justify-content:center;min-height:52px;padding:12px 8px;border-bottom:3px solid transparent;font-size:15px;font-weight:600;text-align:center;line-height:1.5;text-decoration:none}
@@ -6,5 +6,6 @@
 .guide-local-nav a[aria-current=location]{color:#00767e;border-bottom-color:#00767e;font-weight:800;background:#f4faf9}
 .guide-local-nav a:focus-visible{outline:3px solid #00767e;outline-offset:-4px;border-radius:4px}
 .work-guide :is(h1,h2)[tabindex="-1"]:focus-visible{outline:2px solid #00767e;outline-offset:5px}
+@media(min-width:901px){.guide-local-nav{position:sticky;top:var(--guide-nav-top,80px);z-index:28}}
 @media(max-width:760px){.guide-local-nav .container{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 8px}.guide-local-nav a{min-height:46px;padding:10px 5px;font-size:14px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}

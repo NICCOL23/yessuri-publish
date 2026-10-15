@@ -1,0 +1,15 @@
+/* Scoped presentation for the guide list and dedicated field view. */
+.work-guide [hidden]{display:none!important}
+.work-guide .wg-categories a{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;padding:14px 16px;border:1px solid #d9e3e9;border-radius:8px;background:#fff;font-weight:600;color:#19334e;line-height:1.6}
+.work-guide .wg-categories a:hover,.work-guide .wg-categories a.wg-last-field{background:#edf8f6;border-color:#00767e;color:#00666e}
+.work-guide .wg-categories a span{color:#00767e;font-size:20px;flex:none}
+.work-guide #wg-list{padding-bottom:22px}
+.work-guide .wg-back{display:inline-flex;align-items:center;min-height:44px;font-size:15px;font-weight:600;margin:0 0 14px;color:#00767e;text-decoration:none}
+.work-guide .wg-back:hover{text-decoration:underline}
+.work-guide #wg-field-title{font-size:26px;margin:0;line-height:1.4}
+.work-guide #wg-empty{font-weight:400;font-size:15px!important;line-height:1.8;margin-top:20px}
+.work-guide #wg-result-items a{display:block;background:#fff;border:1px solid #d9e3e9;border-radius:8px;padding:12px;min-height:46px;line-height:1.65}
+.work-guide #wg-result-items a:hover{background:#e9f7f4}
+.work-guide #wg-memo-tools .wg-small{margin:10px 0}
+.work-guide #wg-flow-detail .wg-side{align-self:start}
+@media(max-width:760px){.work-guide .wg-categories a{min-height:56px;padding:10px;font-size:14px}.work-guide #wg-field-title{font-size:23px}.work-guide .wg-back{margin-bottom:8px}}
