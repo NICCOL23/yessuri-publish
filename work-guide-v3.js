@@ -6,7 +6,7 @@
  const findRecord=id=>records.find(r=>r.t.id===id);
  const text=(tag,value,cls)=>{const el=document.createElement(tag);el.textContent=value;if(cls)el.className=cls;return el;};
  const button=(label,active,run)=>{const b=text('button',label);b.type='button';b.setAttribute('aria-pressed',String(active));b.addEventListener('click',run);return b;};
- const sectionTitle=(n,label)=>{const h=text('h3',label,'wg-section-title');h.prepend(text('span',n));return h;};
+ const sectionTitle=(n,label)=>text('h3',label,'wg-section-title');
  const announce=text('p','','sr-only');announce.setAttribute('role','status');$('wg-detail-content').before(announce);
  let current,view,products={},listScroll=0,restoring=false,pendingFrame=0,panelMode=null,overlayEntry=false,originScroll=0;
  const routeKey=()=>location.pathname+location.search;
@@ -46,9 +46,13 @@
    const content=$('wg-detail-content');content.replaceChildren();
   const title=text('h2',t.label);title.id='wg-detail-title';title.tabIndex=-1;content.append(title,text('p',t.summary,'wg-summary'));
   if(isGlass||t.id==='bath-glass-parts')content.append(text('p','깨진 유리를 직접 만지거나 치수를 재지 말고, 안전한 위치에서 사진을 준비해 상담하세요.','wg-callout'));
-  const before=text('section','','wg-before');before.append(sectionTitle('01','보수·교체, 먼저 확인하세요'));const pair=text('div','','wg-before-grid');
-  [['점검할 부분',c.guidance[0]],['작업 범위 상담',c.guidance[1]]].forEach(([a,b])=>{const box=text('div');box.append(text('h4',a),text('p',b));pair.append(box);});before.append(pair,text('p','원인과 최종 작업 범위는 기술자 확인 후 결정합니다.','wg-small'));content.append(before);
-  const cost=text('section');cost.append(sectionTitle('02','같은 조건으로 비용을 확인하세요'));
+  const visual=text('section','','wg-work-visual');
+  const figure=document.createElement('figure'),img=document.createElement('img');
+  const art=t.section==='방충망'?20:c.art;img.src='assets/images/guide-detail-'+art+'.webp';img.width=240;img.height=240;img.alt=c.label+' 분야 대표 3D 참고 이미지';
+  figure.append(img,text('figcaption','분야 대표 참고 이미지 · 실제 제품과 구조가 다를 수 있습니다.'));
+  const intro=text('div','','wg-visual-intro');intro.append(text('p',t.section||c.label,'wg-eyebrow'),text('h3',t.rows[0].name),text('p',c.guidance[0]+' · '+c.guidance[1]));
+  visual.append(figure,intro);content.append(visual);
+  const cost=text('section');cost.append(sectionTitle('','제품·규격과 비용 조건'));
   const wrap=text('div','','wg-table-wrap'),table=document.createElement('table');table.append(text('caption',c.label+' 작업·제품 확인 사항','sr-only'));
   const head=document.createElement('thead'),hr=document.createElement('tr');['작업','확인할 제품·규격','비용이 달라지는 조건'].forEach(s=>{const th=text('th',s);th.scope='col';hr.append(th);});head.append(hr);table.append(head);
   const body=document.createElement('tbody');t.rows.forEach(row=>{const tr=document.createElement('tr'),th=text('th',row.name);th.scope='row';tr.append(th);[['확인할 제품·규격',row.parts],['비용이 달라지는 조건',row.conditions]].forEach(([label,value])=>{const td=text('td',value);td.dataset.label=label;tr.append(td);});body.append(tr);});table.append(body);wrap.append(table);cost.append(wrap);content.append(cost);
@@ -60,8 +64,8 @@
   if(c.id==='leak')related.push(['누수면 건조·마감 복구 안내','leak-restore']);
   if(t.id==='leak-restore')related.push(['누수 점검·탐지 안내','leak-work']);
   related.forEach(([label,id])=>{const a=text('a',label+' →','wg-related');a.href='guide.html?work='+id+'#work-guide';a.addEventListener('click',e=>{e.preventDefault();select(findRecord(id),{focus:true});});content.append(a);});
-  const after=text('section','','wg-after');after.append(sectionTitle('03','작업 후 확인할 내용'));const checks=text('ul');[c.guidance[2],'사용한 제품·작업 내역','사후 점검·보증 범위·재방문 비용 조건'].forEach(s=>checks.append(text('li',s)));after.append(checks);content.append(after);
-  $('wg-product-title').textContent=isGlass?'유리 종류를 알고 계신가요?':'제품은 어떻게 준비하시나요?';
+  const after=text('section','','wg-after');after.append(sectionTitle('','작업 후 함께 확인하세요'));const checks=text('ul');[c.guidance[2],'사용한 제품·작업 내역','사후 점검·보증 범위·재방문 비용 조건'].forEach(s=>checks.append(text('li',s)));after.append(checks);content.append(after);
+  $('wg-product-title').textContent=isGlass?'유리 종류를 알고 계신가요?':'제품 준비 방식 · 선택사항';
   $('wg-product-options').replaceChildren(...(isGlass?['종류를 모르겠어요','기존 제품 정보가 있어요','기술자와 함께 선택할게요']:['기술자와 함께 선택','직접 구매한 제품 있음','기존 부품 재사용 상담']).map(s=>{const label=document.createElement('label'),radio=document.createElement('input');radio.type='radio';radio.name='product-preparation';radio.value=s;radio.addEventListener('change',updateMemo);label.append(radio,document.createTextNode(s));return label;}));
   $('wg-prepare').replaceChildren(...(isGlass?['안전한 위치에서 보이는 설치 위치·전체 모습 사진','파손 부위 사진·기존 제품 정보','작업 수량·희망 일정']:['전체 모습과 문제 부위 사진',t.rows[0].parts+' 정보','작업 수량·희망 일정']).map(s=>text('li',s)));
   restoreProduct();updateFind();updateMemo();
@@ -81,6 +85,6 @@
   restoring=true;if(!restore(saved))readURL();if(wasPanel&&!panelMode){products={...products,...choices};$('wg-region').value=region;if(view==='detail'&&current.c===previous.c)current.t=previous.t;window.YESSURI_GUIDE_SKIP_SCROLL=true;const u=new URL(location.href);if(region)u.searchParams.set('region',region);history.replaceState(history.state,'',u);}render();if(view==='list'&&saved?.results)search();requestAnimationFrame(()=>{if(!panelMode&&(!location.hash||location.hash==='#work-guide'))window.scrollTo({top:wasPanel?previousScroll:saved?.scroll||0,behavior:'instant'});restoring=false;persist();});
  });
  function closePanel(){if(!panelMode)return;if(overlayEntry){history.back();return;}panelMode=null;overlayEntry=false;const u=urlFor('detail',current.g,current.c,null);history.replaceState(history.state,'',u);persist();window.dispatchEvent(new Event('guide:viewchange'));}
- window.YESSURI_WORK_PANEL={getState:()=>({mode:panelMode,title:current.t?.label||'',scroll:originScroll}),close:closePanel,setMode:mode=>{if(!current.t||!['work','consult'].includes(mode))return;panelMode=mode;persist();window.dispatchEvent(new Event('guide:viewchange'));}};
+ window.YESSURI_WORK_PANEL={getState:()=>({mode:panelMode,title:current.t?.label||'',category:current.t?.category||'',scroll:originScroll}),close:closePanel,setMode:mode=>{if(!current.t||!['work','consult'].includes(mode))return;panelMode=mode;persist();window.dispatchEvent(new Event('guide:viewchange'));}};
  readURL();const saved=history.state?.wgFlow;if(saved)restore(saved);render();if(view==='list'&&saved?.results)search();persist();
 })();
