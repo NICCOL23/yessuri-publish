@@ -20,3 +20,6 @@ html.wg-panel-open{overflow:hidden}
 @media(prefers-reduced-motion:no-preference){.wg-panel[open]{animation:wg-panel-enter .22s ease-out}@keyframes wg-panel-enter{from{opacity:.7;transform:translateX(-40px)}to{opacity:1;transform:none}}}
 
 .wg-panel #wg-copy{display:none}.wg-panel .wg-panel-photos{scroll-margin-bottom:20px}.wg-panel:focus-visible,.wg-panel button:focus-visible,.wg-panel a:focus-visible,.wg-panel input:focus-visible,.wg-panel select:focus-visible{outline:3px solid #00767e;outline-offset:3px}
+
+/* Per-work illustrations: original aspect ratio, not the field atlas. */
+.wg-panel .wg-work-visual{grid-template-columns:minmax(0,44%) minmax(0,1fr);gap:24px}.wg-panel .wg-work-visual img{width:100%;height:auto;max-height:360px;object-fit:contain;mix-blend-mode:normal}.wg-panel .wg-work-visual figure{background:#fff;border-radius:8px;overflow:hidden}.wg-panel .wg-work-visual figcaption{padding:0 8px 8px}.wg-panel .wg-image-error{padding:18px;font-size:14px!important;color:#52657a}@media(max-width:600px){.wg-panel .wg-work-visual{grid-template-columns:1fr}.wg-panel .wg-work-visual img{max-height:260px}}

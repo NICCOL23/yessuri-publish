@@ -47,10 +47,11 @@
   const title=text('h2',t.label);title.id='wg-detail-title';title.tabIndex=-1;content.append(title,text('p',t.summary,'wg-summary'));
   if(isGlass||t.id==='bath-glass-parts')content.append(text('p','깨진 유리를 직접 만지거나 치수를 재지 말고, 안전한 위치에서 사진을 준비해 상담하세요.','wg-callout'));
   const visual=text('section','','wg-work-visual');
-  const figure=document.createElement('figure'),img=document.createElement('img');
-  const art=t.section==='방충망'?20:c.art;img.src='assets/images/guide-detail-'+art+'.webp';img.width=240;img.height=240;img.alt=c.label+' 분야 대표 3D 참고 이미지';
-  figure.append(img,text('figcaption','분야 대표 참고 이미지 · 실제 제품과 구조가 다를 수 있습니다.'));
-  const intro=text('div','','wg-visual-intro');intro.append(text('p',t.section||c.label,'wg-eyebrow'),text('h3',t.rows[0].name),text('p',c.guidance[0]+' · '+c.guidance[1]));
+  const figure=document.createElement('figure'),catalog=window.YESSURI_WORK_CATALOG;
+  const asset=catalog?.images.find(a=>a.id===t.imageIds?.[0]&&a.taskId===t.id);
+  if(asset){const img=document.createElement('img');img.src=catalog.assetBase+asset.file;img.width=asset.width;img.height=asset.height;img.alt=asset.alt;img.decoding='async';img.addEventListener('error',()=>{img.remove();figure.prepend(text('p','이미지를 불러오지 못했습니다. 아래 작업 안내를 확인해 주세요.','wg-image-error'));console.error('Work image failed: '+t.id);},{once:true});figure.append(img,text('figcaption',asset.caption));}
+  else{figure.append(text('p','이 작업 이미지는 확인 중입니다. 아래 작업 안내를 확인해 주세요.','wg-image-error'));console.error('Missing work image mapping: '+t.id);}
+  const intro=text('div','','wg-visual-intro');intro.append(text('p',t.section||c.label,'wg-eyebrow'),text('h3',t.rows[0].name),text('p',t.before.join(' · ')));
   visual.append(figure,intro);content.append(visual);
   const cost=text('section');cost.append(sectionTitle('','제품·규격과 비용 조건'));
   const wrap=text('div','','wg-table-wrap'),table=document.createElement('table');table.append(text('caption',c.label+' 작업·제품 확인 사항','sr-only'));
@@ -64,7 +65,7 @@
   if(c.id==='leak')related.push(['누수면 건조·마감 복구 안내','leak-restore']);
   if(t.id==='leak-restore')related.push(['누수 점검·탐지 안내','leak-work']);
   related.forEach(([label,id])=>{const a=text('a',label+' →','wg-related');a.href='guide.html?work='+id+'#work-guide';a.addEventListener('click',e=>{e.preventDefault();select(findRecord(id),{focus:true});});content.append(a);});
-  const after=text('section','','wg-after');after.append(sectionTitle('','작업 후 함께 확인하세요'));const checks=text('ul');[c.guidance[2],'사용한 제품·작업 내역','사후 점검·보증 범위·재방문 비용 조건'].forEach(s=>checks.append(text('li',s)));after.append(checks);content.append(after);
+  const after=text('section','','wg-after');after.append(sectionTitle('','작업 후 함께 확인하세요'));const checks=text('ul');t.after.forEach(s=>checks.append(text('li',s)));after.append(checks);content.append(after);
   $('wg-product-title').textContent=isGlass?'유리 종류를 알고 계신가요?':'제품 준비 방식 · 선택사항';
   $('wg-product-options').replaceChildren(...(isGlass?['종류를 모르겠어요','기존 제품 정보가 있어요','기술자와 함께 선택할게요']:['기술자와 함께 선택','직접 구매한 제품 있음','기존 부품 재사용 상담']).map(s=>{const label=document.createElement('label'),radio=document.createElement('input');radio.type='radio';radio.name='product-preparation';radio.value=s;radio.addEventListener('change',updateMemo);label.append(radio,document.createTextNode(s));return label;}));
   $('wg-prepare').replaceChildren(...(isGlass?['안전한 위치에서 보이는 설치 위치·전체 모습 사진','파손 부위 사진·기존 제품 정보','작업 수량·희망 일정']:['전체 모습과 문제 부위 사진',t.rows[0].parts+' 정보','작업 수량·희망 일정']).map(s=>text('li',s)));
