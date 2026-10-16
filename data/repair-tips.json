@@ -1,0 +1,421 @@
+{
+  "schemaVersion": 1,
+  "updatedDate": "2026-10-16",
+  "editorialNote": "공식 자료의 원칙을 국내 주거 환경에 맞춰 정리한 관리 안내이며, 현장 원인을 확정하는 진단이 아닙니다. 해외 자료의 부품 규격·관리 주기는 적용하지 않습니다.",
+  "tips": [
+    {
+      "id": "door-closing",
+      "category": "문·도어락",
+      "title": "문이 잘 안 닫히나요?",
+      "description": "문이 걸리는 위치와 잠금장치의 반응을 나눠 살펴보세요.",
+      "image": {
+        "kind": "work",
+        "imageId": "work-image-lock"
+      },
+      "imageAlt": "문과 도어락, 문 위쪽 닫힘 장치를 보여주는 3D 참고 이미지",
+      "imageNote": "문과 잠금장치의 위치를 이해하기 위한 참고 이미지입니다.",
+      "checksTitle": "문이 걸리나요, 잠금만 안 되나요?",
+      "checks": [
+        "바닥이나 문틀에 닿는 흔적, 문틈의 변화를 눈으로 살펴보세요. 문을 들어 올리거나 세게 밀어 시험하지 마세요.",
+        "문이 닫힌 뒤 잠금만 실패하는지, 경고음이나 배터리 알림이 있는지 구분해 두세요. 알림의 의미는 해당 모델 설명서에서 확인하세요."
+      ],
+      "careTitle": "무리한 힘보다 제품별 관리가 먼저예요",
+      "care": [
+        "문턱과 문 주변의 보이는 이물을 치우고, 문을 쾅 닫거나 물건으로 받쳐 두지 마세요.",
+        "도어락의 건전지 종류·교환 방법은 국내 해당 모델 설명서를 따르세요. 전자부에 세정제나 윤활제를 임의로 뿌리지 마세요."
+      ],
+      "expertTitle": "간섭이나 잠김 불량이 반복되면",
+      "expert": [
+        "문 처짐, 경첩 흔들림, 닫힘 속도 이상이 계속되면 문과 철물을 함께 점검받으세요. 도어락 교체부터 결정할 필요는 없습니다.",
+        "현관문이 잠기지 않으면 방치하지 말고 관리사무소나 해당 제품 서비스에 도움을 요청하세요. 갇힘·화재 등 인명 위험은 긴급 구조 요청이 우선입니다."
+      ],
+      "related": [
+        {
+          "workId": "lock",
+          "label": "현관문·도어락 작업 안내"
+        }
+      ],
+      "sources": [
+        {
+          "label": "게이트맨 · 모델별 사용설명서 안내",
+          "url": "https://www.gateman.kr/customer-service",
+          "checkedDate": "2026-10-16",
+          "scope": "국내 제품의 설명서 확인 경로"
+        },
+        {
+          "label": "Schlage · 문과 잠금장치의 정렬 확인",
+          "url": "https://www.schlage.com/en/blog/product_updates/how-to-install-a-deadbolt-lock.html",
+          "checkedDate": "2026-10-16",
+          "scope": "문·문틀 정렬과 잠금장치 작동의 관계만 참고; 설치 절차·해외 규격 제외"
+        }
+      ]
+    },
+    {
+      "id": "screen-care",
+      "category": "창문·방충망",
+      "title": "방충망이 뻑뻑하거나 틈이 생겼어요",
+      "description": "망 손상·틀 변형·레일 이물을 구분해 관리하세요.",
+      "image": {
+        "kind": "work",
+        "imageId": "work-image-screen-parts"
+      },
+      "imageAlt": "방충망의 망과 하단 틀, 롤러와 틈막이 부속을 보여주는 3D 참고 이미지",
+      "imageNote": "롤러·틀 구조는 창호 제품마다 다릅니다.",
+      "checksTitle": "찢어진 망과 움직임 문제는 달라요",
+      "checks": [
+        "안전하게 서 있는 위치에서 망이 찢어졌는지, 틀과 창 사이에 틈이 있는지 살펴보세요.",
+        "움직이는 구간에 모래·먼지가 보이는지 확인하세요. 깨진 유리나 기울어진 창짝에는 손을 대지 마세요."
+      ],
+      "careTitle": "손이 닿는 레일만 가볍게",
+      "care": [
+        "안쪽에서 접근 가능한 레일의 보이는 이물을 부드러운 솔이나 청소기로 제거하세요. 창밖으로 몸을 내밀지 마세요.",
+        "망과 틀의 세척·윤활은 제품 설명서에 맞추세요. 잘 안 움직인다고 세게 밀거나 무거운 창짝·외부 방충망을 직접 빼지 마세요."
+      ],
+      "expertTitle": "틀이 휘거나 다시 뻑뻑해지면",
+      "expert": [
+        "레일을 정리해도 작동이 나쁘거나 롤러 파손·틀 이탈·큰 틈이 보이면 부속과 설치 상태를 점검받으세요.",
+        "고층 외부 작업이나 무거운 창짝 탈거가 필요하면 전문가에게 맡기세요. 망은 추락을 막는 안전장치가 아닙니다."
+      ],
+      "related": [
+        {
+          "workId": "screen-parts",
+          "label": "방충망 롤러·모헤어 작업 안내"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Andersen · 방충망 레일과 롤러 점검",
+          "url": "https://helpcenter.andersenwindows.com/aw/articles/Knowledge/Adjust-or-Replace-Rollers-on-Andersen-Gliding-Patio-Door-Insect-Screens",
+          "checkedDate": "2026-10-16",
+          "scope": "레일 이물과 작동 불량의 관계 참고; 해외 모델 탈거 방법·점검 주기는 적용하지 않음"
+        }
+      ]
+    },
+    {
+      "id": "sink-moisture",
+      "category": "욕실설비",
+      "title": "세면대 아래가 젖어요",
+      "description": "물이 생기는 시점과 위치를 살피고 반복되는 누수는 점검받으세요.",
+      "image": {
+        "kind": "tip",
+        "imageId": "tip-image-sink-moisture"
+      },
+      "imageAlt": "세면대 하부 급수 호스와 배수트랩, 연결부 아래 물기를 보여주는 3D 참고 이미지",
+      "imageNote": "물기의 위치를 살피기 위한 참고 그림이며 실제 누수 원인을 뜻하지 않습니다.",
+      "checksTitle": "사용할 때만 젖는지 살펴보세요",
+      "checks": [
+        "이미 물기가 있다면 세면대 사용을 멈추고, 언제부터 어디가 젖었는지 안전한 위치에서 기록하세요. 물을 계속 흘려 고장을 재현하지 마세요.",
+        "눈에 보이는 급수 호스 주변, 배수 연결부, 바닥 중 어느 쪽이 젖었는지 구분하세요. 연결부를 돌리거나 분해할 필요는 없습니다."
+      ],
+      "careTitle": "평소에는 물건을 기대 놓지 마세요",
+      "care": [
+        "세면대 아래 배관에 수납 물건이 닿거나 매달리지 않게 하고, 물기를 확인하기 쉽도록 주변을 정리해 두세요.",
+        "정상 사용 중 바닥이 젖거나 가구가 부풀어 오르는 변화가 있는지 살펴보세요. 겉면을 닦는 것만으로 누수가 해결됐다고 판단하지 마세요."
+      ],
+      "expertTitle": "물방울이 반복되거나 번지면",
+      "expert": [
+        "사용을 멈춰도 젖거나, 연결부 물방울·가구 손상·아래층 물샘이 있으면 사용을 중단하고 관리사무소 또는 배관 전문가에게 점검을 요청하세요.",
+        "물이 전기 설비로 번지면 젖은 설비나 플러그를 만지지 말고 안전한 곳으로 떨어져 도움을 요청하세요."
+      ],
+      "related": [
+        {
+          "workId": "bath-trap",
+          "label": "팝업·배수트랩 작업 안내"
+        }
+      ],
+      "sources": [
+        {
+          "label": "EPA WaterSense · 가정의 누수 관찰과 관리",
+          "url": "https://www.epa.gov/watersense/home-maintenance",
+          "checkedDate": "2026-10-16",
+          "scope": "세면대 아래 연결부·고인 물·물자국 관찰과 조기 누수 대응; 수리 절차·미국 제품 규격 제외"
+        }
+      ]
+    },
+    {
+      "id": "drain-odor",
+      "category": "배수·악취",
+      "title": "배수구 냄새와 물 빠짐이 나빠졌어요",
+      "description": "거름망 관리로 해결되는지, 배관 점검이 필요한지 구분하세요.",
+      "image": {
+        "kind": "work",
+        "imageId": "work-image-drain-work"
+      },
+      "imageAlt": "바닥 배수구와 분리형 거름망을 보여주는 3D 참고 이미지",
+      "imageNote": "거름망과 배수구의 형태는 제품마다 다릅니다.",
+      "checksTitle": "한 곳만 느린지, 여러 곳이 함께 느린지",
+      "checks": [
+        "언제 냄새가 심한지, 다른 배수구도 느린지 살펴보세요. 물이 차오르면 더 흘려보내지 마세요.",
+        "손이 닿는 거름망에 머리카락·이물이 쌓였는지 보세요. 고정된 트랩이나 깊은 배관을 직접 분해하지 마세요."
+      ],
+      "careTitle": "이물은 거름망에서 먼저 걸러주세요",
+      "care": [
+        "사용자가 분리하도록 된 거름망만 제품 안내에 따라 청소하고 제자리에 놓으세요. 머리카락·기름·음식 찌꺼기는 흘려보내지 마세요.",
+        "세정제는 표시사항을 따르고 다른 세정제·락스·산성 제품과 섞거나 연이어 붓지 마세요. 이미 약품을 사용했다면 점검 전에 제품명과 사용 사실을 알려주세요."
+      ],
+      "expertTitle": "역류·반복 막힘은 더 붓지 말고 점검",
+      "expert": [
+        "거름망을 정리해도 반복되거나 여러 곳이 동시에 막히면 내부 배관·공용관·트랩 상태를 전문가와 확인하세요.",
+        "물이 역류하거나 하수가 넘치면 사용을 멈추고 관리사무소 또는 배관 전문가에게 연락하세요. 자극적인 냄새나 호흡 불편이 있으면 해당 공간에서 벗어나세요."
+      ],
+      "related": [
+        {
+          "workId": "drain-work",
+          "label": "하수구·변기 막힘 작업 안내"
+        }
+      ],
+      "sources": [
+        {
+          "label": "EPA · 가정용 화학제품 혼합 주의",
+          "url": "https://www.epa.gov/hw/household-hazardous-waste-hhw",
+          "checkedDate": "2026-10-16",
+          "scope": "제품 표시 준수·다른 화학제품과 혼합 금지"
+        },
+        {
+          "label": "EPA · 배수구에 흘려보내지 않을 물질",
+          "url": "https://www.epa.gov/septic/frequent-questions-septic-systems",
+          "checkedDate": "2026-10-16",
+          "scope": "기름·이물 배출 예방 원칙만 참고; 해외 정화조 구조·관리 기준은 적용하지 않음"
+        }
+      ]
+    },
+    {
+      "id": "mold-moisture",
+      "category": "곰팡이·결로",
+      "title": "닦아도 같은 자리에 곰팡이가 생겨요",
+      "description": "청소와 함께 습기·누수·결로의 원인을 확인하세요.",
+      "image": {
+        "kind": "work",
+        "imageId": "work-image-condensation"
+      },
+      "imageAlt": "창문에 맺힌 물방울과 벽 모서리, 습도계를 보여주는 3D 참고 이미지",
+      "imageNote": "결로와 실내 습기 확인을 돕는 참고 이미지입니다.",
+      "checksTitle": "같은 자리인지, 비가 온 뒤인지",
+      "checks": [
+        "반복되는 위치와 시기를 기록하세요. 비 온 뒤 젖는지, 추운 날 창·외벽에 물방울이 맺히는지에 따라 점검할 원인이 달라집니다.",
+        "벽지 들뜸·천장 얼룩·축축함이 함께 보이는지 살펴보세요. 벽 속을 확인하려고 뜯거나 곰팡이를 마른 솔로 털지 마세요."
+      ],
+      "careTitle": "닦는 것과 수분 원인 관리는 함께",
+      "care": [
+        "생활 중 생긴 물기는 남겨두지 말고, 욕실·조리 공간의 환기 설비를 적절히 사용하세요. 실내 습도와 반복되는 젖음을 살펴보세요.",
+        "바깥이 덥고 습하면 창문을 오래 여는 것만으로 습기가 줄지 않을 수 있습니다. 외기 상태에 따라 환기와 제습을 조절하세요.",
+        "젖은 벽에 바로 도배·도장해 가리지 마세요. 청소 제품은 표시사항을 따르고 섞어 쓰지 마세요. 넓게 번졌거나 오염된 물이 원인이라면 직접 청소부터 하지 마세요."
+      ],
+      "expertTitle": "닦아도 재발하면 원인부터 확인하세요",
+      "expert": [
+        "곰팡이가 넓어지거나 벽·천장이 계속 젖으면 누수·방수·결로·단열 조건을 점검받으세요. 청소만으로 해결될 문제와 원인 보수는 다릅니다.",
+        "건강상 우려가 있거나 자극·호흡 증상이 있으면 오염 구역을 피하고 의료 상담을 고려하세요. 눈에 보이는 면적만으로 안전을 단정할 수 없습니다."
+      ],
+      "related": [
+        {
+          "workId": "condensation",
+          "label": "결로 원인 확인 작업 안내"
+        },
+        {
+          "workId": "clean-work",
+          "label": "곰팡이 청소 상담 전 작업 안내"
+        }
+      ],
+      "sources": [
+        {
+          "label": "EPA · 곰팡이와 수분 원인 관리",
+          "url": "https://www.epa.gov/mold/ten-things-you-should-know-about-mold",
+          "checkedDate": "2026-10-16",
+          "scope": "청소와 누수·습기 원인 제거를 함께 진행하는 원칙"
+        },
+        {
+          "label": "EPA · 결로 예방과 외기 조건별 환기",
+          "url": "https://www.epa.gov/mold/mold-course-chapter-9",
+          "checkedDate": "2026-10-16",
+          "scope": "외기가 따뜻하고 습할 때 제습 고려; 주거 환경별 판단"
+        }
+      ]
+    },
+    {
+      "id": "outlet-safety",
+      "category": "전기·조명",
+      "title": "콘센트가 변색되거나 타는 냄새가 나요",
+      "description": "다시 켜서 시험하지 말고 사용 중지와 안전 확보가 먼저예요.",
+      "badge": "사용 중지·점검",
+      "image": {
+        "kind": "tip",
+        "imageId": "tip-image-outlet-warning"
+      },
+      "imageAlt": "국내형 접지 콘센트의 갈색 변색 흔적과 연결되지 않은 둥근 핀 플러그를 보여주는 3D 참고 이미지",
+      "imageNote": "이상 징후의 참고 그림입니다. 뜨겁거나 손상된 플러그를 직접 뽑으라는 뜻이 아닙니다.",
+      "priority": {
+        "title": "먼저 사용을 멈추고 떨어져 주세요",
+        "text": "타는 냄새·변색·스파크가 있으면 해당 기기를 다시 켜지 마세요. 뜨겁거나 녹은 콘센트·플러그는 만지지 마세요. 연기·불꽃·감전 등 급박한 위험은 안전한 곳으로 대피한 뒤 긴급 구조를 요청하세요."
+      },
+      "checksTitle": "만지지 말고 보이는 징후만",
+      "checks": [
+        "안전한 거리에서 변색·그을음·녹은 흔적이 있는지 보고, 어떤 기기를 사용할 때 문제가 생겼는지 기억해 두세요.",
+        "열을 확인하려고 손을 대거나 커버를 열지 마세요. 차단기가 반복해서 내려가도 계속 올려 시험하지 마세요."
+      ],
+      "careTitle": "평소에는 정격용량과 주변 상태를",
+      "care": [
+        "제품과 멀티탭의 정격용량을 확인하고 멀티탭을 서로 이어 쓰지 마세요. 고소비전력 기기는 제조사의 전용·단독 콘센트 안내를 따르세요.",
+        "전선이 눌리거나 꺾이지 않게 하고 물기와 먼지가 쌓이지 않도록 관리하세요. 손상된 제품은 계속 사용하지 마세요."
+      ],
+      "expertTitle": "겉면이 깨끗해져도 재사용 판단은 점검 후에",
+      "expert": [
+        "변색·과열·반복 차단은 전기 전문가에게 원인과 배선 상태를 확인받으세요. 표면 청소나 멀티탭 교체만으로 안전해졌다고 판단하지 마세요."
+      ],
+      "related": [
+        {
+          "workId": "electric-check",
+          "label": "전기 원인 점검·보수 안내"
+        }
+      ],
+      "sources": [
+        {
+          "label": "국가기술표준원·한국소비자원 · 멀티탭·콘센트·플러그 안전주의보",
+          "url": "https://www.kats.go.kr/content.do?cid=25536&cmsid=240&mode=view",
+          "checkedDate": "2026-10-16",
+          "scope": "과부하·화재 위험, 정격용량, 멀티탭 연속 연결 금지 및 고소비전력 제품 사용 주의"
+        }
+      ]
+    },
+    {
+      "id": "aircon-care",
+      "category": "에어컨",
+      "title": "냉방이 약하거나 냄새가 나요",
+      "description": "모델별 필터 관리 후에도 남는 증상은 전문 점검으로 확인하세요.",
+      "image": {
+        "kind": "tip",
+        "imageId": "tip-image-aircon-filter"
+      },
+      "imageAlt": "에어컨 실내기의 사용자용 앞 덮개와 망 필터를 보여주는 3D 참고 이미지",
+      "imageNote": "필터 모양과 분리 가능 범위는 해당 모델 사용설명서에서 확인하세요.",
+      "checksTitle": "설정과 바람길부터 살펴보세요",
+      "checks": [
+        "냉방 모드·설정 온도와 실내기 흡입·토출구 주변을 살펴보세요. 에러 표시나 물샘이 있으면 증상을 기록하세요.",
+        "실외기 주변은 안전하게 접근 가능한 범위에서만 보세요. 창밖·옥상 난간 쪽으로 나가거나 덮개를 열지 마세요."
+      ],
+      "careTitle": "설명서에서 허용한 필터만 관리하세요",
+      "care": [
+        "운전을 멈추고 전원 차단 등 해당 모델의 안전 절차를 따른 뒤 사용자 관리용 필터만 청소하세요. 세척 가능한지와 완전 건조 방법도 설명서로 확인하세요.",
+        "모든 제품에 같은 청소 주기를 적용하지 마세요. 사용 환경과 설명서 기준을 따르고, 세척 불가 필터나 전기부에 물·탈취제를 뿌리지 마세요."
+      ],
+      "expertTitle": "필터 관리로 해결되지 않는 냄새·냉방 저하",
+      "expert": [
+        "기본 관리 후에도 냄새·냉방 저하·반복 물샘이 남으면 제조사 서비스 또는 전문가의 점검이 필요합니다. 냉매 부족으로 단정해 충전부터 요청하지 마세요.",
+        "타는 냄새·연기·스파크가 있으면 운전을 중지하세요. 손상 부위를 만지지 말고 급박한 위험은 대피와 긴급 구조 요청이 우선입니다."
+      ],
+      "related": [
+        {
+          "workId": "aircon-work",
+          "label": "에어컨 설치·수리·청소 작업 안내"
+        }
+      ],
+      "sources": [
+        {
+          "label": "삼성전자서비스 · 에어컨 사전점검 안내",
+          "url": "https://www.samsungsvc.co.kr/solution/2002378?assess=N",
+          "checkedDate": "2026-10-16",
+          "scope": "기본 설정·전원·모델별 사용자 점검 범위 확인"
+        },
+        {
+          "label": "캐나다 천연자원부 · 에어컨 관리와 전문 점검",
+          "url": "https://natural-resources.canada.ca/energy-efficiency/energy-star/air-conditioning-your-home",
+          "checkedDate": "2026-10-16",
+          "scope": "필터 관리와 지속 증상의 전문 점검 구분; 해외 설비·청소 주기·보증 수치 제외"
+        }
+      ]
+    },
+    {
+      "id": "winter-water",
+      "category": "겨울철 관리",
+      "title": "수도·계량기, 겨울 전에 확인하세요",
+      "description": "보호함과 보온 상태를 살피고 동결 시 관리 주체에 문의하세요.",
+      "image": {
+        "kind": "work",
+        "imageId": "work-image-water-meter"
+      },
+      "imageAlt": "보온재가 들어 있는 수도계량기 보호함과 연결 배관을 보여주는 3D 참고 이미지",
+      "imageNote": "보호함과 계량기 설치 방식은 건물마다 다릅니다.",
+      "checksTitle": "한파 전에 보호함을 살펴보세요",
+      "checks": [
+        "안전하게 접근할 수 있는 보호함의 뚜껑이 깨졌거나 열려 있는지, 보온재가 빠지거나 젖었는지 확인하세요. 밀봉·봉인된 설비는 열거나 뜯지 마세요.",
+        "노출 배관과 외풍이 들어오는 틈의 보온 상태를 살펴보세요. 공용 설비는 관리사무소에 확인을 요청하세요."
+      ],
+      "careTitle": "건조한 보온 상태와 관리 주체 확인",
+      "care": [
+        "건물 관리 기준과 부산시 상수도 안내에 따라 보온재·보호함 상태를 유지하세요. 임의의 전열기나 열선을 넣지 마세요.",
+        "장기 부재·한파 전에는 해당 건물의 동파 예방 안내를 확인하세요. 계량기와 옥내 배관의 관리 담당이 다를 수 있습니다."
+      ],
+      "expertTitle": "물이 안 나오거나 계량기가 깨졌다면",
+      "expert": [
+        "동결이 의심되면 불꽃·끓는 물로 녹이거나 배관을 두드리지 마세요. 관리사무소 또는 관할 상수도 담당에 위치와 증상을 알려 조치를 안내받으세요.",
+        "계량기 파손·누수가 보이면 임의로 교체하지 말고 담당 기관에 먼저 문의하세요. 옥내 배관 보수는 관리 범위를 확인한 뒤 연결하세요."
+      ],
+      "related": [
+        {
+          "workId": "water-meter",
+          "label": "수도계량기 작업 전 확인 안내"
+        }
+      ],
+      "sources": [
+        {
+          "label": "부산시 상수도사업본부 · 겨울철 수도계량기 동파 예방",
+          "url": "https://www.busan.go.kr/nbtnewsBU/1706107",
+          "checkedDate": "2026-10-16",
+          "scope": "겨울철 보호통·보온재 점검과 동파 대응 주체 확인; 2025-11-14 게시 자료"
+        }
+      ]
+    }
+  ],
+  "newImages": [
+    {
+      "id": "tip-image-sink-moisture",
+      "file": "assets/images/repair-tips/v1/sink-moisture.webp",
+      "width": 768,
+      "height": 768,
+      "production": {
+        "method": "built-in-imagegen",
+        "generatedDate": "2026-10-16",
+        "promptPath": "docs/repair-tips/prompts/sink-moisture.txt"
+      },
+      "review": {
+        "status": "visually-reviewed",
+        "checkedDate": "2026-10-16",
+        "notes": "급수 호스·배수트랩은 연결된 상태이며 물기 위치를 표시; 분해 절차 없음. 특정 제품 구조 인증용 아님."
+      },
+      "sha256": "c23302e8e5a6076bb4bac02513651d1a42a40331f5db8d62e5e941889dc7074d"
+    },
+    {
+      "id": "tip-image-outlet-warning",
+      "file": "assets/images/repair-tips/v1/outlet-warning.webp",
+      "width": 768,
+      "height": 768,
+      "production": {
+        "method": "built-in-imagegen",
+        "generatedDate": "2026-10-16",
+        "promptPath": "docs/repair-tips/prompts/outlet-warning.txt"
+      },
+      "review": {
+        "status": "visually-reviewed",
+        "checkedDate": "2026-10-16",
+        "notes": "국내 사용형 둥근 두 핀·접지 접점 확인; 커버 닫힘, 공구·노출 배선·분해 동작 없음. 변색 위치는 참고 표현."
+      },
+      "sha256": "15acb568704cf37e1eb30152f019060cce7b7b1e1d0b1bb9c893b96a12711d88"
+    },
+    {
+      "id": "tip-image-aircon-filter",
+      "file": "assets/images/repair-tips/v1/aircon-filter.webp",
+      "width": 768,
+      "height": 768,
+      "production": {
+        "method": "built-in-imagegen",
+        "generatedDate": "2026-10-16",
+        "promptPath": "docs/repair-tips/prompts/aircon-filter.txt"
+      },
+      "review": {
+        "status": "visually-reviewed",
+        "checkedDate": "2026-10-16",
+        "notes": "사용자용 덮개·망 필터 중심, 냉매 배관·노출 전기부·공구 없음; 모델별 형상·수량 차이 안내."
+      },
+      "sha256": "e165cc5096bef679541a88c317a383b90553a06f682b02bee99dde9d36df0179"
+    }
+  ]
+}

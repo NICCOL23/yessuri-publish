@@ -1,0 +1,56 @@
+/* Only the maintenance list and its own native dialog. */
+#repair-tips .rt-lead{color:#52657a;margin:0 0 24px;line-height:1.75}
+#repair-tips .rt-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+#repair-tips .rt-card{display:grid;grid-template-columns:108px minmax(0,1fr) 20px;align-items:center;gap:18px;min-height:156px;padding:18px;border:1px solid #dbe6ec;border-radius:12px;background:#fff;text-decoration:none;color:#19334e;transition:border-color .15s,background .15s}
+#repair-tips .rt-card:hover{background:#f5fbfa;border-color:#00858b}
+#repair-tips .rt-card img{display:block;width:108px;height:108px;object-fit:contain;border-radius:8px;background:#fff}
+#repair-tips .rt-card-copy{min-width:0}
+#repair-tips .rt-category{display:block;font-size:13px;font-weight:700;color:#00777e;margin-bottom:6px}
+#repair-tips .rt-card h3{font-size:19px;line-height:1.5;margin:0 0 7px;word-break:keep-all;overflow-wrap:anywhere}
+#repair-tips .rt-card p{font-size:14px;line-height:1.7;margin:0;color:#52657a;word-break:keep-all;overflow-wrap:anywhere}
+#repair-tips .rt-arrow{font-size:22px;color:#00777e}
+#repair-tips .rt-badge{display:inline-block;background:#fff0e2;color:#914617;font-size:12px;font-weight:700;padding:2px 7px;border-radius:4px;margin:0 0 6px}
+#repair-tips .rt-notes{margin-top:24px;padding:18px 20px;background:#f5f8fa;border-radius:10px;color:#52657a}
+#repair-tips .rt-notes h3{font-size:15px;margin:0 0 8px;color:#19334e}
+#repair-tips .rt-notes ul{padding-left:20px;margin:0;font-size:13px;line-height:1.9}
+#repair-tips .rt-status{color:#52657a;font-size:14px}
+html.rt-open{overflow:hidden}
+#rt-panel{position:fixed;inset:0 auto 0 0;margin:0;padding:0;border:0;border-radius:0 16px 16px 0;width:min(1040px,calc(100vw - 64px));max-width:100vw;height:100dvh;max-height:100dvh;background:#fff;color:#19334e;overflow:hidden;box-shadow:12px 0 40px #13294b26}
+#rt-panel::backdrop{background:#152438a6}
+#rt-panel .rt-shell{height:100%;display:flex;flex-direction:column;min-height:0}
+#rt-panel .rt-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:16px 32px 20px;border-bottom:1px solid #dfe7ec;background:#fff;flex:none}
+#rt-panel .rt-header-copy{min-width:0}
+#rt-panel .rt-back{border:0;background:none;padding:0;min-height:44px;color:#00777e;font-size:14px;text-align:left}
+#rt-panel h2{font-size:28px;line-height:1.45;margin:0;word-break:keep-all;overflow-wrap:anywhere}
+#rt-panel .rt-close{flex:none;min-width:44px;min-height:44px;background:#fff;border:0;font-size:30px;color:#19334e;padding:0;line-height:1}
+#rt-panel .rt-body{overflow-y:auto;overscroll-behavior:contain;min-height:0;flex:1;padding:26px 32px 32px;scrollbar-gutter:stable;line-height:1.85}
+#rt-panel .rt-hero{display:grid;grid-template-columns:minmax(0,42%) minmax(0,1fr);gap:28px;align-items:center;margin:0 0 26px}
+#rt-panel figure{margin:0;min-width:0}
+#rt-panel img{display:block;width:100%;height:auto;max-height:300px;object-fit:contain;border-radius:10px}
+#rt-panel figcaption{color:#697b8d;font-size:12px;line-height:1.7;margin-top:8px}
+#rt-panel .rt-kicker{font-size:13px;font-weight:700;letter-spacing:.02em;color:#00777e;margin:0 0 8px}
+#rt-panel .rt-hero h3{font-size:22px;line-height:1.55;word-break:keep-all;margin:0 0 14px}
+#rt-panel p,#rt-panel li{font-size:16px;word-break:keep-all;overflow-wrap:anywhere}
+#rt-panel .rt-block{margin:0 0 26px}
+#rt-panel .rt-block h3{font-size:20px;line-height:1.5;margin:0 0 12px}
+#rt-panel .rt-block ul{padding-left:20px;margin:0}
+#rt-panel .rt-block li+li{margin-top:9px}
+#rt-panel .rt-care{background:#f0f8f7;border-radius:12px;padding:22px 24px}
+#rt-panel .rt-expert{border-left:3px solid #007d83;padding-left:20px}
+#rt-panel .rt-priority{background:#fff3e8;border:1px solid #efd7bd;border-radius:10px;padding:18px 20px;margin-bottom:24px}
+#rt-panel .rt-priority h3{font-size:19px;color:#854115;margin:0 0 8px}
+#rt-panel .rt-priority p{margin:0}
+#rt-panel .rt-sources{border-top:1px solid #e0e8ed;padding-top:18px;margin-top:30px}
+#rt-panel .rt-sources h3{font-size:14px;margin:0 0 8px}
+#rt-panel .rt-sources ul{list-style:none;padding:0;margin:0}
+#rt-panel .rt-sources li,#rt-panel .rt-sources p{font-size:12px;line-height:1.8;color:#697b8d;margin:4px 0}
+#rt-panel .rt-sources a{color:#52657a;text-underline-offset:3px}
+#rt-panel .rt-footer{flex:none;background:#fff;border-top:1px solid #dfe7ec;padding:12px 32px max(12px,env(safe-area-inset-bottom));display:flex;flex-wrap:wrap;gap:10px}
+#rt-panel .rt-related{display:flex;align-items:center;justify-content:center;flex:1;min-height:48px;padding:9px 15px;border:1px solid #00777e;border-radius:7px;background:#fff;color:#00777e;text-decoration:none;font-weight:700;font-size:14px;line-height:1.6;text-align:center}
+#rt-panel .rt-related:first-child{background:#00777e;color:#fff}
+#rt-panel .rt-image-error{font-size:14px;color:#854115}
+#repair-tips a:focus-visible,#rt-panel :focus-visible{outline:3px solid #00777e;outline-offset:4px}
+@media(max-width:900px){#rt-panel{inset:0;width:100%;border-radius:0}#rt-panel .rt-header{padding:10px 18px 16px}#rt-panel .rt-body{padding:22px 18px}#rt-panel .rt-footer{padding:12px 18px max(12px,env(safe-area-inset-bottom))}#rt-panel h2{font-size:24px}}
+@media(max-width:700px){#repair-tips .rt-grid{grid-template-columns:1fr}#repair-tips .rt-card{grid-template-columns:88px minmax(0,1fr) 16px;gap:12px;min-height:140px;padding:15px}#repair-tips .rt-card img{width:88px;height:88px}#repair-tips .rt-card h3{font-size:18px}#rt-panel .rt-hero{grid-template-columns:1fr;gap:18px}#rt-panel img{max-height:240px}#rt-panel .rt-hero h3{font-size:21px}#rt-panel .rt-block h3{font-size:19px}#rt-panel .rt-care{padding:18px}#rt-panel .rt-footer{flex-direction:column}#rt-panel .rt-related{flex:auto}#rt-panel h2{font-size:22px}}
+@media(max-width:360px){#repair-tips .rt-card{grid-template-columns:64px minmax(0,1fr) 12px;gap:10px;padding:12px}#repair-tips .rt-card img{width:64px;height:64px}#repair-tips .rt-card h3{font-size:17px}#rt-panel .rt-header{padding-left:16px;padding-right:12px}#rt-panel h2{font-size:20px}#rt-panel .rt-body{padding:20px 16px}#rt-panel .rt-footer{padding-left:16px;padding-right:16px}}
+@media(prefers-reduced-motion:no-preference){#rt-panel[open]{animation:rt-enter .28s ease-out}@keyframes rt-enter{from{transform:translateX(-100%)}to{transform:translateX(0)}}}
