@@ -1,0 +1,7 @@
+#home-menu>[data-board-link]{white-space:nowrap}
+.board-page .home-header{height:80px;min-height:80px}
+.board-page .home-header .header-inner{min-height:80px}
+@media(min-width:901px){.board-page #home-menu .register-utility{margin-left:auto}}
+@media(max-width:900px){.board-page .home-header{height:72px;min-height:72px}.board-page .home-header .header-inner{min-height:72px}}
+#home-menu>[data-board-link].board-current{color:#007d85;text-decoration:underline;text-underline-offset:9px;text-decoration-thickness:2px}
+@media(max-width:900px){#home-menu>[data-board-link].board-current{background:#eef8f6;border-radius:7px;text-decoration:none}}

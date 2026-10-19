@@ -1,0 +1,4 @@
+project_id = "yessuri"
+
+[functions.board-api]
+verify_jwt = false
