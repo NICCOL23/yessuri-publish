@@ -30,3 +30,6 @@
 @media(max-width:900px){#categories .category-card:nth-child(n){flex-basis:calc((100% - 24px)/3)}}
 @media(max-width:760px){#categories .category-card:nth-child(n){height:136px;min-height:136px;padding:12px 6px;font-size:13px}#categories .category-description{font-size:11px}}
 @media(max-width:359px){#categories .category-card:nth-child(n){flex-basis:calc((100% - 12px)/2)}}
+/* Home-only 16 service cards: approved 8 by 2 desktop layout. */
+@media(min-width:1101px){#categories .category-grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px}#categories .category-card:nth-child(n){width:100%;height:148px;min-height:148px;padding:12px 5px;font-size:13px;gap:6px}#categories .category-description{font-size:11px;line-height:16px}}
+#categories .computer-upgrade-card>span:not(.category-icon){line-height:17px}#categories .category-card.computer-upgrade-card{gap:5px}#categories .category-card.computer-upgrade-card .category-icon{height:38px}#categories .display-repair-card>span:not(.category-icon){font-size:12px;line-height:17px}

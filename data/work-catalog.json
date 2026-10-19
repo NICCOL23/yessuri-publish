@@ -5,26 +5,32 @@
     {
       "id": "general",
       "name": "일반 집수리",
-      "description": "문·욕실·주방·마감 보수",
+      "description": "부분 수리·교체·시공",
       "sortOrder": 0
     },
     {
       "id": "electric",
       "name": "전기·조명",
-      "description": "스위치·조명·배선 점검",
+      "description": "스위치·조명·배선",
       "sortOrder": 1
     },
     {
       "id": "water",
       "name": "누수·배관",
-      "description": "탐지·배관·막힘·방수",
+      "description": "탐지·막힘·방수",
       "sortOrder": 2
     },
     {
       "id": "life",
       "name": "생활서비스",
-      "description": "에어컨·청소·철거·IT",
+      "description": "에어컨·TV·철거·청소",
       "sortOrder": 3
+    },
+    {
+      "id": "computer",
+      "name": "컴퓨터 수리",
+      "description": "고장·업그레이드·구매 상담",
+      "sortOrder": 4
     }
   ],
   "fields": [
@@ -50,7 +56,8 @@
         "급수·배수 연결부와 누수 위치",
         "도기·수전 규격과 철거·방수 범위",
         "급배수 작동·물샘·고정·실리콘"
-      ]
+      ],
+      "description": "부분 수리·욕실 전체 시공"
     },
     {
       "id": "kitchen",
@@ -62,7 +69,8 @@
         "판재·철물·급배수 연결 상태",
         "상판 타공·기기 치수·가구 보강 범위",
         "문·서랍 작동·배수·상판 마감"
-      ]
+      ],
+      "description": "싱크대·붙박이장 제작·보수"
     },
     {
       "id": "tile",
@@ -74,7 +82,8 @@
         "들뜸·습기·균열·바탕면 상태",
         "기존 자재 수급·색상 차이·시공 면적",
         "들뜸·단차·줄눈·접착·마감"
-      ]
+      ],
+      "description": "타일 보수·도배·장판 시공"
     },
     {
       "id": "wood",
@@ -223,7 +232,7 @@
     {
       "id": "aircon",
       "groupId": "life",
-      "name": "에어컨",
+      "name": "에어컨 설치·이전",
       "sortOrder": 0,
       "representativeArt": 16,
       "guidance": [
@@ -236,7 +245,7 @@
       "id": "clean",
       "groupId": "life",
       "name": "청소·곰팡이 관리",
-      "sortOrder": 1,
+      "sortOrder": 3,
       "representativeArt": 17,
       "guidance": [
         "오염·습기·면적·제외 구역",
@@ -258,14 +267,28 @@
     },
     {
       "id": "it",
-      "groupId": "life",
-      "name": "컴퓨터·IT",
-      "sortOrder": 3,
+      "groupId": "computer",
+      "name": "컴퓨터 수리",
+      "sortOrder": 0,
       "representativeArt": 19,
       "guidance": [
         "증상·모델·데이터·이전 조치",
         "진단·부품·백업·프로그램 작업 범위",
         "동작·설정·데이터·수리 내역"
+      ],
+      "description": "고장·업그레이드・새 제품·중고 구매 상담"
+    },
+    {
+      "id": "display",
+      "groupId": "life",
+      "name": "TV·LED 수리",
+      "description": "TV·LED 모니터 화면·전원 이상",
+      "sortOrder": 1,
+      "representativeArt": 19,
+      "guidance": [
+        "제품 모델·크기·증상과 발생 시점",
+        "진단·부품 수급·운반과 비용 조건",
+        "화면·전원·소리·연결 동작"
       ]
     }
   ],
@@ -4044,6 +4067,445 @@
         "status": "legacy-content-preserved",
         "reviewedDate": null
       }
+    },
+    {
+      "id": "bath-renovation",
+      "fieldId": "bath",
+      "name": "욕실 전체 시공·리모델링",
+      "summary": "부분 교체와 전체 공사를 구분하고, 철거·방수·설비·제품·마감의 포함 범위를 확인하세요.",
+      "section": "전체 시공",
+      "sortOrder": -20,
+      "keywords": "욕실 리모델링 화장실 전체 공사 올수리",
+      "query": "욕실 전체 시공·리모델링",
+      "before": [
+        "전체 철거 또는 기존 마감 위 시공 여부",
+        "욕실 크기·현재 상태·희망 범위"
+      ],
+      "rows": [
+        {
+          "name": "철거·기초",
+          "parts": "철거 범위·바탕면·폐기물",
+          "conditions": "보양·반출·운반·폐기물 처리"
+        },
+        {
+          "name": "방수·설비",
+          "parts": "방수 범위·확인 방법·급배수·전기·환기",
+          "conditions": "기존 설비 상태·위치 변경·복구"
+        },
+        {
+          "name": "제품·마감",
+          "parts": "타일·천장·도기·수전·수납 모델과 수량",
+          "conditions": "제품·마감·사용 제한 기간·공정 일정"
+        }
+      ],
+      "after": [
+        "물 흐름·배수·누수 확인",
+        "제품 작동·고정·마감과 시공 내역",
+        "사후 점검 담당·보증 범위·재방문 조건"
+      ],
+      "photoPreparation": [
+        "안전한 위치에서 촬영한 전체 모습과 확인 부위",
+        "전체 철거 또는 기존 마감 위 시공 여부 · 욕실 크기·현재 상태·희망 범위",
+        "희망 작업 범위와 일정"
+      ],
+      "expertCategory": "전체",
+      "imageIds": [
+        "work-image-bath-renovation"
+      ],
+      "construction": true,
+      "updatedAt": "2026-10-19",
+      "review": {
+        "status": "content-reviewed",
+        "date": "2026-10-19"
+      }
+    },
+    {
+      "id": "wallpaper-install",
+      "fieldId": "tile",
+      "name": "도배 시공",
+      "summary": "방 한 칸부터 집 전체까지, 벽·천장 범위와 벽지·바탕면 상태를 함께 확인하세요.",
+      "section": "전체 시공",
+      "sortOrder": -19,
+      "keywords": "벽지 도배 전체 집전체 합지 실크",
+      "query": "도배 시공",
+      "before": [
+        "방 한 칸·여러 공간·집 전체 및 벽·천장 범위",
+        "합지·실크 등 제품·모델과 습기 원인"
+      ],
+      "rows": [
+        {
+          "name": "제거·바탕면",
+          "parts": "기존 벽지 제거·초배·균열·들뜸",
+          "conditions": "습기·곰팡이 원인 조치와 바탕면 보수"
+        },
+        {
+          "name": "자재·시공",
+          "parts": "벽지 모델·벽·천장 시공 면적",
+          "conditions": "제품·부자재·시공 범위"
+        },
+        {
+          "name": "현장 조건",
+          "parts": "빈집·거주 중·가구 유무",
+          "conditions": "가구 이동·보양·운반·폐기물"
+        }
+      ],
+      "after": [
+        "이음매·들뜸·오염·마감 상태",
+        "제품 정보·시공 범위·작업 내역",
+        "건조·환기 안내·사후 점검 조건"
+      ],
+      "photoPreparation": [
+        "안전한 위치에서 촬영한 전체 모습과 확인 부위",
+        "방 한 칸·여러 공간·집 전체 및 벽·천장 범위 · 합지·실크 등 제품·모델과 습기 원인",
+        "희망 작업 범위와 일정"
+      ],
+      "expertCategory": "전체",
+      "imageIds": [
+        "work-image-wallpaper-install"
+      ],
+      "construction": true,
+      "updatedAt": "2026-10-19",
+      "review": {
+        "status": "content-reviewed",
+        "date": "2026-10-19"
+      }
+    },
+    {
+      "id": "flooring-install",
+      "fieldId": "tile",
+      "name": "장판 시공",
+      "summary": "마루와 장판을 구분하고, 장판 제품·두께·실제 시공 면적과 기존 바닥 상태를 확인하세요.",
+      "section": "전체 시공",
+      "sortOrder": -18,
+      "keywords": "장판 전체 부분 교체 비닐 바닥",
+      "query": "장판 시공",
+      "before": [
+        "시공 공간·면적·장판 제품과 두께",
+        "기존 바닥 상태·가구 유무·문턱·걸레받이"
+      ],
+      "rows": [
+        {
+          "name": "철거·기초",
+          "parts": "기존 바닥재·습기·평활 상태",
+          "conditions": "철거·바탕면 보수·원인 확인"
+        },
+        {
+          "name": "제품·시공",
+          "parts": "장판 제품·두께·모델·면적",
+          "conditions": "이음부·가장자리·문턱·걸레받이"
+        },
+        {
+          "name": "현장 조건",
+          "parts": "빈집·거주 중·가구와 반출 동선",
+          "conditions": "가구 이동·보양·운반·폐기물"
+        }
+      ],
+      "after": [
+        "이음부·들뜸·가장자리 마감",
+        "장판 제품·두께·작업 내역",
+        "사용·가구 배치 안내·사후 점검 조건"
+      ],
+      "photoPreparation": [
+        "안전한 위치에서 촬영한 전체 모습과 확인 부위",
+        "시공 공간·면적·장판 제품과 두께 · 기존 바닥 상태·가구 유무·문턱·걸레받이",
+        "희망 작업 범위와 일정"
+      ],
+      "expertCategory": "전체",
+      "imageIds": [
+        "work-image-flooring-install"
+      ],
+      "construction": true,
+      "updatedAt": "2026-10-19",
+      "review": {
+        "status": "content-reviewed",
+        "date": "2026-10-19"
+      }
+    },
+    {
+      "id": "sink-install",
+      "fieldId": "kitchen",
+      "name": "싱크대 제작·교체",
+      "summary": "싱크볼·수전 부분 교체와 싱크대 가구 전체 제작·교체를 구분해 상담하세요.",
+      "section": "제작·교체",
+      "sortOrder": -17,
+      "keywords": "씽크대 싱크대 주방 가구 제작 교체",
+      "query": "싱크대 제작·교체",
+      "before": [
+        "설치 공간 실측·재질·철물·수납 구성",
+        "상판·급배수·기기 연결 범위"
+      ],
+      "rows": [
+        {
+          "name": "제품·제작",
+          "parts": "실측 치수·판재·철물·상판·모델",
+          "conditions": "구성·타공·제작 사양"
+        },
+        {
+          "name": "철거·설치",
+          "parts": "기존 가구·급배수·기기 연결",
+          "conditions": "철거·설비 변경·보강·복구"
+        },
+        {
+          "name": "일정·현장",
+          "parts": "반출 동선·보양·제작·배송·설치 일정",
+          "conditions": "운반·폐기물·장비·별도 공정"
+        }
+      ],
+      "after": [
+        "문·서랍 작동·수평·고정",
+        "급배수·상판·접합부 마감",
+        "제품·작업 내역·사후 점검 담당과 조건"
+      ],
+      "photoPreparation": [
+        "안전한 위치에서 촬영한 전체 모습과 확인 부위",
+        "설치 공간 실측·재질·철물·수납 구성 · 상판·급배수·기기 연결 범위",
+        "희망 작업 범위와 일정"
+      ],
+      "expertCategory": "전체",
+      "imageIds": [
+        "work-image-sink-install"
+      ],
+      "construction": true,
+      "updatedAt": "2026-10-19",
+      "review": {
+        "status": "content-reviewed",
+        "date": "2026-10-19"
+      }
+    },
+    {
+      "id": "wardrobe-install",
+      "fieldId": "kitchen",
+      "name": "붙박이장 제작·교체",
+      "summary": "벽면과 설치 공간을 실측하고 내부 구성·문 방식·고정 및 철거 범위를 확인하세요.",
+      "section": "제작·교체",
+      "sortOrder": -16,
+      "keywords": "붙박이장 옷장 가구 제작 교체",
+      "query": "붙박이장 제작·교체",
+      "before": [
+        "설치 치수·벽면 상태·재질·철물",
+        "내부 선반·옷걸이·서랍·문 방식"
+      ],
+      "rows": [
+        {
+          "name": "제품·제작",
+          "parts": "실측 치수·재질·철물·내부 구성",
+          "conditions": "맞춤 제작·문 방식·추가 구성"
+        },
+        {
+          "name": "철거·설치",
+          "parts": "기존 가구·벽면·고정면",
+          "conditions": "철거·보강·벽·바닥 마감 복구"
+        },
+        {
+          "name": "일정·현장",
+          "parts": "제작·배송·설치 일정과 운반 동선",
+          "conditions": "운반·보양·폐기물·장비"
+        }
+      ],
+      "after": [
+        "고정·수평·문·서랍 작동",
+        "내부 구성·표면·접합부 마감",
+        "제품·작업 내역·사후 점검 담당과 조건"
+      ],
+      "photoPreparation": [
+        "안전한 위치에서 촬영한 전체 모습과 확인 부위",
+        "설치 치수·벽면 상태·재질·철물 · 내부 선반·옷걸이·서랍·문 방식",
+        "희망 작업 범위와 일정"
+      ],
+      "expertCategory": "전체",
+      "imageIds": [
+        "work-image-wardrobe-install"
+      ],
+      "construction": true,
+      "updatedAt": "2026-10-19",
+      "review": {
+        "status": "content-reviewed",
+        "date": "2026-10-19"
+      }
+    },
+    {
+      "id": "tv-repair",
+      "fieldId": "display",
+      "name": "TV 수리",
+      "summary": "제품 모델과 화면·전원·소리 증상을 확인하고 수리 가능 여부와 부품 수급을 상담하세요.",
+      "section": "제품 종류",
+      "sortOrder": -15,
+      "keywords": "티비 TV 텔레비전 LED 액정 화면 전원",
+      "query": "TV 수리",
+      "before": [
+        "제조사·모델·크기·발생 시점",
+        "외부 연결·전원·화면·소리 증상 기록, 직접 분해 금지"
+      ],
+      "rows": [
+        {
+          "name": "진단·부품",
+          "parts": "제조사·모델·증상·부품 수급",
+          "conditions": "진단 후 수리 가능 여부·부품·작업 범위"
+        },
+        {
+          "name": "운반·설치",
+          "parts": "방문·입고·벽걸이 탈부착 여부",
+          "conditions": "진단·부품·작업·운반·설치 비용 구분"
+        }
+      ],
+      "after": [
+        "화면·전원·소리·연결 동작",
+        "설정·동봉 부속품·작업 내역",
+        "사후 점검·보증 범위·재방문 조건"
+      ],
+      "photoPreparation": [
+        "안전한 위치에서 촬영한 전체 모습과 확인 부위",
+        "제조사·모델·크기·발생 시점 · 외부 연결·전원·화면·소리 증상 기록, 직접 분해 금지",
+        "희망 작업 범위와 일정"
+      ],
+      "expertCategory": "전체",
+      "imageIds": [
+        "work-image-tv-repair"
+      ],
+      "construction": false,
+      "updatedAt": "2026-10-19",
+      "review": {
+        "status": "content-reviewed",
+        "date": "2026-10-19"
+      }
+    },
+    {
+      "id": "monitor-repair",
+      "fieldId": "display",
+      "name": "LED 모니터 수리",
+      "summary": "컴퓨터 본체와 모니터의 증상을 구분해 모델·연결·화면·전원 상태를 상담하세요.",
+      "section": "제품 종류",
+      "sortOrder": -14,
+      "keywords": "모니터 LED 디스플레이 화면 전원",
+      "query": "LED 모니터 수리",
+      "before": [
+        "제조사·모델·크기·연결 방식",
+        "화면·전원·입력 증상 기록, 직접 분해 금지"
+      ],
+      "rows": [
+        {
+          "name": "진단·부품",
+          "parts": "모델·증상·연결 단자·부품 수급",
+          "conditions": "진단 결과·수리 가능 여부·부품·작업 범위"
+        },
+        {
+          "name": "입고·반출",
+          "parts": "어댑터·케이블·받침대 등 인계 품목",
+          "conditions": "진단·부품·작업·운반 비용 구분"
+        }
+      ],
+      "after": [
+        "화면·전원·입력·해당 시 소리",
+        "설정·부속품 인계·작업 내역",
+        "사후 점검·보증 범위·재방문 조건"
+      ],
+      "photoPreparation": [
+        "안전한 위치에서 촬영한 전체 모습과 확인 부위",
+        "제조사·모델·크기·연결 방식 · 화면·전원·입력 증상 기록, 직접 분해 금지",
+        "희망 작업 범위와 일정"
+      ],
+      "expertCategory": "전체",
+      "imageIds": [
+        "work-image-monitor-repair"
+      ],
+      "construction": false,
+      "updatedAt": "2026-10-19",
+      "review": {
+        "status": "content-reviewed",
+        "date": "2026-10-19"
+      }
+    },
+    {
+      "id": "computer-upgrade",
+      "fieldId": "it",
+      "name": "업그레이드",
+      "summary": "현재 사양·용도·예산을 확인하고 호환 부품과 기존 제품을 더 사용할 방법을 상담하세요.",
+      "section": "컴퓨터 상담",
+      "sortOrder": -13,
+      "keywords": "컴퓨터 PC SSD 메모리 램 업그레이드 성능 개선",
+      "query": "업그레이드",
+      "before": [
+        "현재 CPU·메모리·저장장치·전원 등 사양",
+        "사용 목적·예산·데이터 보관 필요 여부"
+      ],
+      "rows": [
+        {
+          "name": "호환·제품",
+          "parts": "SSD·메모리 등 부품 규격과 호환성",
+          "conditions": "기존 부품·전원·케이스·확장 한계"
+        },
+        {
+          "name": "작업·데이터",
+          "parts": "교체·설정·이전·백업 범위",
+          "conditions": "부품비·작업비·데이터 작업 별도 여부"
+        }
+      ],
+      "after": [
+        "동작·부품 인식·기본 설정",
+        "데이터와 기존 부품 인계·작업 내역",
+        "제품·작업의 보증 범위와 사후 점검 조건"
+      ],
+      "photoPreparation": [
+        "안전한 위치에서 촬영한 전체 모습과 확인 부위",
+        "현재 CPU·메모리·저장장치·전원 등 사양 · 사용 목적·예산·데이터 보관 필요 여부",
+        "희망 작업 범위와 일정"
+      ],
+      "expertCategory": "컴퓨터·IT",
+      "imageIds": [
+        "work-image-computer-upgrade"
+      ],
+      "construction": false,
+      "updatedAt": "2026-10-19",
+      "review": {
+        "status": "content-reviewed",
+        "date": "2026-10-19"
+      }
+    },
+    {
+      "id": "computer-purchase",
+      "fieldId": "it",
+      "name": "구매 상담",
+      "summary": "용도와 예산에 맞춰 수리·업그레이드·새 제품·중고 구매를 비교하고, 판매는 별도 전문가에게 확인하세요.",
+      "section": "컴퓨터 상담",
+      "sortOrder": -12,
+      "keywords": "컴퓨터 PC 구매 상담 신품 중고 새컴퓨터 판매",
+      "query": "구매 상담",
+      "before": [
+        "사용 목적·예산·기존 주변기기",
+        "새 제품·중고 제품 선호가 있으면 전달"
+      ],
+      "rows": [
+        {
+          "name": "제품 비교",
+          "parts": "정확한 사양·신품/중고·상태·구성",
+          "conditions": "제품·운영체제·설치·배송 포함 여부"
+        },
+        {
+          "name": "거래 조건",
+          "parts": "판매 업체·제품 상태·보증·반품 조건",
+          "conditions": "판매자 조건·견적·재고 별도 확인"
+        }
+      ],
+      "after": [
+        "제품·구성·기본 작동과 연결",
+        "판매자·거래 내역·제품 상태",
+        "판매자 보증·반품·사후 문의 조건"
+      ],
+      "photoPreparation": [
+        "안전한 위치에서 촬영한 전체 모습과 확인 부위",
+        "사용 목적·예산·기존 주변기기 · 새 제품·중고 제품 선호가 있으면 전달",
+        "희망 작업 범위와 일정"
+      ],
+      "expertCategory": "컴퓨터·IT",
+      "imageIds": [
+        "work-image-computer-purchase"
+      ],
+      "construction": false,
+      "updatedAt": "2026-10-19",
+      "review": {
+        "status": "content-reviewed",
+        "date": "2026-10-19"
+      }
     }
   ],
   "images": [
@@ -6785,6 +7247,213 @@
         "connected": true,
         "localVerifiedDate": "2026-10-16"
       }
+    },
+    {
+      "id": "work-image-bath-renovation",
+      "taskId": "bath-renovation",
+      "file": "../v2/bath-renovation.webp",
+      "alt": "욕실 전체 시공·리모델링 작업 대상 참고 이미지",
+      "caption": "3D 참고 이미지 · 실제 시공 사례·판매 제품이 아니며 현장과 다를 수 있습니다.",
+      "width": 768,
+      "height": 768,
+      "format": "webp",
+      "production": {
+        "method": "built-in-imagegen",
+        "date": "2026-10-19",
+        "originalArchive": "F:/yessuri-web/review/renovation-samples-20261019/bathroom.png",
+        "promptPath": "docs/service-expansion-20261019.md"
+      },
+      "sources": [],
+      "review": {
+        "status": "visually-reviewed",
+        "date": "2026-10-19",
+        "notes": "AI 참고 이미지. 작업 대상과 표시 상태를 시각적으로 확인했으며 실제 제품·시공 사례나 구조 정확성을 보증하지 않습니다."
+      },
+      "sha256": "bfd20f2fa8d4e6842320919ffa2ace62c3af1fa38fae853d03716ada58c97360"
+    },
+    {
+      "id": "work-image-wallpaper-install",
+      "taskId": "wallpaper-install",
+      "file": "../v2/wallpaper-install.webp",
+      "alt": "도배 시공 작업 대상 참고 이미지",
+      "caption": "3D 참고 이미지 · 실제 시공 사례·판매 제품이 아니며 현장과 다를 수 있습니다.",
+      "width": 768,
+      "height": 768,
+      "format": "webp",
+      "production": {
+        "method": "existing-asset-reference",
+        "date": "2026-10-19",
+        "originalArchive": "F:/yessuri-web/yessuri-publish/assets/images/work-tasks/v1/wallpaper.webp",
+        "promptPath": "docs/service-expansion-20261019.md"
+      },
+      "sources": [],
+      "review": {
+        "status": "visually-reviewed",
+        "date": "2026-10-19",
+        "notes": "AI 참고 이미지. 작업 대상과 표시 상태를 시각적으로 확인했으며 실제 제품·시공 사례나 구조 정확성을 보증하지 않습니다."
+      },
+      "sha256": "c35276ecf614f521f1ec0d1c6f2462e4e9005ca1541576bba6b360b1f8367373"
+    },
+    {
+      "id": "work-image-flooring-install",
+      "taskId": "flooring-install",
+      "file": "../v2/flooring-install.webp",
+      "alt": "장판 시공 작업 대상 참고 이미지",
+      "caption": "3D 참고 이미지 · 실제 시공 사례·판매 제품이 아니며 현장과 다를 수 있습니다.",
+      "width": 768,
+      "height": 768,
+      "format": "webp",
+      "production": {
+        "method": "built-in-imagegen",
+        "date": "2026-10-19",
+        "originalArchive": "F:/yessuri-web/review/renovation-samples-20261019/flooring.png",
+        "promptPath": "docs/service-expansion-20261019.md"
+      },
+      "sources": [],
+      "review": {
+        "status": "visually-reviewed",
+        "date": "2026-10-19",
+        "notes": "AI 참고 이미지. 작업 대상과 표시 상태를 시각적으로 확인했으며 실제 제품·시공 사례나 구조 정확성을 보증하지 않습니다."
+      },
+      "sha256": "fef78424bf6208d9ed3ade258d31cc39ff0e0c1b55083c596d359c3c40e0431e"
+    },
+    {
+      "id": "work-image-sink-install",
+      "taskId": "sink-install",
+      "file": "../v2/sink-install.webp",
+      "alt": "싱크대 제작·교체 작업 대상 참고 이미지",
+      "caption": "3D 참고 이미지 · 실제 시공 사례·판매 제품이 아니며 현장과 다를 수 있습니다.",
+      "width": 768,
+      "height": 768,
+      "format": "webp",
+      "production": {
+        "method": "built-in-imagegen",
+        "date": "2026-10-19",
+        "originalArchive": "C:\\Users\\admin\\.codex\\generated_images\\01a132a7-6e74-7d52-9401-bcd557994d6e\\exec-42562164-0162-4de1-a81c-aa1b1103ca7b.png",
+        "promptPath": "docs/service-expansion-20261019.md"
+      },
+      "sources": [],
+      "review": {
+        "status": "visually-reviewed",
+        "date": "2026-10-19",
+        "notes": "AI 참고 이미지. 작업 대상과 표시 상태를 시각적으로 확인했으며 실제 제품·시공 사례나 구조 정확성을 보증하지 않습니다."
+      },
+      "sha256": "3038465e161ab5ba047a51fcf4f9b128f29fe838a486a09860f8fe64dd27b77e"
+    },
+    {
+      "id": "work-image-wardrobe-install",
+      "taskId": "wardrobe-install",
+      "file": "../v2/wardrobe-install.webp",
+      "alt": "붙박이장 제작·교체 작업 대상 참고 이미지",
+      "caption": "3D 참고 이미지 · 실제 시공 사례·판매 제품이 아니며 현장과 다를 수 있습니다.",
+      "width": 768,
+      "height": 768,
+      "format": "webp",
+      "production": {
+        "method": "built-in-imagegen",
+        "date": "2026-10-19",
+        "originalArchive": "C:\\Users\\admin\\.codex\\generated_images\\01a132a7-6e74-7d52-9401-bcd557994d6e\\exec-5ce21481-7992-40b2-9fd0-5822cbae3d14.png",
+        "promptPath": "docs/service-expansion-20261019.md"
+      },
+      "sources": [],
+      "review": {
+        "status": "visually-reviewed",
+        "date": "2026-10-19",
+        "notes": "AI 참고 이미지. 작업 대상과 표시 상태를 시각적으로 확인했으며 실제 제품·시공 사례나 구조 정확성을 보증하지 않습니다."
+      },
+      "sha256": "350e90470632d9ac05540d8ff310e236454f173f1a1c86aac6912fee169ff4cc"
+    },
+    {
+      "id": "work-image-tv-repair",
+      "taskId": "tv-repair",
+      "file": "../v2/tv-repair.webp",
+      "alt": "TV 수리 작업 대상 참고 이미지",
+      "caption": "3D 참고 이미지 · 실제 시공 사례·판매 제품이 아니며 현장과 다를 수 있습니다.",
+      "width": 768,
+      "height": 768,
+      "format": "webp",
+      "production": {
+        "method": "built-in-imagegen",
+        "date": "2026-10-19",
+        "originalArchive": "C:\\Users\\admin\\.codex\\generated_images\\01a132a7-6e74-7d52-9401-bcd557994d6e\\exec-f196dda9-a790-4cff-9386-e5eb2dade2f0.png",
+        "promptPath": "docs/service-expansion-20261019.md"
+      },
+      "sources": [],
+      "review": {
+        "status": "visually-reviewed",
+        "date": "2026-10-19",
+        "notes": "AI 참고 이미지. 작업 대상과 표시 상태를 시각적으로 확인했으며 실제 제품·시공 사례나 구조 정확성을 보증하지 않습니다."
+      },
+      "sha256": "16bc33b59db1729861a2bc81fdde938eb9c0d4c92384b05b28417d565c4152b4"
+    },
+    {
+      "id": "work-image-monitor-repair",
+      "taskId": "monitor-repair",
+      "file": "../v2/monitor-repair.webp",
+      "alt": "LED 모니터 수리 작업 대상 참고 이미지",
+      "caption": "3D 참고 이미지 · 실제 시공 사례·판매 제품이 아니며 현장과 다를 수 있습니다.",
+      "width": 768,
+      "height": 768,
+      "format": "webp",
+      "production": {
+        "method": "built-in-imagegen",
+        "date": "2026-10-19",
+        "originalArchive": "C:\\Users\\admin\\.codex\\generated_images\\01a132a7-6e74-7d52-9401-bcd557994d6e\\exec-2dc6717e-5919-4f44-bb52-49c702df6ee4.png",
+        "promptPath": "docs/service-expansion-20261019.md"
+      },
+      "sources": [],
+      "review": {
+        "status": "visually-reviewed",
+        "date": "2026-10-19",
+        "notes": "AI 참고 이미지. 작업 대상과 표시 상태를 시각적으로 확인했으며 실제 제품·시공 사례나 구조 정확성을 보증하지 않습니다."
+      },
+      "sha256": "ebb3c0b0751f2c3a0501cb181478d9003b093853e2f61f3a3eb4468074a4f2a0"
+    },
+    {
+      "id": "work-image-computer-upgrade",
+      "taskId": "computer-upgrade",
+      "file": "../v2/computer-upgrade.webp",
+      "alt": "업그레이드 작업 대상 참고 이미지",
+      "caption": "3D 참고 이미지 · 실제 시공 사례·판매 제품이 아니며 현장과 다를 수 있습니다.",
+      "width": 768,
+      "height": 768,
+      "format": "webp",
+      "production": {
+        "method": "built-in-imagegen",
+        "date": "2026-10-19",
+        "originalArchive": "C:\\Users\\admin\\.codex\\generated_images\\01a132a7-6e74-7d52-9401-bcd557994d6e\\exec-9a2a27f3-24ee-4267-873a-68669f450727.png",
+        "promptPath": "docs/service-expansion-20261019.md"
+      },
+      "sources": [],
+      "review": {
+        "status": "visually-reviewed",
+        "date": "2026-10-19",
+        "notes": "AI 참고 이미지. 작업 대상과 표시 상태를 시각적으로 확인했으며 실제 제품·시공 사례나 구조 정확성을 보증하지 않습니다."
+      },
+      "sha256": "6efb5af1448c0f31a1e17a68759edcf3012900b2ede4627fd5dfc44d8a206f37"
+    },
+    {
+      "id": "work-image-computer-purchase",
+      "taskId": "computer-purchase",
+      "file": "../v2/computer-purchase.webp",
+      "alt": "구매 상담 작업 대상 참고 이미지",
+      "caption": "3D 참고 이미지 · 실제 시공 사례·판매 제품이 아니며 현장과 다를 수 있습니다.",
+      "width": 768,
+      "height": 768,
+      "format": "webp",
+      "production": {
+        "method": "built-in-imagegen",
+        "date": "2026-10-19",
+        "originalArchive": "C:\\Users\\admin\\.codex\\generated_images\\01a132a7-6e74-7d52-9401-bcd557994d6e\\exec-0db721c8-6229-40ac-9237-bea57d7e552c.png",
+        "promptPath": "docs/service-expansion-20261019.md"
+      },
+      "sources": [],
+      "review": {
+        "status": "visually-reviewed",
+        "date": "2026-10-19",
+        "notes": "AI 참고 이미지. 작업 대상과 표시 상태를 시각적으로 확인했으며 실제 제품·시공 사례나 구조 정확성을 보증하지 않습니다."
+      },
+      "sha256": "04a907ddb21e372d8a4d5d44e36fe968ebcf495dc50d1240bc3676f1c7dd48a2"
     }
   ],
   "meta": {
