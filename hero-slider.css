@@ -1,0 +1,38 @@
+/* All overrides are confined to the homepage hero carousel. */
+body.home-modern #top.hero-carousel{padding:0;background:#f6fbfa}
+body.home-modern #top.hero-carousel::before{content:none}
+#top.hero-carousel .hero-swiper{overflow:hidden}
+#top.hero-carousel .hero-panel{position:relative;isolation:isolate;height:auto;box-sizing:border-box}
+#top.hero-carousel .hero-panel[hidden]{display:none}
+#top.hero-carousel .hero-panel::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,#ffffffed 0%,#ffffffe0 32%,#ffffff66 48%,#ffffff00 62%)}
+body.home-modern #top.hero-carousel .revised-hero-grid{position:static;min-height:516px;box-sizing:border-box;padding:46px 0;align-items:stretch}
+#top.hero-carousel .local-service-badge{align-self:flex-start}
+#top.hero-carousel .hero-copy{align-self:stretch;display:flex;flex-direction:column;justify-content:flex-start}
+#top.hero-carousel .hero-slide-heading{font-size:clamp(30px,3vw,43px);letter-spacing:-1.7px;line-height:1.35;margin:22px 0 20px;color:#132d4d}
+#top.hero-carousel .hero-slide-heading span{display:block;color:#008c95}
+#top.hero-carousel .hero-description{min-height:90px}
+#top.hero-carousel .revised-hero-actions{margin-top:auto}
+body.home-modern #top.hero-carousel .revised-hero-photo{position:static;height:auto;min-height:380px}
+body.home-modern #top.hero-carousel .revised-hero-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right center}
+#top.hero-carousel .hero-panel:not(:first-child) .revised-hero-photo img{object-fit:contain;object-position:right center;background:#f6fbfa}
+#top.hero-carousel .revised-hero-photo figcaption{right:12px;bottom:12px}
+#top.hero-carousel .hero-tabs{display:flex;justify-content:center;gap:12px;padding:12px 0 18px;position:relative;z-index:3}
+#top.hero-carousel .hero-tabs button{min-height:48px;padding:10px 22px;border:0;border-bottom:3px solid transparent;background:transparent;color:#526781;font:inherit;font-weight:700;cursor:pointer}
+#top.hero-carousel .hero-tabs button[aria-selected="true"]{color:#007e86;border-bottom-color:#008b95}
+#top.hero-carousel .hero-tabs button:disabled{cursor:default;opacity:.6}
+#top.hero-carousel .hero-tabs button:focus-visible{outline:3px solid #d58b14;outline-offset:3px}
+@media(max-width:900px){
+body.home-modern #top.hero-carousel .revised-hero-grid{display:flex;flex-direction:column;gap:24px;padding:30px 0 0;min-height:0}
+#top.hero-carousel .hero-panel::before{content:none}
+#top.hero-carousel .hero-copy{flex:1}
+#top.hero-carousel .hero-copy h1,#top.hero-carousel .hero-slide-heading{font-size:34px}
+#top.hero-carousel .hero-description{min-height:0}
+#top.hero-carousel .revised-hero-actions{margin-top:auto}
+body.home-modern #top.hero-carousel .revised-hero-photo{position:relative;min-height:0;aspect-ratio:16/9;width:100vw;align-self:center;flex:none}
+body.home-modern #top.hero-carousel .revised-hero-photo img{position:absolute;inset:0;aspect-ratio:16/9;width:100%;height:100%;object-fit:contain;background:#f6fbfa}
+#top.hero-carousel .hero-tabs{gap:0;padding:8px 0 12px}
+#top.hero-carousel .hero-tabs button{flex:1;padding:10px 4px;font-size:14px;white-space:nowrap}
+body.home-modern #top.hero-carousel .revised-hero-photo figcaption{bottom:8px;right:8px;font-size:10px;padding:3px 6px}
+}
+@media(max-width:480px){#top.hero-carousel .hero-copy h1,#top.hero-carousel .hero-slide-heading{font-size:29px;letter-spacing:-1.2px}#top.hero-carousel .hero-tabs button{font-size:13px}}
+@media(prefers-reduced-motion:reduce){#top.hero-carousel .swiper-wrapper,#top.hero-carousel .swiper-slide{transition-duration:0ms!important}}
