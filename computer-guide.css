@@ -1,0 +1,49 @@
+/* Only the computer list and its independent guide pages. */
+#wg-computer-intro{margin:24px 0 18px}
+#wg-computer-intro h2{margin:0 0 8px;color:#13294b}
+#wg-computer-intro p{margin:0;color:#52657a}
+#wg-categories.computer-service-list{display:block}
+.computer-service-list .computer-card-section{margin:0 0 24px}
+.computer-service-list h3{margin:0 0 12px;color:#13294b;font-size:20px}
+.computer-service-list .computer-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:1fr;gap:14px}
+.computer-service-list .computer-cards.purchase{grid-template-columns:repeat(2,minmax(0,1fr))}
+.computer-service-list .computer-card{position:relative;display:flex!important;flex-direction:column;align-items:stretch!important;gap:6px;padding:18px!important;border:1px solid #dbe4ec;border-radius:12px;color:#13294b;text-decoration:none;background:#fff;min-width:0}
+.computer-service-list .computer-card:hover{border-color:#00767e;background:#f6fbfb}
+.computer-service-list .computer-card strong{font-size:18px;line-height:1.5}
+.computer-service-list .computer-muted{color:#52657a;font-size:14px;line-height:1.6}
+#wg-categories.computer-service-list .computer-muted{color:#52657a;font-size:14px;font-weight:400}
+#wg-categories.computer-service-list .computer-card strong{color:#13294b}
+.computer-image{margin:0;min-width:0}
+.computer-image img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:contain;background:#fff}
+.computer-image figcaption{font-size:11px;line-height:1.5;color:#52657a;font-weight:400}
+.computer-service-list .computer-image img{height:150px;aspect-ratio:auto}
+.computer-service-list .computer-arrow{position:absolute;right:15px;bottom:36px;color:#00767e}
+.computer-service-list .computer-legacy{margin-top:24px;padding:16px;border:1px solid #dbe4ec;border-radius:10px}
+.computer-legacy summary{cursor:pointer;color:#173353}
+.computer-service-list .computer-legacy a{display:inline-flex!important;margin:8px 16px 0 0;padding:6px 0!important;border:0!important;color:#00767e;text-decoration:underline}
+.computer-public-note{font-size:13px;color:#52657a;line-height:1.7;margin:20px 0}
+.computer-content{padding-top:28px;padding-bottom:48px;color:#13294b}
+#computer-groups{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:28px}
+#computer-groups a{display:flex;flex-direction:column;justify-content:center;text-align:center;padding:14px 8px;border-radius:9px;background:#19344c;color:#fff;text-decoration:none;min-width:0}
+#computer-groups a[aria-current]{background:#00767e}
+#computer-groups small{font-size:11px;line-height:1.5;margin-top:4px}
+#computer-guide .computer-breadcrumb{display:flex;flex-wrap:wrap;gap:8px;font-size:13px;color:#52657a;margin-bottom:24px}
+#computer-guide a{color:#00767e;text-underline-offset:4px}
+#computer-guide .computer-detail-head{display:grid;grid-template-columns:minmax(0,1fr) 240px;align-items:center;gap:28px;margin-bottom:24px}
+#computer-guide h1{font-size:clamp(28px,3vw,40px);line-height:1.35;margin:14px 0 12px;word-break:keep-all;overflow-wrap:anywhere}
+#computer-guide .computer-summary{font-size:17px;line-height:1.7;color:#52657a;margin:0}
+#computer-guide .computer-detail-panels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+#computer-guide .computer-detail-panels section{padding:22px;border:1px solid #dbe4ec;border-radius:12px;min-width:0}
+#computer-guide h2{font-size:20px;line-height:1.5;margin:0 0 12px}
+#computer-guide ul{margin:0;padding-left:20px;line-height:1.8}
+#computer-guide li+li{margin-top:8px}
+#computer-guide .computer-notice{margin:24px 0;padding:22px;border-radius:12px;background:#eaf7f6}
+#computer-guide .computer-notice p{margin:0;line-height:1.8}
+#computer-guide .computer-related{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;margin:24px 0}
+#computer-guide .computer-related h2{width:100%;margin-bottom:0}
+#computer-guide .computer-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+#computer-guide .computer-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:12px 20px;border-radius:9px;border:1px solid #00767e;text-decoration:none;font-weight:700}
+#computer-guide a.computer-primary{background:#00767e;color:white}
+.computer-content a:focus-visible,.computer-service-list a:focus-visible,.computer-service-list summary:focus-visible{outline:3px solid #00767e;outline-offset:4px}
+@media(max-width:900px){.computer-service-list .computer-cards{grid-template-columns:repeat(2,minmax(0,1fr))}#computer-groups{grid-template-columns:repeat(2,minmax(0,1fr))}#computer-groups a:last-child{grid-column:1/-1}#computer-guide .computer-detail-panels{grid-template-columns:1fr}#computer-guide .computer-detail-head{grid-template-columns:minmax(0,1fr) 180px}}
+@media(max-width:480px){.computer-service-list .computer-cards.purchase{grid-template-columns:1fr}.computer-service-list .computer-card{padding:12px!important}.computer-service-list .computer-card strong{font-size:16px}.computer-service-list .computer-image img{height:120px}.computer-service-list .computer-muted{font-size:13px}#computer-guide .computer-detail-head{grid-template-columns:1fr}#computer-guide .computer-detail-head .computer-image{max-width:240px;width:100%;margin:auto}#computer-guide .computer-detail-panels section{padding:18px}#computer-guide .computer-actions a{width:100%}.computer-content{padding-top:20px}}
