@@ -1,0 +1,6 @@
+/* Home categories only: preserve existing typography and ordered links. */
+@media(min-width:1101px){body.home-modern #categories .category-grid{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:10px}body.home-modern #categories .category-card:nth-child(n){height:154px;min-height:154px;padding:12px 4px;overflow-wrap:anywhere}}
+@media(min-width:901px) and (max-width:1100px){body.home-modern #categories .category-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}}
+.service-extra{margin:24px 0;padding:20px;border:1px solid #dce8e9;border-radius:12px;background:#f6fbfb}
+.service-extra h2,.service-extra h3{color:#173353}.service-extra li{margin:8px 0;line-height:1.7}.service-extra .service-links{display:flex;flex-wrap:wrap;gap:16px}.service-extra a{color:#007e86;text-decoration:underline}
+.service-extra .service-notice{font-size:13px;color:#526781}.service-extra img{width:72px;height:72px;object-fit:contain;float:right;margin:0 0 12px 16px}
