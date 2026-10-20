@@ -1,8 +1,10 @@
 /* One continuous photo in every desktop panel; original mobile photos preserved. */
 @media(min-width:1101px){
-body.home-modern #top.hero-carousel .revised-hero-grid{min-height:max(440px,30.2vw);padding-top:24px;padding-bottom:68px}
+body.home-modern #top.hero-carousel .revised-hero-grid{min-height:clamp(360px,calc(100svh - 500px),620px);padding-top:16px;padding-bottom:56px}
 body.home-modern #top.hero-carousel .revised-hero-photo img,body.home-modern #top.hero-carousel .hero-panel:not(:first-child) .revised-hero-photo img{object-fit:cover;object-position:right center;background:none}
-body.home-modern #top.hero-carousel #hero-panel-3 .revised-hero-photo img{object-position:right 76%}
+body.home-modern #top.hero-carousel #hero-panel-3 .revised-hero-photo img{object-position:right 60%}
+#top.hero-carousel .hero-copy h1,#top.hero-carousel .hero-slide-heading{margin-top:10px;margin-bottom:8px}
+#top.hero-carousel .hero-description{min-height:0;margin-bottom:8px}
 #top.hero-carousel .hero-panel::before{background:linear-gradient(90deg,rgba(255,255,255,.76) 0%,rgba(255,255,255,.6) 28%,rgba(255,255,255,.22) 43%,rgba(255,255,255,0) 53%)}
 }
 body.home-modern #categories{padding-top:16px;padding-bottom:44px}
@@ -21,4 +23,3 @@ body.home-modern #top.hero-carousel .revised-hero-photo figcaption{bottom:8px}
 body.home-modern #categories{padding-top:22px;padding-bottom:32px}
 }
 @media(max-width:480px){#top.hero-carousel .hero-tabs button{font-size:13px}}
-
