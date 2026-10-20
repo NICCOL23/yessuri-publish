@@ -14,7 +14,7 @@ let selectedRegion = '전체';
 let selectedCategory = '전체';
 
 const homeServices=[
- ['욕실 전체 시공','전체 리모델링·범위 상담','assets/images/work-tasks/v2/bath-renovation.webp','guide.html?work=bath-renovation#work-guide'],
+ ['욕실·설비','부분 수리부터 전체 시공까지','assets/images/work-tasks/v2/bath-renovation.webp','guide.html?group=general&field=bath#work-guide'],
  ['도배','방 한 칸·집 전체','assets/images/work-tasks/v2/wallpaper-install.webp','guide.html?work=wallpaper-install#work-guide'],
  ['장판','부분 교체·전체 시공','assets/images/work-tasks/v2/flooring-install.webp','guide.html?work=flooring-install#work-guide'],
  ['싱크대·붙박이장','제작·교체·보수 상담','assets/images/service-expansion/sink-wardrobe.webp','guide.html?field=kitchen#work-guide'],
