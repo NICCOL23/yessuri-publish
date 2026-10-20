@@ -1,6 +1,7 @@
 /* List -> field -> work detail. State lives only in this tab's history, never on a server. */
 (() => {
  'use strict';
+ const requested=new URLSearchParams(location.search);if(requested.get('field')==='boiler'||requested.get('work')==='boiler-service'){location.replace('boiler-guide.html');return;}
  const groups=window.YESSURI_WORK_GUIDE,$=id=>document.getElementById(id);
  const records=groups.flatMap(g=>g.categories.flatMap(c=>c.tasks.map(t=>({g,c,t}))));
  const findRecord=id=>records.find(r=>r.t.id===id);
@@ -25,12 +26,12 @@
   restoring=true;requestAnimationFrame(()=>{if(panelMode){restoring=false;persist();return;}if(toList){window.scrollTo({top:listScroll,behavior:'instant'});const target=current.c?$('wg-list').querySelector('a[data-field="'+current.c.id+'"]'):$('wg-groups').querySelector('[aria-pressed=true]');target?.focus({preventScroll:true});}else if(field){$('wg-field-title').focus({preventScroll:true});scrollToElement($('wg-flow-detail'));}else if(focus){const h=$('wg-detail-title');h.focus({preventScroll:true});const rect=h.getBoundingClientRect();if(rect.top<offset()||rect.bottom>innerHeight)scrollToElement(h);}restoring=false;persist();});
   announce.textContent=toList?'분야 목록으로 돌아왔습니다.':current.c.label+' · '+(current.t?.label||'작업을 선택하세요.');
  }
- function select(record,{focus=true}={}){if(record)change(record,{focus});}
+ function select(record,{focus=true}={}){if(record?.c.id==='boiler'){location.href='boiler-guide.html';return;}if(record)change(record,{focus});}
  function render(){
   const {g,c,t}=current;$('wg-list').hidden=view!=='list';$('wg-flow-detail').hidden=view!=='detail';$('work-guide').setAttribute('aria-labelledby',view==='list'?'wg-title':'wg-field-title');
   document.title=view==='list'?'비용·이용안내 | YESSURI':(t?.label||c.label)+' 안내 | YESSURI';
   $('wg-groups').replaceChildren(...groups.map(group=>{const b=button(group.title,g===group,()=>{const next=current.g===group?current:{g:group,c:null,t:null};change(next,{toList:true});});b.append(text('small',group.help));return b;}));
-  $('wg-categories').replaceChildren(...g.categories.map(category=>{const a=text('a','');const copy=text('span','','wg-field-copy');copy.append(text('strong',category.label));if(category.description)copy.append(text('small',category.description));a.append(copy);a.dataset.field=category.id;a.href=urlFor('detail',g,category,null).pathname+urlFor('detail',g,category,null).search+'#work-guide';if(c===category)a.className='wg-last-field';a.append(text('span','→'));a.addEventListener('click',e=>{if(e.button||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;e.preventDefault();change({g,c:category,t:null},{field:true});});return a;}));
+  $('wg-categories').replaceChildren(...g.categories.map(category=>{const a=text('a','');const copy=text('span','','wg-field-copy');copy.append(text('strong',category.label));if(category.description)copy.append(text('small',category.description));a.append(copy);a.dataset.field=category.id;if(category.id==='boiler'){a.href='boiler-guide.html';a.append(text('span','→'));return a;}a.href=urlFor('detail',g,category,null).pathname+urlFor('detail',g,category,null).search+'#work-guide';if(c===category)a.className='wg-last-field';a.append(text('span','→'));a.addEventListener('click',e=>{if(e.button||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;e.preventDefault();change({g,c:category,t:null},{field:true});});return a;}));
   let computerIntro=$('wg-computer-intro');if(!computerIntro){computerIntro=text('section','','wg-computer-intro');computerIntro.id='wg-computer-intro';$('wg-categories').before(computerIntro);}computerIntro.hidden=g.id!=='computer';if(g.id==='computer'){computerIntro.replaceChildren(text('h2','컴퓨터 수리·업그레이드·구매 상담'),text('p','컴퓨터 수리 경력 30년의 답변 담당자가 안내합니다. 새 제품·중고 구매와 실제 판매 조건은 별도 전문가에게 확인하세요.'));const pc=g.categories.find(c=>c.id==='it');$('wg-categories').replaceChildren(...[['고장·수리','it-work'],['업그레이드','computer-upgrade'],['구매 상담','computer-purchase']].map(([label,id])=>{const r=findRecord(id),a=text('a',label);a.href=urlFor('detail',r.g,r.c,r.t);a.append(text('span','→'));a.addEventListener('click',e=>{if(e.button||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;e.preventDefault();select(r)});return a;}));}
   if(view==='list'){window.dispatchEvent(new Event('guide:viewchange'));return;}
   $('wg-field-title').textContent=c.label;$('wg-field-title').tabIndex=-1;

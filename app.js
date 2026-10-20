@@ -18,6 +18,7 @@ const homeServices=[
  ['도배','방 한 칸·집 전체','assets/images/work-tasks/v2/wallpaper-install.webp','guide.html?work=wallpaper-install#work-guide'],
  ['장판','부분 교체·전체 시공','assets/images/work-tasks/v2/flooring-install.webp','guide.html?work=flooring-install#work-guide'],
  ['싱크대·붙박이장','제작·교체·보수 상담','assets/images/service-expansion/sink-wardrobe.webp','guide.html?field=kitchen#work-guide'],
+ ['보일러','고장·온수·난방·교체','assets/images/boiler-guide/boiler.svg','boiler-guide.html'],
  ...categories.filter(([n])=>!['에어컨','컴퓨터·IT'].includes(n)).map(([n],i)=>{const k=categories.findIndex(([name])=>name===n);return [n,categoryDescriptions[k],'assets/images/service-icons.svg#icon'+(k+1),'find.html?'+new URLSearchParams({category:n})];}),
  ['이사','원룸·가정·포장 이사','assets/images/service-expansion-20261020/moving.webp','guide.html?group=life&field=moving#work-guide'],
  ['에어컨','수리·설치·청소','assets/images/service-icons.svg#icon6','guide.html?field=aircon#work-guide'],
@@ -26,7 +27,7 @@ const homeServices=[
 ];
 const movingCard=homeServices.splice(homeServices.findIndex(([name])=>name==='이사'),1)[0];homeServices.splice(homeServices.findIndex(([name])=>name==='청소')+1,0,movingCard);
 homeServices.splice(homeServices.findIndex(([name])=>name==='에어컨')+1,0,['CCTV 설치','실내외 설치·교체','assets/images/service-expansion-20261020/cctv.webp','guide.html?group=life&field=cctv#work-guide']);
-homeServices.forEach(([name,description,image,href])=>{const a=document.createElement('a');a.className='category-card';if(name==='컴퓨터 수리·업그레이드')a.classList.add('computer-upgrade-card');if(name==='TV·LED 모니터 수리')a.classList.add('display-repair-card');const visual=document.createElement('span');visual.className='category-icon';visual.setAttribute('aria-hidden','true');const img=document.createElement('img');img.src=image;img.alt='';img.width=160;img.height=160;img.loading='lazy';visual.append(img);const title=document.createElement('span');title.textContent=name;if(a.classList.contains('computer-upgrade-card')){title.replaceChildren(document.createTextNode('컴퓨터 수리·'),document.createElement('br'),document.createTextNode('업그레이드'));}const small=document.createElement('small');small.className='category-description';small.textContent=description;a.href=href;a.append(visual,title,small);categoryGrid.append(a);});
+homeServices.forEach(([name,description,image,href])=>{const a=document.createElement('a');a.className='category-card';if(name==='보일러')a.classList.add('boiler-card');if(name==='컴퓨터 수리·업그레이드')a.classList.add('computer-upgrade-card');if(name==='TV·LED 모니터 수리')a.classList.add('display-repair-card');const visual=document.createElement('span');visual.className='category-icon';visual.setAttribute('aria-hidden','true');const img=document.createElement('img');img.src=image;img.alt='';img.width=160;img.height=160;img.loading='lazy';visual.append(img);const title=document.createElement('span');title.textContent=name;if(a.classList.contains('computer-upgrade-card')){title.replaceChildren(document.createTextNode('컴퓨터 수리·'),document.createElement('br'),document.createTextNode('업그레이드'));}const small=document.createElement('small');small.className='category-description';small.textContent=description;a.href=href;a.append(visual,title,small);categoryGrid.append(a);});
 
 
 function renderExperts(){

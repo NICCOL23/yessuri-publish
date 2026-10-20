@@ -16,7 +16,7 @@
     },
     {
       "id": "water",
-      "name": "누수·배관",
+      "name": "누수·배관·보일러",
       "description": "탐지·막힘·방수",
       "sortOrder": 2
     },
@@ -358,6 +358,19 @@
           "파손·분실 발생 시 연락 및 처리 절차"
         ]
       }
+    },
+    {
+      "id": "boiler",
+      "groupId": "water",
+      "name": "보일러·난방",
+      "description": "고장·온수·난방·교체 상담",
+      "sortOrder": 1.5,
+      "representativeArt": 13,
+      "guidance": [
+        "제조사·모델명·연료·에러코드·발생 시점",
+        "본체와 난방·온수 배관의 점검 범위 구분",
+        "출장·진단비·수리비·부품비·설치비·보증 조건"
+      ]
     }
   ],
   "tasks": [
@@ -5102,6 +5115,69 @@
       ],
       "construction": false,
       "updatedAt": "2026-10-20"
+    },
+    {
+      "id": "boiler-service",
+      "fieldId": "boiler",
+      "name": "보일러 수리·교체 상담",
+      "summary": "고장·온수·난방 증상을 구분하고 본체 수리와 배관 작업, 교체·설치 범위를 확인합니다.",
+      "section": null,
+      "sortOrder": 0,
+      "keywords": "보일러 난방 온수 점화 에러 조절기 분배기 교체 설치",
+      "query": "",
+      "before": [
+        "제조사·정확한 모델명·연료와 사용 기간",
+        "에러코드·발생 시점·난방 또는 온수 증상",
+        "보이는 물샘·소음·최근 수리 여부와 안전한 위치의 사진"
+      ],
+      "rows": [
+        {
+          "name": "고장·에러·온수·난방 점검",
+          "parts": "제조사·모델·연료·에러코드·증상 발생 조건",
+          "conditions": "출장·진단비, 수리비와 부품비, 제조사 보증 적용 여부"
+        },
+        {
+          "name": "조절기·난방 배관 확인",
+          "parts": "실내조절기 모델, 일부 방인지 전체인지, 보이는 물샘 위치",
+          "conditions": "본체·조절기·분배기·배관 중 점검 범위와 별도 공사비"
+        },
+        {
+          "name": "보일러 교체·설치 상담",
+          "parts": "주택·난방 면적, 기존 모델·연료, 설치 공간·배기 및 배수 조건",
+          "conditions": "제품비·기본 설치비·연통·배관·철거·폐기·부가세·추가 작업 포함 범위"
+        }
+      ],
+      "after": [
+        "난방·온수 작동과 물샘·표시 오류 여부를 담당자와 확인",
+        "교체 부품·작업 내역과 비용 명세 확인",
+        "제조사와 시공 업체의 보증 담당·기간·범위·재방문 비용 확인"
+      ],
+      "photoPreparation": [
+        "본체 전체와 모델 라벨",
+        "조절기의 에러 표시",
+        "안전하게 촬영 가능한 배관 주변"
+      ],
+      "expertCategory": "누수·수도",
+      "imageIds": [
+        "work-image-boiler-service"
+      ],
+      "contentUpdatedDate": "2026-10-20",
+      "contentReview": {
+        "status": "official-sources-reviewed",
+        "reviewedDate": "2026-10-20"
+      },
+      "sources": [
+        {
+          "title": "경동나비엔 고객 서비스·요금·보증 정책",
+          "url": "https://www.kdnavien.co.kr/ko/service",
+          "accessedDate": "2026-10-20"
+        },
+        {
+          "title": "린나이 가스보일러 사용·설치설명서",
+          "url": "https://rhpa2.rinnai.co.kr/upload/explain/125120001733720506021_20241209140154872.pdf",
+          "accessedDate": "2026-10-20"
+        }
+      ]
     }
   ],
   "images": [
@@ -8130,6 +8206,23 @@
       "width": 768,
       "height": 768,
       "format": "webp"
+    },
+    {
+      "id": "work-image-boiler-service",
+      "taskId": "boiler-service",
+      "file": "../../boiler-guide/boiler.svg",
+      "alt": "벽걸이 보일러와 조절 패널을 표현한 참고 일러스트",
+      "caption": "보일러 분야 참고 일러스트 · 실제 제품·시공 사례가 아닙니다.",
+      "width": 512,
+      "height": 512,
+      "format": "svg",
+      "sha256": "4b996a8938303519a9834775f988743e92fbbb192aafab1569e9e2671c54175b",
+      "production": {
+        "method": "code-authored-svg",
+        "generatedDate": "2026-10-20"
+      },
+      "sources": [],
+      "sortOrder": 110
     }
   ],
   "meta": {
