@@ -1,0 +1,20 @@
+/* Approved homepage composition; service data and shared header remain untouched. */
+body.home-modern #top.hero-carousel .revised-hero-grid{min-height:440px;padding:24px 0 66px;gap:28px}
+body.home-modern #top.hero-carousel .revised-hero-photo{min-height:0}
+#top.hero-carousel .hero-copy h1,#top.hero-carousel .hero-slide-heading{font-size:clamp(30px,2.8vw,40px);line-height:1.25;margin:14px 0 12px;letter-spacing:-1.4px}
+#top.hero-carousel .hero-description{font-size:15px;line-height:1.6;margin:0 0 14px}
+#top.hero-carousel .hero-description strong{color:#173353;font-weight:700}
+#top.hero-carousel .revised-hero-actions{margin-top:0}
+#top.hero-carousel .revised-hero-actions>a{min-height:46px;padding:10px 20px}
+#top.hero-carousel .home-service-note{font-size:11px;line-height:1.5;margin:10px 0 0}
+#top.hero-carousel .hero-tabs{position:absolute;left:0;right:0;bottom:10px;justify-content:flex-start;gap:20px;padding:0;background:none;pointer-events:none}
+#top.hero-carousel .hero-tabs button{pointer-events:auto;min-height:44px;padding:8px 4px;border-bottom-width:2px;background:none;font-size:14px}
+body.home-modern #top.hero-carousel .revised-hero-photo figcaption{bottom:16px}
+body.home-modern #categories{padding-top:24px;padding-bottom:28px}
+body.home-modern #categories .section-head{margin-bottom:18px}
+body.home-modern #categories .section-head h2{margin:0}
+@media(min-width:1101px){body.home-modern #categories .category-card:nth-child(n){height:144px;min-height:144px;padding:8px 4px}}
+@media(max-width:900px){body.home-modern #top.hero-carousel .revised-hero-grid{min-height:0;padding:24px 0 0;gap:18px}#top.hero-carousel .hero-copy h1,#top.hero-carousel .hero-slide-heading{font-size:34px}#top.hero-carousel .hero-tabs{position:relative;left:auto;right:auto;bottom:auto;gap:0;justify-content:center;padding:4px 0 10px}#top.hero-carousel .hero-tabs button{font-size:13px;flex:1}body.home-modern #top.hero-carousel .revised-hero-photo figcaption{bottom:8px}body.home-modern #categories{padding-top:22px}}
+@media(max-width:480px){#top.hero-carousel .hero-copy h1,#top.hero-carousel .hero-slide-heading{font-size:29px}#top.hero-carousel .hero-description{font-size:14px}#top.hero-carousel .revised-hero-actions{margin-top:0}
+#top.hero-carousel .revised-hero-actions>a{padding:10px 8px;font-size:13px}}
+
