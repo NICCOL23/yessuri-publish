@@ -34,3 +34,9 @@
 #home-footer a:focus-visible,#home-closing a:focus-visible{outline:3px solid #f0a942;outline-offset:4px}
 @media(max-width:900px){#home-closing .closing-inner{flex-direction:column;align-items:flex-start}#home-closing .closing-actions{justify-content:flex-start;max-width:none}#home-closing .closing-actions p{text-align:left}}
 @media(max-width:760px){#home-faq{padding:36px 0}#home-faq h2{font-size:25px}#home-faq summary{padding:18px 16px;font-size:14px}#home-faq .faq-answer{padding:16px;font-size:13px}#home-closing .closing-inner{padding:24px}#home-closing h2{font-size:24px}#home-closing .closing-actions{width:100%;flex-direction:column}#home-closing a{white-space:normal}#home-footer{padding-bottom:66px}#home-footer .end-footer-top,#home-footer .end-footer-bottom{flex-direction:column;align-items:flex-start}#home-footer .end-footer-links{gap:16px}}
+
+/* Compact homepage footer, copyright directly below the last navigation link. */
+#home-footer{padding:24px 0}
+#home-footer .end-footer-right{display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+#home-footer .end-copyright{margin:0;font-size:12px;line-height:1.5;text-align:right}
+@media(max-width:760px){#home-footer{padding:24px 0 80px}#home-footer .end-footer-right{width:100%;align-items:flex-end}#home-footer .end-footer-links{align-self:flex-start}}
