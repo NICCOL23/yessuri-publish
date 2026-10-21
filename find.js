@@ -24,7 +24,7 @@ let appliedFilters;
 const searchState=window.YESSURI_SEARCH_STATE;
 let searchHour=searchState.hour(), searchIds=null, resultPage=1;
 let pendingRestore=null;
-const captureSearch=()=>({url:location.href,applied:{...appliedFilters},categories:requestedCategories.slice(),service:requestedService,ids:searchIds?.slice(),hour:searchHour,page:resultPage,draft:{query:queryInput.value,region:regionSelect.value,category:categorySelect.value,sort:sortSelect.value},helpOpen:document.querySelector('#category-help').open,helpPending:helpCategoryPending,helpStatus:document.querySelector('#category-help-status').textContent,scroll:window.scrollY});
+const captureSearch=()=>({url:location.href,applied:{...appliedFilters},categories:requestedCategories.slice(),service:requestedService,ids:searchIds?.slice(),hour:searchHour,page:resultPage,draft:{query:queryInput.value,region:regionSelect.value,category:categorySelect.value,sort:sortSelect.value},scroll:window.scrollY});
 function saveSearch(){const state=captureSearch();searchState.write('yessuri:last-search',state);searchState.write('yessuri:search:'+searchState.keyFor(location.href),state);try{history.replaceState({yessuriSearch:state},'',location.href);}catch{}return state;}
 function restoreSearch(state){if(!state||!searchState.safeFind(state.url)||searchState.keyFor(state.url)!==searchState.keyFor(location.href)||!Array.isArray(state.ids)||!Number.isSafeInteger(state.hour))return false;searchIds=[...new Set(state.ids.filter(id=>typeof id==='string'))];searchHour=state.hour;pendingRestore=state;return true;}
 function freshSearch(){searchIds=null;searchHour=searchState.hour();resultPage=1;}
@@ -32,7 +32,6 @@ function freshSearch(){searchIds=null;searchHour=searchState.hour();resultPage=1
 const readFilters = () => ({query:queryInput.value.trim().replace(/\s+/g," "),region:regionSelect.value,category:categorySelect.value,sort:sortSelect.value});
 let requestedCategories = [];
 let requestedService = '';
-let helpCategoryPending = false;
 const serviceNotice = document.createElement('p');
 serviceNotice.className = 'demo-note';
 serviceNotice.setAttribute('role','status');
@@ -49,7 +48,6 @@ function updateCompareCount() {
 function loadFiltersFromUrl() {
   const params = new URLSearchParams(window.location.search);
   resultPage=Math.max(1,Math.floor(Number(params.get('page'))||1));
-  helpCategoryPending = false;
   requestedCategories = (params.get('categories') || '').split(',').filter(field => validCategories.includes(field) && field !== '전체');
   requestedService = (params.get('service') || '').slice(0, 80);
   queryInput.value = (params.get('q') || '').slice(0, 80);
@@ -126,8 +124,6 @@ function renderDirectory(syncUrl = true) {
 function resetFilters() {
   freshSearch();
   requestedCategories = []; requestedService = '';
-  helpCategoryPending = false;
-  document.querySelector('#category-help-status').textContent = '';
   queryInput.value = '';
   regionSelect.value = '전체';
   categorySelect.value = '전체';
@@ -139,9 +135,7 @@ function resetFilters() {
 document.querySelector('#find-filter-form').addEventListener('submit', event => {
   event.preventDefault();
   freshSearch();
-  if (helpCategoryPending || categorySelect.value !== appliedFilters.category) { requestedCategories = []; requestedService = ''; }
-  helpCategoryPending = false;
-  document.querySelector('#category-help-status').textContent = '';
+  if (categorySelect.value !== appliedFilters.category) { requestedCategories = []; requestedService = ''; }
   appliedFilters = readFilters();
   renderDirectory();
   document.querySelector('.find-results-heading').scrollIntoView({behavior:'smooth',block:'start'});
@@ -220,15 +214,9 @@ window.addEventListener('yessuri:favorites-changed',refreshCardControls);
 document.querySelectorAll('[data-edit-search]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();document.querySelector('#find-filter-form').scrollIntoView({behavior:'smooth',block:'start'});regionSelect.focus({preventScroll:true});}));
 
 // Help changes draft inputs only; applied results and URL wait for form submission.
-document.querySelectorAll('[data-help-category]').forEach(button => button.addEventListener('click', () => {
-  categorySelect.value = button.dataset.helpCategory;
-  helpCategoryPending = true;
-  document.querySelector('#category-help-status').textContent = button.dataset.helpCategory + '를 선택했습니다. 전문가 찾기를 눌러주세요.';
-}));
 
 function renderPagination(pages){const nav=document.querySelector('#search-pagination');nav.replaceChildren();nav.hidden=pages<=1;if(pages<=1)return;const values=[1,...Array.from({length:5},(_,i)=>resultPage-2+i),pages].filter(n=>n>=1&&n<=pages);const numbers=[...new Set(values)].sort((a,b)=>a-b);const link=(label,page)=>{const a=document.createElement('a'),u=new URL(location.href);u.searchParams.set('page',page);a.href=u.href;a.textContent=label;if(page===resultPage&&label===String(page))a.setAttribute('aria-current','page');a.addEventListener('click',event=>{if(event.button||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;event.preventDefault();resultPage=page;renderDirectory();const title=document.querySelector('#directory-results-title');title.focus({preventScroll:true});title.scrollIntoView({block:'start'});resultsLive.textContent='검색 결과 '+page+'페이지';});nav.append(a);};if(resultPage>1)link('이전',resultPage-1);let previous=0;for(const n of numbers){if(previous&&n-previous>1){const dots=document.createElement('span');dots.textContent='…';nav.append(dots);}link(String(n),n);previous=n;}if(resultPage<pages)link('다음',resultPage+1);}
-function applyRestoredDraft(){if(!pendingRestore)return;const state=pendingRestore;pendingRestore=null;const d=state.draft||{};queryInput.value=typeof d.query==='string'?d.query.slice(0,80):appliedFilters.query;regionSelect.value=validRegions.includes(d.region)?d.region:appliedFilters.region;categorySelect.value=validCategories.includes(d.category)?d.category:appliedFilters.category;helpCategoryPending=state.helpPending===true;document.querySelector('#category-help').open=state.helpOpen===true;document.querySelector('#category-help-status').textContent=typeof state.helpStatus==='string'?state.helpStatus:'';const restorePosition=()=>window.scrollTo({top:Math.max(0,Number(state.scroll)||0),behavior:'instant'});requestAnimationFrame(restorePosition);document.fonts.ready.then(restorePosition);saveSearch();}
-document.querySelector('.category-help-panel a').addEventListener('click',event=>{const link=event.currentTarget,state=captureSearch();saveSearch();const url=new URL('guide.html',location.href);url.hash='check-title';url.searchParams.set('fromSearch','1');url.searchParams.set('search',location.pathname+location.search);searchState.write('yessuri:search-return',{url:location.href,state,created:Date.now()});link.href=url.href;});
+function applyRestoredDraft(){if(!pendingRestore)return;const state=pendingRestore;pendingRestore=null;const d=state.draft||{};queryInput.value=typeof d.query==='string'?d.query.slice(0,80):appliedFilters.query;regionSelect.value=validRegions.includes(d.region)?d.region:appliedFilters.region;categorySelect.value=validCategories.includes(d.category)?d.category:appliedFilters.category;const restorePosition=()=>window.scrollTo({top:Math.max(0,Number(state.scroll)||0),behavior:'instant'});requestAnimationFrame(restorePosition);document.fonts.ready.then(restorePosition);saveSearch();}
 window.addEventListener('pagehide',saveSearch);
 window.addEventListener('pageshow',event=>{if(event.persisted){renderDirectory(false);}});
 
