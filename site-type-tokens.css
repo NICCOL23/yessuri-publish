@@ -1,0 +1,4 @@
+/* YESSURI shared type scale. Sizes are relative to browser preferences. */
+@font-face{font-family:"Yessuri Noto Sans KR";src:url("assets/fonts/noto-sans-kr/NotoSansKR-variable.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
+:root,:host{--ys-font:"Yessuri Noto Sans KR","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;--ys-body:1rem;--ys-small:.875rem;--ys-control:.9375rem;--ys-h1:2rem;--ys-h2:1.5rem;--ys-h3:1.125rem;--ys-caption:.8125rem;--ys-ink:#19334e;--ys-copy:#344b61;--ys-muted:#52657a;--ys-teal:#00767e;--ys-leading:1.7;--ys-heading-leading:1.35;--ys-hero-heading:clamp(1.875rem,2.6vw,2.6875rem)}
+@media(max-width:760px){:root,:host{--ys-h1:1.75rem;--ys-h2:1.375rem}}

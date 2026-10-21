@@ -1,5 +1,6 @@
+@import url("site-type-tokens.css?v=1");
 /* Isolated inside the footer component: page styles cannot change this layout. */
-:host{display:block;width:100%;font-family:Arial,"Malgun Gothic",sans-serif;font-size:13px;font-weight:400;line-height:1.6;letter-spacing:0;color:#526781;background:#f5f7fa}
+:host{display:block;width:100%;font-family:var(--ys-font);font-size:var(--ys-small);font-weight:400;line-height:1.6;letter-spacing:0;color:var(--ys-muted);background:#f5f7fa}
 *{box-sizing:border-box}
 footer{padding:24px 0}
 .footer-inner{width:calc(100% - 48px);max-width:1160px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:24px}
@@ -9,9 +10,9 @@ a:focus-visible{outline:3px solid #00767e;outline-offset:4px;border-radius:3px}
 .brand{position:relative;display:block;width:235px;height:70px}
 .brand img{position:absolute;top:-5px;left:0;width:235px;height:auto;display:block}
 .korean{position:absolute;left:30.110497%;width:62.891344%;top:53px;text-align:center;font-size:11px;font-weight:700;color:#008b95;letter-spacing:.3px;line-height:14px}
-.description{margin:10px 0 0;font-size:12px}
+.description{margin:10px 0 0;font-size:var(--ys-caption)}
 .footer-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;font-size:13px;font-weight:700}
+nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;font-size:var(--ys-control);font-weight:600}
 nav a{display:inline-flex;align-items:center;min-height:44px}
 .copyright{margin:0;font-size:12px;line-height:1.5;text-align:right;white-space:nowrap}
 @media(max-width:760px){.footer-inner{width:calc(100% - 32px);flex-direction:column;align-items:flex-start;gap:16px}.footer-right{width:100%;gap:8px}nav{align-self:flex-start;gap:4px 20px}:host([has-mobile-nav]) footer{padding-bottom:80px}}

@@ -1,0 +1,77 @@
+@import url("site-type-tokens.css?v=1");
+html[data-type-system]{font-size:100%;text-size-adjust:100%;--text:var(--ys-copy);--navy:var(--ys-ink);--muted:var(--ys-muted)}
+html[data-type-system] body{font-family:var(--ys-font);font-size:var(--ys-body);font-weight:400;line-height:var(--ys-leading);letter-spacing:0;color:var(--ys-copy)}
+html[data-type-system] :where(button,input,select,textarea,table,h1,h2,h3,h4,p,li,dt,dd,label,nav,a,small){font-family:var(--ys-font)}
+html[data-type-system] body :is(#main,#board-root,main){font-size:var(--ys-body);line-height:var(--ys-leading);letter-spacing:0}
+html[data-type-system] body :is(#main,#board-root,main) :is(h1,h2,h3){font-weight:700;line-height:var(--ys-heading-leading);letter-spacing:-.02em;word-break:keep-all;overflow-wrap:anywhere}
+html[data-type-system] body :is(#main,#board-root,main) h1{font-size:var(--ys-h1)}
+html[data-type-system] body :is(#main,#board-root,main) h2{font-size:var(--ys-h2)}
+html[data-type-system] body :is(#main,#board-root,main) h3{font-size:var(--ys-h3)}
+html[data-type-system] body :is(#main,#board-root,main) :is(p,li,dt,dd,label){font-size:var(--ys-body);font-weight:400;line-height:var(--ys-leading);letter-spacing:0;word-break:keep-all;overflow-wrap:anywhere}
+html[data-type-system] body :is(#main,#board-root,main) :is(small,.section-description,.home-service-note,.b-hint,.b-count,.entry-private-line,.entry-private-line strong,.entry-bottom-note,.entry-count,.entry-list-hint,.entry-kicker,.reg-note,.section-kicker,.eyebrow,.profile-tags,.profile-tags span){font-size:var(--ys-small);line-height:1.6;letter-spacing:0;color:var(--ys-muted)}
+html[data-type-system] body :is(#main,#board-root,main) :is(strong,b){font-weight:600}
+html[data-type-system] body :is(button,input,select,textarea){font-family:var(--ys-font);font-size:var(--ys-control);font-weight:500;line-height:1.5;letter-spacing:0}
+html[data-type-system] body :is(button:not(.menu-toggle),input:not([type=checkbox]):not([type=radio]):not([type=file]),select){height:auto;min-height:2.75rem}
+html[data-type-system] body :is(#main,#board-root,main) :is(.button,.btn,.b-btn,.home-quote,.hero-find-link,.entry-primary,.entry-lookup-action,.entry-page-edge,.entry-page-number){font-size:var(--ys-control);font-weight:600;line-height:1.5;letter-spacing:0;min-height:2.75rem;height:auto;white-space:normal;overflow-wrap:anywhere}
+html[data-type-system] body :is(#main,#board-root,main) :is(.b-textbtn,.entry-kakao-inline){font-size:var(--ys-small);line-height:1.5;letter-spacing:0;min-height:2.75rem}
+html[data-type-system] body .site-header #home-menu a[href],html[data-type-system] body :is(.directory-menu,.desktop-nav,.nav) a{font-family:var(--ys-font);font-size:var(--ys-control);font-weight:600;line-height:1.5;letter-spacing:0;white-space:normal}
+html[data-type-system] body :is(#main,#board-root,main) :is(input,select,textarea){max-width:100%;min-width:0;color:var(--ys-ink)}
+html[data-type-system] body :is(#main,#board-root,main) :is(a,button,input,select,textarea):focus-visible{outline:3px solid var(--ys-teal);outline-offset:3px}
+html[data-type-system] body :is(#main,#board-root,main) :is(th,td){font-size:var(--ys-small);font-weight:400;line-height:1.6;letter-spacing:0;vertical-align:middle;color:var(--ys-ink)}
+html[data-type-system] body :is(#main,#board-root,main) th{font-weight:600}
+html[data-type-system] body :is(#main,#board-root,main) :is(td time,.entry-table td:nth-last-child(2)){font-variant-numeric:tabular-nums}
+/* Keep the approved hero scale; the content layer remains stationary. */
+html[data-type-system] body #top :is(.hero-copy h1,.hero-slide-heading){font-size:var(--ys-hero-heading);line-height:1.35;letter-spacing:-.02em}
+html[data-type-system] body #top .hero-description{font-size:var(--ys-body);line-height:1.7}
+html[data-type-system] body #top.hero-carousel .hero-tabs button{font-size:var(--ys-control);font-weight:600;line-height:1.5;letter-spacing:0;color:#006770;white-space:normal}
+html[data-type-system] body #top.hero-carousel .hero-tabs{flex-wrap:wrap}
+html[data-type-system] body :is(#main,#board-root,main) :is(.hint,.guide-disclaimer){font-size:var(--ys-small);line-height:1.6;color:var(--ys-muted);letter-spacing:0}
+html[data-type-system] body #categories .category-card:nth-child(n){height:auto;min-height:3.875rem;grid-template-rows:auto auto;font-size:var(--ys-small);padding:6px 4px}
+html[data-type-system] body #categories .category-card>span:not(.category-icon){font-size:var(--ys-small);height:auto;min-height:2.8em;line-height:1.4;font-weight:600;letter-spacing:0}
+html[data-type-system] body #categories .category-description{display:none}
+html[data-type-system] body #categories .category-card{overflow-wrap:anywhere}
+html[data-type-system] body :is(#home-guide,#home-faq,#home-closing) :is(p,li,summary){font-size:var(--ys-body);line-height:1.7;letter-spacing:0}
+/* Question list: no hidden duplicate author or clipped title. */
+html[data-type-system] body[data-board-page=list] #board-root .b-table{font-size:var(--ys-small);line-height:1.6}
+html[data-type-system] body[data-board-page=list] #board-root .b-table :is(td,th){height:auto;padding:12px 10px;white-space:normal;overflow:visible;text-overflow:clip;font-size:var(--ys-small);line-height:1.6;letter-spacing:0}
+html[data-type-system] body[data-board-page=list] #board-root .b-table .b-col-status{width:9%}
+html[data-type-system] body[data-board-page=list] #board-root .b-table .b-col-field{width:12%}
+html[data-type-system] body[data-board-page=list] #board-root .b-table .b-col-region{width:8%}
+html[data-type-system] body[data-board-page=list] #board-root .b-table .b-col-author{width:11%}
+html[data-type-system] body[data-board-page=list] #board-root .b-table .b-col-date{width:10%}
+html[data-type-system] body[data-board-page=list] #board-root .b-table .b-col-answer{width:5%}
+html[data-type-system] body[data-board-page=list] #board-root .b-table .b-item{display:block;font-size:var(--ys-control);font-weight:500;line-height:1.6;letter-spacing:0;white-space:normal;overflow:visible;text-overflow:clip;word-break:keep-all;overflow-wrap:anywhere}
+html[data-type-system] body[data-board-page=list] #board-root .b-title-wrap{display:block;overflow:visible;-webkit-line-clamp:unset;line-height:1.6}
+html[data-type-system] body[data-board-page=list] #board-root .b-table .b-cell-author>span:first-child{display:block;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
+html[data-type-system] body[data-board-page=list] #board-root .b-table :is(.b-cell-answer,th:last-child){text-align:center;font-weight:600}
+html[data-type-system] body[data-board-page=list] #board-root :is(.b-status,.b-mobile-field,.b-mobile-answer){font-size:var(--ys-caption);font-weight:600;line-height:1.5;letter-spacing:0}
+html[data-type-system] body[data-board-page=list] #board-root :is(.b-heading p,.b-count,.b-check,.b-list-notice p){font-size:var(--ys-small);line-height:1.6;letter-spacing:0;color:var(--ys-muted)}
+html[data-type-system] body[data-board-page=list] #board-root .b-pagination-new :is(a,.page-edge){font-size:var(--ys-control);font-weight:500;line-height:1.5;min-height:2.75rem;height:auto;min-width:2.75rem;width:auto;letter-spacing:0}
+html[data-type-system] body[data-board-page=list] #board-root .b-filters{align-items:center}
+html[data-type-system] body #board-root .b-item p{display:block;-webkit-line-clamp:unset;overflow:visible;white-space:normal}
+html[data-type-system] body[data-board-page=list] #board-root .b-check{display:flex;align-items:center}
+html[data-type-system] body[data-board-page=list] #board-root .b-check input{min-height:0;flex:none}
+/* Registration uses the same readable scale without changing its data or flow. */
+html[data-type-system] body.technician-entry #main .entry-description{font-size:var(--ys-body);line-height:1.7}
+html[data-type-system] body.technician-entry #main .entry-table :is(td,th){font-size:var(--ys-small);line-height:1.6;padding:12px 10px;white-space:normal;overflow-wrap:anywhere}
+html[data-type-system] body.technician-entry #main .entry-table .title-link{font-size:var(--ys-control);font-weight:500;line-height:1.6}
+html[data-type-system] body.technician-entry #main :is(.reg-kicker,.reg-number,.reg-field,.reg-example,.reg-pending){font-size:var(--ys-small);letter-spacing:0;line-height:1.6}
+html[data-type-system] body.technician-entry #main .entry-copy h1{font-size:var(--ys-h1);line-height:1.35;letter-spacing:-.02em}
+html[data-type-system] body .site-header{height:auto;min-height:82px}
+html[data-type-system] body .site-header .header-inner{min-height:82px;height:auto}
+@media(min-width:901px){html[data-type-system] body .site-header #home-menu{flex-wrap:wrap}}
+@media(max-width:900px){
+ html[data-type-system] body[data-board-page=list] #board-root .b-table tr{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;padding:16px 0}
+ html[data-type-system] body[data-board-page=list] #board-root .b-table td{padding:0;min-width:0}
+ html[data-type-system] body[data-board-page=list] #board-root .b-table .b-cell-title{grid-column:1/-1;grid-row:1}
+ html[data-type-system] body[data-board-page=list] #board-root .b-table .b-cell-region{grid-column:1;grid-row:2}
+ html[data-type-system] body[data-board-page=list] #board-root .b-table .b-cell-date{grid-column:2;grid-row:2}
+ html[data-type-system] body[data-board-page=list] #board-root .b-table .b-cell-author{grid-column:1/-1;grid-row:3;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+ html[data-type-system] body[data-board-page=list] #board-root .b-mobile-tags{display:flex;flex-wrap:wrap;gap:6px;max-width:100%;margin:0 0 6px;font-size:var(--ys-caption)}
+ html[data-type-system] body[data-board-page=list] #board-root .b-mobile-field{max-width:none;white-space:normal;overflow:visible;text-overflow:clip}
+ html[data-type-system] body[data-board-page=list] #board-root .b-mobile-answer{display:inline}
+ html[data-type-system] body[data-board-page=list] #board-root .b-table .b-item::after{content:none}
+ html[data-type-system] body[data-board-page=list] #board-root .b-pagination-new{flex-wrap:wrap;gap:10px}
+ html[data-type-system] body[data-board-page=list] #board-root .b-list-notice{align-items:flex-start;gap:8px}
+}
+@media(max-width:760px){html[data-type-system] body .site-header,html[data-type-system] body .site-header .header-inner{min-height:76px}html[data-type-system] body #top :is(.hero-copy h1,.hero-slide-heading){font-size:1.8125rem}html[data-type-system] body #categories .category-card>span:not(.category-icon){font-size:var(--ys-small)}html[data-type-system] body #categories .category-card{padding:6px 3px}}

@@ -9,7 +9,7 @@
       const url = path => new URL(path, base).href;
       this.toggleAttribute('has-mobile-nav', !!document.querySelector('nav.mobile-nav'));
       root.innerHTML = `
-        <link rel="stylesheet" href="${url('site-footer.css?v=1')}">
+        <link rel="stylesheet" href="${url('site-footer.css?v=2')}">
         <footer aria-label="사이트 하단">
           <div class="footer-inner">
             <div class="brand-block">
