@@ -25,3 +25,20 @@
 .detail-page .detail-main .not-found{border-color:#dfe8ee;border-radius:14px;box-shadow:none}
 .detail-page .detail-main :is(a,button):focus-visible{outline:3px solid #00767e;outline-offset:3px}
 @media(max-width:760px){.detail-page .detail-main :is(.profile-hero,.detail-card,.contact-card){padding:22px 20px;border-radius:12px}}
+
+/* Consistent spacing after removing redundant profile labels and notices. */
+.detail-page .expert-page-actions{margin-bottom:20px}
+.detail-page .detail-grid{gap:24px}
+.detail-page .detail-primary{gap:20px}
+.detail-page .detail-main .detail-card h2{margin:0 0 16px;line-height:1.4}
+.detail-page .detail-main .detail-intro{margin:0}
+.detail-page .detail-main .fact-list{margin-top:20px;margin-bottom:0}
+.detail-page .detail-main .fact-list>div:last-child{border-bottom:0;padding-bottom:0}
+.detail-page .detail-main .section-description{margin:0 0 16px}
+.detail-page .detail-main .work-figure{margin:0}
+.detail-page .detail-main .work-figure img{display:block;max-width:100%}
+.detail-page .detail-main .compare-detail-status:empty{display:none}
+@media(max-width:760px){.detail-page .detail-main{padding-top:24px;padding-bottom:48px}.detail-page .expert-page-actions{margin-bottom:16px}.detail-page .detail-grid,.detail-page .detail-primary{gap:16px}}
+
+.detail-page .directory-footer-bottom{justify-content:flex-end}
+.detail-page .detail-main .profile-heading{margin-top:0}
