@@ -1,0 +1,11 @@
+.work-guide .wg-hero::before{display:none}
+.work-guide .wg-hero{background:#f5fafb}
+.guide-motion{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.guide-motion img{position:absolute;right:0;width:auto;max-width:none;height:100%;object-fit:contain;object-position:right center;opacity:0;transition:opacity 1.6s ease;animation:guide-drift 16s ease-in-out infinite alternate;transform-origin:80% 50%}
+.guide-motion img.active{opacity:1}
+.guide-motion::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#fff 0%,#fffffff5 42%,#ffffffa6 60%,#ffffff05 83%)}
+@keyframes guide-drift{from{transform:scale(1)}to{transform:scale(1.015)}}
+.work-guide .wg-hero .guide-motion-toggle{position:absolute;top:8px;right:8px;min-height:32px;min-width:32px;padding:2px 6px;background:#fffffff0;color:#006770;border:1px solid #ccdfe1;font-size:15px;z-index:2}
+.wg-hero.motion-paused .guide-motion img{animation-play-state:paused}
+@media(max-width:760px){.guide-motion img{object-position:78% center}.guide-motion::after{background:linear-gradient(90deg,#fffffff5,#ffffffe6 55%,#ffffff94)}.work-guide .wg-hero h1{padding-right:20px}}
+@media(prefers-reduced-motion:reduce){.guide-motion img{animation:none;transition:none}}
