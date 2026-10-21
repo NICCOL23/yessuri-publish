@@ -1,0 +1,8 @@
+/* Illustrations only for the non-computer subcategory links. */
+.work-guide #wg-categories .wg-field-illustrated{min-height:108px;padding:10px 12px;gap:10px}
+.work-guide #wg-categories .wg-field-image{width:76px;height:76px;object-fit:contain;flex:0 0 76px;border-radius:6px}
+.work-guide #wg-categories .wg-field-illustrated .wg-field-copy{min-width:0;white-space:normal;word-break:keep-all;font-size:15px}
+.work-guide #wg-categories .wg-field-illustrated>span:last-child{font-size:20px}
+.work-guide #wg-categories .wg-field-illustrated:focus-visible{outline:3px solid #00838b;outline-offset:3px}
+@media(max-width:1100px){.work-guide #wg-categories .wg-field-illustrated{gap:7px;padding:9px}.work-guide #wg-categories .wg-field-image{width:60px;height:60px;flex-basis:60px}.work-guide #wg-categories .wg-field-illustrated .wg-field-copy{font-size:14px}}
+@media(max-width:480px){.work-guide #wg-categories .wg-field-illustrated{position:relative;flex-direction:column;align-items:flex-start;min-height:150px;padding:10px}.work-guide #wg-categories .wg-field-image{width:70px;height:70px;flex-basis:70px;align-self:center}.work-guide #wg-categories .wg-field-illustrated .wg-field-copy{flex:1;padding-right:12px}.work-guide #wg-categories .wg-field-illustrated>span:last-child{position:absolute;right:9px;bottom:10px}}

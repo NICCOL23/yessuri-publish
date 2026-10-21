@@ -44,7 +44,13 @@
         "경첩·잠금·레일·고정부의 작동 상태",
         "문·창 치수·재질과 기존 철물 호환성",
         "개폐·잠금·간섭·틈새"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/doors.webp",
+        "alt": "문·창호·방충망 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "bath",
@@ -57,7 +63,13 @@
         "도기·수전 규격과 철거·방수 범위",
         "급배수 작동·물샘·고정·실리콘"
       ],
-      "description": "부분 수리·욕실 전체 시공"
+      "description": "부분 수리·욕실 전체 시공",
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/bath.webp",
+        "alt": "욕실설비 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "kitchen",
@@ -70,7 +82,13 @@
         "상판 타공·기기 치수·가구 보강 범위",
         "문·서랍 작동·배수·상판 마감"
       ],
-      "description": "싱크대·붙박이장 제작·보수"
+      "description": "싱크대·붙박이장 제작·보수",
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/kitchen.webp",
+        "alt": "주방·가구 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "tile",
@@ -83,7 +101,13 @@
         "기존 자재 수급·색상 차이·시공 면적",
         "들뜸·단차·줄눈·접착·마감"
       ],
-      "description": "타일 보수·도배·장판 시공"
+      "description": "타일 보수·도배·장판 시공",
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/tile.webp",
+        "alt": "타일·도배·바닥 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "wood",
@@ -95,7 +119,13 @@
         "벽·천장 고정면·습기·틀 손상",
         "치수·하중·단열 두께·복구 범위",
         "고정·수평·개폐·틈새·마감"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/wood.webp",
+        "alt": "목공·실내보수 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "paint",
@@ -107,7 +137,13 @@
         "기존 도막·습기·균열·오염",
         "색상·제품 용도·보양·시공 횟수",
         "건조·색상·도막·주변 오염"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/paint.webp",
+        "alt": "페인트 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "glass",
@@ -119,7 +155,13 @@
         "안전한 위치에서 파손·설치 위치 확인",
         "유리 종류·두께·가공·운반 조건",
         "고정·모서리·개폐·주변 마감"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/glass.webp",
+        "alt": "유리·거울 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "outdoor",
@@ -131,7 +173,13 @@
         "고정면·부식·높이·이용자 동선",
         "제품 규격·구조·접근·보강 범위",
         "고정·통행·단차·표면 마감"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/outdoor.webp",
+        "alt": "외부·생활안전 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "switch",
@@ -143,7 +191,13 @@
         "증상·회로·기존 제품 정보",
         "전기 규격·부하·배선·제품 호환성",
         "스위치 제어·콘센트 고정·설정"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/switch.webp",
+        "alt": "스위치·콘센트 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "lights",
@@ -155,7 +209,13 @@
         "깜빡임·고정·배기·전원 상태",
         "제품 크기·전력·천장 보강·배기 연결",
         "점등·제어·소음·고정·배기"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/lights.webp",
+        "alt": "조명·환풍기 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "wiring",
@@ -167,7 +227,13 @@
         "차단 증상·회로·사용 기기",
         "부하·배선 경로·분전반·복구 범위",
         "회로 표기·동작 점검·마감"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/wiring.webp",
+        "alt": "배선·차단기 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "leak-electric",
@@ -179,7 +245,13 @@
         "차단 시점·사용 기기·발생 구간",
         "원인 점검과 부속·배선 보수 범위",
         "점검 결과·보수 구간·재점검 조건"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/leak-electric.webp",
+        "alt": "누전 점검 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "leak",
@@ -191,7 +263,13 @@
         "물샘 위치·시간·건물·이전 작업",
         "탐지 장비·점검 구간·서류 발급 범위",
         "점검 내역·보수 제안·보고서 내용"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/leak.webp",
+        "alt": "누수 진단·탐지 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "pipes",
@@ -203,7 +281,13 @@
         "관 재질·연결부·차단·접근 상태",
         "교체 길이·부속·보온·매립 복구",
         "급수·물샘·연결·보온·마감"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/pipes.webp",
+        "alt": "배관 보수 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "drain",
@@ -215,7 +299,13 @@
         "막힌 위치·역류·공용관 여부",
         "장비·점검·탈거·세척 구간",
         "통수·배수·주변 청소·점검 기록"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/drain.webp",
+        "alt": "막힘·역류 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "waterproof",
@@ -227,7 +317,13 @@
         "누수 원인 조치·습기·바탕면",
         "방수·건조·철거·손상 마감 범위",
         "건조·마감·작업 기록·점검 조건"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/waterproof.webp",
+        "alt": "방수·누수면 복구 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "aircon",
@@ -239,7 +335,13 @@
         "모델·증상·설치 위치·배관 상태",
         "설치·수리·청소별 작업 범위",
         "가동·냉방·배수·소음·청소 범위"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/aircon.webp",
+        "alt": "에어컨 설치·이전 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "clean",
@@ -251,7 +353,13 @@
         "오염·습기·면적·제외 구역",
         "세척 재질·방법·가구 이동·폐기물",
         "구역별 청소·잔여 오염·건조"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/clean.webp",
+        "alt": "청소·곰팡이 관리 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "demo",
@@ -263,7 +371,13 @@
         "철거 대상·연결 설비·반출 동선",
         "보양·설비 분리·폐기물·복구 범위",
         "철거 경계·설비 상태·반출·복구"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/demo.webp",
+        "alt": "철거·원상복구 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "it",
@@ -289,7 +403,13 @@
         "제품 모델·크기·증상과 발생 시점",
         "진단·부품 수급·운반과 비용 조건",
         "화면·전원·소리·연결 동작"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/display.webp",
+        "alt": "TV·LED 수리 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "id": "cctv",
@@ -321,6 +441,12 @@
           "비밀번호 변경과 접근 권한",
           "A/S 범위와 비용"
         ]
+      },
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/cctv.webp",
+        "alt": "CCTV 설치 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
       }
     },
     {
@@ -357,6 +483,12 @@
           "추가 작업 내역과 최종 정산",
           "파손·분실 발생 시 연락 및 처리 절차"
         ]
+      },
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/moving.webp",
+        "alt": "이사 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
       }
     },
     {
@@ -370,7 +502,13 @@
         "제조사·모델명·연료·에러코드·발생 시점",
         "본체와 난방·온수 배관의 점검 범위 구분",
         "출장·진단비·수리비·부품비·설치비·보증 조건"
-      ]
+      ],
+      "cardImage": {
+        "src": "assets/images/field-3d-20261021/boiler.webp",
+        "alt": "보일러·난방 분류를 표현한 3D 이미지",
+        "width": 512,
+        "height": 512
+      }
     }
   ],
   "tasks": [
