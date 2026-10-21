@@ -1,3 +1,4 @@
+(async()=>{await window.YESSURI_PUBLIC_READY;
 const favoriteGrid = document.querySelector('#favorite-grid');
 const favoriteEmpty = document.querySelector('#favorite-empty');
 const favoriteCount = document.querySelector('#favorite-count');
@@ -79,3 +80,5 @@ refreshFavoriteCompare();
 document.querySelector('.compare-toolbar a').addEventListener('click',event=>{
   if(window.YESSURI_COMPARE.selectedExperts().length<2){event.preventDefault();compareStatus.textContent='비교할 업체를 2곳 이상 선택하세요.';}
 });
+
+})();

@@ -76,25 +76,27 @@ const returnState=searchState.read('yessuri:search-restore');
 if(!restoreSearch(returnState))restoreSearch(searchState.read('yessuri:search:'+searchState.keyFor(location.href)));
 searchState.write('yessuri:search-restore',null);
 
-function renderDirectory(syncUrl = true) {
+let renderVersion=0;
+async function renderDirectory(syncUrl = true) {const version=++renderVersion;await window.YESSURI_PUBLIC_READY;let remote=null;try{remote=await window.YESSURI_PUBLIC_API.search({query:appliedFilters.query,region:appliedFilters.region,category:appliedFilters.category,page:resultPage,sort:appliedFilters.sort,categories:requestedCategories.join(',')});}catch{}if(version!==renderVersion)return;const server=remote&&remote.totalPublic>0;if(server)resultPage=remote.page;
+
   const query = appliedFilters.query.normalize('NFKC').toLocaleLowerCase('ko-KR');
-  const matches = directoryExperts().filter(expert =>
+  const matches = server?remote.items:directoryExperts().filter(e=>e.isExample!==false).filter(expert =>
     servesRegion(expert, appliedFilters.region) &&
     (requestedCategories.length ? requestedCategories.some(field => expert.fields.includes(field)) : (appliedFilters.category === '전체' || expert.fields.includes(appliedFilters.category))) &&
     (!query || query.split(' ').every(term => [expert.name, expert.keywords || '', ...expert.fields].join(' ').normalize('NFKC').toLocaleLowerCase('ko-KR').includes(term)))
   );
-  if(searchIds===null)searchIds=searchState.rotate(matches,searchHour).map(expert=>expert.id);
+  if(!server&&searchIds===null)searchIds=searchState.rotate(matches,searchHour).map(expert=>expert.id);
   const current=new Map(matches.map(expert=>[expert.id,expert]));
-  matches.splice(0,matches.length,...searchIds.filter(id=>current.has(id)).map(id=>current.get(id)));
-  if (appliedFilters.sort === 'name') {
+  if(!server)matches.splice(0,matches.length,...searchIds.filter(id=>current.has(id)).map(id=>current.get(id)));
+  if (!server&&appliedFilters.sort === 'name') {
     matches.sort((a, b) => a.name.localeCompare(b.name, 'ko') || a.id.localeCompare(b.id));
-  } else if (appliedFilters.sort === 'areas') {
+  } else if (!server&&appliedFilters.sort === 'areas') {
     matches.sort((a, b) => (b.serviceAreas?.length || 0) - (a.serviceAreas?.length || 0) || a.id.localeCompare(b.id));
   }
   serviceNotice.hidden = !requestedService;
   serviceNotice.textContent = requestedService ? `선택한 수리: ${requestedService}. 세부 작업 가능 여부는 전문가에게 확인해 주세요. 상위 분야 기준으로 검색합니다.` : '';
   resultGrid.replaceChildren();
-  resultCount.textContent = String(matches.length);let countNote=document.querySelector('#actual-public-count');if(!countNote){countNote=document.createElement('p');countNote.id='actual-public-count';countNote.className='demo-note';resultCount.parentElement.after(countNote)}countNote.textContent='실제 공개 전문가 '+window.YESSURI_EXPERT_CARD.actualCount()+'명'+(matches.some(window.YESSURI_EXPERT_CARD.example)?' · 아래 예시 프로필은 별도 시연입니다.':'');
+  const resultTotal=server?remote.total:matches.length;resultCount.textContent = String(resultTotal);let countNote=document.querySelector('#actual-public-count');if(!countNote){countNote=document.createElement('p');countNote.id='actual-public-count';countNote.className='demo-note';resultCount.parentElement.after(countNote)}countNote.textContent='실제 공개 전문가 '+window.YESSURI_EXPERT_CARD.actualCount()+'명'+(matches.some(window.YESSURI_EXPERT_CARD.example)?' · 아래 예시 프로필은 별도 시연입니다.':'');
   emptyState.hidden = matches.length !== 0;
   document.querySelector('#results-refine').hidden = matches.length === 0;
   if (!matches.length) {
@@ -109,11 +111,11 @@ function renderDirectory(syncUrl = true) {
       ? `${regionName}, ${sortName}. 검색 결과 ${matches.length}곳.`
       : `${regionName}, ${sortName}. ${emptyHeading.textContent}`;
   }, 250);
-  const pages=Math.max(1,Math.ceil(matches.length/12));resultPage=Math.min(resultPage,pages);
+  const pages=Math.max(1,Math.ceil(resultTotal/12));resultPage=Math.min(resultPage,pages);
   const start=(resultPage-1)*12;
-  matches.slice(start,start+12).forEach(expert => resultGrid.append(createExpertCard(expert)));
-  document.querySelector('#search-rotation-note').hidden=appliedFilters.sort!=='default';
-  const range=document.querySelector('#search-page-range');range.hidden=!matches.length;range.textContent=matches.length ? (start+1)+'–'+Math.min(start+12,matches.length)+'곳 표시' : '';
+  (server?matches:matches.slice(start,start+12)).forEach(expert => resultGrid.append(createExpertCard(expert)));
+  document.querySelector('.results-example-note').hidden=!!server;document.querySelector('#search-rotation-note').hidden=appliedFilters.sort!=='default';document.querySelector('#search-rotation-note').textContent=server?'기본순은 일 단위로 순환하며 페이지 내 순서를 유지합니다.':'예시 목록은 시간대별로 순환하며 검색 중에는 순서를 유지합니다.';
+  const range=document.querySelector('#search-page-range');range.hidden=!matches.length;range.textContent=matches.length ? (start+1)+'–'+Math.min(start+12,resultTotal)+'곳 표시' : '';
   if (syncUrl) updateUrl();
   renderPagination(pages);
 

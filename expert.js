@@ -1,3 +1,4 @@
+(async()=>{await window.YESSURI_PUBLIC_READY;
 const profileId = new URLSearchParams(window.location.search).get('id');
 const rawPerson = window.YESSURI_PUBLIC_EXPERTS().find(expert => expert.id === profileId);
 const person=rawPerson?window.YESSURI_EXPERT_CARD.present(rawPerson):null;
@@ -49,3 +50,5 @@ if (!person) {
     window.setTimeout(() => toast.classList.remove('show'), 3500);
   });
 }
+
+})();

@@ -1,3 +1,4 @@
+(async()=>{await window.YESSURI_PUBLIC_READY;
 const compareGrid = document.querySelector('#compare-grid');
 const compareEmpty = document.querySelector('#compare-empty');
 const compareCount = document.querySelector('#compare-count');
@@ -105,3 +106,5 @@ importButton.addEventListener('click', () => {
 window.addEventListener('yessuri:compare-changed', renderComparison);
 window.addEventListener('storage', renderComparison);
 renderComparison();
+
+})();
