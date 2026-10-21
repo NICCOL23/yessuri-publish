@@ -12,3 +12,12 @@
 .directory-footer-bottom p{margin:0}
 .directory-footer-bottom p:last-child{white-space:nowrap}
 @media(max-width:760px){.find-page .directory-footer{padding:32px 0 90px}.directory-footer-top{display:block}.directory-footer-links{margin-top:20px;gap:4px 20px}.directory-footer-bottom{flex-direction:column;margin-top:20px;gap:12px}.directory-footer-brand{width:190px;height:56px}.directory-footer-korean{top:41px;font-size:10px}}
+/* Copyright shares the upper footer row; no separate bottom strip. */
+.directory-copyright{margin:0;color:#425770;font-size:13px;white-space:nowrap}
+.find-page .directory-footer:has(.directory-copyright){padding:24px 0}
+.directory-footer-top:has(.directory-copyright){gap:24px}
+@media(max-width:760px){.directory-footer-top .directory-copyright{margin-top:14px}.find-page .directory-footer:has(.directory-copyright){padding:24px 0}}
+
+.directory-footer-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.directory-footer-right .directory-copyright{margin:0;text-align:right}
+@media(max-width:760px){.directory-footer-right{margin-top:16px;align-items:flex-start;gap:8px}.directory-footer-right .directory-footer-links{margin-top:0}.directory-footer-right .directory-copyright{align-self:flex-end;margin-top:0}}
