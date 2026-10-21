@@ -26,8 +26,8 @@ html[data-type-system] body #top .hero-description{font-size:var(--ys-body);line
 html[data-type-system] body #top.hero-carousel .hero-tabs button{font-size:var(--ys-control);font-weight:600;line-height:1.5;letter-spacing:0;color:#006770;white-space:normal}
 html[data-type-system] body #top.hero-carousel .hero-tabs{flex-wrap:wrap}
 html[data-type-system] body :is(#main,#board-root,main) :is(.hint,.guide-disclaimer){font-size:var(--ys-small);line-height:1.6;color:var(--ys-muted);letter-spacing:0}
-html[data-type-system] body #categories .category-card:nth-child(n){height:auto;min-height:3.875rem;grid-template-rows:auto auto;font-size:var(--ys-small);padding:6px 4px}
-html[data-type-system] body #categories .category-card>span:not(.category-icon){font-size:var(--ys-small);height:auto;min-height:2.8em;line-height:1.4;font-weight:600;letter-spacing:0}
+html[data-type-system] body #categories .category-card:nth-child(n){height:auto;min-height:3.875rem;grid-template-rows:1.25rem minmax(2rem,auto);align-content:center;font-size:.75rem;padding:3px;gap:0}
+html[data-type-system] body #categories .category-card>span:not(.category-icon){font-size:.75rem;height:auto;min-height:2rem;line-height:1rem;font-weight:700;letter-spacing:0}
 html[data-type-system] body #categories .category-description{display:none}
 html[data-type-system] body #categories .category-card{overflow-wrap:anywhere}
 html[data-type-system] body :is(#home-guide,#home-faq,#home-closing) :is(p,li,summary){font-size:var(--ys-body);line-height:1.7;letter-spacing:0}
@@ -74,4 +74,4 @@ html[data-type-system] body .site-header .header-inner{min-height:82px;height:au
  html[data-type-system] body[data-board-page=list] #board-root .b-pagination-new{flex-wrap:wrap;gap:10px}
  html[data-type-system] body[data-board-page=list] #board-root .b-list-notice{align-items:flex-start;gap:8px}
 }
-@media(max-width:760px){html[data-type-system] body .site-header,html[data-type-system] body .site-header .header-inner{min-height:76px}html[data-type-system] body #top :is(.hero-copy h1,.hero-slide-heading){font-size:1.8125rem}html[data-type-system] body #categories .category-card>span:not(.category-icon){font-size:var(--ys-small)}html[data-type-system] body #categories .category-card{padding:6px 3px}}
+@media(max-width:760px){html[data-type-system] body .site-header,html[data-type-system] body .site-header .header-inner{min-height:76px}html[data-type-system] body #top :is(.hero-copy h1,.hero-slide-heading){font-size:1.8125rem}html[data-type-system] body #categories .category-card>span:not(.category-icon){font-size:.75rem}html[data-type-system] body #categories .category-card{padding:3px}}
