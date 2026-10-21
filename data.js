@@ -40,7 +40,7 @@ window.YESSURI_EXPERTS = [
 
 // 정적 시안의 표시 기준입니다. 실제 승인·비공개 통제는 서버에서 처리해야 합니다.
 window.YESSURI_IS_PUBLIC_EXPERT = person => person?.publicationStatus === 'approved';
-window.YESSURI_PUBLIC_EXPERTS = () => window.YESSURI_EXPERTS.filter(window.YESSURI_IS_PUBLIC_EXPERT);
+window.YESSURI_PUBLIC_EXPERTS = () => [...new Map(window.YESSURI_EXPERTS.filter(window.YESSURI_IS_PUBLIC_EXPERT).map(e=>[e.id,e])).values()];
 window.YESSURI_SERVES_REGION = (person, region) => region === '전체' || person.serviceAreas?.includes(region) === true;
 window.YESSURI_AREAS_LABEL = person => person.serviceAreas?.join(' · ') || '지역 미설정';
 
@@ -53,3 +53,5 @@ window.YESSURI_PHONE_HREF = function (person) {
   if (digits.length < 9 || digits.length > 15) return null;
   return `tel:${raw.startsWith('+') ? '+' : ''}${digits}`;
 };
+
+window.YESSURI_EXPERTS.forEach(e=>{if(e.isExample===undefined)e.isExample=true;});

@@ -1,10 +1,11 @@
 const profileId = new URLSearchParams(window.location.search).get('id');
-const person = window.YESSURI_PUBLIC_EXPERTS().find(expert => expert.id === profileId);
+const rawPerson = window.YESSURI_PUBLIC_EXPERTS().find(expert => expert.id === profileId);
+const person=rawPerson?window.YESSURI_EXPERT_CARD.present(rawPerson):null;
 
 if (!person) {
   document.querySelector('#not-found').hidden = false;
 } else {
-  document.title = `${person.name} | YESSURI 예시 프로필`;
+  document.title = `${person.name} | YESSURI 프로필`;
   document.querySelector('#profile-content').hidden = false;
   document.querySelector('#expert-icon').textContent = person.icon;
   document.querySelector('#expert-name').textContent = person.name;
@@ -23,7 +24,7 @@ if (!person) {
     document.querySelector('#contact-footnote').textContent = '전화 연결을 누르면 기기의 전화 앱으로 이동합니다.';
   }
   const image = document.querySelector('#expert-image');
-  image.src = `assets/images/${person.image}`;
+  const src=person.image||'';image.src=/^(https?:|\/|assets\/)/.test(src)?src:'assets/images/'+src;image.style.objectFit=person.imageType==='card'?'contain':'cover';image.style.objectPosition=person.imagePosition||'center';image.addEventListener('error',()=>{image.hidden=true;},{once:true});
   image.alt = person.imageAlt;
   const tags = document.querySelector('#expert-fields');
   person.fields.forEach(field => {
@@ -31,6 +32,12 @@ if (!person) {
     tag.textContent = field;
     tags.append(tag);
   });
+  if(person.isExample===false){
+    document.querySelector('#expert-region').textContent='부산 '+window.YESSURI_AREAS_LABEL(person)+' · '+(person.profileType||'');
+    document.querySelector('#expert-region-fact').textContent='부산 '+window.YESSURI_AREAS_LABEL(person);
+  }
+  const pictures=[...(person.workPhotos||[]),...(person.businessCard?[{...person.businessCard,imageType:'card'}]:[])];
+  if(pictures.length){const section=document.createElement('section');const heading=document.createElement('h2');heading.textContent='작업 사진·명함';section.append(heading);pictures.forEach(photo=>{const image=window.YESSURI_EXPERT_CARD.photo({...person,...photo});image.style.width='100%';image.style.height='auto';image.style.maxHeight='480px';image.loading='lazy';section.append(image)});document.querySelector('#profile-content').append(section);}
   document.querySelector('#contact-button').addEventListener('click', () => {
     if (phoneHref) {
       window.location.href = phoneHref;

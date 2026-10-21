@@ -4,9 +4,9 @@ const directoryPresentation = window.YESSURI_EXPERT_PRESENTATION;
 // Missing coverage data defaults to false; broad coverage is never inferred from an address.
 const servesAllBusan = expert => expert.serviceAllBusan === true || expert.serviceAreas?.includes('전체') === true;
 const servesRegion = (expert, region) => servesAllBusan(expert) || window.YESSURI_SERVES_REGION(expert, region);
-const directoryExperts = () => window.YESSURI_PUBLIC_EXPERTS().map(expert => ({...expert, ...directoryPresentation[expert.id]}));
+const directoryExperts = () => window.YESSURI_PUBLIC_EXPERTS().map(window.YESSURI_EXPERT_CARD.present);
 const validRegions = window.YESSURI_REGIONS;
-const validCategories = ['전체','누수·수도','하수구·변기','타일','페인트','목공','에어컨','청소','철거','전기·조명','문·창호','컴퓨터·IT'];
+const validCategories = ['전체','욕실·설비','도배','장판','싱크대·붙박이장','보일러','누수·수도','하수구·변기','타일','페인트','목공','청소','이사','철거','전기·조명','문·창호','에어컨','CCTV 설치','TV·LED 모니터 수리','컴퓨터·IT'];
 const queryInput = document.querySelector('#find-query');
 const regionSelect = document.querySelector('#find-region');
 const categorySelect = document.querySelector('#find-category');
@@ -87,14 +87,14 @@ function renderDirectory(syncUrl = true) {
   const current=new Map(matches.map(expert=>[expert.id,expert]));
   matches.splice(0,matches.length,...searchIds.filter(id=>current.has(id)).map(id=>current.get(id)));
   if (appliedFilters.sort === 'name') {
-    matches.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+    matches.sort((a, b) => a.name.localeCompare(b.name, 'ko') || a.id.localeCompare(b.id));
   } else if (appliedFilters.sort === 'areas') {
-    matches.sort((a, b) => (b.serviceAreas?.length || 0) - (a.serviceAreas?.length || 0));
+    matches.sort((a, b) => (b.serviceAreas?.length || 0) - (a.serviceAreas?.length || 0) || a.id.localeCompare(b.id));
   }
   serviceNotice.hidden = !requestedService;
   serviceNotice.textContent = requestedService ? `선택한 수리: ${requestedService}. 세부 작업 가능 여부는 전문가에게 확인해 주세요. 상위 분야 기준으로 검색합니다.` : '';
   resultGrid.replaceChildren();
-  resultCount.textContent = String(matches.length);
+  resultCount.textContent = String(matches.length);let countNote=document.querySelector('#actual-public-count');if(!countNote){countNote=document.createElement('p');countNote.id='actual-public-count';countNote.className='demo-note';resultCount.parentElement.after(countNote)}countNote.textContent='실제 공개 전문가 '+window.YESSURI_EXPERT_CARD.actualCount()+'명'+(matches.some(window.YESSURI_EXPERT_CARD.example)?' · 아래 예시 프로필은 별도 시연입니다.':'');
   emptyState.hidden = matches.length !== 0;
   document.querySelector('#results-refine').hidden = matches.length === 0;
   if (!matches.length) {
@@ -109,11 +109,11 @@ function renderDirectory(syncUrl = true) {
       ? `${regionName}, ${sortName}. 검색 결과 ${matches.length}곳.`
       : `${regionName}, ${sortName}. ${emptyHeading.textContent}`;
   }, 250);
-  const pages=Math.max(1,Math.ceil(matches.length/10));resultPage=Math.min(resultPage,pages);
-  const start=(resultPage-1)*10;
-  matches.slice(start,start+10).forEach(expert => resultGrid.append(createExpertCard(expert)));
+  const pages=Math.max(1,Math.ceil(matches.length/12));resultPage=Math.min(resultPage,pages);
+  const start=(resultPage-1)*12;
+  matches.slice(start,start+12).forEach(expert => resultGrid.append(createExpertCard(expert)));
   document.querySelector('#search-rotation-note').hidden=appliedFilters.sort!=='default';
-  const range=document.querySelector('#search-page-range');range.hidden=!matches.length;range.textContent=matches.length ? (start+1)+'–'+Math.min(start+10,matches.length)+'곳 표시' : '';
+  const range=document.querySelector('#search-page-range');range.hidden=!matches.length;range.textContent=matches.length ? (start+1)+'–'+Math.min(start+12,matches.length)+'곳 표시' : '';
   if (syncUrl) updateUrl();
   renderPagination(pages);
 
@@ -140,6 +140,7 @@ document.querySelector('#find-filter-form').addEventListener('submit', event => 
   renderDirectory();
   document.querySelector('.find-results-heading').scrollIntoView({behavior:'smooth',block:'start'});
 });
+for(const select of [regionSelect,categorySelect])select.addEventListener('change',()=>{freshSearch();requestedCategories=[];requestedService='';appliedFilters=readFilters();renderDirectory()});
 sortSelect.addEventListener('change', () => { appliedFilters.sort = sortSelect.value; resultPage=1; renderDirectory(); });
 document.querySelector('#reset-filters').addEventListener('click', resetFilters);
 document.querySelector('#empty-reset').addEventListener('click', resetFilters);
@@ -181,31 +182,7 @@ function renderConditionChips() {
   else if (appliedFilters.category !== '전체') chip(appliedFilters.category, () => {appliedFilters.category='전체';requestedService='';}, '수리 분야 조건 해제');
   if (appliedFilters.query) chip('검색: '+appliedFilters.query, () => {appliedFilters.query='';}, '검색어 조건 해제');
 }
-function createExpertCard(expert) {
-  const card = document.createElement('article');
-  card.className='find-card result-list-card';
-  const href='expert.html?id='+encodeURIComponent(expert.id);
-  const photo=document.createElement('a');photo.className='directory-photo';photo.href=href;photo.setAttribute('aria-label',expert.name+' 프로필 예시 보기');
-  const image=document.createElement('img');image.src='assets/images/'+expert.image;image.alt=expert.imageAlt;image.loading='lazy';image.width=1536;image.height=1024;
-  const photoLabel=document.createElement('span');photoLabel.className='directory-photo-label';photoLabel.textContent='예시 사진';photo.append(image,photoLabel);
-  const info=document.createElement('div');info.className='find-card-body';
-  const title=document.createElement('h3');title.className='find-card-name';
-  const titleLink=document.createElement('a');titleLink.href=href;titleLink.textContent=expert.name;title.append(titleLink);info.append(title);
-  const facts=document.createElement('dl');facts.className='result-card-facts';
-  const fact=(label,value)=>{const row=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=value;row.append(dt,dd);facts.append(row);return dd;};
-  const fieldValue= fact('전문 분야',expert.fields.join(' · '));
-  if (expert.keywords) {const work=document.createElement('span');work.className='result-work-keywords';work.textContent=expert.keywords;fieldValue.append(work);}
-  fact('주요 출장 지역',window.YESSURI_AREAS_LABEL(expert)+' (예시)');info.append(facts);
-  if(servesAllBusan(expert)){const badge=document.createElement('span');badge.className='find-card-coverage';badge.textContent='부산 전 지역 출장 가능';info.append(badge);}
-  const cost=document.createElement('p');cost.className='result-card-cost';cost.textContent='출장·진단비: 상담 시 확인';info.append(cost);
-  const note=document.createElement('p');note.className='result-card-note';note.textContent='주요 지역 외 방문 가능 여부와 출장비는 상담 시 확인하세요.';info.append(note);
-  const actions=document.createElement('div');actions.className='result-card-actions';
-  const profile=document.createElement('a');profile.className='result-profile-link';profile.href=href;profile.textContent='프로필 예시 보기';profile.setAttribute('aria-label',expert.name+' 프로필 예시 보기');
-  const controls=document.createElement('div');controls.className='result-card-controls';
-  const favorite=document.createElement('button');favorite.type='button';favorite.className='favorite-button find-favorite';favorite.dataset.expertId=expert.id;favorite.dataset.expertName=expert.name;window.YESSURI_FAVORITES.bindButton(favorite,expert.id);
-  const compare=document.createElement('button');compare.type='button';compare.className='compare-button';compare.dataset.expertId=expert.id;compare.dataset.expertName=expert.name;compare.setAttribute('role','checkbox');window.YESSURI_COMPARE.bindButton(compare,expert.id,compareStatus);
-  controls.append(favorite,compare);actions.append(profile,controls);card.append(photo,info,actions);return card;
-}
+function createExpertCard(expert){return window.YESSURI_EXPERT_CARD.create(expert,{compare:true});}
 function refreshCardControls() {
   resultGrid.querySelectorAll('.find-favorite').forEach(button=>{const saved=window.YESSURI_FAVORITES.saved(button.dataset.expertId);button.textContent=saved?'관심 저장됨':'관심 저장';button.dataset.saved=String(saved);const label=button.dataset.expertName+(saved?' 관심 해제':' 관심 저장');button.setAttribute('aria-label',label);button.title=button.disabled?button.title:label;});
   resultGrid.querySelectorAll('.compare-button').forEach(button=>{const selected=window.YESSURI_COMPARE.selected(button.dataset.expertId);button.textContent='비교 선택';button.setAttribute('aria-checked',String(selected));button.removeAttribute('aria-pressed');button.setAttribute('aria-label',button.dataset.expertName+' 비교 선택');});
@@ -215,7 +192,7 @@ document.querySelectorAll('[data-edit-search]').forEach(link=>link.addEventListe
 
 // Help changes draft inputs only; applied results and URL wait for form submission.
 
-function renderPagination(pages){const nav=document.querySelector('#search-pagination');nav.replaceChildren();nav.hidden=pages<=1;if(pages<=1)return;const values=[1,...Array.from({length:5},(_,i)=>resultPage-2+i),pages].filter(n=>n>=1&&n<=pages);const numbers=[...new Set(values)].sort((a,b)=>a-b);const link=(label,page)=>{const a=document.createElement('a'),u=new URL(location.href);u.searchParams.set('page',page);a.href=u.href;a.textContent=label;if(page===resultPage&&label===String(page))a.setAttribute('aria-current','page');a.addEventListener('click',event=>{if(event.button||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;event.preventDefault();resultPage=page;renderDirectory();const title=document.querySelector('#directory-results-title');title.focus({preventScroll:true});title.scrollIntoView({block:'start'});resultsLive.textContent='검색 결과 '+page+'페이지';});nav.append(a);};if(resultPage>1)link('이전',resultPage-1);let previous=0;for(const n of numbers){if(previous&&n-previous>1){const dots=document.createElement('span');dots.textContent='…';nav.append(dots);}link(String(n),n);previous=n;}if(resultPage<pages)link('다음',resultPage+1);}
+function renderPagination(pages){const nav=document.querySelector('#search-pagination');nav.replaceChildren();nav.hidden=pages<=1;if(pages<=1)return;function link(label,target,cls=''){const valid=target>=1&&target<=pages,e=document.createElement(valid?'a':'span');e.className=valid?cls:'page-disabled';e.textContent=label;if(!valid)e.setAttribute('aria-disabled','true');else{const u=new URL(location.href);u.searchParams.set('page',target);e.href=u.href;if(target===resultPage&&cls==='page-number')e.setAttribute('aria-current','page');e.addEventListener('click',event=>{if(event.button||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;event.preventDefault();resultPage=target;renderDirectory();document.querySelector('#directory-results-title').scrollIntoView({block:'start'});document.querySelector('#directory-results-title').focus({preventScroll:true})})}nav.append(e)}link('이전',resultPage-1);let previous=0;for(const n of [...new Set([1,resultPage-1,resultPage,resultPage+1,pages])].filter(n=>n>=1&&n<=pages).sort((a,b)=>a-b)){if(previous&&n-previous>1){const gap=document.createElement('span');gap.className='page-gap';gap.textContent='…';nav.append(gap)}link(String(n),n,'page-number');previous=n}const progress=document.createElement('span');progress.className='page-mobile';progress.textContent=resultPage+' / '+pages;nav.append(progress);link('다음',resultPage+1)}
 function applyRestoredDraft(){if(!pendingRestore)return;const state=pendingRestore;pendingRestore=null;const d=state.draft||{};queryInput.value=typeof d.query==='string'?d.query.slice(0,80):appliedFilters.query;regionSelect.value=validRegions.includes(d.region)?d.region:appliedFilters.region;categorySelect.value=validCategories.includes(d.category)?d.category:appliedFilters.category;const restorePosition=()=>window.scrollTo({top:Math.max(0,Number(state.scroll)||0),behavior:'instant'});requestAnimationFrame(restorePosition);document.fonts.ready.then(restorePosition);saveSearch();}
 window.addEventListener('pagehide',saveSearch);
 window.addEventListener('pageshow',event=>{if(event.persisted){renderDirectory(false);}});

@@ -30,29 +30,8 @@ homeServices.splice(homeServices.findIndex(([name])=>name==='에어컨')+1,0,['C
 homeServices.forEach(([name,description,image,href])=>{const a=document.createElement('a');a.className='category-card';if(name==='보일러')a.classList.add('boiler-card');if(name==='컴퓨터 수리·업그레이드')a.classList.add('computer-upgrade-card');if(name==='TV·LED 모니터 수리')a.classList.add('display-repair-card');const visual=document.createElement('span');visual.className='category-icon';visual.setAttribute('aria-hidden','true');const img=document.createElement('img');img.src=image;img.alt='';img.width=160;img.height=160;img.loading='lazy';visual.append(img);const title=document.createElement('span');title.textContent=name;if(a.classList.contains('computer-upgrade-card')){title.replaceChildren(document.createTextNode('컴퓨터 수리·'),document.createElement('br'),document.createTextNode('업그레이드'));}const small=document.createElement('small');small.className='category-description';small.textContent=description;a.href=href;a.append(visual,title,small);categoryGrid.append(a);});
 
 
-function renderExperts(){
- const source=experts();
- const featured=[
-  {id:'bada-repair',name:'누수·수도 업체명',field:'수도꼭지·배관·누수 점검',image:'ai-water-yessuri-v2.png'},
-  {id:'bright-home',name:'전기·조명 업체명',field:'전등·스위치·콘센트',image:'ai-light-yessuri-v2.png'},
-  {id:'tile-studio',name:'타일·문창호 업체명',field:'타일·문·창호 보수',image:'ai-tile-yessuri-v2.png'},
-  {id:'busan-home-repair',name:'목공·페인트 업체명',field:'가구·선반·목공·페인트',image:'ai-wood-yessuri-v2.png'},
-  {id:'clean-day',name:'청소 업체명',field:'입주·생활 청소·철거',image:'ai-clean-yessuri-v2.png'},
-  {id:'local-it',name:'컴퓨터·IT 업체명',field:'부팅·속도·컴퓨터 점검',image:'ai-it-yessuri-v2.png'}
- ];
- expertGrid.replaceChildren();
- featured.forEach(example=>{
-  const person=source.find(p=>p.id===example.id);if(!person)return;
-  const card=document.createElement('article');card.className='expert-card';
-  card.innerHTML=`<div class="expert-photo"><img src="assets/images/${example.image}" alt="${example.field} 작업을 표현한 예시 사진" loading="lazy"><span class="ai-image-label">예시 사진</span></div><div class="expert-main"><h3 class="expert-name">${example.name}</h3><dl class="expert-facts"><div><dt>전문 분야</dt><dd>${example.field}</dd></div><div><dt>출장 지역</dt><dd>${window.YESSURI_AREAS_LABEL(person)} (예시)</dd></div></dl><p class="featured-cost">출장·진단비: 상담 시 확인</p></div><div class="expert-actions"><a class="profile-button" href="expert.html?id=${encodeURIComponent(person.id)}">프로필 예시 보기</a></div>`;
-  const favorite=document.createElement('button');favorite.type='button';favorite.className='favorite-button';window.YESSURI_FAVORITES.bindButton(favorite,person.id);card.querySelector('.expert-photo').append(favorite);expertGrid.append(card);
- });
- refreshHearts();
-}
-function refreshHearts(){document.querySelectorAll('#expert-grid .favorite-button').forEach(b=>{const saved=b.getAttribute('aria-pressed')==='true';b.setAttribute('aria-label',saved?'관심 해제':'관심 저장');b.textContent=saved?'♥':'♡'})}
-window.addEventListener('yessuri:favorites-changed',refreshHearts);window.addEventListener('storage',refreshHearts);
+function renderExperts(){const source=window.YESSURI_EXPERT_CARD.selectFeatured(experts(),8);expertGrid.replaceChildren(...source.map(person=>window.YESSURI_EXPERT_CARD.create(person)));const actual=window.YESSURI_EXPERT_CARD.actualCount(),link=document.querySelector('.featured-directory-link a');link.textContent='전문가 전체 보기 · 공개 '+actual+'명'+(source.some(window.YESSURI_EXPERT_CARD.example)?' (예시 프로필 별도)':'')+' →';}
 renderExperts();
-
 let toastTimer;
 function showToast(message) {
   const toast = document.querySelector('#toast'); toast.textContent = message; toast.classList.add('show');
