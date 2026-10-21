@@ -1,0 +1,22 @@
+
+      .home-header #home-menu .estimate-link{background:#008b95;color:#fff;padding:11px 18px;border-radius:11px;white-space:nowrap}
+      .home-header #home-menu .estimate-link:hover{background:#006d76;color:#fff}
+      .home-header #home-menu>button{font:inherit;white-space:nowrap;padding:11px 0}
+      .home-header #home-menu .home-login,.home-header #home-menu .register-utility{color:#526781;font-size:13px;font-weight:600}
+      .home-header #home-menu .register-utility{white-space:nowrap}
+    
+.technician-entry .site-header{border-bottom:0;box-shadow:none;background:#fff;flex:none}
+.technician-entry .site-header .header-inner{height:84px;max-width:1392px;width:calc(100% - 48px);padding:0;margin:0 auto;display:flex;align-items:center;gap:40px}
+.technician-entry .home-header .ys11-brand{width:215px;height:66px}.technician-entry .ys11-brand .ys11-lockup{width:215px;top:-4px;left:0;position:absolute}
+.technician-entry .home-header .ys11-brand .ys11-korean{left:28.3%;right:7%;top:47px;font-family:'Malgun Gothic',sans-serif;font-size:12px;line-height:17px;font-weight:800;letter-spacing:.04em;color:#00747c}
+.technician-entry .home-header #home-menu{display:flex;align-items:center;flex:1;gap:28px;position:static;background:transparent;border:0;box-shadow:none;padding:0;font-size:14px;font-weight:600}
+.technician-entry .home-header #home-menu .register-utility{margin-left:auto}.technician-entry .home-header #home-menu a{min-height:44px;display:inline-flex;align-items:center}.technician-entry .menu-toggle{display:none}
+.technician-entry main.container{max-width:1440px;width:calc(100% - 48px);padding-top:0}
+.technician-entry #root{display:flex;flex-direction:column;gap:16px;min-height:calc(100svh - 108px)}
+.entry-hero{position:relative;width:100vw;margin-left:calc(50% - 50vw);padding:26px max(24px,calc((100vw - 1340px)/2));min-height:300px;border:0;border-radius:0;box-shadow:none;background:linear-gradient(110deg,#fff 0%,#f7fcfb 48%,#e6f5f3 100%);grid-template-columns:1.25fr 1fr;gap:36px;flex:none}
+.entry-copy h1{font-size:34px;line-height:1.25}.entry-description{font-size:14px;line-height:1.7}.entry-art img{max-height:245px}.entry-kicker{font-size:12px}
+.entry-board{flex:1;min-height:270px;margin-top:0;padding:20px 26px}.entry-board h2{font-size:21px}.entry-bottom-note{margin:0 4px;font-size:12px;flex:none}
+@media(max-width:1000px){.technician-entry .site-header .header-inner{gap:24px}.technician-entry .home-header #home-menu{gap:18px;font-size:13px}.entry-copy h1{font-size:29px}.entry-hero{gap:20px;min-height:280px}.entry-description{font-size:13px}}
+@media(max-width:900px){.technician-entry .site-header .header-inner{width:calc(100% - 32px);height:72px;justify-content:space-between}.technician-entry .home-header .ys11-brand{width:175px;height:58px}.technician-entry .ys11-brand .ys11-lockup{width:175px;top:-2px}.technician-entry .home-header .ys11-brand .ys11-korean{top:40px;font-size:11px;line-height:15px}.technician-entry .menu-toggle{display:block;margin-left:auto;border:0;background:transparent;color:#17314c;width:44px;height:44px;font-size:24px}.technician-entry .home-header #home-menu{display:none;position:absolute;top:72px;left:0;right:0;background:#fff;padding:16px;z-index:50;box-shadow:0 10px 20px #17314c18;flex-direction:column;align-items:stretch;gap:4px}.technician-entry .home-header #home-menu.is-open{display:flex}.technician-entry .home-header #home-menu .register-utility{margin-left:0}.technician-entry main.container{width:100%;padding-top:0}.technician-entry #root{min-height:0;gap:14px}.entry-hero{grid-template-columns:1fr;padding:22px 20px 16px;gap:12px;min-height:0}.entry-copy h1{font-size:28px}.entry-description{font-size:12px}.entry-art img{max-height:145px}.entry-board{min-height:300px;flex:none;padding:16px}.entry-board h2{font-size:17px}.entry-bottom-note{font-size:11px}}
+
+.technician-entry .home-header #home-menu .register-utility[aria-current="page"]{color:#007d85;border-bottom:2px solid #007d85;font-weight:700}
