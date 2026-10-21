@@ -70,3 +70,14 @@ body.home-modern #categories .category-grid{gap:6px}
 .full-bg-scene:nth-child(3) img{object-position:100% center;transform-origin:100% 50%;animation-name:devices-safe-drift!important}
 @keyframes devices-safe-drift{from{transform:scale(1)}to{transform:scale(1.04)}}
 
+
+/* Preserve the full four-service panorama on narrow screens. */
+@media(max-width:1100px){.full-bg-scene:nth-child(3){background:#ece9e2}.full-bg-scene:nth-child(3)::before{content:"";position:absolute;inset:0;background:url("assets/images/hero-tv-20261021-v1/devices-tv-mobile.webp") center/cover;filter:blur(16px);opacity:.4}.full-bg-scene:nth-child(3) img{position:relative;object-fit:contain;object-position:center 55%;transform-origin:center 55%}}
+
+/* Fit the complete TV panorama; softly fill the remaining background. */
+.full-bg-scene:nth-child(3){background:#eee9e1}
+.full-bg-scene:nth-child(3)::before{content:"";position:absolute;inset:0;background:url("assets/images/hero-tv-20261021-v1/devices-tv-desktop.webp") center/cover;filter:blur(20px);opacity:.24}
+.full-bg-scene:nth-child(3) img{position:relative;object-fit:contain;object-position:center 52%;transform-origin:center 52%;animation-name:tv-panorama-drift!important}
+@keyframes tv-panorama-drift{from{transform:scale(1)}to{transform:scale(1.015)}}
+@media(max-width:1100px){.full-bg-scene:nth-child(3)::before{background-image:url("assets/images/hero-tv-20261021-v1/devices-tv-mobile.webp")}.full-bg-scene:nth-child(3) img{object-position:center 55%}}
+
