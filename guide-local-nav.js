@@ -6,7 +6,7 @@
  let frame=0;
  const desktop=()=>matchMedia('(min-width:901px)').matches;
  function baseOffset(){return (header?.getBoundingClientRect().height||0)+(returnBar&&!returnBar.hidden?returnBar.getBoundingClientRect().height:0);}
- function offset(){return baseOffset()+(desktop()?nav.getBoundingClientRect().height:0)+16;}
+ function offset(){return baseOffset()+(desktop()?nav.getBoundingClientRect().height:0)+(document.querySelector('.ys-page-backbar')?.getBoundingClientRect().height||0)+16;}
  function metrics(){nav.style.setProperty('--guide-nav-top',baseOffset()+'px');schedule();}
  window.YESSURI_GUIDE_OFFSET=offset;
  function syncLinks(){links.forEach(a=>{const u=new URL(location.href);u.hash=a.dataset.section;a.href=u.pathname+u.search+u.hash;});}

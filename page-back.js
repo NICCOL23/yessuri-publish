@@ -21,7 +21,10 @@
  const main=document.querySelector('main');if(!main)return;
  const bar=document.createElement('div');bar.className='ys-page-backbar';
  const link=document.createElement('a');decorate(link);bar.append(link);main.before(bar);
- if(file==='find.html'){bar.classList.add('ys-page-backbar-sticky');const header=document.querySelector('yessuri-site-header');const align=()=>bar.style.setProperty('--ys-page-back-top',(header?.getBoundingClientRect().height||82)+'px');align();if(header)new ResizeObserver(align).observe(header);}
+ bar.classList.add('ys-page-backbar-sticky');
+ const header=document.querySelector('yessuri-site-header'),localNav=document.querySelector('#guide-local-nav');
+ const align=()=>{const navHeight=localNav&&getComputedStyle(localNav).position==='sticky'?localNav.getBoundingClientRect().height:0;const top=(header?.getBoundingClientRect().height||82)+navHeight;bar.style.setProperty('--ys-page-back-top',top+'px');document.documentElement.style.setProperty('--ys-page-back-scroll-offset',(top+bar.getBoundingClientRect().height+16)+'px');};
+ align();const measure=new ResizeObserver(align);if(header)measure.observe(header);if(localNav)measure.observe(localNav);measure.observe(bar);window.addEventListener('resize',align);
  let legacyTarget=null;
  function target(){return safe(history.state?.ysPageBack?.previous)||legacyTarget||safe(defaults[file]);}
  function sync(){
