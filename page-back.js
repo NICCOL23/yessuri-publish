@@ -7,10 +7,14 @@
  const safe=value=>{if(!value)return null;try{const u=new URL(value,location.href);return u.origin===location.origin&&(u.pathname.split('/').pop() in defaults||u.pathname.endsWith('/')||u.pathname.endsWith('/index.html'))?u:null;}catch{return null;}};
  const read=key=>{try{return JSON.parse(sessionStorage.getItem(key));}catch{return null;}};
  const pending=read('yessuri:back-departure'),ref=safe(document.referrer),type=performance.getEntriesByType('navigation')[0]?.type;
- const initial=history.state?.ysPageBack||(type==='navigate'&&ref&&pending&&pending.url===ref.href&&Date.now()-pending.at<60000?{previous:ref.href}:{});
+ const explicit=file==='find.html'?safe(new URLSearchParams(location.search).get('returnTo')):null;
+ const source=explicit||(ref&&ref.href!==location.href?ref:null),stored=history.state?.ysPageBack;
+ const withoutHash=value=>{const u=safe(value);if(!u)return '';u.hash='';return u.href;};
+ const confirmed=!!(source&&ref&&withoutHash(source.href)===withoutHash(ref.href)&&pending&&withoutHash(pending.url)===withoutHash(ref.href)&&Date.now()-pending.at<60000);
+ const initial=safe(stored?.previous)?stored:source?{previous:source.href,canBack:confirmed}:{};
  const push=history.pushState.bind(history),replace=history.replaceState.bind(history);
  history.replaceState=function(state,title,url){return replace({...state,ysPageBack:state?.ysPageBack||history.state?.ysPageBack||initial},title,url);};
- history.pushState=function(state,title,url){return push({...state,ysPageBack:{previous:location.href}},title,url);};
+ history.pushState=function(state,title,url){return push({...state,ysPageBack:{previous:location.href,canBack:true}},title,url);};
  history.replaceState(history.state,'');
  addEventListener('pagehide',()=>{try{sessionStorage.setItem('yessuri:back-departure',JSON.stringify({url:location.href,at:Date.now()}));}catch{}});
  if(file==='index.html'||!(file in defaults))return;
@@ -31,7 +35,7 @@
  link.addEventListener('click',event=>{
   if(event.button||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;
   const previous=safe(history.state?.ysPageBack?.previous);
-  if(previous&&history.length>1){event.preventDefault();history.back();return;}
+  if(previous&&history.state?.ysPageBack?.canBack!==false&&history.length>1){event.preventDefault();history.back();return;}
   // Preserve the guide's existing search-restore hook on direct search-return links.
   const old=document.querySelector('#search-return-bar:not([hidden]) a');
   if(old&&safe(old.href)){event.preventDefault();old.click();}
