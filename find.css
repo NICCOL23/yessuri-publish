@@ -73,4 +73,8 @@
 .find-page .find-current-conditions{padding:12px;background:#f4f8fa;border-radius:8px}
 @media(max-width:1100px){.find-page .find-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.find-page .find-filter-fields{grid-template-columns:1fr 1fr}.find-page .find-query-field{grid-column:1/-1;grid-row:2}.find-page label[for="find-type"]{grid-column:1;grid-row:3}.find-page .find-filter-fields>.button{grid-column:2;grid-row:3}}
 @media(max-width:760px){.find-page .find-grid{grid-template-columns:1fr}.find-page .find-intro h1{font-size:30px}.find-page .find-card-link{display:flex;gap:12px}.find-page .directory-photo img{height:190px;min-height:0;width:100%}.find-page .find-card-name{font-size:18px}.find-page .find-card-kicker,.find-page .find-card-meta{font-size:12px}.find-page .find-card-action{font-size:13px}}
-@media(max-width:390px){.find-page .find-filter-fields{grid-template-columns:1fr}.find-page label[for="find-region"],.find-page label[for="find-category"],.find-page label[for="find-type"],.find-page .find-query-field,.find-page .find-filter-fields>.button{grid-column:1;grid-row:auto}}
+@media(max-width:390px){.find-page .find-filter-fields{grid-template-columns:1fr}.find-page label[for="find-region"],.find-page label[for="find-category"],.find-page label[for="find-type"],.find-page .find-query-field,.find-page .find-filter-fields>.button{grid-column:1;grid-row:auto}}/* Compact spacing for the search page's back control and heading only. */
+.find-page .ys-page-backbar-sticky{margin-top:12px}
+html body #main.find-main .find-intro{padding:16px 0 12px}
+html body #main.find-main .find-intro h1{margin:0;line-height:1.4}
+html body #main.find-main .find-content{padding-top:8px}
