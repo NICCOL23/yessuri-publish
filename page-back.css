@@ -5,3 +5,5 @@ html body :is(.ys-page-backbar,#wg-panel) .ys-page-back{display:inline-flex;alig
 .ys-page-back:focus-visible{outline:2px solid #00767e;outline-offset:3px}
 [data-page-back-duplicate]{display:none!important}
 @media(max-width:600px){.ys-page-backbar{width:calc(100% - 32px);margin-top:12px}}
+
+.ys-page-backbar-sticky{position:sticky;top:var(--ys-page-back-top,82px);z-index:30;background:#fff}

@@ -21,6 +21,7 @@
  const main=document.querySelector('main');if(!main)return;
  const bar=document.createElement('div');bar.className='ys-page-backbar';
  const link=document.createElement('a');decorate(link);bar.append(link);main.before(bar);
+ if(file==='find.html'){bar.classList.add('ys-page-backbar-sticky');const header=document.querySelector('yessuri-site-header');const align=()=>bar.style.setProperty('--ys-page-back-top',(header?.getBoundingClientRect().height||82)+'px');align();if(header)new ResizeObserver(align).observe(header);}
  let legacyTarget=null;
  function target(){return safe(history.state?.ysPageBack?.previous)||legacyTarget||safe(defaults[file]);}
  function sync(){
