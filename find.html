@@ -12,7 +12,7 @@
   <script src="regions.js?v=1" defer></script>
   <script src="favorites.js?v=2" defer></script>
   <script src="compare.js?v=3" defer></script>
-  <script src="search-state.js?v=1" defer></script><script src="expert-presentation.js?v=2" defer></script><script src="public-experts.js?v=2" defer></script><script src="expert-card.js?v=2" defer></script><script src="find.js?v=32" defer></script><link rel="stylesheet" href="service-field-picker.css?v=4"><script src="service-field-picker.js?v=2" defer></script>
+  <script src="search-state.js?v=1" defer></script><script src="expert-presentation.js?v=2" defer></script><script src="public-experts.js?v=2" defer></script><script src="expert-card.js?v=2" defer></script><script src="find.js?v=32" defer></script><link rel="stylesheet" href="service-field-picker.css?v=4"><script src="service-field-picker.js?v=3" defer></script>
   <link rel="icon" href="assets/icons/favicon.ico?v=1" sizes="any">
   <link rel="icon" type="image/png" href="assets/icons/favicon-32.png?v=1" sizes="32x32">
   <link rel="apple-touch-icon" href="assets/icons/favicon-180.png?v=1" sizes="180x180">
@@ -36,7 +36,7 @@
     <section class="find-intro"><div class="container"><h1>부산 전문가 찾기</h1><p>수리받을 지역과 필요한 수리 분야를 선택해보세요.</p></div></section>
     <div class="container find-content">
       <form class="find-filter-panel compact-search" id="find-filter-form"><div class="find-filter-fields">
-<label for="find-region">수리받을 지역<select id="find-region" name="region" data-busan-regions></select></label>
+<label for="find-region">수리받을 지역<select id="find-region" data-service-field-picker="region" name="region" data-busan-regions></select></label>
 <label for="find-category">수리 분야<select id="find-category" name="category" data-service-field-picker data-service-field-select><option value="전체">전체 분야</option><option value="욕실·설비">욕실·설비</option><option value="도배">도배</option><option value="장판">장판</option><option value="싱크대·붙박이장">싱크대·붙박이장</option><option value="보일러">보일러</option><option value="누수·수도">누수·수도</option><option value="하수구·변기">하수구·변기</option><option value="타일">타일</option><option value="페인트">페인트</option><option value="목공">목공</option><option value="청소">청소</option><option value="이사">이사</option><option value="철거">철거</option><option value="전기·조명">전기·조명</option><option value="문·창호">문·창호</option><option value="에어컨">에어컨</option><option value="CCTV 설치">CCTV 설치</option><option value="TV·LED 모니터 수리">TV·LED 모니터 수리</option><option value="컴퓨터·IT">컴퓨터 수리·업그레이드</option></select></label>
 <label for="find-query" class="find-query-field">업체명 또는 작업 내용 검색 (선택)<input id="find-query" name="q" type="search" maxlength="80" autocomplete="off" placeholder="예: 누수, 싱크대, 업체명" aria-describedby="find-query-help"><small id="find-query-help">직접 입력해도 되고, 비워두고 지역·분야만 선택해도 됩니다.</small></label>
 <button class="button button-primary" type="submit">전문가 찾기</button></div><div class="search-reset-row"><button id="reset-filters" type="button">검색 조건 초기화</button></div></form>
