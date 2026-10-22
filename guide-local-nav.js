@@ -2,7 +2,7 @@
 (() => {
  const nav=document.getElementById('guide-local-nav');if(!nav)return;
  const links=[...nav.querySelectorAll('a')],sections=links.map(a=>document.getElementById(a.hash.slice(1)));
- const header=document.querySelector('.directory-header'),returnBar=document.getElementById('search-return-bar');
+ const header=document.querySelector('yessuri-site-header, .directory-header'),returnBar=document.getElementById('search-return-bar');
  let frame=0;
  const desktop=()=>matchMedia('(min-width:901px)').matches;
  function baseOffset(){return (header?.getBoundingClientRect().height||0)+(returnBar&&!returnBar.hidden?returnBar.getBoundingClientRect().height:0);}
