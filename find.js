@@ -98,7 +98,7 @@ async function renderDirectory(syncUrl = true) {const version=++renderVersion;aw
   resultGrid.replaceChildren();
   const resultTotal=server?remote.total:matches.length;resultCount.textContent = String(resultTotal);
   emptyState.hidden = matches.length !== 0;
-  document.querySelector('#results-refine').hidden = matches.length === 0;
+
   if (!matches.length) {
     emptyHeading.textContent = '조건에 맞는 전문가가 없습니다';
   }
