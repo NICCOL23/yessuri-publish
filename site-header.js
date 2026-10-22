@@ -16,7 +16,7 @@
     connectedCallback() {
       const page = location.pathname.split('/').pop() || 'index.html';
       const group = /^(find|expert|favorites|compare|case|cases|request)\.html$/.test(page) ? 'find'
-        : /^(guide|computer-guide|boiler-guide)\.html$/.test(page) ? 'guide'
+        : /^(guide|service-detail|computer-guide|boiler-guide)\.html$/.test(page) ? 'guide'
         : /^(questions?|question-.+|questions-example|board-notice)\.html$/.test(page) ? 'questions'
         : /^(technician-.+|register|register-form)\.html$/.test(page) ? 'technician' : '';
       const root = this.shadowRoot || this.attachShadow({ mode: 'open' });
