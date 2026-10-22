@@ -1,0 +1,135 @@
+[
+  {
+    "value": "욕실·설비",
+    "label": "욕실·설비",
+    "description": "부분 수리부터 전체 시공까지",
+    "image": "assets/images/work-tasks/v2/bath-renovation.webp",
+    "href": "guide.html?group=general&field=bath#work-guide"
+  },
+  {
+    "value": "도배",
+    "label": "도배",
+    "description": "방 한 칸·집 전체",
+    "image": "assets/images/work-tasks/v2/wallpaper-install.webp",
+    "href": "guide.html?work=wallpaper-install#work-guide"
+  },
+  {
+    "value": "장판",
+    "label": "장판",
+    "description": "부분 교체·전체 시공",
+    "image": "assets/images/work-tasks/v2/flooring-install.webp",
+    "href": "guide.html?work=flooring-install#work-guide"
+  },
+  {
+    "value": "싱크대·붙박이장",
+    "label": "싱크대·붙박이장",
+    "description": "제작·교체·보수 상담",
+    "image": "assets/images/service-expansion/sink-wardrobe.webp",
+    "href": "guide.html?field=kitchen#work-guide"
+  },
+  {
+    "value": "보일러",
+    "label": "보일러",
+    "description": "고장·온수·난방·교체",
+    "image": "assets/images/boiler-guide/boiler.svg",
+    "href": "boiler-guide.html"
+  },
+  {
+    "value": "누수·수도",
+    "label": "누수·수도",
+    "description": "수도꼭지·배관",
+    "image": "assets/images/service-icons.svg#icon1",
+    "href": "find.html?category=%EB%88%84%EC%88%98%C2%B7%EC%88%98%EB%8F%84"
+  },
+  {
+    "value": "하수구·변기",
+    "label": "하수구·변기",
+    "description": "변기·싱크대 막힘",
+    "image": "assets/images/service-icons.svg#icon2",
+    "href": "find.html?category=%ED%95%98%EC%88%98%EA%B5%AC%C2%B7%EB%B3%80%EA%B8%B0"
+  },
+  {
+    "value": "타일",
+    "label": "타일",
+    "description": "깨짐·부분 보수",
+    "image": "assets/images/service-icons.svg#icon3",
+    "href": "find.html?category=%ED%83%80%EC%9D%BC"
+  },
+  {
+    "value": "페인트",
+    "label": "페인트",
+    "description": "벽면·부분 도장",
+    "image": "assets/images/service-icons.svg#icon4",
+    "href": "find.html?category=%ED%8E%98%EC%9D%B8%ED%8A%B8"
+  },
+  {
+    "value": "목공",
+    "label": "목공",
+    "description": "가구·선반 보수",
+    "image": "assets/images/service-icons.svg#icon5",
+    "href": "find.html?category=%EB%AA%A9%EA%B3%B5"
+  },
+  {
+    "value": "청소",
+    "label": "청소",
+    "description": "입주·생활 청소",
+    "image": "assets/images/service-icons.svg#icon7",
+    "href": "find.html?category=%EC%B2%AD%EC%86%8C"
+  },
+  {
+    "value": "이사",
+    "label": "이사",
+    "description": "원룸·가정·포장 이사",
+    "image": "assets/images/service-expansion-20261020/moving.webp",
+    "href": "guide.html?group=life&field=moving#work-guide"
+  },
+  {
+    "value": "철거",
+    "label": "철거",
+    "description": "부분 철거",
+    "image": "assets/images/service-icons.svg#icon8",
+    "href": "find.html?category=%EC%B2%A0%EA%B1%B0"
+  },
+  {
+    "value": "전기·조명",
+    "label": "전기·조명",
+    "description": "전등·콘센트",
+    "image": "assets/images/service-icons.svg#icon9",
+    "href": "find.html?category=%EC%A0%84%EA%B8%B0%C2%B7%EC%A1%B0%EB%AA%85"
+  },
+  {
+    "value": "문·창호",
+    "label": "문·창호",
+    "description": "문·방충망",
+    "image": "assets/images/service-icons.svg#icon10",
+    "href": "find.html?category=%EB%AC%B8%C2%B7%EC%B0%BD%ED%98%B8"
+  },
+  {
+    "value": "에어컨",
+    "label": "에어컨",
+    "description": "수리·설치·청소",
+    "image": "assets/images/service-icons.svg#icon6",
+    "href": "guide.html?field=aircon#work-guide"
+  },
+  {
+    "value": "CCTV 설치",
+    "label": "CCTV 설치",
+    "description": "실내외 설치·교체",
+    "image": "assets/images/service-expansion-20261020/cctv.webp",
+    "href": "guide.html?group=life&field=cctv#work-guide"
+  },
+  {
+    "value": "TV·LED 모니터 수리",
+    "label": "TV·LED 모니터 수리",
+    "description": "화면·전원 이상 상담",
+    "image": "assets/images/service-expansion/tv-monitor.webp",
+    "href": "guide.html?field=display#work-guide"
+  },
+  {
+    "value": "컴퓨터·IT",
+    "label": "컴퓨터 수리·업그레이드",
+    "description": "고장 점검·성능 개선",
+    "image": "assets/images/service-icons.svg#icon11",
+    "href": "guide.html?group=computer#work-guide"
+  }
+]

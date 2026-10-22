@@ -1777,7 +1777,7 @@
         "재질·두께·균열 길이·변형·열 손상 정보",
         "작업 수량·희망 일정"
       ],
-      "expertCategory": "전체",
+      "expertCategory": "싱크대·붙박이장",
       "imageIds": [
         "work-image-countertop"
       ],
@@ -2022,7 +2022,7 @@
         "벽지 종류·색상·무늬 정보",
         "작업 수량·희망 일정"
       ],
-      "expertCategory": "전체",
+      "expertCategory": "도배",
       "imageIds": [
         "work-image-wallpaper"
       ],
@@ -4378,7 +4378,7 @@
         "방 한 칸·여러 공간·집 전체 및 벽·천장 범위 · 합지·실크 등 제품·모델과 습기 원인",
         "희망 작업 범위와 일정"
       ],
-      "expertCategory": "전체",
+      "expertCategory": "도배",
       "imageIds": [
         "work-image-wallpaper-install"
       ],
@@ -4429,7 +4429,7 @@
         "시공 공간·면적·장판 제품과 두께 · 기존 바닥 상태·가구 유무·문턱·걸레받이",
         "희망 작업 범위와 일정"
       ],
-      "expertCategory": "전체",
+      "expertCategory": "장판",
       "imageIds": [
         "work-image-flooring-install"
       ],
@@ -4480,7 +4480,7 @@
         "설치 공간 실측·재질·철물·수납 구성 · 상판·급배수·기기 연결 범위",
         "희망 작업 범위와 일정"
       ],
-      "expertCategory": "전체",
+      "expertCategory": "싱크대·붙박이장",
       "imageIds": [
         "work-image-sink-install"
       ],
@@ -4531,7 +4531,7 @@
         "설치 치수·벽면 상태·재질·철물 · 내부 선반·옷걸이·서랍·문 방식",
         "희망 작업 범위와 일정"
       ],
-      "expertCategory": "전체",
+      "expertCategory": "싱크대·붙박이장",
       "imageIds": [
         "work-image-wardrobe-install"
       ],
@@ -4577,7 +4577,7 @@
         "제조사·모델·크기·발생 시점 · 외부 연결·전원·화면·소리 증상 기록, 직접 분해 금지",
         "희망 작업 범위와 일정"
       ],
-      "expertCategory": "전체",
+      "expertCategory": "TV·LED 모니터 수리",
       "imageIds": [
         "work-image-tv-repair"
       ],
@@ -4623,7 +4623,7 @@
         "제조사·모델·크기·연결 방식 · 화면·전원·입력 증상 기록, 직접 분해 금지",
         "희망 작업 범위와 일정"
       ],
-      "expertCategory": "전체",
+      "expertCategory": "TV·LED 모니터 수리",
       "imageIds": [
         "work-image-monitor-repair"
       ],
@@ -4784,7 +4784,7 @@
         "전원·인터넷 환경과 배선 경로",
         "기존 장비 모델명과 현재 증상"
       ],
-      "expertCategory": "전체",
+      "expertCategory": "CCTV 설치",
       "imageIds": [
         "work-image-cctv-new"
       ],
@@ -4849,7 +4849,7 @@
         "전원·인터넷 환경과 배선 경로",
         "기존 장비 모델명과 현재 증상"
       ],
-      "expertCategory": "전체",
+      "expertCategory": "CCTV 설치",
       "imageIds": [
         "work-image-cctv-replace"
       ],
@@ -4914,7 +4914,7 @@
         "전원·인터넷 환경과 배선 경로",
         "기존 장비 모델명과 현재 증상"
       ],
-      "expertCategory": "전체",
+      "expertCategory": "CCTV 설치",
       "imageIds": [
         "work-image-cctv-relocate"
       ],
@@ -4979,7 +4979,7 @@
         "전원·인터넷 환경과 배선 경로",
         "기존 장비 모델명과 현재 증상"
       ],
-      "expertCategory": "전체",
+      "expertCategory": "CCTV 설치",
       "imageIds": [
         "work-image-cctv-check"
       ],
@@ -5046,7 +5046,7 @@
         "주차·차량 진입·사다리차 사용 조건",
         "보관이 필요하면 기간과 보관 조건"
       ],
-      "expertCategory": "전체",
+      "expertCategory": "이사",
       "imageIds": [
         "work-image-moving-small"
       ],
@@ -5113,7 +5113,7 @@
         "주차·차량 진입·사다리차 사용 조건",
         "보관이 필요하면 기간과 보관 조건"
       ],
-      "expertCategory": "전체",
+      "expertCategory": "이사",
       "imageIds": [
         "work-image-moving-home"
       ],
@@ -5180,7 +5180,7 @@
         "주차·차량 진입·사다리차 사용 조건",
         "보관이 필요하면 기간과 보관 조건"
       ],
-      "expertCategory": "전체",
+      "expertCategory": "이사",
       "imageIds": [
         "work-image-moving-office"
       ],
@@ -5247,7 +5247,7 @@
         "주차·차량 진입·사다리차 사용 조건",
         "보관이 필요하면 기간과 보관 조건"
       ],
-      "expertCategory": "전체",
+      "expertCategory": "이사",
       "imageIds": [
         "work-image-moving-storage"
       ],
@@ -5295,7 +5295,7 @@
         "조절기의 에러 표시",
         "안전하게 촬영 가능한 배관 주변"
       ],
-      "expertCategory": "누수·수도",
+      "expertCategory": "보일러",
       "imageIds": [
         "work-image-boiler-service"
       ],

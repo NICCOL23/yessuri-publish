@@ -6,7 +6,7 @@ const servesAllBusan = expert => expert.serviceAllBusan === true || expert.servi
 const servesRegion = (expert, region) => servesAllBusan(expert) || window.YESSURI_SERVES_REGION(expert, region);
 const directoryExperts = () => window.YESSURI_PUBLIC_EXPERTS().map(window.YESSURI_EXPERT_CARD.present);
 const validRegions = window.YESSURI_REGIONS;
-const validCategories = ['전체','욕실·설비','도배','장판','싱크대·붙박이장','보일러','누수·수도','하수구·변기','타일','페인트','목공','청소','이사','철거','전기·조명','문·창호','에어컨','CCTV 설치','TV·LED 모니터 수리','컴퓨터·IT'];
+const validCategories = ['전체', ...window.YESSURI_SERVICE_FIELDS.values];
 const queryInput = document.querySelector('#find-query');
 const regionSelect = document.querySelector('#find-region');
 const categorySelect = document.querySelector('#find-category');

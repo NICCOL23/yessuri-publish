@@ -24,7 +24,7 @@
   $('wg-panel-title').textContent=state.mode==='consult'?'상담 문구 준비하기':state.title;
   $('wg-panel-back').textContent=state.mode==='consult'?'← 작업 안내로 돌아가기':'← 작업 선택으로';
   work.hidden=state.mode!=='work';consult.hidden=state.mode!=='consult';$('wg-panel-next').hidden=state.mode!=='work';$('wg-panel-copy').hidden=state.mode!=='consult';
-  $('wg-panel-find').textContent=state.category==='전체'?'이 작업 문의하기':'이 작업 전문가 찾기';
+  $('wg-panel-find').textContent=state.category==='전체'?'전체 분야에서 전문가 찾기':'이 작업 전문가 찾기';
   $('wg-panel-action-note').textContent=state.mode==='work'?'전문가 찾기는 상담 문구 작성 없이 이용할 수 있습니다.':'복사한 문구는 선택한 업체에 직접 전달해 주세요.';
   if(!locked){bodyPadding=document.body.style.paddingRight;const gap=innerWidth-document.documentElement.clientWidth;if(gap)document.body.style.paddingRight=(parseFloat(getComputedStyle(document.body).paddingRight)+gap)+'px';}
   document.documentElement.classList.add('wg-panel-open');locked=true;if(!dialog.open)dialog.showModal();
@@ -33,7 +33,7 @@
  $('wg-panel-close').addEventListener('click',api.close);$('wg-panel-back').addEventListener('click',()=>api.getState().mode==='consult'?api.setMode('work'):api.close());
  $('wg-panel-next').addEventListener('click',()=>api.setMode('consult'));
  $('wg-panel-copy').addEventListener('click',()=>copy.click());
- $('wg-panel-find').addEventListener('click',()=>{const state=api.getState();if(state.category==='전체')window.open(find.href,'_blank','noopener');else location.assign(find.href);});
+ $('wg-panel-find').addEventListener('click',()=>{location.assign(find.href);});
  dialog.addEventListener('cancel',e=>{e.preventDefault();api.close();});
  dialog.addEventListener('keydown',e=>{if(e.key!=='Tab')return;const items=[...dialog.querySelectorAll('a[href],button,input,select,textarea,[tabindex="0"]')].filter(el=>!el.disabled&&el.getClientRects().length),first=items[0],last=items.at(-1);if(!first)return;if(e.shiftKey&&(document.activeElement===first||document.activeElement===$('wg-panel-title'))){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}});
  let onBackdrop=false;dialog.addEventListener('pointerdown',e=>{onBackdrop=e.target===dialog;});dialog.addEventListener('click',e=>{if(onBackdrop&&e.target===dialog)api.close();onBackdrop=false;});
