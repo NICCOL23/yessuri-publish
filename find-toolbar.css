@@ -1,0 +1,27 @@
+/* Search toolbar rearrangement only; cards and search behavior are unchanged. */
+html body #main .find-box-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:16px;padding-top:12px;border-top:1px solid #d8e4e6}
+html body #main .find-box-toolbar .search-reset-row{margin:0;flex:none}
+html body #main .find-box-toolbar .find-results-actions{display:flex;align-items:center;justify-content:flex-end;flex-direction:row;gap:8px;width:auto;flex-wrap:wrap}
+html body #main .find-box-toolbar .saved-access{width:auto}
+html body #main .find-box-toolbar .saved-access-buttons{justify-content:flex-start}
+html body #main .find-box-toolbar .find-results-actions label{width:auto;margin:0}
+html body #main .find-box-toolbar #find-sort{width:160px;max-width:100%;min-height:44px;margin:0;background:#fff;font-size:16px;font-weight:400}
+html body #main .find-results-strip{display:flex;align-items:center;justify-content:flex-start;gap:12px;flex-wrap:wrap;margin:16px 0;padding:0 0 12px;border-bottom:1px solid #dfe7eb;scroll-margin-top:150px}
+html body #main .find-results-strip #find-current-conditions{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0;padding:0;background:transparent}
+html body #main .find-results-strip #directory-results-title{margin:0;white-space:nowrap;font-size:22px;line-height:1.4}
+html body #main .find-results-strip #search-page-range{margin:0;font-size:14px;color:#52657a;line-height:1.5}
+html body #main .find-usage{position:relative;margin-left:auto;flex:none}
+html body #main .find-usage summary{min-height:44px;padding:10px 8px;color:#006a72;font-size:14px;line-height:1.5;cursor:pointer}
+html body #main .find-usage summary:focus-visible{outline:2px solid #00767e;outline-offset:2px}
+html body #main .find-usage-body{position:absolute;top:100%;right:0;z-index:35;box-sizing:border-box;width:min(420px,calc(100vw - 64px));padding:16px;border:1px solid #d3e2e4;border-radius:10px;background:#f2f9f7;box-shadow:0 5px 18px #19334e18}
+html body #main .find-usage-body p{margin:0;color:#52657a;font-size:14px;line-height:1.6;text-align:left}
+html body #main .find-usage-body p+p{margin-top:8px}
+html body #main #compare-status:empty{display:none}
+@media(max-width:760px){
+ html body #main .find-box-toolbar{gap:8px;margin-top:12px}
+ html body #main .find-box-toolbar .find-results-actions{justify-content:flex-start;width:100%}
+ html body #main .find-box-toolbar .saved-access-buttons a{padding:8px 10px}
+ html body #main .find-box-toolbar #find-sort{width:140px}
+ html body #main .find-results-strip{gap:8px;margin:12px 0}
+ html body #main .find-results-strip #directory-results-title{font-size:20px}
+}
