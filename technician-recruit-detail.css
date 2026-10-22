@@ -1,0 +1,16 @@
+/* 사전 모집 안내 전용. 다른 페이지 및 공통 글자 기준을 변경하지 않습니다. */
+html[data-type-system] body.recruitment-detail #main .recruit-launch{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 14px;line-height:1.5}
+html[data-type-system] body.recruitment-detail #main .launch-year{display:inline-flex;align-items:baseline;gap:3px;font-family:var(--ys-font);font-size:3rem;font-weight:700;line-height:1.2;letter-spacing:-.02em;color:#075d68;background:linear-gradient(165deg,#19334e 5%,#195361 36%,#277681 48%,#075d68 58%,#19334e 95%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 1px 0 #bdd9da) drop-shadow(0 2px 0 #91b4b8) drop-shadow(0 3px 2px #19334e15)}
+body.recruitment-detail .launch-year-unit{font-size:1rem;letter-spacing:0;font-weight:600}
+html[data-type-system] body.recruitment-detail #main .launch-copy{font-size:1.5rem;font-weight:600;line-height:1.6;color:#006770;letter-spacing:0;word-break:keep-all;overflow-wrap:anywhere}
+html[data-type-system] body.recruitment-detail #main .extra-field-emphasis{font-size:inherit;line-height:inherit;font-weight:600;color:#006770}
+html[data-type-system] body.recruitment-detail #main .promotion-six{padding:26px;border:1px solid #bddbd5;border-radius:16px;background:linear-gradient(125deg,#edf8f5,#f7fbfc);margin-top:28px}
+body.recruitment-detail .six-channel-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:22px 0}
+body.recruitment-detail .channel-card{background:white;border:1px solid #d0e3e5;border-radius:12px;box-shadow:0 5px 16px #19334e06;padding:18px 16px 22px;min-width:0}
+html[data-type-system] body.recruitment-detail #main .channel-card dt{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;font-size:1rem;line-height:1.5;font-weight:600;color:#19334e;word-break:keep-all;overflow-wrap:anywhere}
+body.recruitment-detail .channel-icon{display:flex;align-items:center;justify-content:center;width:100%;height:150px;flex-shrink:0;background:transparent}
+body.recruitment-detail .channel-icon img{display:block;width:100%;height:150px;object-fit:contain}
+html[data-type-system] body.recruitment-detail #main .promotion-six>.recruit-notice{font-size:.875rem;line-height:1.6;background:#fff;color:#344b61}
+@media(max-width:760px){html[data-type-system] body.recruitment-detail #main .launch-year{font-size:2.625rem}html[data-type-system] body.recruitment-detail #main .launch-copy{font-size:1.25rem}html[data-type-system] body.recruitment-detail #main .promotion-six{padding:20px}body.recruitment-detail .six-channel-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}body.recruitment-detail .channel-card{padding:14px 8px 18px}body.recruitment-detail .channel-icon,body.recruitment-detail .channel-icon img{height:112px}}
+@media(forced-colors:active){html[data-type-system] body.recruitment-detail #main .launch-year{background:none;-webkit-text-fill-color:CanvasText;filter:none}}
+@media print{html[data-type-system] body.recruitment-detail #main .launch-year{background:none;-webkit-text-fill-color:#19334e;filter:none}}
