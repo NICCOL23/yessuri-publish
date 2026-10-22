@@ -21,7 +21,7 @@
         : /^(technician-.+|register|register-form)\.html$/.test(page) ? 'technician' : '';
       const root = this.shadowRoot || this.attachShadow({ mode: 'open' });
       root.innerHTML = `
-        <link rel="stylesheet" href="${url('site-header.css?v=1')}">
+        <link rel="stylesheet" href="${url('site-header.css?v=2')}">
         <header aria-label="사이트 상단">
           <div class="header-inner">
             <a class="brand" href="${url('index.html#top')}" aria-label="YESSURI 예스수리 홈">
