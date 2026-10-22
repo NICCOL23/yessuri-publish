@@ -96,7 +96,7 @@ async function renderDirectory(syncUrl = true) {const version=++renderVersion;aw
   serviceNotice.hidden = !requestedService;
   serviceNotice.textContent = requestedService ? `선택한 수리: ${requestedService}. 세부 작업 가능 여부는 전문가에게 확인해 주세요. 상위 분야 기준으로 검색합니다.` : '';
   resultGrid.replaceChildren();
-  const resultTotal=server?remote.total:matches.length;resultCount.textContent = String(resultTotal);let countNote=document.querySelector('#actual-public-count');if(!countNote){countNote=document.createElement('p');countNote.id='actual-public-count';countNote.className='demo-note';resultCount.parentElement.after(countNote)}countNote.textContent='실제 공개 전문가 '+window.YESSURI_EXPERT_CARD.actualCount()+'명'+(matches.some(window.YESSURI_EXPERT_CARD.example)?' · 아래 예시 프로필은 별도 시연입니다.':'');
+  const resultTotal=server?remote.total:matches.length;resultCount.textContent = String(resultTotal);
   emptyState.hidden = matches.length !== 0;
   document.querySelector('#results-refine').hidden = matches.length === 0;
   if (!matches.length) {
@@ -114,7 +114,7 @@ async function renderDirectory(syncUrl = true) {const version=++renderVersion;aw
   const pages=Math.max(1,Math.ceil(resultTotal/12));resultPage=Math.min(resultPage,pages);
   const start=(resultPage-1)*12;
   (server?matches:matches.slice(start,start+12)).forEach(expert => resultGrid.append(createExpertCard(expert)));
-  document.querySelector('.results-example-note').hidden=!!server;document.querySelector('#search-rotation-note').hidden=appliedFilters.sort!=='default';document.querySelector('#search-rotation-note').textContent=server?'기본순은 일 단위로 순환하며 페이지 내 순서를 유지합니다.':'예시 목록은 시간대별로 순환하며 검색 중에는 순서를 유지합니다.';
+  document.querySelector('#search-rotation-note').hidden=appliedFilters.sort!=='default';document.querySelector('#search-rotation-note').textContent=server?'기본순은 일 단위로 순환하며 페이지 내 순서를 유지합니다.':'예시 목록은 시간대별로 순환하며 검색 중에는 순서를 유지합니다.';
   const range=document.querySelector('#search-page-range');range.hidden=!matches.length;range.textContent=matches.length ? (start+1)+'–'+Math.min(start+12,resultTotal)+'곳 표시' : '';
   if (syncUrl) updateUrl();
   renderPagination(pages);
