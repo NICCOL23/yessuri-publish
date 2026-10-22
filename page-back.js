@@ -20,7 +20,7 @@
  function sync(){
   const duplicates=document.querySelectorAll('#expert-back,a.b-back,a.case-back,a.request-back,a.recruit-back,.saved-return,#search-return-bar');
   for(const node of duplicates){if(node.id==='search-return-bar'&&node.hidden)continue;const a=node.matches('a')?node:node.querySelector('a');if(!legacyTarget&&a)legacyTarget=safe(a.href);node.setAttribute('data-page-back-duplicate','');}
-  if(file==='boiler-guide.html')main.querySelectorAll('a').forEach(a=>{if(a.textContent.trim()==='← 분야 목록으로'||a.textContent.trim()==='분야 목록으로')a.setAttribute('data-page-back-duplicate','');});
+  main.querySelectorAll('a').forEach(a=>{if(['← 분야 목록으로','분야 목록으로'].includes(a.textContent.trim())){if(!legacyTarget)legacyTarget=safe(a.href);a.setAttribute('data-page-back-duplicate','');}});
   if(file.startsWith('technician-'))main.querySelectorAll('a.btn').forEach(a=>{if(['목록으로','관리자 목록'].includes(a.textContent.trim())){if(!legacyTarget)legacyTarget=safe(a.href);a.setAttribute('data-page-back-duplicate','');}});
   if(file==='case.html')document.querySelector('.cases-home-link')?.setAttribute('data-page-back-duplicate','');
   if(file==='register-form.html')document.querySelector('.panel-footer a[href="register.html"]')?.setAttribute('data-page-back-duplicate','');
