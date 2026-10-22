@@ -13,7 +13,7 @@
 .technician-entry .home-header #home-menu .register-utility{margin-left:auto}.technician-entry .home-header #home-menu a{min-height:44px;display:inline-flex;align-items:center}.technician-entry .menu-toggle{display:none}
 .technician-entry main.container{max-width:1440px;width:calc(100% - 48px);padding-top:0}
 .technician-entry #root{display:flex;flex-direction:column;gap:16px;min-height:calc(100svh - 108px)}
-.entry-hero{position:relative;width:100vw;margin-left:calc(50% - 50vw);padding:26px max(24px,calc((100vw - 1340px)/2));min-height:300px;border:0;border-radius:0;box-shadow:none;background:linear-gradient(110deg,#fff 0%,#f7fcfb 48%,#e6f5f3 100%);grid-template-columns:1.25fr 1fr;gap:36px;flex:none}
+.entry-hero{position:relative;width:var(--entry-viewport-width,100%);margin-left:calc(50% - var(--entry-viewport-width,100%)/2);padding:26px max(24px,calc((var(--entry-viewport-width,100%) - 1340px)/2));min-height:300px;border:0;border-radius:0;box-shadow:none;background:linear-gradient(110deg,#fff 0%,#f7fcfb 48%,#e6f5f3 100%);grid-template-columns:1.25fr 1fr;gap:36px;flex:none}
 .entry-copy h1{font-size:34px;line-height:1.25}.entry-description{font-size:14px;line-height:1.7}.entry-art img{max-height:245px}.entry-kicker{font-size:12px}
 .entry-board{flex:1;min-height:270px;margin-top:0;padding:20px 26px}.entry-board h2{font-size:21px}.entry-bottom-note{margin:0 4px;font-size:12px;flex:none}
 @media(max-width:1000px){.technician-entry .site-header .header-inner{gap:24px}.technician-entry .home-header #home-menu{gap:18px;font-size:13px}.entry-copy h1{font-size:29px}.entry-hero{gap:20px;min-height:280px}.entry-description{font-size:13px}}
