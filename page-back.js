@@ -1,5 +1,7 @@
 /* Shared back navigation only. Keep existing page content and search state intact. */
 (()=>{'use strict';
+ const decorate=control=>{control.classList.add('ys-page-back');control.textContent='← 이전 페이지로';};
+ document.querySelectorAll('[data-page-back-local]').forEach(decorate);
  const file=location.pathname.split('/').pop()||'index.html';
  const defaults={'find.html':'index.html','guide.html':'index.html','boiler-guide.html':'guide.html?group=water&view=list#work-guide','computer-guide.html':'guide.html?group=computer#work-guide','expert.html':'find.html','favorites.html':'find.html','compare.html':'find.html','cases.html':'index.html','case.html':'cases.html','questions.html':'index.html','question.html':'questions.html','question-write.html':'questions.html','questions-example.html':'questions.html','board-notice.html':'questions.html','question-admin.html':'questions.html','technician-board.html':'index.html','technician-apply.html':'technician-board.html','technician-lookup.html':'technician-board.html','technician-detail.html':'technician-board.html','technician-recruit.html':'technician-board.html','technician-notice.html':'technician-board.html','technician-admin.html':'technician-board.html','register-form.html':'technician-board.html','request.html':'guide.html'};
  const safe=value=>{if(!value)return null;try{const u=new URL(value,location.href);return u.origin===location.origin&&(u.pathname.split('/').pop() in defaults||u.pathname.endsWith('/')||u.pathname.endsWith('/index.html'))?u:null;}catch{return null;}};
@@ -14,7 +16,7 @@
  if(file==='index.html'||!(file in defaults))return;
  const main=document.querySelector('main');if(!main)return;
  const bar=document.createElement('div');bar.className='ys-page-backbar';
- const link=document.createElement('a');link.className='ys-page-back';link.textContent='← 이전 페이지로';bar.append(link);main.before(bar);
+ const link=document.createElement('a');decorate(link);bar.append(link);main.before(bar);
  let legacyTarget=null;
  function target(){return safe(history.state?.ysPageBack?.previous)||legacyTarget||safe(defaults[file]);}
  function sync(){

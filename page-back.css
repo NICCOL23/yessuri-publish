@@ -1,6 +1,6 @@
 /* Only the common return control and its identified duplicates. */
 .ys-page-backbar{box-sizing:border-box;width:min(1160px,calc(100% - 48px));margin:16px auto 0}
-html body .ys-page-backbar .ys-page-back{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;border:1px solid #cfdddf;border-radius:8px;background:#fff;color:#006a72;font-family:inherit;font-size:14px;font-weight:500;line-height:1.5;letter-spacing:0;text-decoration:none}
+html body :is(.ys-page-backbar,#wg-panel) .ys-page-back{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;border:1px solid #cfdddf;border-radius:8px;background:#fff;color:#006a72;font-family:inherit;font-size:14px;font-weight:500;line-height:1.5;letter-spacing:0;text-decoration:none}
 .ys-page-back:hover{background:#eff8f7}
 .ys-page-back:focus-visible{outline:2px solid #00767e;outline-offset:3px}
 [data-page-back-duplicate]{display:none!important}

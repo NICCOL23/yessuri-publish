@@ -2,7 +2,7 @@
 (() => {
  const api=window.YESSURI_WORK_PANEL;if(!api)return;
  const dialog=document.createElement('dialog');dialog.id='wg-panel';dialog.className='work-guide wg-panel';dialog.setAttribute('aria-labelledby','wg-panel-title');
- dialog.innerHTML='<div class="wg-panel-shell"><header class="wg-panel-header"><div><button type="button" id="wg-panel-back">← 작업 선택으로</button><h2 id="wg-panel-title" tabindex="-1"></h2></div><button type="button" id="wg-panel-close" aria-label="상세 패널 닫기">×</button></header><div id="wg-panel-body" class="wg-panel-body"></div><footer class="wg-panel-footer"><div class="wg-panel-actions"><button type="button" id="wg-panel-find">이 작업 전문가 찾기</button><button type="button" id="wg-panel-next">상담 문구 준비하기</button><button type="button" id="wg-panel-copy">상담 문구 복사</button></div><p id="wg-panel-action-note">전문가 찾기는 상담 문구 작성 없이 이용할 수 있습니다.</p><a class="wg-panel-kakao" href="https://pf.kakao.com/_VdyFX/chat" target="_blank" rel="noopener">카카오톡 이용 문의 <span class="sr-only">(새 창)</span></a></footer></div>';
+ dialog.innerHTML='<div class="wg-panel-shell"><header class="wg-panel-header"><div><button type="button" id="wg-panel-back" data-page-back-local>← 이전 페이지로</button><h2 id="wg-panel-title" tabindex="-1"></h2></div><button type="button" id="wg-panel-close" aria-label="상세 패널 닫기">×</button></header><div id="wg-panel-body" class="wg-panel-body"></div><footer class="wg-panel-footer"><div class="wg-panel-actions"><button type="button" id="wg-panel-find">이 작업 전문가 찾기</button><button type="button" id="wg-panel-next">상담 문구 준비하기</button><button type="button" id="wg-panel-copy">상담 문구 복사</button></div><p id="wg-panel-action-note">전문가 찾기는 상담 문구 작성 없이 이용할 수 있습니다.</p><a class="wg-panel-kakao" href="https://pf.kakao.com/_VdyFX/chat" target="_blank" rel="noopener">카카오톡 이용 문의 <span class="sr-only">(새 창)</span></a></footer></div>';
  const $=id=>document.getElementById(id),work=$('wg-work-detail'),aside=document.querySelector('#wg-flow-detail .wg-side'),products=document.querySelector('.wg-products'),body=dialog.querySelector('#wg-panel-body'),consult=document.createElement('div');consult.id='wg-panel-consult';body.append(work,consult);document.body.append(dialog);
  const regionLabel=aside.querySelector('label[for="wg-region"]'),region=$('wg-region'),memoWork=$('wg-memo-work'),prepare=$('wg-prepare'),memo=$('wg-memo'),copy=$('wg-copy'),status=$('wg-copy-status'),find=$('wg-find');
  const intro=document.createElement('p');intro.textContent='필요할 때만 작성하고, 문구를 복사해 업체에 전달하세요.';
@@ -22,7 +22,8 @@
   if(activeTitle!==state.title){savedScroll={};activeTitle=state.title;}
   const key=state.mode+state.title;if(prior&&lastMode!==state.mode)savedScroll[lastMode]=body.scrollTop;
   $('wg-panel-title').textContent=state.mode==='consult'?'상담 문구 준비하기':state.title;
-  $('wg-panel-back').textContent=state.mode==='consult'?'← 작업 안내로 돌아가기':'← 작업 선택으로';
+  $('wg-panel-back').textContent='← 이전 페이지로';
+  $('wg-panel-back').setAttribute('aria-label',state.mode==='consult'?'이전 페이지로: 작업 안내':'이전 페이지로: 작업 선택');
   work.hidden=state.mode!=='work';consult.hidden=state.mode!=='consult';$('wg-panel-next').hidden=state.mode!=='work';$('wg-panel-copy').hidden=state.mode!=='consult';
   $('wg-panel-find').textContent=state.category==='전체'?'전체 분야에서 전문가 찾기':'이 작업 전문가 찾기';
   $('wg-panel-action-note').textContent=state.mode==='work'?'전문가 찾기는 상담 문구 작성 없이 이용할 수 있습니다.':'복사한 문구는 선택한 업체에 직접 전달해 주세요.';
