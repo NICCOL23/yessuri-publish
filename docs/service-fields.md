@@ -9,3 +9,9 @@
 추가·삭제·변경한 뒤 `node tools/build-service-fields.cjs`를 실행합니다. 실행 결과는 공통 컴포넌트 `service-fields.js`와 자바스크립트가 꺼져 있어도 표시되는 HTML 목록에 반영됩니다. 배포 시 변경된 스크립트의 캐시 버전도 올립니다.
 
 작업별 연결은 `data/work-catalog.json`의 `expertCategory`를 수정하고 `node tools/build-work-catalog.cjs`를 실행합니다. 위 분야 검사 도구는 모든 작업의 연결 값도 검증합니다. 독립 분야가 없는 작업은 `전체`를 사용하며 전체 전문가 검색으로 연결합니다. 해당 업체의 실제 세부 작업 가능 여부는 별도로 확인합니다.
+
+## 수리 분야 선택 화면
+
+`service-field-picker.js` / `service-field-picker.css`는 `data-service-field-picker`가 있는 선택 상자만 개선합니다. 현재 적용 범위는 전문가 찾기의 수리 분야 한 곳입니다. 목록은 공통 select의 옵션에서 생성하고, 컴퓨터 분야만 선택 목록 맨 앞으로 올립니다(전체 분야 다음). 메인 카드 순서는 바꾸지 않습니다.
+
+원래 select는 폼 값과 검색의 원본으로 유지합니다. URL 복원·조건 해제·초기화에 따른 값 변경도 선택 상자에 반영합니다. 2열, 글자 16px, 항목 최소 44px, 간격 4px, 안쪽 여백 16px이며 모바일의 긴 이름은 최소 68px 행 안에서 줄바꿈합니다. 화면에 맞춰 내부 스크롤을 제공합니다. 방향키·Home·End·Enter·Space·Escape 및 바깥 클릭으로 조작할 수 있습니다. 자바스크립트를 사용할 수 없으면 기존 select가 표시됩니다.
