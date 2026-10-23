@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="768" height="768" viewBox="0 0 768 768" role="img" aria-label="욕실 천장 돔과 조명·환풍기 위치를 표현한 개념도">
+<rect width="768" height="768" rx="28" fill="#f7fbfc"/>
+<path d="M110 295 384 160 658 295 384 434Z" fill="#e1ebef" stroke="#647f91" stroke-width="6"/>
+<path d="M110 295v228l274 139V434ZM658 295v228L384 662V434Z" fill="#eef4f6" stroke="#b9ccd5" stroke-width="4"/>
+<path d="m144 298 240-118 240 118-240 121Z" fill="#fff" stroke="#93adba" stroke-width="5"/>
+<path d="M190 301q194-175 388 0L384 396Z" fill="#f2f8fa" stroke="#93adba" stroke-width="5"/>
+<path d="m384 205 0 191M263 252l242 87M505 252l-242 87" fill="none" stroke="#c7d8df" stroke-width="3"/>
+<ellipse cx="384" cy="306" rx="40" ry="20" fill="#fff6d9" stroke="#91a8b4" stroke-width="4"/>
+<path d="m470 253 42-20 42 20-42 21Z" fill="#d5e7eb" stroke="#688796" stroke-width="3"/>
+<path d="m487 249 40 12m-28-18 40 12" stroke="#688796" stroke-width="3"/>
+<path d="M139 351v143m63-111v144m63-111v143m178-145v143m63-175v143m63-175v143M110 408l274 139 274-139M110 465l274 139 274-139" fill="none" stroke="#d4e1e6" stroke-width="2"/>
+<rect x="265" y="687" width="238" height="5" rx="2" fill="#007b83"/>
+</svg>

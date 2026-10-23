@@ -5316,6 +5316,57 @@
           "accessedDate": "2026-10-20"
         }
       ]
+    },
+    {
+      "id": "bath-ceiling",
+      "fieldId": "bath",
+      "name": "욕실 천장 돔 설치·교체",
+      "summary": "욕실 크기와 천장 높이, 기존 천장·고정틀 상태를 확인하고 돔 설치·교체 범위를 상담하세요.",
+      "section": "마감·기타",
+      "sortOrder": 10.5,
+      "keywords": "욕실 천장 돔 돔천장 천정 설치 교체 보수",
+      "query": "",
+      "before": [
+        "천장 처짐·파손·변색과 천장 위 누수 여부",
+        "욕실 가로·세로 치수, 천장 높이와 기존 고정틀 상태",
+        "조명·환풍기·점검구 위치와 재사용 여부"
+      ],
+      "rows": [
+        {
+          "name": "천장 돔·마감재",
+          "parts": "제품 재질·모델·색상·규격과 시공 면적",
+          "conditions": "맞춤 재단·형태·천장 높이·고정틀 보강"
+        },
+        {
+          "name": "기존 천장 철거·교체",
+          "parts": "기존 천장 재질·손상 범위·철거 대상",
+          "conditions": "철거·보양·운반·폐기물 처리·누수 원인 조치 포함 여부"
+        },
+        {
+          "name": "조명·환풍기·점검구",
+          "parts": "기존 위치·개구부 규격·제품 재사용 여부",
+          "conditions": "타공·위치 변경·제품 교체·별도 전기 작업 포함 여부"
+        }
+      ],
+      "after": [
+        "천장 고정·처짐·틈새와 테두리 마감 상태",
+        "조명·환풍기 작동과 점검구 개폐 상태",
+        "사용 제품·시공 범위·폐기물 처리·사후 점검 조건"
+      ],
+      "photoPreparation": [
+        "욕실 전체와 천장 전체 사진",
+        "처짐·파손·변색 부위와 조명·환풍기·점검구 사진",
+        "알고 있는 욕실 치수·천장 높이·희망 제품 정보"
+      ],
+      "expertCategory": "욕실·설비",
+      "imageIds": [
+        "work-image-bath-ceiling"
+      ],
+      "contentUpdatedDate": "2026-10-23",
+      "contentReview": {
+        "status": "new-content",
+        "reviewedDate": null
+      }
     }
   ],
   "images": [
@@ -8361,6 +8412,27 @@
       },
       "sources": [],
       "sortOrder": 110
+    },
+    {
+      "id": "work-image-bath-ceiling",
+      "taskId": "bath-ceiling",
+      "file": "../v2/bath-ceiling.svg",
+      "alt": "욕실 천장 돔과 조명·환풍기 위치를 표현한 개념도",
+      "caption": "구성 이해를 돕는 개념도 · 실제 제품·규격·시공 사례가 아닙니다.",
+      "width": 768,
+      "height": 768,
+      "format": "svg",
+      "sha256": "7712ad05c779396d817a0f04ac86f5703526d2caff29ffa8e15c07ad78f44f19",
+      "production": {
+        "method": "svg-diagram",
+        "date": "2026-10-23"
+      },
+      "sources": [],
+      "review": {
+        "status": "visually-reviewed",
+        "date": "2026-10-23",
+        "notes": "기존 상세 패널에서 천장 돔 구성 개념도와 캡션 표시 확인. 실제 제품·규격·시공 사례가 아님."
+      }
     }
   ],
   "meta": {
