@@ -9,7 +9,7 @@
       ['repair-tips', '수리·관리 팁'], ['faq', '자주 묻는 질문']
     ] },
     { key: 'questions', href: 'questions.html', label: '수리 질문' },
-    { key: 'technician', href: 'register.html', label: '기술자 모집·등록' }
+    { key: 'technician', href: 'technician-board.html', label: '기술자 모집·등록' }
   ];
   const url = path => new URL(path, base).href;
   class YessuriSiteHeader extends HTMLElement {
