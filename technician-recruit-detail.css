@@ -14,3 +14,22 @@ html[data-type-system] body.recruitment-detail #main .promotion-six>.recruit-not
 @media(max-width:760px){html[data-type-system] body.recruitment-detail #main .launch-year{font-size:2.625rem}html[data-type-system] body.recruitment-detail #main .launch-copy{font-size:1.25rem}html[data-type-system] body.recruitment-detail #main .promotion-six{padding:20px}body.recruitment-detail .six-channel-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}body.recruitment-detail .channel-card{padding:14px 8px 18px}body.recruitment-detail .channel-icon,body.recruitment-detail .channel-icon img{height:112px}}
 @media(forced-colors:active){html[data-type-system] body.recruitment-detail #main .launch-year{background:none;-webkit-text-fill-color:CanvasText;filter:none}}
 @media print{html[data-type-system] body.recruitment-detail #main .launch-year{background:none;-webkit-text-fill-color:#19334e;filter:none}}
+
+/* Compact desktop spacing keeps all six promotion cards in the first viewport. */
+@media(min-width:1000px){
+body.recruitment-detail .recruit-detail-content{margin-top:8px;padding:18px 24px}
+body.recruitment-detail #main{padding-top:8px}
+body.recruitment-detail .recruit-detail-content>h1{margin-bottom:6px}
+body.recruitment-detail .recruit-detail-content>p{margin-bottom:8px}
+body.recruitment-detail .recruit-detail-content>section{margin-top:14px;padding-top:12px}
+body.recruitment-detail .recruit-detail-content h2{margin-bottom:8px}
+body.recruitment-detail .recruit-fields{gap:6px;margin:8px 0 0}
+body.recruitment-detail .recruit-fields li{padding:4px 10px}
+html[data-type-system] body.recruitment-detail #main .promotion-six{padding:14px 18px;margin-top:14px}
+body.recruitment-detail .promotion-six>p{margin-bottom:8px}
+body.recruitment-detail .six-channel-grid{gap:10px;margin:12px 0}
+body.recruitment-detail .channel-card{padding:10px 12px}
+html[data-type-system] body.recruitment-detail #main .channel-card dt{gap:6px}
+body.recruitment-detail .channel-icon,body.recruitment-detail .channel-icon img{height:80px}
+body.recruitment-detail .promotion-six .recruit-notice{padding:8px 10px;margin-bottom:0}
+}
