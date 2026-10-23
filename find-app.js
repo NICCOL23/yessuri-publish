@@ -55,7 +55,7 @@
       });
     }
   };
-  new MutationObserver(cards).observe(document.querySelector('#find-grid'), {childList:true});
+  new MutationObserver(cards).observe(document.querySelector('#find-grid'), {childList:true,subtree:true});
   window.addEventListener('yessuri:compare-changed', cards);
   window.addEventListener('yessuri:favorites-changed', cards);
   window.addEventListener('storage', cards);
