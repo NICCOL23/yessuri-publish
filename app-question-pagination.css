@@ -1,0 +1,6 @@
+/* Prevent header menu styles from positioning question pagination over the list. */
+@media(max-width:760px){
+ html body.ys-installed-mobile #board-root #b-pages{display:flex;position:static;inset:auto;flex:none;flex-direction:row;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;width:100%;max-width:100%;max-height:none;overflow:visible;box-sizing:border-box;margin:18px 0 0;padding:0;background:transparent;border:0;box-shadow:none}
+ html body.ys-installed-mobile #board-root #b-pages:empty{display:none}
+ html body.ys-installed-mobile #board-root #b-pages .page-edge{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+}

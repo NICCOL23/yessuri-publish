@@ -1,0 +1,13 @@
+/* Installed mobile maintenance list only; web and detail dialogs are unchanged. */
+@media(max-width:760px){
+ html body.ys-installed-mobile #repair-tips{scroll-margin-top:90px}
+ html body.ys-installed-mobile #repair-tips .rt-lead{margin-bottom:12px}
+ html body.ys-installed-mobile #repair-tips .rt-grid{grid-template-columns:minmax(0,1fr);gap:4px}
+ html body.ys-installed-mobile #repair-tips .rt-card{grid-template-columns:48px minmax(0,1fr) 12px;gap:8px;min-height:80px;height:auto;box-sizing:border-box;padding:6px;border-radius:8px}
+ html body.ys-installed-mobile #repair-tips .rt-card img{width:48px;height:48px;border-radius:6px}
+ html body.ys-installed-mobile #repair-tips .rt-category{font-size:.8125rem;line-height:1.4;margin:0 0 2px}
+ html body.ys-installed-mobile #repair-tips .rt-card h3{font-size:1rem;line-height:1.4;letter-spacing:0;margin:0;word-break:keep-all;overflow-wrap:anywhere}
+ html body.ys-installed-mobile #repair-tips .rt-card p{display:none}
+ html body.ys-installed-mobile #repair-tips .rt-badge{font-size:.8125rem;line-height:1.5;margin:0 0 2px;padding:1px 5px}
+ html body.ys-installed-mobile #repair-tips .rt-arrow{font-size:18px}
+}
