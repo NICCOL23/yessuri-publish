@@ -10,7 +10,9 @@
  html body.ys-app-expert-layout #main :is(#expert-grid,#find-grid) .ys-app-expert-card .ys-card-open:focus-visible{outline:3px solid #00767e;outline-offset:2px}
  html body.ys-app-expert-layout #main :is(#expert-grid,#find-grid) .ys-app-expert-card:after{content:'›';grid-column:3;grid-row:1;justify-self:center;align-self:center;color:#55736c;font-size:22px;line-height:1;pointer-events:none}
  html body.ys-app-expert-layout #expert-grid .ys-app-expert-card .ys-expert-actions{display:none}
- html body.ys-app-expert-layout #find-grid .ys-app-expert-card .ys-expert-actions{position:relative;z-index:3;grid-column:2/-1;grid-row:2;display:flex;flex-direction:row;justify-content:flex-end;align-items:center;gap:4px;border:0;margin:0;padding:0;min-width:0}
+ html body.ys-app-expert-layout #find-grid .ys-app-expert-card .ys-expert-actions{position:relative;z-index:3;grid-column:3;grid-row:1;display:flex;flex-direction:row;align-self:start;justify-content:flex-end;align-items:center;gap:0;width:96px;border:0;margin:0;padding:0;min-width:0}
  html body.ys-app-expert-layout #find-grid .ys-app-expert-card .ys-expert-favorite{position:static;inset:auto;flex:none;width:44px;min-width:44px;min-height:44px;height:44px;padding:4px}
- html body.ys-app-expert-layout #find-grid .ys-app-expert-card .ys-expert-compare{position:relative;flex:0 0 56px;width:56px;min-width:56px;min-height:44px;padding:4px;margin:0;font-size:.875rem;white-space:nowrap}
+ html body.ys-app-expert-layout #find-grid .ys-app-expert-card .ys-expert-compare{position:relative;flex:0 0 52px;width:52px;min-width:52px;min-height:44px;padding:2px;margin:0;font-size:.875rem;white-space:nowrap}
+ html body.ys-app-expert-layout #main #find-grid .ys-app-expert-card{grid-template-columns:52px minmax(0,1fr) 96px;grid-template-rows:auto;min-height:80px}
+ html body.ys-app-expert-layout #main #find-grid .ys-app-expert-card:after{align-self:end;grid-column:3;justify-self:end;margin:0 8px 4px 0}
 }
