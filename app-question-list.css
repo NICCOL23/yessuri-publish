@@ -1,0 +1,9 @@
+/* Installed app list metadata only; full author/date remain in question detail. */
+@media(max-width:760px){
+ html body.ys-installed-mobile[data-board-page="list"] #board-root .b-table tr{grid-template-columns:minmax(0,1fr) auto auto}
+ html body.ys-installed-mobile[data-board-page="list"] #board-root .b-table .b-cell-author{display:none}
+ html body.ys-installed-mobile[data-board-page="list"] #board-root .b-table .b-cell-region{grid-column:1;grid-row:2}
+ html body.ys-installed-mobile[data-board-page="list"] #board-root .b-table .b-cell-date{grid-column:2;grid-row:2}
+ html body.ys-installed-mobile[data-board-page="list"] #board-root .b-table .b-cell-answer{display:block;grid-column:3;grid-row:2;font-size:12px;color:var(--b-muted)}
+ html body.ys-installed-mobile[data-board-page="list"] #board-root .b-cell-answer:before{content:'답변 '}
+}

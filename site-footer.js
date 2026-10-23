@@ -4,12 +4,20 @@
   const base = new URL('.', document.currentScript.src);
   class YessuriSiteFooter extends HTMLElement {
     connectedCallback() {
+      if (!this.syncAppMode) {
+        this.appDisplay = matchMedia('(display-mode:standalone)');
+        this.appMobile = matchMedia('(max-width:760px)');
+        this.syncAppMode = () => this.toggleAttribute('app-compact', this.appMobile.matches && (this.appDisplay.matches || navigator.standalone === true));
+      }
+      this.appDisplay.addEventListener('change', this.syncAppMode);
+      this.appMobile.addEventListener('change', this.syncAppMode);
+      this.syncAppMode();
       if (this.shadowRoot) return;
       const root = this.attachShadow({ mode: 'open' });
       const url = path => new URL(path, base).href;
       this.toggleAttribute('has-mobile-nav', !!document.querySelector('nav.mobile-nav'));
       root.innerHTML = `
-        <link rel="stylesheet" href="${url('site-footer.css?v=2')}">
+        <link rel="stylesheet" href="${url('site-footer.css?v=3')}">
         <footer aria-label="사이트 하단">
           <div class="footer-inner">
             <div class="brand-block">
