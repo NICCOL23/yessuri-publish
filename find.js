@@ -87,7 +87,12 @@ async function renderDirectory(syncUrl = true) {const version=++renderVersion;aw
   );
   if(!server&&searchIds===null)searchIds=searchState.rotate(matches,searchHour).map(expert=>expert.id);
   const current=new Map(matches.map(expert=>[expert.id,expert]));
-  if(!server)matches.splice(0,matches.length,...searchIds.filter(id=>current.has(id)).map(id=>current.get(id)));
+  if(!server){
+    // Keep the saved order while including newly added public examples.
+    const known=new Set(searchIds);
+    searchIds=searchIds.filter(id=>current.has(id)).concat(searchState.rotate(matches,searchHour).filter(e=>!known.has(e.id)).map(e=>e.id));
+    matches.splice(0,matches.length,...searchIds.map(id=>current.get(id)));
+  }
   if (!server&&appliedFilters.sort === 'name') {
     matches.sort((a, b) => a.name.localeCompare(b.name, 'ko') || a.id.localeCompare(b.id));
   } else if (!server&&appliedFilters.sort === 'areas') {
