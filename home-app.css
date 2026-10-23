@@ -40,3 +40,9 @@
 @media(max-width:760px){
  html body.home-modern.ys-home-installed #experts #expert-grid .ys-expert-actions .ys-expert-favorite{display:none}
 }
+/* Keep main-page pagination independent of the header's mobile navigation styles. */
+@media(max-width:760px){
+ html body.home-modern.ys-home-installed #home-expert-pages{display:flex;flex:none;position:static;inset:auto;flex-direction:row;align-items:center;justify-content:center;flex-wrap:wrap;gap:5px;width:100%;max-width:100%;max-height:none;overflow:visible;box-sizing:border-box;margin:22px 0 0;padding:0;background:transparent;border:0;box-shadow:none}
+ html body.home-modern.ys-home-installed #home-expert-pages[hidden]{display:none}
+ html body.home-modern.ys-home-installed #home-expert-pages button,html body.home-modern.ys-home-installed #home-expert-pages .page-disabled{box-sizing:border-box;flex:none;min-width:38px;min-height:44px;padding:7px}
+}
