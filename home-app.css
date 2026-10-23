@@ -34,12 +34,8 @@
 }
 @media(max-width:360px){html body.home-modern.ys-home-installed #categories .category-grid{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(5,48px)}}
 @media(prefers-reduced-motion:reduce){html body.home-modern.ys-home-installed .full-bg-scene{transition:none}}
-@media(max-width:760px){
- html body.home-modern.ys-home-installed #experts #expert-grid .ys-expert-actions .ys-expert-favorite{position:static;inset:auto;flex:none;width:44px;height:44px;min-height:44px;padding:4px;border-radius:50%;font-size:24px;line-height:1.3}
-}
-@media(max-width:760px){
- html body.home-modern.ys-home-installed #experts #expert-grid .ys-expert-actions .ys-expert-favorite{display:none}
-}
+
+
 /* Keep main-page pagination independent of the header's mobile navigation styles. */
 @media(max-width:760px){
  html body.home-modern.ys-home-installed #home-expert-pages{display:flex;flex:none;position:static;inset:auto;flex-direction:row;align-items:center;justify-content:center;flex-wrap:wrap;gap:5px;width:100%;max-width:100%;max-height:none;overflow:visible;box-sizing:border-box;margin:22px 0 0;padding:0;background:transparent;border:0;box-shadow:none}
@@ -57,14 +53,4 @@
  html body.home-modern.ys-home-installed #experts .expert-section-all{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;color:#006770;font-size:.875rem;line-height:1.5;font-weight:600;text-decoration:none;white-space:nowrap}
  html body.home-modern.ys-home-installed #experts .expert-section-all:focus-visible{outline:3px solid #00767e;outline-offset:2px}
  html body.home-modern.ys-home-installed #experts .section-head p{font-size:1rem;line-height:1.6;margin:4px 0 0;color:#526570;text-align:left}
- html body.home-modern.ys-home-installed #experts #expert-grid{grid-template-columns:minmax(0,1fr);gap:4px;align-items:stretch}
- html body.home-modern.ys-home-installed #experts #expert-grid .ys-expert-card{position:relative;display:grid;grid-template-columns:52px minmax(0,1fr) 12px;grid-template-rows:auto;align-items:center;align-content:center;justify-content:flex-start;min-width:0;min-height:80px;height:auto;margin:0;padding:6px;gap:8px;background:#fff;border:1px solid #d9e5df;border-radius:10px;box-shadow:none}
- html body.home-modern.ys-home-installed #experts #expert-grid .ys-expert-photo{grid-column:1;grid-row:1;width:52px;height:52px;flex:none;border-radius:6px}
- html body.home-modern.ys-home-installed #experts #expert-grid .ys-expert-summary{grid-column:2;grid-row:1;width:100%;min-width:0;align-self:center}
- html body.home-modern.ys-home-installed #experts #expert-grid .ys-expert-summary h3{font-size:1rem;line-height:1.4;margin:0 0 3px;letter-spacing:0;overflow-wrap:anywhere}
- html body.home-modern.ys-home-installed #experts #expert-grid .ys-expert-summary p{font-size:.875rem;line-height:1.5;margin:0;overflow-wrap:anywhere}
- html body.home-modern.ys-home-installed #experts #expert-grid .ys-expert-actions{display:none}
- html body.home-modern.ys-home-installed #experts #expert-grid .ys-card-open{position:absolute;inset:0;z-index:2;background:transparent;border:0;border-radius:10px;font-size:0;color:transparent;box-shadow:none;padding:0;margin:0}
- html body.home-modern.ys-home-installed #experts #expert-grid .ys-card-open:focus-visible{outline:3px solid #00767e;outline-offset:2px}
- html body.home-modern.ys-home-installed #experts #expert-grid .ys-expert-card:after{content:'›';grid-column:3;grid-row:1;justify-self:center;align-self:center;color:#55736c;font-size:22px;line-height:1;pointer-events:none}
 }
