@@ -16,7 +16,7 @@
   // Keep the existing work snapshot valid when only the tip parameter changes.
   function routeState(u,repairTip){const s={...history.state,repairTip};if(s.wgFlow)s.wgFlow={...s.wgFlow,route:u.pathname+u.search};return s;}
   const dialog=el('dialog');dialog.id='rt-panel';dialog.setAttribute('aria-labelledby','rt-title');
-  dialog.innerHTML='<div class="rt-shell"><header class="rt-header"><div class="rt-header-copy"><button class="rt-back" type="button">← 관리 팁 목록으로</button><h2 id="rt-title" tabindex="-1"></h2></div><button class="rt-close" type="button" aria-label="관리 팁 상세 닫기">×</button></header><div class="rt-body"></div><footer class="rt-footer" aria-label="관련 작업 안내"></footer></div>';
+  dialog.innerHTML='<div class="rt-shell"><header class="rt-header"><div class="rt-header-copy"><button class="rt-back" type="button" data-page-back-local>← 이전 페이지로</button><h2 id="rt-title" tabindex="-1"></h2></div><button class="rt-close" type="button" aria-label="관리 팁 상세 닫기">×</button></header><div class="rt-body"></div><footer class="rt-footer" aria-label="관련 작업 안내"></footer></div>';
   document.body.append(dialog);
   const title=dialog.querySelector('h2'),body=dialog.querySelector('.rt-body'),footer=dialog.querySelector('.rt-footer');
   let active=null,originScroll=0,opener=null,savedPadding='',locked=false,backdropDown=false,frame=0;

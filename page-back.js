@@ -1,7 +1,9 @@
 /* Shared back navigation only. Keep existing page content and search state intact. */
 (()=>{'use strict';
- const decorate=control=>{control.classList.add('ys-page-back');control.textContent='← 이전 페이지로';};
- document.querySelectorAll('[data-page-back-local]').forEach(decorate);
+ const decorate=control=>{control.classList.add('ys-page-back');if(control.textContent!=='← 이전 페이지로')control.textContent='← 이전 페이지로';};
+ const decorateLocal=root=>{if(root.matches?.('[data-page-back-local]'))decorate(root);root.querySelectorAll?.('[data-page-back-local]').forEach(decorate);};
+ decorateLocal(document);
+ new MutationObserver(records=>{for(const record of records)for(const node of record.addedNodes)if(node.nodeType===1)decorateLocal(node);}).observe(document.body,{childList:true,subtree:true});
  const file=location.pathname.split('/').pop()||'index.html';
  const defaults={'service-detail.html':'index.html','find.html':'index.html','guide.html':'index.html','boiler-guide.html':'guide.html?group=water&view=list#work-guide','computer-guide.html':'guide.html?group=computer#work-guide','expert.html':'find.html','favorites.html':'find.html','compare.html':'find.html','cases.html':'index.html','case.html':'cases.html','questions.html':'index.html','question.html':'questions.html','question-write.html':'questions.html','questions-example.html':'questions.html','board-notice.html':'questions.html','question-admin.html':'questions.html','technician-board.html':'index.html','technician-apply.html':'technician-board.html','technician-lookup.html':'technician-board.html','technician-detail.html':'technician-board.html','technician-recruit.html':'technician-board.html','technician-notice.html':'technician-board.html','technician-admin.html':'technician-board.html','register-form.html':'technician-board.html','request.html':'guide.html'};
  const safe=value=>{if(!value)return null;try{const u=new URL(value,location.href);return u.origin===location.origin&&(u.pathname.split('/').pop() in defaults||u.pathname.endsWith('/')||u.pathname.endsWith('/index.html'))?u:null;}catch{return null;}};
