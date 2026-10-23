@@ -10,7 +10,7 @@ body :is(#expert-grid,#find-grid) .ys-expert-card{display:grid;grid-template-col
 
 /* Keep search page numbers available on narrow screens as well as desktop. */
 @media(max-width:600px){
- body #search-pagination{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;overflow:visible;margin:20px 0 28px}
+ body #search-pagination{display:flex;position:static;top:auto;left:auto;right:auto;width:100%;max-height:none;flex-direction:row;justify-content:center;gap:6px;flex-wrap:wrap;overflow:visible;margin:20px 0 28px;padding:0;background:transparent;border:0;box-shadow:none}
  body #search-pagination .page-number{display:grid}
  body #search-pagination .page-gap{display:inline-flex;min-width:20px;padding:0}
  body #search-pagination :is(a,.page-disabled){box-sizing:border-box;min-width:44px;min-height:44px;padding:8px}
