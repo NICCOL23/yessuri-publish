@@ -6,6 +6,6 @@ html body :is(.ys-page-backbar,#wg-panel) .ys-page-back{display:inline-flex;alig
 [data-page-back-duplicate]{display:none!important}
 @media(max-width:600px){.ys-page-backbar{width:calc(100% - 32px);margin-top:12px}}
 
-.ys-page-backbar-sticky{position:sticky;top:var(--ys-page-back-top,82px);z-index:30;background:#fff}
+.ys-page-backbar-sticky{position:sticky;top:var(--ys-page-back-top,82px);z-index:30;background:inherit}
 
 .ys-page-backbar~main :is(h1,h2,h3,[tabindex="-1"]){scroll-margin-top:var(--ys-page-back-scroll-offset,150px)}
