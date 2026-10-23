@@ -8416,22 +8416,23 @@
     {
       "id": "work-image-bath-ceiling",
       "taskId": "bath-ceiling",
-      "file": "../v2/bath-ceiling.svg",
-      "alt": "욕실 천장 돔과 조명·환풍기 위치를 표현한 개념도",
-      "caption": "구성 이해를 돕는 개념도 · 실제 제품·규격·시공 사례가 아닙니다.",
-      "width": 768,
-      "height": 768,
-      "format": "svg",
-      "sha256": "7712ad05c779396d817a0f04ac86f5703526d2caff29ffa8e15c07ad78f44f19",
+      "file": "../v2/bath-ceiling-3d.png",
+      "alt": "욕실 천장 돔의 곡면과 조명·환풍기·점검구를 보여주는 3D 참고 이미지",
+      "caption": "3D 참고 이미지 · 실제 시공 사례·판매 제품이 아니며 현장과 다를 수 있습니다.",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "sha256": "f48d146106cc9f721631a044bdfea39cda6a14ccef0e544fb5630d0b584c91ab",
       "production": {
-        "method": "svg-diagram",
-        "date": "2026-10-23"
+        "method": "built-in-imagegen",
+        "date": "2026-10-23",
+        "originalArchive": "C:/Users/admin/.codex/generated_images/01a132a7-6e74-7d52-9401-bcd557994d6e/exec-84f38ad4-932c-4557-80bf-66d74db7915b.png"
       },
       "sources": [],
       "review": {
-        "status": "visually-reviewed",
+        "status": "user-approved-sample",
         "date": "2026-10-23",
-        "notes": "기존 상세 패널에서 천장 돔 구성 개념도와 캡션 표시 확인. 실제 제품·규격·시공 사례가 아님."
+        "notes": "사용자가 3D 샘플 확인 후 적용·배포 요청. 실제 제품·시공 사례가 아닌 참고 이미지."
       }
     }
   ],
