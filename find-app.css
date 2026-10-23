@@ -1,0 +1,45 @@
+/* All changes are restricted to mobile installed-app expert search. */
+@media(max-width:760px){
+ body.ys-find-installed #main.find-main .find-intro{padding:8px 0 10px}
+ body.ys-find-installed #main.find-main .find-intro h1{font-size:1.625rem;line-height:1.4}
+ body.ys-find-installed #main .find-content{padding-top:0}
+ body.ys-find-installed #main .compact-search{padding:12px}
+ body.ys-find-installed #main .compact-search .find-filter-fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px 8px}
+ body.ys-find-installed #main .compact-search .find-filter-fields>label{grid-column:auto;font-size:1rem;line-height:1.5;gap:4px}
+ body.ys-find-installed #main .compact-search :is(input,select,.sf-picker-trigger){font-size:1rem;min-height:44px;height:auto;margin:0}
+ body.ys-find-installed #main .compact-search .find-filter-fields>.button{grid-column:1;grid-row:2;min-height:44px;margin:0;padding:8px}
+ body.ys-find-installed #main #reset-filters{grid-column:2;grid-row:2;min-height:44px;padding:8px;border:1px solid #c8dadd;border-radius:8px;background:white;color:#00767e;font:inherit;font-size:1rem;margin:0}
+ body.ys-find-installed .app-query-disclosure{margin-top:10px;border-top:1px solid #d8e4e6}
+ body.ys-find-installed .app-query-disclosure summary{min-height:44px;box-sizing:border-box;padding:10px 0;cursor:pointer;font-size:1rem;line-height:1.5;color:#006770}
+ body.ys-find-installed #main .app-query-disclosure .find-query-field{display:flex;gap:4px;font-size:1rem;line-height:1.5;padding:6px 0}
+ body.ys-find-installed #main .app-query-disclosure small{font-size:.875rem;line-height:1.5}
+ body.ys-find-installed #main .find-box-toolbar{display:grid;grid-template-columns:minmax(0,1fr) 100px;gap:6px;margin-top:10px;padding-top:8px}
+ body.ys-find-installed #main .find-box-toolbar .search-reset-row{display:none}
+ body.ys-find-installed #main .find-box-toolbar .find-results-actions{display:contents}
+ body.ys-find-installed #main .find-box-toolbar .saved-access{min-width:0;width:auto}
+ body.ys-find-installed #main .saved-access-buttons{flex-wrap:nowrap;gap:4px}
+ body.ys-find-installed #main .saved-access-buttons a{min-height:44px;padding:6px 4px;font-size:.875rem;gap:2px}
+ body.ys-find-installed #main .find-box-toolbar #find-sort{width:100px;min-height:44px;padding-left:6px;padding-right:24px;background-position:right 6px center}
+ body.ys-find-installed #main .find-results-strip{margin:12px 0 8px;padding-bottom:6px;gap:6px}
+ body.ys-find-installed .app-results-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;flex:1 1 220px;width:auto;min-width:0}
+ body.ys-find-installed #main .find-results-strip #find-current-conditions{display:flex;flex:0 1 auto;width:auto}
+ body.ys-find-installed #main .find-results-strip #directory-results-title{font-size:1.125rem;line-height:1.5;margin:0;text-align:left}
+ body.ys-find-installed #main #search-page-range{display:none}
+ body.ys-find-installed #main .find-usage{margin-left:auto}
+ body.ys-find-installed #main #find-grid{grid-template-columns:1fr;gap:8px}
+ body.ys-find-installed #main #find-grid .ys-expert-card{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:6px 10px}
+ body.ys-find-installed #find-grid .ys-expert-photo{grid-column:1;grid-row:1/3;width:72px;height:100%;min-height:110px}
+ body.ys-find-installed #find-grid .ys-expert-summary{grid-column:2;grid-row:1}
+ body.ys-find-installed #find-grid .ys-expert-actions{display:flex;flex-direction:row;align-items:center;grid-column:2;grid-row:2;gap:4px;border:0;padding:0;min-width:0}
+ body.ys-find-installed #find-grid .ys-expert-profile{flex:1;padding:6px;font-size:.875rem;min-width:0;min-height:44px}
+ body.ys-find-installed #find-grid .ys-expert-compare{flex:0 0 44px;width:44px;grid-column:auto;padding:4px;min-width:44px;min-height:44px;font-size:.875rem}
+ body.ys-find-installed .ys-page-backbar{padding-top:4px;padding-bottom:4px}
+ body.ys-find-installed :is(summary,button,a):focus-visible{outline:3px solid #00767e;outline-offset:3px}
+}
+@media(max-width:360px){
+ body.ys-find-installed #main .find-box-toolbar{grid-template-columns:minmax(0,1fr) 90px}
+ body.ys-find-installed #main .find-box-toolbar #find-sort{width:90px}
+ body.ys-find-installed #main .saved-access-buttons{flex-wrap:wrap}
+ body.ys-find-installed #main #find-grid .ys-expert-card{grid-template-columns:60px minmax(0,1fr);gap:6px}
+ body.ys-find-installed #find-grid .ys-expert-photo{width:60px}
+}
