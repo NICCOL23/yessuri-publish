@@ -1,10 +1,11 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import catalog from './catalog.json' with { type: 'json' };
+import {groups, acceptsWork, fieldFilter} from './field-rules.mjs';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const db = createClient(SUPABASE_URL, KEY, { auth: { persistSession: false, autoRefreshToken: false } });
-const groups = new Set(['general','electric','water','life','computer','unknown']);
+
 const districts = new Set(['중구','서구','동구','영도구','부산진구','동래구','남구','북구','해운대구','사하구','금정구','강서구','연제구','수영구','사상구','기장군']);
 const origins = new Set(['https://yessuri.com','https://www.yessuri.com','https://niccol23.github.io','http://127.0.0.1:8097','http://localhost:8097']);
 const encoder = new TextEncoder();
@@ -29,7 +30,7 @@ function fields(p: Record<string,unknown>){
   const group_id=text(p.group_id,1,20,'분야');check(groups.has(group_id),'분야를 선택해 주세요.');
   const district=text(p.district,1,20,'지역');check(districts.has(district),'부산 구·군을 선택해 주세요.');
   const work_id=p.work_id ? text(p.work_id,1,100,'세부 작업') : '';
-  if(work_id)check(catalog.some(t=>t.id===work_id&&t.group_id===group_id),'선택한 분야와 작업이 맞지 않습니다.');
+  if(work_id)check(acceptsWork(group_id,work_id),'선택한 분야와 작업이 맞지 않습니다.');
   return {nickname:text(p.nickname,1,30,'닉네임'),district,group_id,work_id,title:text(p.title,2,120,'제목'),body:text(p.body,10,10000,'질문 내용')};
 }
 async function admin(req: Request){
@@ -88,7 +89,7 @@ Deno.serve(async(req)=>{
       check(action==='list','지원하지 않는 요청입니다.');await rate(req,'read',600);
       const page=Math.max(1,Math.min(1000,Number(u.searchParams.get('page'))||1)),group=u.searchParams.get('group')||'',district=u.searchParams.get('district')||'',search=(u.searchParams.get('q')||'').trim().slice(0,100);
       let q=db.from('board_questions').select('id,nickname,district,group_id,work_id,title,body,created_at,edited_at,board_answers(id),board_photos(id,position)',{count:'exact'}).eq('state','published').eq('board_answers.published',true);
-      if(group&&groups.has(group))q=q.eq('group_id',group);if(district&&districts.has(district))q=q.eq('district',district);
+      if(group&&groups.has(group))q=q.or(fieldFilter(group)!);if(district&&districts.has(district))q=q.eq('district',district);
       if(search){const safe=search.replace(/[%,().*\\]/g,' ');q=q.or('title.ilike.%'+safe+'%,body.ilike.%'+safe+'%');}
       if(u.searchParams.get('waiting')==='1')q=q.is('board_answers','null');
       const {data,error,count}=await q.order('created_at',{ascending:false}).order('id',{ascending:false}).range((page-1)*10,page*10-1);if(error)throw Error('list query failed');
