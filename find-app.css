@@ -32,7 +32,7 @@
  body.ys-find-installed #find-grid .ys-expert-summary{grid-column:2;grid-row:1}
  body.ys-find-installed #find-grid .ys-expert-actions{display:flex;flex-direction:row;align-items:center;grid-column:2;grid-row:2;gap:4px;border:0;padding:0;min-width:0}
  body.ys-find-installed #find-grid .ys-expert-profile{flex:1;padding:6px;font-size:.875rem;min-width:0;min-height:44px}
- body.ys-find-installed #find-grid .ys-expert-compare{flex:0 0 44px;width:44px;grid-column:auto;padding:4px;min-width:44px;min-height:44px;font-size:.875rem}
+ body.ys-find-installed #find-grid .ys-expert-compare{flex:0 0 56px;width:56px;grid-column:auto;padding:4px;min-width:56px;min-height:44px;font-size:.875rem;white-space:nowrap}
  body.ys-find-installed .ys-page-backbar{padding-top:4px;padding-bottom:4px}
  body.ys-find-installed :is(summary,button,a):focus-visible{outline:3px solid #00767e;outline-offset:3px}
 }
