@@ -39,6 +39,10 @@
           </div>
         </footer>`;
     }
+    disconnectedCallback() {
+      this.appDisplay?.removeEventListener('change', this.syncAppMode);
+      this.appMobile?.removeEventListener('change', this.syncAppMode);
+    }
   }
   if (!customElements.get('yessuri-site-footer')) customElements.define('yessuri-site-footer', YessuriSiteFooter);
 })();
