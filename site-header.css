@@ -27,3 +27,10 @@ nav{display:flex;align-items:center;gap:24px;flex:1;min-width:0;margin-left:28px
 @media(max-width:900px){:host,yessuri-site-header{min-height:76px}.header-inner{min-height:76px;justify-content:space-between;width:calc(100% - 32px)}.brand{width:190px;height:58px}.brand img{top:-3px}.brand>span{top:44px;font-size:10px;line-height:12px}.menu-toggle{display:inline-flex;margin-left:auto}nav{display:none;position:absolute;top:100%;left:-16px;right:-16px;margin:0;padding:1rem;flex-direction:column;align-items:stretch;gap:0;background:#fff;border-bottom:1px solid #dbe5e8;box-shadow:0 12px 24px #19334e14;max-height:calc(100dvh - 76px);overflow-y:auto}nav.is-open{display:flex}.nav-link{padding:.75rem}.register-link{margin-left:0}.guide-nav{display:grid;grid-template-columns:minmax(0,1fr) 2.75rem;gap:0}#guide-submenu{position:static;grid-column:1/-1;width:auto;max-width:none;margin:0 .75rem .5rem;padding:0 .5rem;border:0;border-left:2px solid #00767e;box-shadow:none;border-radius:0}}
 @media(max-width:359px){.brand{width:175px}.brand>span{top:41px}}
 @media print{:host,yessuri-site-header{position:static}nav{display:none}.menu-toggle{display:none}}
+
+/* PWA installation action only. */
+.pwa-install{order:3;flex:none;min-height:44px;padding:.5rem .75rem;border:1px solid #c8e3e2;border-radius:8px;background:#edf8f6;font-size:1rem;line-height:1.5;white-space:nowrap}
+.pwa-install[hidden]{display:none}
+@media(max-width:900px){.pwa-install{order:0;margin-left:auto}.menu-toggle{margin-left:0}}
+@media(max-width:400px){.header-inner{gap:6px}.brand{width:155px;height:50px}.brand>span{top:36px}.pwa-install{padding:.5rem}}
+@media print{.pwa-install{display:none}}

@@ -21,13 +21,14 @@
         : /^(technician-.+|register|register-form)\.html$/.test(page) ? 'technician' : '';
       const root = this.shadowRoot || this.attachShadow({ mode: 'open' });
       root.innerHTML = `
-        <link rel="stylesheet" href="${url('site-header.css?v=2')}">
+        <link rel="stylesheet" href="${url('site-header.css?v=3')}">
         <header aria-label="사이트 상단">
           <div class="header-inner">
             <a class="brand" href="${url('index.html#top')}" aria-label="YESSURI 예스수리 홈">
               <img src="${url('assets/images/yessuri-ys11-brand-color.png')}" alt="YESSURI" width="235" height="81">
               <span aria-hidden="true">예스수리</span>
             </a>
+            <button class="pwa-install" type="button" hidden>앱 설치</button>
             <button class="menu-toggle" type="button" aria-controls="home-menu" aria-expanded="false" aria-label="메뉴 열기"><span aria-hidden="true">☰</span></button>
             <nav id="home-menu" aria-label="주요 메뉴">
               ${navigation.map(item => {
@@ -38,6 +39,11 @@
             </nav>
           </div>
         </header>`;
+      const install = root.querySelector('.pwa-install');
+      const syncInstall = () => { install.hidden = !window.YessuriPWA || window.YessuriPWA.standalone(); };
+      syncInstall();
+      install.addEventListener('click', () => window.YessuriPWA?.install());
+      matchMedia('(display-mode: standalone)').addEventListener('change', syncInstall);
       const toggle = root.querySelector('.menu-toggle');
       const menu = root.querySelector('nav');
       const guide = root.querySelector('.guide-nav');
