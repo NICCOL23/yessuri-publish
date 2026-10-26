@@ -1,0 +1,6 @@
+/* Installed mobile app FAQ list spacing only. */
+@media(max-width:760px){
+ html body.ys-installed-mobile #main #faq details{padding:0}
+ html body.ys-installed-mobile #main #faq summary{min-height:44px;line-height:1.6}
+ html body.ys-installed-mobile #main #faq details p{margin:0;padding:4px 12px 8px;line-height:1.6}
+}
