@@ -1,0 +1,12 @@
+/* Requested recruitment introduction and field list, installed app only. */
+@media(max-width:760px){
+ html body.ys-installed-mobile.recruitment-detail #main .recruit-detail-content{padding:12px;margin-top:10px}
+ html body.ys-installed-mobile.recruitment-detail #main .recruit-detail-content>h1{margin:0 0 8px;line-height:1.4;letter-spacing:-.02em}
+ html body.ys-installed-mobile.recruitment-detail #main .recruit-detail-content>p{margin:0 0 8px;line-height:1.6;letter-spacing:0}
+ html body.ys-installed-mobile.recruitment-detail #main .recruit-launch{gap:4px 10px}
+ html body.ys-installed-mobile.recruitment-detail #main section[aria-labelledby="recruit-fields-title"]{margin-top:14px;padding-top:12px}
+ html body.ys-installed-mobile.recruitment-detail #main #recruit-fields-title{margin:0 0 8px;line-height:1.4;letter-spacing:-.01em}
+ html body.ys-installed-mobile.recruitment-detail #main section[aria-labelledby="recruit-fields-title"]>p{margin:0 0 8px;line-height:1.6;letter-spacing:0}
+ html body.ys-installed-mobile.recruitment-detail #main .recruit-fields{gap:4px;margin:8px 0 0}
+ html body.ys-installed-mobile.recruitment-detail #main .recruit-fields li{padding:4px 8px;max-width:100%;overflow-wrap:anywhere;line-height:1.5;letter-spacing:0}
+}
