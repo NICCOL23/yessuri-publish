@@ -1,0 +1,23 @@
+/* Only the four requested registration-guide sections in the installed app. */
+@media(max-width:760px){
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower :is(p,li){line-height:1.6;letter-spacing:0}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-steps{gap:8px}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-steps li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-content:start;gap:2px 8px;padding:4px;min-width:0}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-steps .reg-number{grid-column:1;grid-row:1;align-self:center;justify-self:end;width:28px;height:28px;margin:0}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-steps .reg-art-icon{grid-column:2;grid-row:1;align-self:center;justify-self:start;width:29px;height:29px;margin:0}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-steps h3{grid-column:1/-1;grid-row:2;margin:0;line-height:1.5}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-steps p{grid-column:1/-1;grid-row:3;margin:0}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-preparation{gap:8px}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-preparation article{padding:14px 12px}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-preparation h3{margin:0 0 8px;line-height:1.5}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-preparation li+li{margin-top:4px}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-preview{padding:12px}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-preview-body{gap:10px}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-preview-body h3{margin:0 0 6px;line-height:1.5}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-preview-body p{margin:4px 0 0}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-example-actions{margin-top:10px;gap:8px}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-note{margin:10px 0 0}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-faq details{margin-top:6px}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-faq summary{min-height:44px;padding:8px 12px;line-height:1.5;letter-spacing:0}
+ html body.ys-installed-mobile[data-technician-page="board"] #main .entry-restored-lower .reg-faq details p{margin:0;padding:0 12px 10px}
+}
