@@ -19,7 +19,7 @@ nav a{display:inline-flex;align-items:center;min-height:44px}
 
 /* App-only compact variant inside the existing shared footer component. */
 @media(max-width:760px){
- :host([app-compact]) footer{padding:12px 0 max(12px,env(safe-area-inset-bottom));border-top:1px solid #dce6e2}
+ :host([app-compact]) footer{padding:12px 0 calc(12px + max(env(safe-area-inset-bottom),var(--app-footer-nav-height,0px)));border-top:1px solid #dce6e2}
  :host([app-compact]) .footer-inner{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px 12px;width:calc(100% - 32px)}
  :host([app-compact]) .brand-block{grid-column:1;grid-row:1}
  :host([app-compact]) .brand{width:140px;height:42px}
@@ -30,5 +30,4 @@ nav a{display:inline-flex;align-items:center;min-height:44px}
  :host([app-compact]) .copyright{grid-column:2;grid-row:1;font-size:12px;text-align:right}
  :host([app-compact]) nav{grid-column:1/-1;grid-row:2;display:flex;justify-content:space-between;gap:0 8px;font-size:14px;line-height:1.5}
  :host([app-compact]) nav a{min-height:44px}
- :host([app-compact][has-mobile-nav]) footer{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
 }
