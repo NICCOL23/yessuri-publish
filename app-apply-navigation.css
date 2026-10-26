@@ -1,0 +1,13 @@
+/* Keep the installed-app form navigation in document flow, outside header-menu styles. */
+@media(max-width:760px){
+ html body.ys-installed-mobile[data-technician-page="apply"] #root > .tabs{
+  position:static;inset:auto;z-index:auto;
+  display:flex;flex-direction:row;flex-wrap:wrap;align-items:stretch;
+  margin:0 0 16px;padding:0;gap:0;
+  background:transparent;border:0;border-bottom:1px solid #d8e2ea;
+  box-shadow:none;max-height:none;overflow:visible;
+ }
+ html body.ys-installed-mobile[data-technician-page="apply"] #root > .tabs a{
+  flex:1 1 140px;min-width:0;text-align:center;overflow-wrap:anywhere;
+ }
+}
