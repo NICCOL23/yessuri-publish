@@ -1,0 +1,12 @@
+/* Installed mobile app only: fit parent groups and their child cards together. */
+@media(max-width:760px){
+ html body.ys-installed-mobile #main #wg-groups{gap:4px;margin:8px 0 0}
+ html body.ys-installed-mobile #main #wg-groups button{min-height:48px;padding:6px;line-height:1.5}
+ html body.ys-installed-mobile #main #wg-groups button small{display:none}
+ html body.ys-installed-mobile #main .wg-category-heading{margin:8px 0 6px}
+ html body.ys-installed-mobile #main #wg-categories{gap:4px}
+ html body.ys-installed-mobile #main #wg-categories .wg-field-illustrated{position:relative;flex-direction:column;align-items:center;justify-content:flex-start;min-height:98px;padding:2px;gap:0}
+ html body.ys-installed-mobile #main #wg-categories .wg-field-illustrated .wg-field-copy{flex:0 0 auto;width:100%;min-width:0;padding:0 12px 0 0;line-height:1.5;text-align:center;word-break:normal;overflow-wrap:anywhere}
+ html body.ys-installed-mobile #main #wg-categories .wg-field-illustrated .wg-field-copy small{display:none}
+ html body.ys-installed-mobile #main #wg-categories .wg-field-illustrated>span:last-child{position:absolute;right:3px;top:auto;bottom:3px;font-size:16px}
+}
