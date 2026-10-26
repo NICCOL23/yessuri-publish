@@ -1,0 +1,12 @@
+/* Installed-app consultation message only; retain text, icon and copy action. */
+@media(max-width:760px){
+ html body.ys-installed-mobile #consultation .guide-consult{display:grid;grid-template-columns:48px minmax(0,1fr);gap:4px;padding:10px}
+ html body.ys-installed-mobile #consultation .guide-consult-content,
+ html body.ys-installed-mobile #consultation .guide-consult-heading{display:contents}
+ html body.ys-installed-mobile #consultation .guide-consult-heading>div{grid-column:1/-1;grid-row:1}
+ html body.ys-installed-mobile #consultation .guide-consult>.guide-check-icon{grid-column:1;grid-row:2;margin:0;align-self:center}
+ html body.ys-installed-mobile #consultation #guide-copy{grid-column:2;grid-row:2;justify-self:start;align-self:center;min-height:44px;padding:6px 12px}
+ html body.ys-installed-mobile #consultation #guide-message{grid-column:1/-1;grid-row:3;padding:8px;margin:0}
+ html body.ys-installed-mobile #consultation #guide-copy-status{grid-column:1/-1;grid-row:4;margin:0}
+ html body.ys-installed-mobile #consultation #guide-copy-status:empty{display:none}
+}
