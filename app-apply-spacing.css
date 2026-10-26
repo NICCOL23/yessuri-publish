@@ -1,0 +1,30 @@
+/* App-only spacing for the technician registration form. */
+@media(max-width:760px){
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #main{padding:8px 10px 16px;font-size:1rem;line-height:1.6;letter-spacing:0;word-spacing:normal}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #main .page-title{margin-bottom:8px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #main .page-title h1{margin:0 0 4px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #main .page-title p{margin:0}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #root > .tabs{margin-bottom:10px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form{padding:10px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form .required-note{margin:0 0 8px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form .section{margin-top:12px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form .section:first-of-type{margin-top:0}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form .section-title{margin-bottom:6px;gap:6px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form .fields{gap:8px 10px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form .field{gap:2px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form input:not([type=checkbox]){min-height:44px;padding:6px 8px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form textarea{padding:6px 8px;resize:vertical}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form p{margin:4px 0}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form .hint{font-size:.875rem;line-height:1.5;letter-spacing:0;margin:2px 0 0}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form .upload{padding:8px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form .upload h3{margin:0 0 4px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form .upload button{margin:4px 0;min-height:44px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form .file-grid:empty{margin:0}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form .terms{padding:8px;font-size:1rem;line-height:1.6;letter-spacing:0;overflow-wrap:anywhere}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form .check{margin-top:8px;gap:8px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #application-form .actions{margin-top:12px;gap:8px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #main .layout{gap:12px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #main .aside .card{padding:10px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #main .aside h3{margin-bottom:4px}
+ html[data-type-system] body.ys-installed-mobile[data-technician-page="apply"] #main .aside p{margin:0}
+}
