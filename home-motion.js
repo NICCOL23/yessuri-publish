@@ -4,23 +4,15 @@
   const root = document.querySelector('#top.hero-carousel');
   const scenes = [...document.querySelectorAll('.hero-showcase .full-bg-scene')];
   if (!root || scenes.length < 2) return;
-  let index = 0, paused = false, timer;
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.className = 'full-bg-toggle';
-  root.append(button);
+  let index = 0, timer;
   function show(next) {
     index = next;
     scenes.forEach((scene, i) => scene.classList.toggle('active', i === index));
   }
   function start() {
     clearInterval(timer);
-    button.textContent = paused ? '배경 재생 ▶' : '배경 정지 Ⅱ';
-    button.setAttribute('aria-pressed', String(paused));
-    document.body.classList.toggle('full-bg-paused', paused);
-    if (!paused) timer = setInterval(() => show((index + 1) % scenes.length), 8000);
+    timer = setInterval(() => show((index + 1) % scenes.length), 8000);
   }
-  button.addEventListener('click', () => { paused = !paused; start(); });
   const tabs = [...root.querySelectorAll('[role="tab"]')];
   // Observe the existing slider so clicks, arrow keys and touch all stay in sync.
   const observer = new MutationObserver(() => {
