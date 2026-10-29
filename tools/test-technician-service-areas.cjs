@@ -19,6 +19,11 @@ const server=http.createServer((req,res)=>{const pathname=decodeURIComponent(new
   if(url.origin===origin)return route.continue();
   if(url.hostname==='buotlfllagjwxopnbeit.supabase.co'){
    const endpoint=url.searchParams.get('route');
+   if(endpoint==='/api/verify'){
+    const data=route.request().postDataJSON();
+    return route.fulfill({status:data.password==='Only-test-password!'?200:403,json:data.password==='Only-test-password!'?{id}:{error:'신청 정보 또는 비밀번호를 확인해 주세요.'},headers:{'Access-Control-Allow-Origin':origin}});
+   }
+   if(endpoint&&endpoint.startsWith('/api/applications?'))return route.fulfill({json:{count:1,applications:[{id,companyMasked:'테***',created_at:'2026-10-29T00:00:00Z',status:'접수',replies:0}]},headers:{'Access-Control-Allow-Origin':origin}});
    if(route.request().method()==='POST'){writes.push({endpoint,data:route.request().postDataJSON()});return route.fulfill({json:{id,receipt:'YS-TEST'},headers:{'Access-Control-Allow-Origin':origin}})}
    return route.fulfill({json:{application:application(),photos:[],messages:[]},headers:{'Access-Control-Allow-Origin':origin}});
   }
@@ -82,7 +87,20 @@ const server=http.createServer((req,res)=>{const pathname=decodeURIComponent(new
  await page.evaluate(()=>{document.documentElement.style.fontSize='';document.querySelectorAll('.ys-area-picker,.ys-area-picker *').forEach(el=>{el.style.lineHeight='';el.style.letterSpacing='';el.style.wordSpacing='';});});
  await page.getByRole('button',{name:'선택 완료',exact:true}).click();
  if(process.env.YESSURI_SCREENSHOT_DIR)await page.locator('.ys-service-areas').screenshot({path:path.join(process.env.YESSURI_SCREENSHOT_DIR,'service-areas-mobile-closed.png')});
- await page.locator('#application-form .actions button').click();await page.getByText('등록 신청이 접수되었습니다.',{exact:true}).waitFor();
+ await page.locator('#application-form .actions button').click();await page.waitForURL('**/technician-board.html?submitted=1#entry-list');
+ await page.getByText('신청이 접수되었습니다. 본인 글을 누르고 설정한 비밀번호로 확인해 주세요.',{exact:true}).waitFor();
+ assert.equal(await page.locator('#copy-receipt').count(),0);assert.equal(await page.locator('#copy-url').count(),0);
+ await page.locator('.title-link').click();
+ const passwordDialog=page.locator('#board-password-dialog');
+ assert.equal(await passwordDialog.isVisible(),true);assert.equal(await passwordDialog.locator('#receipt').count(),0);
+ await page.locator('#board-password').fill('wrong');
+ await passwordDialog.getByRole('button',{name:'내 신청 확인',exact:true}).click();
+ await page.getByText('신청 정보 또는 비밀번호를 확인해 주세요.',{exact:true}).waitFor();
+ assert.equal(await page.locator('#board-password').inputValue(),'');
+ assert.equal(page.url().includes('technician-board.html'),true);
+ await passwordDialog.getByRole('button',{name:'취소하기',exact:true}).click();await passwordDialog.waitFor({state:'detached'});
+ await page.locator('.title-link').click();await page.locator('#board-password').fill('Only-test-password!');
+ await page.locator('#board-password-dialog').getByRole('button',{name:'내 신청 확인',exact:true}).click();await page.waitForURL('**/technician-detail.html?id=*');
  assert.equal(writes[0].data.fields,'누수·수도, 타일, 페인트');assert.equal(writes[0].data.areas,'전체, 부산진구, 수영구, 해운대구');assert.equal(writes[0].data.areaNotes,'평일은 해운대구·수영구, 토요일은 부산진구 출장 가능');
  areas=writes[0].data.areas;fields=writes[0].data.fields;
  await page.goto(origin+'/technician-apply.html?id='+id);await page.locator('#service-area-trigger').waitFor();

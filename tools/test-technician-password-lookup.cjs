@@ -43,6 +43,6 @@ async function ui({selected=id,action='',fail=false}={}){
  const cancel=await ui();cancel.get('#lookup-password').value=password;cancel.get('#cancel-lookup').onclick();assert.equal(cancel.get('#lookup-password').value,'');assert.equal(cancel.location.href,'technician-board.html');assert.equal(cancel.calls.length,0);
  const failed=await ui({fail:true});failed.get('#lookup-password').value='wrong';await failed.get('#lookup-form').onsubmit({preventDefault(){}});assert.equal(failed.location.href,'');assert.equal(failed.get('#lookup-password').value,'');
  const unselected=await ui({selected:''});assert.equal(unselected.html.includes('신청 목록에서 내 글 찾기'),true);assert.equal(unselected.html.includes('id="lookup-password"'),false);assert.equal(unselected.calls.length,0);
- assert(read('technician.js').includes('href="technician-apply.html?id=${esc(d.id)}">신청 내용 수정</a>'));
+ assert(read('technician.js').includes("location.replace('technician-board.html?submitted=1#entry-list')"));
  console.log('PASS: selected application + password without receipt, isolated access, incorrect/expired/missing targets, rate limit, password change race, legacy receipt, lookup UI, cancel without deletion, edit return');
 })().catch(e=>{console.error(e);process.exitCode=1});
