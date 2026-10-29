@@ -21,7 +21,7 @@ function fields(p:any){const result:Record<string,string>={};const limits:Record
 async function readBody(req:Request){check((req.headers.get('content-type')||'').split(';')[0]==='application/json','지원하지 않는 요청 형식입니다.',415);const reader=req.body?.getReader();check(reader,'입력 내용을 확인해 주세요.');let size=0;const chunks:Uint8Array[]=[];while(true){const{value,done}=await reader.read();if(done)break;size+=value.length;if(size>7500000){await reader.cancel();throw new UserError('전송할 사진 용량을 줄여 주세요.',413);}chunks.push(value);}const bytes=new Uint8Array(size);let offset=0;for(const c of chunks){bytes.set(c,offset);offset+=c.length;}let p;try{p=JSON.parse(new TextDecoder().decode(bytes));}catch{throw new UserError('입력 내용을 확인해 주세요.');}check(p&&typeof p==='object'&&!Array.isArray(p),'입력 내용을 확인해 주세요.');return p;}
 async function rate(req:Request,action:string,max:number,seconds:number){const ip=req.headers.get('x-forwarded-for')?.split(',')[0].trim()||req.headers.get('cf-connecting-ip')||'unknown';const key=await sha(action+':'+ip);const d=await rpc('rate',{key,max,seconds});check(d.allowed,'반복 시도가 많습니다. 잠시 후 다시 시도해 주세요.',429);return key;}
 async function session(req:Request,role:'owner'|'admin'){const token=req.headers.get(role==='admin'?'x-admin-token':'x-owner-token')||'';if(!/^[a-f0-9]{64}$/.test(token))return null;const hash=await sha(token),s=await rpc('session',{hash});return s.role===role?{...s,hash}:null;}
-async function owner(req:Request,id:string){const s=await session(req,'owner');check(s&&s.application_id===id,'접수번호와 비밀번호로 본인 확인해 주세요.',403);return s;}
+async function owner(req:Request,id:string){const s=await session(req,'owner');check(s&&s.application_id===id,'신청 목록에서 본인 글을 선택하고 비밀번호로 확인해 주세요.',403);return s;}
 async function admin(req:Request){const s=await session(req,'admin');check(s,'관리자 로그인이 필요합니다.',403);return s;}
 async function auth(req:Request,id?:string){const s=await session(req,'admin')||await session(req,'owner');check(s&&(s.role==='admin'||s.application_id===id),'본인 확인이 필요합니다.',403);return s;}
 async function cleanup(){const d=await rpc('cleanup');if(d.paths?.length){const{error}=await db.storage.from(BUCKET).remove(d.paths);if(!error)await rpc('cleanup-done',{paths:d.paths});}}
@@ -50,8 +50,14 @@ Deno.serve(async req=>{
   }
   check(req.method==='POST','지원하지 않는 요청입니다.',405);const p=await readBody(req);
   if(route==='/api/verify'){
-   const key=await rate(req,'verify',5,900),receipt=text(p.receipt||'',1,40,'접수번호').toUpperCase(),pass=typeof p.password==='string'&&p.password.length<=128?p.password:'';
-   const a=await rpc('find-receipt',{receipt}),valid=await passwordMatches(pass,a.password_hash||'pbkdf2-600000:00000000000000000000000000000000:0000000000000000000000000000000000000000000000000000000000000000');check(a.id&&valid&&(!p.id||p.id===a.id),'접수번호 또는 비밀번호를 확인해 주세요.',403);
+   const key=await rate(req,'verify',5,900),pass=typeof p.password==='string'&&p.password.length<=128?p.password:'';
+   let a;
+   if(p.id!==undefined){
+    check(typeof p.id==='string'&&/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(p.id),'신청 목록에서 본인 글을 다시 선택해 주세요.');
+    const{data,error}=await db.rpc(IS_TEST?'technician_password_target_test':'technician_password_target',{p_id:p.id});
+    if(error)throw Error('password target lookup failed');a=data||{};
+   }else{a=await rpc('find-receipt',{receipt:text(p.receipt||'',1,40,'접수번호').toUpperCase()});}
+   const valid=await passwordMatches(pass,a.password_hash||'pbkdf2-600000:00000000000000000000000000000000:0000000000000000000000000000000000000000000000000000000000000000');check(a.id&&valid&&(!p.id||p.id===a.id),'신청 정보 또는 비밀번호를 확인해 주세요.',403);
    const token=random();await rpc('grant-owner',{id:a.id,expectedHash:a.password_hash,newHash:await sha(token)});await rpc('rate-clear',{key});return json({id:a.id,ownerSession:{token,expiresAt:Date.now()+900000}});
   }
   if(route==='/api/admin/login'){
