@@ -21,16 +21,20 @@ async function renderExperts() {
   const server = Boolean(remote && actual > 0);
   const examples = experts().filter(window.YESSURI_EXPERT_CARD.example);
   const ordered = window.YESSURI_EXPERT_CARD.selectFeatured(examples, examples.length);
-  const source = server ? remote.items : ordered.slice(0,12);
+  const actualItems = server ? remote.items : experts().filter(person => !window.YESSURI_EXPERT_CARD.example(person));
+  const pool = new Map();
+  for (const person of [...actualItems,...ordered]) if (!pool.has(person.id)) pool.set(person.id,person);
+  const combined = Array.from(pool.values());
+  const source = combined.slice(0,12);
   expertGrid.replaceChildren(...source.map(person => window.YESSURI_EXPERT_CARD.create(person)));
   const link = document.querySelector('.featured-directory-link a');
-  if (link) link.textContent = '전문가 전체 보기 · 공개 '+actual+'명'+(!server?' · 예시 '+examples.length+'명':'')+' →';
-  const total = server ? remote.total : ordered.length;
+  if (link) link.textContent = '전문가 전체 보기 · 공개 '+actual+'명 · 예시 '+examples.length+'명 →';
+  const total = (server ? remote.total : actualItems.length) + ordered.length;
   if (source.length < 12 || total <= 12) return;
 
-  let queue = server ? [] : ordered.slice(12);
+  let queue = combined.slice(12);
   let nextPage = 2, slot = 0, busy = false;
-  let pages = Math.ceil(total/12);
+  let pages = server ? Math.ceil(remote.total/12) : 1;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   const mobile = window.matchMedia('(max-width: 767px)');
   let paused = reduced.matches;
@@ -70,11 +74,17 @@ async function renderExperts() {
     try {
       const visibleIds = new Set(cards.map(card => card.dataset.expertId));
       queue = queue.filter(person => !visibleIds.has(person.id));
-      if (server && !queue.length) {
-        const result = await window.YESSURI_PUBLIC_API.search({page:nextPage,size:12});
-        pages = Math.max(1, Math.ceil(result.total/12));
-        nextPage = nextPage >= pages ? 1 : nextPage+1;
-        queue = result.items.filter(person => !visibleIds.has(person.id));
+      if (server && nextPage <= pages) {
+        try {
+          const result = await window.YESSURI_PUBLIC_API.search({page:nextPage,size:12});
+          pages = Math.max(1, Math.ceil(result.total/12));
+          nextPage++;
+          for (const person of result.items) {
+            if (pool.has(person.id)) continue;
+            pool.set(person.id,person);
+            if (!visibleIds.has(person.id)) queue.push(person);
+          }
+        } catch { /* Keep rotating already loaded real and example profiles. */ }
       }
       const old = cards[target];
       // Recheck after an asynchronous request: never replace a newly focused card.
@@ -84,10 +94,8 @@ async function renderExperts() {
       const height = old.getBoundingClientRect().height;
       if (height) card.style.minHeight = height+'px';
       old.replaceWith(card);
-      if (!server) {
-        const outgoing = ordered.find(person => person.id === old.dataset.expertId);
-        if (outgoing) queue.push(outgoing);
-      }
+      const outgoing = pool.get(old.dataset.expertId);
+      if (outgoing) queue.push(outgoing);
       if (!reduced.matches && typeof card.animate === 'function') {
         card.animate([{opacity:0},{opacity:1}], {duration:300});
       }
