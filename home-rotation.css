@@ -1,0 +1,5 @@
+/* Homepage rotation controls; existing twelve-card layout is unchanged. */
+#experts .home-rotation-controls{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:20px;color:#52657a;font-size:1rem;line-height:1.6}
+#experts .home-rotation-controls button{min-height:44px;padding:8px 14px;border:1px solid #cddfdf;border-radius:9px;background:#fff;color:#00767e;font:inherit;cursor:pointer}
+#experts .home-rotation-controls button:hover{background:#e8f5f2}
+#experts .home-rotation-controls button:focus-visible{outline:3px solid #00767e;outline-offset:3px}
