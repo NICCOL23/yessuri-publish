@@ -1,0 +1,14 @@
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+const {stripTypeScriptTypes}=require('node:module');
+const source=fs.readFileSync(path.join(__dirname,'../supabase/functions/technician-api/index.ts'),'utf8');
+const text=source.slice(source.indexOf('function text('),source.indexOf('function pw('));
+const fields=source.slice(source.indexOf('function fields('),source.indexOf('async function readBody('));
+const sandbox={check:(condition,message)=>{if(!condition)throw Error(message)}};
+vm.runInNewContext(stripTypeScriptTypes(text+'\n'+fields,{mode:'transform'})+'\nglobalThis.fields=fields;',sandbox);
+const base={company:'테스트',contact:'테스트',phone:'010-1234-5678',fields:'누수·수도',areas:'부산진구, 수영구'};
+assert.equal(sandbox.fields({...base,areaNotes:'토요일 출장 가능'}).areaNotes,'토요일 출장 가능');
+assert.equal(sandbox.fields({...base,areaNotes:'토요일 출장 가능'}).areas,base.areas);
+assert.equal(sandbox.fields(base).areaNotes,'','older clients remain supported');
+assert.throws(()=>sandbox.fields({...base,areaNotes:'가'.repeat(1001)}));
+assert.throws(()=>sandbox.fields({...base,areas:''}));
+console.log('PASS: service areas and notes stored separately, optional notes backward compatible, required areas and note length enforced');
