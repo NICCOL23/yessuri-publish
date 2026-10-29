@@ -87,7 +87,13 @@ const server=http.createServer((req,res)=>{const pathname=decodeURIComponent(new
  await page.evaluate(()=>{document.documentElement.style.fontSize='';document.querySelectorAll('.ys-area-picker,.ys-area-picker *').forEach(el=>{el.style.lineHeight='';el.style.letterSpacing='';el.style.wordSpacing='';});});
  await page.getByRole('button',{name:'선택 완료',exact:true}).click();
  if(process.env.YESSURI_SCREENSHOT_DIR)await page.locator('.ys-service-areas').screenshot({path:path.join(process.env.YESSURI_SCREENSHOT_DIR,'service-areas-mobile-closed.png')});
- await page.locator('#application-form .actions button').click();await page.waitForURL('**/technician-board.html?submitted=1#entry-list');
+ await page.locator('#application-form .actions button').click();const completeDialog=page.locator('#registration-complete-dialog');
+ await completeDialog.waitFor();
+ assert.equal(await completeDialog.getByRole('link',{name:'돌아가서 수정',exact:true}).getAttribute('href'),'technician-apply.html?id='+id);
+ assert.equal(await completeDialog.locator('#copy-receipt').count(),0);
+ assert.equal(await completeDialog.locator('#copy-url').count(),0);
+ await completeDialog.getByRole('button',{name:'확인·게시판으로',exact:true}).click();
+ await page.waitForURL('**/technician-board.html?submitted=1#entry-list');
  await page.getByText('신청이 접수되었습니다. 본인 글을 누르고 설정한 비밀번호로 확인해 주세요.',{exact:true}).waitFor();
  assert.equal(await page.locator('#copy-receipt').count(),0);assert.equal(await page.locator('#copy-url').count(),0);
  await page.locator('.title-link').click();
@@ -100,7 +106,7 @@ const server=http.createServer((req,res)=>{const pathname=decodeURIComponent(new
  assert.equal(page.url().includes('technician-board.html'),true);
  await passwordDialog.getByRole('button',{name:'취소하기',exact:true}).click();await passwordDialog.waitFor({state:'detached'});
  await page.locator('.title-link').click();await page.locator('#board-password').fill('Only-test-password!');
- await page.locator('#board-password-dialog').getByRole('button',{name:'내 신청 확인',exact:true}).click();await page.waitForURL('**/technician-detail.html?id=*');
+ await page.locator('#board-password-dialog').getByRole('button',{name:'내 신청 확인',exact:true}).click();await page.waitForURL('**/technician-detail.html?id=*');await page.locator('#delete-application').waitFor();assert.equal((await page.locator('.summary').innerText()).includes('접수번호'),false);assert.equal((await page.locator('.summary').innerText()).includes('YS-TEST'),false);
  assert.equal(writes[0].data.fields,'누수·수도, 타일, 페인트');assert.equal(writes[0].data.areas,'전체, 부산진구, 수영구, 해운대구');assert.equal(writes[0].data.areaNotes,'평일은 해운대구·수영구, 토요일은 부산진구 출장 가능');
  areas=writes[0].data.areas;fields=writes[0].data.fields;
  await page.goto(origin+'/technician-apply.html?id='+id);await page.locator('#service-area-trigger').waitFor();
@@ -108,7 +114,7 @@ const server=http.createServer((req,res)=>{const pathname=decodeURIComponent(new
  await openDrawer();assert.equal(await page.getByRole('checkbox',{name:'부산 전 지역',exact:true}).isChecked(),true);
  await page.getByRole('checkbox',{name:'해운대구',exact:true}).uncheck();assert.equal(await dialog.locator('.ys-area-chip').count(),3);assert.equal(await page.locator('#service-area-all').isChecked(),true);
  await page.getByRole('checkbox',{name:'해운대구',exact:true}).check();await page.getByRole('button',{name:'선택 완료',exact:true}).click();
- await page.locator('#application-form .actions button').click();await page.waitForURL('**/technician-detail.html?id=*');
+ await page.locator('#application-form .actions button').click();await page.waitForURL('**/technician-detail.html?id=*');await page.locator('#delete-application').waitFor();assert.equal((await page.locator('.summary').innerText()).includes('접수번호'),false);assert.equal((await page.locator('.summary').innerText()).includes('YS-TEST'),false);
  assert.equal(writes[1].endpoint,'/api/applications/'+id+'/edit');assert.equal(writes[1].data.version,4);assert.equal(writes[1].data.areaNotes,areaNotes);assert.equal(writes[1].data.areas,areas);
  areas='해운대구 제외, 평일 상담';areaNotes='';fields='수전 교체 / 변기 수리';await page.goto(origin+'/technician-apply.html?id='+id);await page.locator('#service-area-trigger').waitFor();assert.equal(await page.locator('#t-areaNotes').inputValue(),areas);assert.equal(await page.locator('#t-areas').inputValue(),'');
  assert.equal(await page.locator('#t-fields').inputValue(),fields);await openFields();assert.equal(await page.locator('#service-field-other').inputValue(),fields);await page.keyboard.press('Escape');
