@@ -21,10 +21,20 @@ const server=http.createServer((req,res)=>{const file=path.resolve(root,'.'+new 
   await page.locator('#experts h2').scrollIntoViewIfNeeded();await page.mouse.move(1400,900);
   for(let i=0;i<20;i++){
    const before=await cards.evaluateAll(nodes=>nodes.map(node=>node.dataset.expertId));await page.evaluate(()=>window.__homeTick());
-   const after=await cards.evaluateAll(nodes=>nodes.map(node=>node.dataset.expertId));assert.equal(after.filter((id,n)=>id!==before[n]).length,1);assert.equal(new Set(after).size,12);
+   const after=await cards.evaluateAll(nodes=>nodes.map(node=>node.dataset.expertId));assert.equal(after.filter((id,n)=>id!==before[n]).length,2);assert.deepEqual([...after].sort(),[...before].sort());assert.equal(new Set(after).size,12);
    const heights=await cards.evaluateAll(nodes=>nodes.map(node=>Math.round(node.getBoundingClientRect().height)));assert.equal(new Set(heights).size,1,'all three rows must have equal card heights');
    assert.equal(await cards.evaluateAll(nodes=>nodes.every(node=>!node.style.minHeight)),true,'rotation must not copy old inline heights');
   }
+  const allIds=new Set(await cards.evaluateAll(nodes=>nodes.map(node=>node.dataset.expertId)));
+  for(let n=2;n<=5;n++) {
+   await nav.getByRole('button',{name:String(n),exact:true}).click();
+   await page.waitForFunction(n=>document.querySelector('#home-expert-pages [aria-current=page]')?.textContent===String(n),n);
+   const ids=await cards.evaluateAll(nodes=>nodes.map(node=>node.dataset.expertId));assert.equal(ids.length,n===5?10:12);
+   for(const id of ids){assert.equal(allIds.has(id),false,'no duplicate across pages');allIds.add(id);}
+  }
+  assert.equal(allIds.size,58);assert.equal(allIds.has('real-yescom'),true);
+  await nav.getByRole('button',{name:'1',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelector('#home-expert-pages [aria-current=page]')?.textContent==='1');
   await nav.getByRole('button',{name:'2',exact:true}).click();await page.waitForFunction(()=>document.querySelector('#home-expert-pages [aria-current=page]')?.textContent==='2');assert.equal(await nav.locator('[aria-current="page"]').innerText(),'2');assert.equal(await cards.count(),12);
   await nav.getByRole('button',{name:'5',exact:true}).click();await page.waitForFunction(()=>document.querySelector('#home-expert-pages [aria-current=page]')?.textContent==='5');assert.equal(await nav.locator('[aria-current="page"]').innerText(),'5');assert.equal(await cards.count(),10);assert.equal(await nav.locator('.page-disabled').last().innerText(),'다음 →');
   await nav.getByRole('button',{name:'← 이전',exact:true}).click();await page.waitForFunction(()=>document.querySelector('#home-expert-pages [aria-current=page]')?.textContent==='4');assert.equal(await nav.locator('[aria-current="page"]').innerText(),'4');assert.equal(await cards.count(),12);

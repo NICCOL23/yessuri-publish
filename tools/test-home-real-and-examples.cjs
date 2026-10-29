@@ -28,12 +28,12 @@ async function fixture(realCount,exampleCount,{offline=false,mobile=false}={}){
   const f=await fixture(realCount,exampleCount);assert.equal(f.ids().length,12);assert.equal(f.delay,12000);if(realCount)assert.equal(f.ids()[0],'yescom');
   if(realCount===1)assert.equal(f.ids().filter(id=>id.startsWith('example-')).length,11);
   const seen=new Set(f.ids());
-  for(let i=0;i<180;i++){const before=f.ids();await f.tick();const after=f.ids();assert.equal(after.length,12);assert.equal(new Set(after).size,12);assert.equal(after.filter((id,n)=>id!==before[n]).length,1);after.forEach(id=>seen.add(id));}
-  assert.equal(seen.size,realCount+exampleCount,'all real and example profiles should remain in rotation');
+  for(let i=0;i<180;i++){const before=f.ids();await f.tick();const after=f.ids();assert.equal(after.length,12);assert.equal(new Set(after).size,12);assert.equal(after.filter((id,n)=>id!==before[n]).length,2);assert.deepEqual([...after].sort(),[...before].sort(),'page membership stays fixed');after.forEach(id=>seen.add(id));}
+  assert.equal(seen.size,12,'only current page profiles rotate');
  }
- const offline=await fixture(25,57,{offline:true});const before=offline.ids();await offline.tick();assert.equal(offline.ids().filter((id,n)=>id!==before[n]).length,1);
+ const offline=await fixture(25,57,{offline:true});const before=offline.ids();await offline.tick();assert.equal(offline.ids().filter((id,n)=>id!==before[n]).length,2);
  const mobile=await fixture(1,57,{mobile:true});const mobileBefore=mobile.ids();await mobile.tick();assert.deepEqual(mobile.ids(),mobileBefore);
  const protectedCards=await fixture(1,57);protectedCards.grid.children.forEach(card=>card.focused=true);const protectedBefore=protectedCards.ids();await protectedCards.tick();assert.deepEqual(protectedCards.ids(),protectedBefore);
- const small=await fixture(1,3);assert.equal(small.ids().length,4);assert.equal(small.tick,undefined);
- console.log('PASS: yescom + 11 examples initially; all real/example profiles rotate, 12 slots, 12-second interval, one-card replacement, pagination, no duplicates, network fallback, interaction/mobile protection');
+ const small=await fixture(1,3);assert.equal(small.ids().length,4);assert.equal(small.delay,12000);
+ console.log('PASS: yescom + 11 examples initially; current page profiles rotate, 12 slots, 12-second interval, two-card position swap, pagination, no duplicates, network fallback, interaction/mobile protection');
 })().catch(error=>{console.error(error);process.exitCode=1});

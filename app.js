@@ -11,7 +11,7 @@ const homeServices=window.YESSURI_SERVICE_FIELDS.items.map(({label,description,i
 homeServices.forEach(([name,description,image,href])=>{const a=document.createElement('a');a.className='category-card';if(name==='보일러')a.classList.add('boiler-card');if(name==='컴퓨터 수리·업그레이드')a.classList.add('computer-upgrade-card');if(name==='TV·LED 모니터 수리')a.classList.add('display-repair-card');const visual=document.createElement('span');visual.className='category-icon';visual.setAttribute('aria-hidden','true');const img=document.createElement('img');img.src=image;img.alt='';img.width=160;img.height=160;img.loading='lazy';visual.append(img);const title=document.createElement('span');title.textContent=name;if(a.classList.contains('computer-upgrade-card')){title.replaceChildren(document.createTextNode('컴퓨터 수리·'),document.createElement('br'),document.createTextNode('업그레이드'));}const small=document.createElement('small');small.className='category-description';small.textContent=description;a.href=href;a.append(visual,title,small);categoryGrid.append(a);});
 
 
-// Keep twelve stable slots; replace just one available card every twelve seconds.
+// Keep each page membership fixed; reorder existing cards every twelve seconds.
 let homeRotationTimer;
 let homeRenderVersion=0;
 async function renderExperts(requestedPage=1) {
@@ -25,8 +25,6 @@ async function renderExperts(requestedPage=1) {
   const examples = experts().filter(window.YESSURI_EXPERT_CARD.example);
   const ordered = window.YESSURI_EXPERT_CARD.selectFeatured(examples, examples.length);
   const actualItems = server ? remote.items : experts().filter(person => !window.YESSURI_EXPERT_CARD.example(person));
-  const pool = new Map();
-  for (const person of [...actualItems,...ordered]) if (!pool.has(person.id)) pool.set(person.id,person);
   const realTotal=server?remote.total:actualItems.length;
   const total=realTotal+ordered.length;
   const pageCount=Math.max(1,Math.ceil(total/12));
@@ -39,7 +37,6 @@ async function renderExperts(requestedPage=1) {
       try{pageActual=(await window.YESSURI_PUBLIC_API.search({page:currentPage,size:12})).items;}
       catch{if(version===homeRenderVersion)return;}
     }
-    for(const person of pageActual)if(!pool.has(person.id))pool.set(person.id,person);
   }
   const source=[...pageActual,...ordered.slice(Math.max(0,start-realTotal),Math.max(0,start+12-realTotal))];
   if(version!==homeRenderVersion)return;
@@ -63,12 +60,9 @@ async function renderExperts(requestedPage=1) {
   add('다음 →',currentPage+1);expertGrid.after(nav);
   const link = document.querySelector('.featured-directory-link a');
   if (link) link.textContent = '전문가 전체 보기 · 공개 '+actual+'명 · 예시 '+examples.length+'명 →';
-  if (!source.length || total <= source.length) return;
+  if (source.length < 2) return;
 
-  const sourceIds=new Set(source.map(person=>person.id));
-  let queue = Array.from(pool.values()).filter(person=>!sourceIds.has(person.id));
-  let nextPage = 2, slot = 0, busy = false;
-  let pages = server ? Math.ceil(remote.total/12) : 1;
+  let slot = 0;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   const mobile = window.matchMedia('(max-width: 767px)');
   let paused = reduced.matches;
@@ -94,7 +88,7 @@ async function renderExperts(requestedPage=1) {
     return card.contains(document.activeElement) || card.matches(':hover') || (mobile.matches && visible);
   }
   async function rotateOne() {
-    if (paused || busy || document.hidden || version!==homeRenderVersion) return;
+    if (paused || document.hidden || version!==homeRenderVersion) return;
     const bounds = expertGrid.getBoundingClientRect();
     if (bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
     const cards = Array.from(expertGrid.children);
@@ -104,37 +98,22 @@ async function renderExperts(requestedPage=1) {
       if (!protectedCard(cards[index])) { target=index; break; }
     }
     if (target < 0) return;
-    busy = true;
-    try {
-      const visibleIds = new Set(cards.map(card => card.dataset.expertId));
-      queue = queue.filter(person => !visibleIds.has(person.id));
-      if (server && nextPage <= pages) {
-        try {
-          const result = await window.YESSURI_PUBLIC_API.search({page:nextPage,size:12});
-          pages = Math.max(1, Math.ceil(result.total/12));
-          nextPage++;
-          for (const person of result.items) {
-            if (pool.has(person.id)) continue;
-            pool.set(person.id,person);
-            if (!visibleIds.has(person.id)) queue.push(person);
-          }
-        } catch { /* Keep rotating already loaded real and example profiles. */ }
+    // Move existing nodes without removing any profile from this page.
+    let partner = -1;
+    for (let offset=1; offset<cards.length; offset++) {
+      const index = (target+offset)%cards.length;
+      if (!protectedCard(cards[index])) { partner=index; break; }
+    }
+    if (partner < 0) return;
+    const reordered = cards.slice();
+    [reordered[target],reordered[partner]] = [reordered[partner],reordered[target]];
+    expertGrid.replaceChildren(...reordered);
+    if (!reduced.matches) {
+      for (const card of [cards[target],cards[partner]]) {
+        if (typeof card.animate === 'function') card.animate([{opacity:0},{opacity:1}], {duration:300});
       }
-      const old = cards[target];
-      // Recheck after an asynchronous request: never replace a newly focused card.
-      if (!queue.length || paused || document.hidden || version!==homeRenderVersion || protectedCard(old)) return;
-      const person = queue.shift();
-      const card = window.YESSURI_EXPERT_CARD.create(person);
-      old.replaceWith(card);
-      const outgoing = pool.get(old.dataset.expertId);
-      if (outgoing) queue.push(outgoing);
-      if (!reduced.matches && typeof card.animate === 'function') {
-        card.animate([{opacity:0},{opacity:1}], {duration:300});
-      }
-      slot = (target+1)%cards.length;
-    } catch {
-      // Keep the current twelve cards intact and retry on the next tick.
-    } finally { busy = false; }
+    }
+    slot = (partner+1)%cards.length;
   }
   clearInterval(homeRotationTimer);
   homeRotationTimer = setInterval(rotateOne, 12000);
