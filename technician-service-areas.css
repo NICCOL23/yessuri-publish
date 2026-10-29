@@ -1,21 +1,31 @@
-/* Only the service-area field in the registration/edit form. */
+/* Only the registration service-area field and its modal drawer. */
 html[data-type-system] body[data-technician-page="apply"] #application-form .fields > .field.ys-service-areas{grid-column:1 / -1;min-width:0}
 html[data-type-system] body[data-technician-page="apply"] #application-form .ys-service-areas #t-areas[hidden]{display:none}
 html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-picker{position:relative;z-index:1;background:#fff;font-size:1rem;line-height:1.6;letter-spacing:0;color:#17364c;min-width:0}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-trigger{width:100%;min-height:48px;padding:12px 16px;border:1px solid #00858c;border-radius:8px;background:#fff;color:#007780;font:inherit;cursor:pointer;text-align:center}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-dialog{position:fixed;inset:0 auto 0 0;margin:0;width:min(440px,100%);max-width:100%;height:100dvh;max-height:100dvh;box-sizing:border-box;padding:24px;border:0;border-radius:0 12px 12px 0;background:#fff;color:#17364c;overflow-y:auto;overscroll-behavior:contain;font-size:1rem;line-height:1.6;box-shadow:8px 0 32px #18384824}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-dialog[open]{animation:ys-area-open .24s ease-out}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-dialog::backdrop{background:#142b4266}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-dialog h2{font-size:1.5rem;line-height:1.4;margin:0;letter-spacing:-.01em}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-close{flex:none;min-height:44px;padding:8px 12px;border:1px solid #cbdde4;border-radius:8px;background:#fff;color:#17515c;font:inherit;cursor:pointer}
 html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-help{font-size:.875rem;line-height:1.6;color:#60758b;margin:6px 0 12px}
-html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-option{display:flex;flex-direction:row;align-items:center;gap:10px;border:1px solid #cfdee6;border-radius:8px;padding:12px;min-height:48px;box-sizing:border-box;cursor:pointer;font-size:1rem;line-height:1.5;min-width:0;overflow-wrap:anywhere}
-html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-option input{appearance:auto;accent-color:#00858c;flex:0 0 20px;width:20px;height:20px;min-height:20px;margin:0;padding:0;scroll-margin-block:200px 24px}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-option{display:flex;flex-direction:row;align-items:center;gap:10px;border:1px solid #cfdee6;border-radius:8px;padding:10px 12px;min-height:48px;box-sizing:border-box;cursor:pointer;font-size:1rem;line-height:1.5;min-width:0;overflow-wrap:anywhere}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-option input{appearance:auto;accent-color:#00858c;flex:0 0 20px;width:20px;height:20px;min-height:20px;margin:0;padding:0;scroll-margin-block:24px}
 html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-option.is-selected{background:#edf9f8;border-color:#00858c}
 html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-option:focus-within{outline:2px solid #00858c;outline-offset:2px}
 html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-all{margin-bottom:12px}
-html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-count{margin-left:auto;font-size:.875rem;color:#60758b}
 html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-summary{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:12px;margin:16px 0;background:#eff9f8;border-radius:8px}
 html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-selected-count{font-weight:600}
-html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-chips{display:flex;flex-wrap:wrap;gap:8px}
-html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-chip{font:inherit;line-height:1.5;color:#17515c;background:#d8f0ef;border:0;border-radius:24px;min-height:44px;padding:8px 12px;cursor:pointer}
-html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-chip:focus-visible{outline:2px solid #00858c;outline-offset:2px}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-chips{display:flex;flex-wrap:wrap;gap:8px;min-width:0}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-chip{display:inline-flex;align-items:center;gap:8px;font:inherit;line-height:1.5;color:#17515c;background:#d8f0ef;border:0;border-radius:24px;padding:8px 12px;overflow-wrap:anywhere;max-width:100%;box-sizing:border-box}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-selected-mark{color:#007780;flex:none}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-empty{color:#60758b;font-size:.875rem}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-done{width:100%;min-height:48px;padding:12px 16px;background:#00858c;color:#fff;border:0;border-radius:8px;font:inherit;cursor:pointer}
+html[data-type-system] body[data-technician-page="apply"] #application-form :is(.ys-area-trigger,.ys-area-close,.ys-area-done):focus-visible{outline:3px solid #00858c;outline-offset:3px}
 html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-note-label{font-size:1rem;line-height:1.6;margin:12px 0 6px}
 html[data-type-system] body[data-technician-page="apply"] #application-form #t-areaNotes{width:100%;min-height:88px;height:auto;resize:vertical;font:inherit;font-size:1rem;line-height:1.6;box-sizing:border-box}
-@media(max-width:760px){html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-grid{grid-template-columns:repeat(2,minmax(0,1fr))}html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-count{font-size:.875rem}}
-@media(max-width:360px){html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-count{display:none}}
+@keyframes ys-area-open{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+@media(prefers-reduced-motion:reduce){html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-dialog[open]{animation:none}}
+@media(max-width:480px){html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-dialog{padding:20px 16px}html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-dialog h2{font-size:1.375rem}}
