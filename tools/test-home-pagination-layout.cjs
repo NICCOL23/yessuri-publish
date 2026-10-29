@@ -11,13 +11,20 @@ const server=http.createServer((req,res)=>{const file=path.resolve(root,'.'+new 
   await context.addInitScript(()=>{const interval=window.setInterval;window.setInterval=(fn,ms,...args)=>{if(ms===12000)window.__homeTick=fn;return interval(fn,ms,...args)};});
   await context.route('**/*',route=>{
    const url=new URL(route.request().url());if(url.origin===origin)return route.continue();
-   if(url.pathname.endsWith('/search_public_experts'))return route.fulfill({json:{page:1,total:1,totalPublic:1,items:[{id:'real-yescom',name:'yescom',fields:['컴퓨터·IT'],serviceAreas:['전체'],intro:'테스트',isExample:false,publicationStatus:'approved',phonePublic:false,image:null}]}});
+   if(url.pathname.endsWith('/search_public_experts'))return route.fulfill({json:{page:1,total:1,totalPublic:1,items:[{id:'real-yescom',name:'yescom',fields:['에어컨','CCTV 설치','TV·LED 모니터 수리','컴퓨터·IT'],serviceAreas:['전체','부산진구','연제구','동래구'],intro:'테스트',isExample:false,publicationStatus:'approved',phonePublic:false,image:null}]}});
    return route.abort();
   });
   const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
   await page.goto(origin+'/index.html');await page.locator('#home-expert-pages').waitFor();
   const cards=page.locator('#expert-grid .ys-expert-card'),nav=page.locator('#home-expert-pages');
   assert.equal(await cards.count(),12);assert.equal(await cards.locator('.ys-example-label').count(),11);assert.equal(await nav.locator('[aria-current="page"]').innerText(),'1');
+  const yescom=cards.filter({hasText:'yescom'});
+  assert.equal(await yescom.locator('.ys-expert-fields').innerText(),'에어컨 외 3개 분야');
+  assert.equal(await yescom.locator('.ys-expert-summary p').last().innerText(),'부산 전 지역 외 3곳');
+  const initialHeight=await yescom.evaluate(node=>Math.round(node.getBoundingClientRect().height));
+  assert.ok(initialHeight<210,'summary must not inflate the original compact cards');
+  const fullFields=await page.evaluate(()=>window.YESSURI_EXPERT_CARD.create({id:'verify',name:'yescom',isExample:false,fields:['에어컨','CCTV 설치','TV·LED 모니터 수리','컴퓨터·IT'],serviceAreas:['전체','부산진구','연제구','동래구']}).querySelector('.ys-expert-fields').textContent);
+  assert.equal(fullFields,'에어컨 · CCTV 설치 · TV·LED 모니터 수리 · 컴퓨터·IT','shared default presentation remains unchanged');
   await page.locator('#experts h2').scrollIntoViewIfNeeded();await page.mouse.move(1400,900);
   for(let i=0;i<20;i++){
    const before=await cards.evaluateAll(nodes=>nodes.map(node=>node.dataset.expertId));await page.evaluate(()=>window.__homeTick());

@@ -40,7 +40,7 @@ async function renderExperts(requestedPage=1) {
   }
   const source=[...pageActual,...ordered.slice(Math.max(0,start-realTotal),Math.max(0,start+12-realTotal))];
   if(version!==homeRenderVersion)return;
-  expertGrid.replaceChildren(...source.map(person => window.YESSURI_EXPERT_CARD.create(person)));
+  expertGrid.replaceChildren(...source.map(person => window.YESSURI_EXPERT_CARD.create(person,{compact:true})));
   document.querySelector('#home-expert-pages')?.remove();
   document.querySelector('.home-rotation-controls')?.remove();
   const nav=document.createElement('nav');nav.id='home-expert-pages';nav.setAttribute('aria-label','메인 전문가 목록 페이지');
