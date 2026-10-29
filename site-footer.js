@@ -48,7 +48,7 @@
                 <a href="${url('index.html')}">홈</a>
                 <a href="${url('find.html')}">전문가 찾기</a>
                 <a href="${url('guide.html')}">비용·이용안내</a>
-                <a href="${url('register.html')}">기술자 등록</a>
+                <a href="${url('technician-board.html')}">기술자 등록</a>
               </nav>
               <p class="copyright">© 2026 YESSURI</p>
             </div>
