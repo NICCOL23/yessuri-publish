@@ -13,7 +13,10 @@ homeServices.forEach(([name,description,image,href])=>{const a=document.createEl
 
 // Keep twelve stable slots; replace just one available card every twelve seconds.
 let homeRotationTimer;
-async function renderExperts() {
+let homeRenderVersion=0;
+async function renderExperts(requestedPage=1) {
+  const version=++homeRenderVersion;
+  clearInterval(homeRotationTimer);
   await window.YESSURI_PUBLIC_READY;
   let remote = null;
   try { remote = await window.YESSURI_PUBLIC_API.search({page:1,size:12}); } catch {}
@@ -24,15 +27,46 @@ async function renderExperts() {
   const actualItems = server ? remote.items : experts().filter(person => !window.YESSURI_EXPERT_CARD.example(person));
   const pool = new Map();
   for (const person of [...actualItems,...ordered]) if (!pool.has(person.id)) pool.set(person.id,person);
-  const combined = Array.from(pool.values());
-  const source = combined.slice(0,12);
+  const realTotal=server?remote.total:actualItems.length;
+  const total=realTotal+ordered.length;
+  const pageCount=Math.max(1,Math.ceil(total/12));
+  const currentPage=Math.max(1,Math.min(requestedPage,pageCount));
+  const start=(currentPage-1)*12;
+  let pageActual=actualItems.slice(start,start+12);
+  if(server&&start<realTotal){
+    if(currentPage===1)pageActual=remote.items;
+    else {
+      try{pageActual=(await window.YESSURI_PUBLIC_API.search({page:currentPage,size:12})).items;}
+      catch{if(version===homeRenderVersion)return;}
+    }
+    for(const person of pageActual)if(!pool.has(person.id))pool.set(person.id,person);
+  }
+  const source=[...pageActual,...ordered.slice(Math.max(0,start-realTotal),Math.max(0,start+12-realTotal))];
+  if(version!==homeRenderVersion)return;
   expertGrid.replaceChildren(...source.map(person => window.YESSURI_EXPERT_CARD.create(person)));
+  document.querySelector('#home-expert-pages')?.remove();
+  document.querySelector('.home-rotation-controls')?.remove();
+  const nav=document.createElement('nav');nav.id='home-expert-pages';nav.setAttribute('aria-label','메인 전문가 목록 페이지');
+  nav.hidden=pageCount<=1;
+  function add(label,target,current=false){
+    const valid=target>=1&&target<=pageCount,button=document.createElement(valid?'button':'span');button.textContent=label;
+    if(valid){button.type='button';if(current)button.setAttribute('aria-current','page');button.onclick=()=>{renderExperts(target).then(()=>{const title=document.querySelector('#experts h2');title.tabIndex=-1;title.focus({preventScroll:true});title.scrollIntoView({block:'start'});});};}
+    else{button.className='page-disabled';button.setAttribute('aria-disabled','true');}
+    nav.append(button);
+  }
+  add('← 이전',currentPage-1);
+  let previous=0;
+  for(const page of [...new Set([1,currentPage-1,currentPage,currentPage+1,pageCount])].filter(page=>page>=1&&page<=pageCount).sort((a,b)=>a-b)){
+    if(previous&&page-previous>1){const gap=document.createElement('span');gap.className='page-gap';gap.textContent='…';nav.append(gap);}
+    add(String(page),page,page===currentPage);previous=page;
+  }
+  add('다음 →',currentPage+1);expertGrid.after(nav);
   const link = document.querySelector('.featured-directory-link a');
   if (link) link.textContent = '전문가 전체 보기 · 공개 '+actual+'명 · 예시 '+examples.length+'명 →';
-  const total = (server ? remote.total : actualItems.length) + ordered.length;
-  if (source.length < 12 || total <= 12) return;
+  if (!source.length || total <= source.length) return;
 
-  let queue = combined.slice(12);
+  const sourceIds=new Set(source.map(person=>person.id));
+  let queue = Array.from(pool.values()).filter(person=>!sourceIds.has(person.id));
   let nextPage = 2, slot = 0, busy = false;
   let pages = server ? Math.ceil(remote.total/12) : 1;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -52,7 +86,7 @@ async function renderExperts() {
   reduced.addEventListener('change', event => { paused = event.matches; updateToggle(); });
   updateToggle();
   controls.append(note, toggle);
-  expertGrid.after(controls);
+  nav.after(controls);
 
   function protectedCard(card) {
     const box = card.getBoundingClientRect();
@@ -60,7 +94,7 @@ async function renderExperts() {
     return card.contains(document.activeElement) || card.matches(':hover') || (mobile.matches && visible);
   }
   async function rotateOne() {
-    if (paused || busy || document.hidden) return;
+    if (paused || busy || document.hidden || version!==homeRenderVersion) return;
     const bounds = expertGrid.getBoundingClientRect();
     if (bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
     const cards = Array.from(expertGrid.children);
@@ -88,11 +122,9 @@ async function renderExperts() {
       }
       const old = cards[target];
       // Recheck after an asynchronous request: never replace a newly focused card.
-      if (!queue.length || paused || document.hidden || protectedCard(old)) return;
+      if (!queue.length || paused || document.hidden || version!==homeRenderVersion || protectedCard(old)) return;
       const person = queue.shift();
       const card = window.YESSURI_EXPERT_CARD.create(person);
-      const height = old.getBoundingClientRect().height;
-      if (height) card.style.minHeight = height+'px';
       old.replaceWith(card);
       const outgoing = pool.get(old.dataset.expertId);
       if (outgoing) queue.push(outgoing);
@@ -108,7 +140,7 @@ async function renderExperts() {
   homeRotationTimer = setInterval(rotateOne, 12000);
   window.addEventListener('pagehide', () => clearInterval(homeRotationTimer), {once:true});
   window.addEventListener('pageshow', event => {
-    if (event.persisted) { clearInterval(homeRotationTimer); homeRotationTimer = setInterval(rotateOne,12000); }
+    if (event.persisted && version===homeRenderVersion) { clearInterval(homeRotationTimer); homeRotationTimer = setInterval(rotateOne,12000); }
   });
 }
 renderExperts();

@@ -6,6 +6,7 @@ class Element{
  append(...nodes){this.children.push(...nodes)}
  replaceChildren(...nodes){this.children=nodes;nodes.forEach(node=>node.parent=this)}
  after(node){this.afterElement=node}
+ remove(){}
  setAttribute(){}
  addEventListener(name,handler){this.handlers[name]=handler}
  contains(){return this.focused}

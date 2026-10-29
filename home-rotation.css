@@ -3,3 +3,5 @@
 #experts .home-rotation-controls button{min-height:44px;padding:8px 14px;border:1px solid #cddfdf;border-radius:9px;background:#fff;color:#00767e;font:inherit;cursor:pointer}
 #experts .home-rotation-controls button:hover{background:#e8f5f2}
 #experts .home-rotation-controls button:focus-visible{outline:3px solid #00767e;outline-offset:3px}
+body.home-modern #experts #expert-grid{grid-auto-rows:1fr}
+#experts #home-expert-pages{position:static;inset:auto;width:auto;max-height:none;overflow:visible;flex-direction:row;background:transparent;border:0;box-shadow:none;padding:0}
