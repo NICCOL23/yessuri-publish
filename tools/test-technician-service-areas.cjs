@@ -12,8 +12,8 @@ const server=http.createServer((req,res)=>{const pathname=decodeURIComponent(new
  const context=await browser.newContext({viewport:{width:1280,height:1100},serviceWorkers:'block'});
  await context.addInitScript(()=>{window.TECHNICIAN_CLOUD_TEST=true});
  const errors=[],writes=[];
- let areas='부산진구, 수영구',areaNotes='토요일 출장 가능';
- const application=()=>({id,version:4,receipt:'YS-TEST',company:'테스트 업체',contact:'테스트',phone:'010-1234-5678',fields:'누수·수도',areas,areaNotes,intro:'소개',links:'',notes:'',status:'접수',created_at:'2026-10-29T00:00:00Z',expires_at:'2027-04-29T00:00:00Z'});
+ let areas='부산진구, 수영구',areaNotes='토요일 출장 가능',fields='누수·수도';
+ const application=()=>({id,version:4,receipt:'YS-TEST',company:'테스트 업체',contact:'테스트',phone:'010-1234-5678',fields,areas,areaNotes,intro:'소개',links:'',notes:'',status:'접수',created_at:'2026-10-29T00:00:00Z',expires_at:'2027-04-29T00:00:00Z'});
  await context.route('**/*',async route=>{
   const url=new URL(route.request().url());
   if(url.origin===origin)return route.continue();
@@ -28,7 +28,13 @@ const server=http.createServer((req,res)=>{const pathname=decodeURIComponent(new
  await page.goto(origin+'/technician-apply.html');await page.locator('#service-area-trigger').waitFor();
  const dialog=page.locator('#service-area-dialog'),trigger=page.locator('#service-area-trigger'),outside=page.locator('#service-area-selection');
  const openDrawer=async()=>{await trigger.click();await dialog.evaluate(el=>Promise.all(el.getAnimations().map(animation=>animation.finished)));};
- assert.equal(await dialog.isVisible(),false);assert.equal(await page.locator('.ys-area-grid input').count(),16);
+ const fieldDialog=page.locator('#service-field-dialog'),fieldTrigger=page.locator('#service-field-trigger');
+ const openFields=async()=>{await fieldTrigger.click();await fieldDialog.evaluate(el=>Promise.all(el.getAnimations().map(animation=>animation.finished)));};
+ const layout=await page.evaluate(()=>({field:document.querySelector('#t-fields').closest('.field').getBoundingClientRect().toJSON(),area:document.querySelector('#t-areas').closest('.field').getBoundingClientRect().toJSON()}));
+ assert.equal(Math.abs(layout.field.top-layout.area.top)<2,true,'PC fields must share a row');
+ assert.equal(layout.area.left>layout.field.right,true,'PC area must be on the right');
+ assert.equal(await dialog.isVisible(),false);assert.equal(await dialog.locator('.ys-area-grid input').count(),16);
+ assert.equal(await fieldDialog.locator('input[type="checkbox"]').count(),19);
  assert.equal(await page.locator('#t-areas').inputValue(),'');
  await page.locator('#application-form .actions button').click();
  assert.match(await page.locator('#t-areas-error').innerText(),/한 곳 이상/);assert.equal(writes.length,0);
@@ -47,17 +53,27 @@ const server=http.createServer((req,res)=>{const pathname=decodeURIComponent(new
  await openDrawer();await page.keyboard.press('Escape');assert.equal(await dialog.isVisible(),false);assert.equal(await outside.locator('.ys-area-chip').count(),4);
  await openDrawer();await page.keyboard.press('Tab');assert.equal(await dialog.evaluate(el=>el.contains(document.activeElement)),true);
  await page.getByRole('button',{name:'지역 선택 창 닫기',exact:true}).click();assert.equal(writes.length,0);
- await page.locator('#t-company').fill('테스트 업체');await page.locator('#t-contact').fill('테스트');await page.locator('#t-phone').fill('010-1234-5678');await page.locator('#t-fields').fill('누수·수도');
+ await page.locator('#t-company').fill('테스트 업체');await page.locator('#t-contact').fill('테스트');await page.locator('#t-phone').fill('010-1234-5678');await openFields();
+ for(const name of ['누수·수도','타일','페인트'])await fieldDialog.getByRole('checkbox',{name,exact:true}).check();
+ assert.equal(await fieldDialog.locator('.ys-area-selected-count').innerText(),'선택한 분야 3개');
+ await fieldDialog.getByRole('button',{name:'선택 완료',exact:true}).click();
+ assert.equal(await page.locator('#t-fields').inputValue(),'누수·수도, 타일, 페인트');
+ await openFields();assert.equal(await fieldDialog.getByRole('checkbox',{name:'타일',exact:true}).isChecked(),true);
+ await page.keyboard.press('Escape');
  await page.locator('#t-password').fill('Only-test-password!');await page.locator('#t-passwordConfirm').fill('Only-test-password!');await page.locator('#consent').check();
  await page.locator('#t-areaNotes').fill('평일은 해운대구·수영구, 토요일은 부산진구 출장 가능');
  const restored=await page.evaluate(()=>({normal:window.YESSURI_TECHNICIAN_AREAS.restore('부산광역시 부산진구 · 수영구'),all:window.YESSURI_TECHNICIAN_AREAS.restore('부산 전 지역'),mixed:window.YESSURI_TECHNICIAN_AREAS.restore('전체, 부산진구, 수영구, 해운대구'),legacy:window.YESSURI_TECHNICIAN_AREAS.restore('해운대구 제외')}));
  assert.deepEqual(restored.normal.selected,['부산진구','수영구']);assert.deepEqual(restored.all.selected,['부산 전 지역']);assert.equal(restored.mixed.selected.length,4);assert.equal(restored.legacy.selected.length,0);assert.equal(restored.legacy.note,'해운대구 제외');
  if(process.env.YESSURI_SCREENSHOT_DIR){
   fs.mkdirSync(process.env.YESSURI_SCREENSHOT_DIR,{recursive:true});
-  await page.locator('.ys-service-areas').screenshot({path:path.join(process.env.YESSURI_SCREENSHOT_DIR,'service-areas-desktop-closed.png')});
+  await page.locator('#t-fields').locator('xpath=ancestor::section[1]').screenshot({path:path.join(process.env.YESSURI_SCREENSHOT_DIR,'fields-and-areas-desktop.png')});await openFields();await page.screenshot({path:path.join(process.env.YESSURI_SCREENSHOT_DIR,'service-fields-desktop-open.png')});await fieldDialog.getByRole('button',{name:'선택 완료',exact:true}).click();
   await openDrawer();await page.screenshot({path:path.join(process.env.YESSURI_SCREENSHOT_DIR,'service-areas-desktop-open.png')});await page.getByRole('button',{name:'선택 완료',exact:true}).click();
  }
- await page.setViewportSize({width:390,height:844});await openDrawer();
+ await page.setViewportSize({width:390,height:844});
+ const mobileLayout=await page.evaluate(()=>({field:document.querySelector('#t-fields').closest('.field').getBoundingClientRect().toJSON(),area:document.querySelector('#t-areas').closest('.field').getBoundingClientRect().toJSON()}));
+ assert.equal(mobileLayout.area.top>=mobileLayout.field.bottom,true,'Mobile areas must be below fields');
+ await openFields();assert.equal(await fieldDialog.evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);await fieldDialog.getByRole('button',{name:'선택 완료',exact:true}).click();
+ await openDrawer();
  assert.equal(await dialog.locator('.ys-area-grid').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length),2);
  assert.equal(await dialog.evaluate(el=>el.getBoundingClientRect().left===0&&el.getBoundingClientRect().right<=innerWidth&&el.scrollWidth<=el.clientWidth+1),true);
  if(process.env.YESSURI_SCREENSHOT_DIR)await page.screenshot({path:path.join(process.env.YESSURI_SCREENSHOT_DIR,'service-areas-mobile-open.png')});
@@ -67,16 +83,17 @@ const server=http.createServer((req,res)=>{const pathname=decodeURIComponent(new
  await page.getByRole('button',{name:'선택 완료',exact:true}).click();
  if(process.env.YESSURI_SCREENSHOT_DIR)await page.locator('.ys-service-areas').screenshot({path:path.join(process.env.YESSURI_SCREENSHOT_DIR,'service-areas-mobile-closed.png')});
  await page.locator('#application-form .actions button').click();await page.getByText('등록 신청이 접수되었습니다.',{exact:true}).waitFor();
- assert.equal(writes[0].data.areas,'전체, 부산진구, 수영구, 해운대구');assert.equal(writes[0].data.areaNotes,'평일은 해운대구·수영구, 토요일은 부산진구 출장 가능');
- areas=writes[0].data.areas;
+ assert.equal(writes[0].data.fields,'누수·수도, 타일, 페인트');assert.equal(writes[0].data.areas,'전체, 부산진구, 수영구, 해운대구');assert.equal(writes[0].data.areaNotes,'평일은 해운대구·수영구, 토요일은 부산진구 출장 가능');
+ areas=writes[0].data.areas;fields=writes[0].data.fields;
  await page.goto(origin+'/technician-apply.html?id='+id);await page.locator('#service-area-trigger').waitFor();
- assert.equal(await outside.locator('.ys-area-chip').count(),4);assert.equal(await page.locator('#t-areaNotes').inputValue(),areaNotes);
+ assert.equal(await outside.locator('.ys-area-chip').count(),4);assert.equal(await page.locator('#service-field-selection .ys-area-chip').count(),3);assert.equal(await page.locator('#t-areaNotes').inputValue(),areaNotes);
  await openDrawer();assert.equal(await page.getByRole('checkbox',{name:'부산 전 지역',exact:true}).isChecked(),true);
  await page.getByRole('checkbox',{name:'해운대구',exact:true}).uncheck();assert.equal(await dialog.locator('.ys-area-chip').count(),3);assert.equal(await page.locator('#service-area-all').isChecked(),true);
  await page.getByRole('checkbox',{name:'해운대구',exact:true}).check();await page.getByRole('button',{name:'선택 완료',exact:true}).click();
  await page.locator('#application-form .actions button').click();await page.waitForURL('**/technician-detail.html?id=*');
  assert.equal(writes[1].endpoint,'/api/applications/'+id+'/edit');assert.equal(writes[1].data.version,4);assert.equal(writes[1].data.areaNotes,areaNotes);assert.equal(writes[1].data.areas,areas);
- areas='해운대구 제외, 평일 상담';areaNotes='';await page.goto(origin+'/technician-apply.html?id='+id);await page.locator('#service-area-trigger').waitFor();assert.equal(await page.locator('#t-areaNotes').inputValue(),areas);assert.equal(await page.locator('#t-areas').inputValue(),'');
+ areas='해운대구 제외, 평일 상담';areaNotes='';fields='수전 교체 / 변기 수리';await page.goto(origin+'/technician-apply.html?id='+id);await page.locator('#service-area-trigger').waitFor();assert.equal(await page.locator('#t-areaNotes').inputValue(),areas);assert.equal(await page.locator('#t-areas').inputValue(),'');
+ assert.equal(await page.locator('#t-fields').inputValue(),fields);await openFields();assert.equal(await page.locator('#service-field-other').inputValue(),fields);await page.keyboard.press('Escape');
  await page.emulateMedia({reducedMotion:'reduce'});await openDrawer();assert.equal(await dialog.evaluate(el=>getComputedStyle(el).animationName),'none');await page.keyboard.press('Escape');
  assert.deepEqual(errors,[]);
  console.log('PASS: left modal drawer, close/Escape/focus, citywide + 3 = 4, circle marks, preserved selections/notes, create/edit payloads, mobile/200% spacing/reduced motion; no production writes');

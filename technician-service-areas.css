@@ -1,5 +1,5 @@
 /* Only the registration service-area field and its modal drawer. */
-html[data-type-system] body[data-technician-page="apply"] #application-form .fields > .field.ys-service-areas{grid-column:1 / -1;min-width:0}
+html[data-type-system] body[data-technician-page="apply"] #application-form .fields > .field.ys-service-areas{grid-column:auto;min-width:0}
 html[data-type-system] body[data-technician-page="apply"] #application-form .ys-service-areas #t-areas[hidden]{display:none}
 html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-picker{position:relative;z-index:1;background:#fff;font-size:1rem;line-height:1.6;letter-spacing:0;color:#17364c;min-width:0}
 html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-trigger{width:100%;min-height:48px;padding:12px 16px;border:1px solid #00858c;border-radius:8px;background:#fff;color:#007780;font:inherit;cursor:pointer;text-align:center}
@@ -29,3 +29,6 @@ html[data-type-system] body[data-technician-page="apply"] #application-form #t-a
 @keyframes ys-area-open{from{transform:translateX(-100%)}to{transform:translateX(0)}}
 @media(prefers-reduced-motion:reduce){html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-dialog[open]{animation:none}}
 @media(max-width:480px){html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-dialog{padding:20px 16px}html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-dialog h2{font-size:1.375rem}}
+html[data-type-system] body[data-technician-page="apply"] #application-form .fields > .field.ys-service-fields{grid-column:auto;min-width:0}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-service-fields #t-fields[hidden]{display:none}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-field-other{width:100%;min-height:88px;height:auto;resize:vertical;font:inherit;font-size:1rem;line-height:1.6;box-sizing:border-box}

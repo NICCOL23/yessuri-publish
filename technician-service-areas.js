@@ -2,7 +2,8 @@
 (() => {
   'use strict';
   const citywide = '부산 전 지역';
-  const regions = () => window.YESSURI_REGIONS.filter(name => name !== '전체');
+  const nearbyOrder = ['부산진구','연제구','동래구','금정구','수영구','남구','해운대구','기장군','동구','중구','서구','영도구','북구','사상구','사하구','강서구'];
+  const regions = () => nearbyOrder.filter(name => window.YESSURI_REGIONS.includes(name));
   function restore(value = '', note = '') {
     const list = [citywide,...regions()], raw = value.trim();
     if (!raw) return {selected: [], note};
