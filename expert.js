@@ -65,6 +65,7 @@ if (!person) {
   }
   const pictures=[...(person.isExample===false?[]:(person.workPhotos||[])),...(person.businessCard?[{...person.businessCard,imageType:'card'}]:[])];
   if(pictures.length){const section=document.createElement('section');const heading=document.createElement('h2');heading.textContent='작업 사진·명함';section.append(heading);pictures.forEach(photo=>{const image=window.YESSURI_EXPERT_CARD.photo({...person,...photo});image.style.width='100%';image.style.height='auto';image.style.maxHeight='480px';image.loading='lazy';section.append(image)});document.querySelector('#profile-content').append(section);}
+  window.YESSURI_PROFILE_JOURNAL?.mount({person});
   document.querySelector('#contact-button').addEventListener('click', () => {
     if (phoneHref) {
       window.location.href = phoneHref;

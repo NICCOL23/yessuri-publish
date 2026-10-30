@@ -1,0 +1,23 @@
+// Local browser regression. All API results are fixtures; no production writes.
+const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
+const {chromium}=require(process.env.YESSURI_PLAYWRIGHT_MODULE||'playwright');
+const root=path.resolve(__dirname,'..'),mime={'.html':'text/html','.css':'text/css','.js':'text/javascript','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp'};
+const server=http.createServer((req,res)=>{const file=path.resolve(root,'.'+new URL(req.url,'http://local').pathname);if(!file.startsWith(root+path.sep)){res.writeHead(403).end();return;}fs.readFile(file,(error,data)=>{res.writeHead(error?404:200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream'});res.end(error?'not found':data)});});
+(async()=>{
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin='http://127.0.0.1:'+server.address().port;
+ const browser=await chromium.launch({channel:'msedge',headless:true});try{
+ const context=await browser.newContext({viewport:{width:1440,height:1000},serviceWorkers:'block'});
+ const real={id:'real-yescom',name:'yescom',fields:['컴퓨터·IT','에어컨'],serviceAreas:['전체'],intro:'컴퓨터 수리',career:'등록 경력',isExample:false,publicationStatus:'approved',phonePublic:true,phone:'01012345678',image:null,workPhotos:[]};
+ await context.route('**/*',r=>new URL(r.request().url()).origin===origin?r.continue():r.request().url().includes('search_public_experts')?r.fulfill({json:{page:1,total:1,totalPublic:1,items:[real]}}):r.abort());
+ const p=await context.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
+ await p.goto(origin+'/expert.html?id=real-yescom');await p.locator('.journal-nav').waitFor();
+ const ids=await p.evaluate(()=>YESSURI_PUBLIC_EXPERTS().map(p=>p.id));assert.equal(ids.length,58);
+ for(const id of ids){await p.goto(origin+'/expert.html?id='+id);await p.locator('.journal-nav').waitFor();const values=await p.evaluate(()=>{const person=YESSURI_EXPERT_CARD.present(YESSURI_PUBLIC_EXPERTS().find(p=>p.id===new URLSearchParams(location.search).get('id')));return {intro:person.intro,name:person.name,career:person.career,shownIntro:document.querySelector('#expert-intro').textContent,shownName:document.querySelector('#expert-name').textContent,shownCareer:document.querySelector('#expert-career').textContent}});assert.equal(values.shownIntro,values.intro);assert.equal(values.shownName,values.name);assert.equal(values.shownCareer,values.career);}
+ await p.goto(origin+'/expert.html?id=real-yescom');await p.locator('.journal-nav').waitFor();assert.equal(await p.locator('#expert-phone-fact').innerText(),real.phone);assert.equal(await p.locator('.contact-card').isVisible(),false);
+ await p.locator('#expert-favorite').click();assert.equal(await p.locator('#expert-favorite').getAttribute('aria-pressed'),'true');await p.locator('#expert-compare').click();assert.equal(await p.locator('#expert-compare').getAttribute('aria-pressed'),'true');
+ for(const width of [1440,390,320]){await p.setViewportSize({width,height:1000});assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'overflow '+width);}
+ assert.equal(await p.locator('.contact-card').isVisible(),true);await p.addStyleTag({content:'html{font-size:200%!important}'});assert.ok(await p.locator('#profile-content').evaluate(n=>n.scrollWidth<=n.clientWidth+1),'profile reflows at 200% text');
+ real.workPhotos=[{image:'assets/images/work-tasks/v1/it-work.webp',imageAlt:'등록 사진'}];await p.goto(origin+'/expert.html?id=real-yescom');await p.locator('.journal-nav').waitFor();assert.equal(await p.locator('.journal-photo-grid img').count(),1);assert.equal(await p.locator('.journal-cover img').count(),1);
+ await p.setViewportSize({width:1440,height:1000});await p.screenshot({path:process.env.YESSURI_JOURNAL_SCREENSHOT,fullPage:true});await p.setViewportSize({width:390,height:844});await p.screenshot({path:process.env.YESSURI_JOURNAL_SCREENSHOT.replace('desktop','mobile'),fullPage:true});assert.deepEqual(errors,[]);console.log('PASS: all 58 profile templates; original name, introduction and career preserved; photos; favorites and comparison; desktop/mobile phone layout; 320px and 200% reflow');
+ }finally{await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1}).finally(()=>server.close());
