@@ -36,7 +36,7 @@ const server=http.createServer((req,res)=>{
   fail=true;page.once('dialog',dialog=>dialog.accept());await button.click();await page.getByText('먼저 공개 프로필을 등록해 주세요.',{exact:true}).waitFor();assert.equal(await button.isEnabled(),true);
   fail=false;page.once('dialog',dialog=>dialog.accept());await button.click();await page.getByText('대표 이미지 등록됨',{exact:true}).waitFor();assert.equal(posts,2);
   await page.goto(origin+'/expert.html?id=technician-'+id);await page.locator('#expert-icon img').waitFor();
-  assert.equal(await page.locator('#expert-icon img').getAttribute('src'),origin+'/published.png');assert.equal(await page.locator('#expert-image').getAttribute('src'),origin+'/published.png');assert.equal(await page.locator('#work-heading').innerText(),'대표 이미지');
+  assert.equal(await page.locator('#expert-icon img').getAttribute('src'),origin+'/published.png');assert.equal(await page.locator('#work-heading').innerText(),'작업 사진');assert.equal(await page.locator('.work-figure img').count(),0);await page.getByText('등록된 작업 사진이 없습니다.',{exact:true}).waitFor();
   await page.goto(origin+'/index.html');const card=page.locator('#expert-grid .ys-expert-card').filter({hasText:'시험 업체'});await card.waitFor();assert.equal(await card.locator('img').getAttribute('src'),origin+'/published.png');
   await page.goto(origin+'/technician-detail.html?id='+id);await page.locator('.file-grid').first().waitFor();assert.equal(await page.getByRole('button',{name:'첨부사진 1 대표 이미지로 등록',exact:true}).count(),0);
   assert.deepEqual(errors,[]);console.log('PASS: admin attachment button, cancel, error recovery, explicit selected image, profile avatar and image, homepage card, no owner publication button');

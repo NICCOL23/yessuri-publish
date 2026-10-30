@@ -24,17 +24,28 @@ if (!person) {
     document.querySelector('#contact-description').textContent = '기술자가 공개에 동의한 번호로 전화 앱을 엽니다. 통화 연결과 응답 여부는 전화 앱에서 확인해 주세요.';
     document.querySelector('#contact-footnote').textContent = '전화 연결을 누르면 기기의 전화 앱으로 이동합니다.';
   }
-  const image = document.querySelector('#expert-image');
-  const src=person.image||'';image.src=/^(https?:|\/|assets\/)/.test(src)?src:'assets/images/'+src;image.style.objectFit=person.imageType==='card'?'contain':'cover';image.style.objectPosition=person.imagePosition||'center';image.addEventListener('error',()=>{image.hidden=true;},{once:true});
-  image.alt = person.imageAlt;
-  if(person.isExample===false&&!person.image){image.closest('section').hidden=true;document.querySelector('#expert-icon').textContent=person.name.slice(0,1);}
-  if(person.isExample===false && person.image){
+  if(person.isExample===false){
     const avatar=document.querySelector('#expert-icon');
-    const portrait=window.YESSURI_EXPERT_CARD.photo(person);
-    portrait.style.width='100%';portrait.style.height='100%';portrait.style.objectFit='cover';portrait.style.borderRadius='inherit';
-    avatar.replaceChildren(portrait);
-    document.querySelector('#work-heading').textContent='대표 이미지';
-    document.querySelector('#work-heading').parentElement.querySelector('.section-description').textContent='업체에서 등록한 대표 이미지입니다.';
+    if(person.image){
+      const portrait=window.YESSURI_EXPERT_CARD.photo(person);
+      portrait.style.width='100%';portrait.style.height='100%';portrait.style.objectFit='cover';portrait.style.borderRadius='inherit';
+      avatar.replaceChildren(portrait);
+    }else{avatar.textContent=person.name.slice(0,1);}
+    const heading=document.querySelector('#work-heading'),section=heading.parentElement,figure=section.querySelector('.work-figure');
+    heading.textContent='작업 사진';
+    section.querySelector('.section-description').textContent='업체에서 공개 등록한 작업 사진입니다.';
+    const seen=new Set();
+    const photos=(person.workPhotos||[]).filter(photo=>photo.image&&photo.image!==person.image&&!seen.has(photo.image)&&seen.add(photo.image));
+    figure.replaceChildren();
+    if(!photos.length){const empty=document.createElement('p');empty.textContent='등록된 작업 사진이 없습니다.';figure.append(empty);}
+    photos.forEach(photo=>{
+      const image=window.YESSURI_EXPERT_CARD.photo({...person,...photo});
+      image.style.objectFit='contain';image.loading='lazy';figure.append(image);
+    });
+  }else{
+    const image=document.querySelector('#expert-image');
+    const src=person.image||'';image.src=/^(https?:|\/|assets\/)/.test(src)?src:'assets/images/'+src;image.style.objectFit=person.imageType==='card'?'contain':'cover';image.style.objectPosition=person.imagePosition||'center';image.addEventListener('error',()=>{image.hidden=true;},{once:true});
+    image.alt=person.imageAlt;
   }
 
   const tags = document.querySelector('#expert-fields');
@@ -47,7 +58,7 @@ if (!person) {
     document.querySelector('#expert-region').textContent='부산 '+window.YESSURI_AREAS_LABEL(person)+' · '+(person.profileType||'');
     document.querySelector('#expert-region-fact').textContent='부산 '+window.YESSURI_AREAS_LABEL(person);
   }
-  const pictures=[...(person.workPhotos||[]).filter(photo=>person.isExample!==false||photo.image!==person.image),...(person.businessCard?[{...person.businessCard,imageType:'card'}]:[])];
+  const pictures=[...(person.isExample===false?[]:(person.workPhotos||[])),...(person.businessCard?[{...person.businessCard,imageType:'card'}]:[])];
   if(pictures.length){const section=document.createElement('section');const heading=document.createElement('h2');heading.textContent='작업 사진·명함';section.append(heading);pictures.forEach(photo=>{const image=window.YESSURI_EXPERT_CARD.photo({...person,...photo});image.style.width='100%';image.style.height='auto';image.style.maxHeight='480px';image.loading='lazy';section.append(image)});document.querySelector('#profile-content').append(section);}
   document.querySelector('#contact-button').addEventListener('click', () => {
     if (phoneHref) {
