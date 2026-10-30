@@ -18,6 +18,11 @@ if (!person) {
   window.YESSURI_FAVORITES.bindButton(document.querySelector('#expert-favorite'), person.id);
   window.YESSURI_COMPARE.bindButton(document.querySelector('#expert-compare'), person.id, document.querySelector('#expert-compare-status'));
   const phoneHref = window.YESSURI_PHONE_HREF(person);
+  if(navigator.standalone===true)document.body.classList.add('profile-installed');
+  if(person.isExample===false && phoneHref){
+    document.querySelector('#expert-phone-fact').textContent=person.phone.trim();
+    document.querySelector('#expert-phone-row').hidden=false;
+  }
   document.querySelector('#contact-heading').textContent = phoneHref ? '전화로 문의하기' : '전화 연결 준비 중';
   document.querySelector('#contact-button').textContent = phoneHref ? '전화 연결하기' : '전화 연결 준비 중';
   if (phoneHref) {

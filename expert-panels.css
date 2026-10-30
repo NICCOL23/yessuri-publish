@@ -42,3 +42,10 @@
 
 .detail-page .directory-footer-bottom{justify-content:flex-end}
 .detail-page .detail-main .profile-heading{margin-top:0}
+
+/* Desktop browsers show the consented number in the introduction instead. */
+.detail-page #expert-phone-row[hidden]{display:none}
+@media(min-width:761px) and (hover:hover) and (pointer:fine) and (display-mode:browser){
+ .detail-page:not(.profile-installed) .detail-main .contact-card{display:none}
+ .detail-page:not(.profile-installed) .detail-main .detail-grid{grid-template-columns:minmax(0,1fr)}
+}
