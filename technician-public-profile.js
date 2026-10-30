@@ -73,6 +73,7 @@
       const link = element('a','공개 프로필 보기','btn');
       link.href = 'expert.html?id='+encodeURIComponent(profile.id);
       status.append(link);
+      if(window.YESSURI_TECHNICIAN_PUBLIC_PHOTOS) window.dispatchEvent(new Event('yessuri:public-photo-changed'));
     }
     open.addEventListener('click', async () => {
       if (checking) return;
@@ -148,6 +149,7 @@
           const link = element('a','프로필 확인');
           link.href = 'expert.html?id='+encodeURIComponent('technician-'+application.id);
           status.append(link);
+          window.dispatchEvent(new Event('yessuri:public-photo-changed'));
         } catch (err) { status.textContent = err.message; }
         finally {
           saving = false;

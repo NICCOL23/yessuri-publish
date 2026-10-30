@@ -27,6 +27,7 @@ if (!person) {
   const image = document.querySelector('#expert-image');
   const src=person.image||'';image.src=/^(https?:|\/|assets\/)/.test(src)?src:'assets/images/'+src;image.style.objectFit=person.imageType==='card'?'contain':'cover';image.style.objectPosition=person.imagePosition||'center';image.addEventListener('error',()=>{image.hidden=true;},{once:true});
   image.alt = person.imageAlt;
+  if(person.isExample===false&&!person.image){image.closest('section').hidden=true;document.querySelector('#expert-icon').textContent=person.name.slice(0,1);}
   if(person.isExample===false && person.image){
     const avatar=document.querySelector('#expert-icon');
     const portrait=window.YESSURI_EXPERT_CARD.photo(person);
@@ -46,7 +47,7 @@ if (!person) {
     document.querySelector('#expert-region').textContent='부산 '+window.YESSURI_AREAS_LABEL(person)+' · '+(person.profileType||'');
     document.querySelector('#expert-region-fact').textContent='부산 '+window.YESSURI_AREAS_LABEL(person);
   }
-  const pictures=[...(person.workPhotos||[]),...(person.businessCard?[{...person.businessCard,imageType:'card'}]:[])];
+  const pictures=[...(person.workPhotos||[]).filter(photo=>person.isExample!==false||photo.image!==person.image),...(person.businessCard?[{...person.businessCard,imageType:'card'}]:[])];
   if(pictures.length){const section=document.createElement('section');const heading=document.createElement('h2');heading.textContent='작업 사진·명함';section.append(heading);pictures.forEach(photo=>{const image=window.YESSURI_EXPERT_CARD.photo({...person,...photo});image.style.width='100%';image.style.height='auto';image.style.maxHeight='480px';image.loading='lazy';section.append(image)});document.querySelector('#profile-content').append(section);}
   document.querySelector('#contact-button').addEventListener('click', () => {
     if (phoneHref) {
