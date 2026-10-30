@@ -51,7 +51,7 @@
       originalHeadingParent.prepend(conditions, heading);
       disclosure.remove(); resultRow.remove();
       document.querySelectorAll('#find-grid .ys-expert-compare').forEach(button => {
-        button.textContent = '비교 선택'; button.closest('.ys-expert-card').append(button);
+        button.textContent = '비교 선택'; button.closest('.ys-expert-card').querySelector('.ys-expert-actions').append(button);
       });
     }
   };

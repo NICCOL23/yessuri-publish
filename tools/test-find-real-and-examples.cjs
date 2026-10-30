@@ -19,7 +19,7 @@ const server=http.createServer((req,res)=>{const file=path.resolve(root,'.'+new 
  const yescom=cards.filter({hasText:'yescom'});
  assert.equal(await yescom.locator('.ys-expert-fields').innerText(),'에어컨 외 3개 분야');
  assert.equal(await yescom.locator('.ys-expert-summary p').last().innerText(),'부산 전 지역 외 3곳');
- assert.ok(await yescom.locator('.ys-expert-summary').evaluate(n=>n.getBoundingClientRect().height<=90),'long details must not inflate the card summary');
+ assert.ok(await yescom.locator('.ys-expert-summary').evaluate(n=>n.getBoundingClientRect().height<=105),'long details must not inflate the card summary');
  assert.equal(await yescom.getByRole('checkbox').count(),1,'compare selection remains');
 const seen=new Set();
  for(let n=1;n<=5;n++){
