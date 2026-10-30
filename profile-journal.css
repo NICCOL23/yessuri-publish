@@ -79,3 +79,16 @@ html[data-type-system] .profile-journal .journal-title{font-size:2rem;line-heigh
 .profile-journal .pending-card h2{font-size:1.125rem!important;padding-top:0!important}
 .profile-journal .pending-card h2:before{display:none}
 @media(max-width:760px){.profile-journal .detail-main .pending-card.journal-section{padding:16px 18px;gap:8px}.profile-journal .pending-card .pending-grid{grid-template-columns:minmax(0,1fr);gap:4px}.profile-journal .pending-card .pending-grid>div{padding:6px 0}}
+
+.profile-journal .journal-photo-grid:has(>figure:only-child){grid-template-columns:minmax(0,1fr)}
+.profile-journal .journal-photo-open{display:block;width:100%;padding:0;border:0;background:#f5f8f7;cursor:zoom-in;border-radius:4px}
+.profile-journal .detail-main .journal-photo-grid .journal-photo-open img{width:100%;height:auto;aspect-ratio:4/3;object-fit:contain}
+.profile-journal .journal-photo-empty{padding:16px;background:#f5f8f7;border:1px dashed #c4d7d7;border-radius:6px}
+.profile-journal .journal-photo-dialog{max-width:94vw;max-height:94dvh;padding:16px;border:1px solid #c4d7d7;border-radius:10px;color:#19334e}
+.profile-journal .journal-photo-dialog::backdrop{background:#102536bb}
+.profile-journal .journal-photo-dialog img{display:block;max-width:85vw;max-height:75dvh;width:auto;height:auto;object-fit:contain;margin:12px auto}
+.profile-journal .journal-photo-dialog button{min-height:44px;font-size:1rem;padding:8px 20px}
+.profile-journal .journal-photo-dialog p{font-size:1rem;line-height:1.6;overflow-wrap:anywhere}
+@media(max-width:760px){.profile-journal .journal-photo-grid{grid-template-columns:minmax(0,1fr)}}
+
+.profile-journal .journal-cover>img{object-fit:contain;aspect-ratio:4/3}

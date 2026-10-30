@@ -31,7 +31,7 @@ async function preparePhotos(list:any,id:string){check(Array.isArray(list)&&list
  }catch(e){await rpc('abandon-uploads',{ids:planned.map(p=>p.id)});await cleanup();throw e;}}
 async function abandon(photos:any[]){if(photos.length){await rpc('abandon-uploads',{ids:photos.map(p=>p.id)});await cleanup();}}
 function addPhotoUrls(d:any){return{...d,photos:(d.photos||[]).map((p:any)=>({...p,url:'/api/photos/'+p.id}))};}
-function publicPhotos(profile:any){const seen=new Set();return [...(profile.image?[{image:profile.image,imageAlt:profile.image_alt||profile.name+' 대표 이미지'}]:[]),...(profile.work_photos||[])].filter((p:any)=>p&&typeof p.image==='string'&&!seen.has(p.image)&&seen.add(p.image));}
+function publicPhotos(profile:any){const seen=new Set();return [...(profile.work_photos||[]),...(profile.image?[{image:profile.image,imageAlt:profile.image_alt||profile.name+' 대표 이미지'}]:[])].filter((p:any)=>p&&typeof p.image==='string'&&!seen.has(p.image)&&seen.add(p.image));}
 async function photoProfile(id:string){const{data,error}=await db.from('expert_profiles').select('id,name,image,image_alt,work_photos').eq('id','technician-'+id).eq('publication_status','approved').eq('public_consent',true).maybeSingle();if(error)throw Error('public photo profile lookup failed');check(data,'먼저 공개 프로필을 등록해 주세요.',409);return data;}
 async function updatePhotoProfile(profile:any,changes:any){if(changes.work_photos&&!changes.replaceCases)changes.work_photos=[...changes.work_photos.filter((p:any)=>p.kind!=='case'),...(profile.work_photos||[]).filter((p:any)=>p.kind==='case')];delete changes.replaceCases;let q=db.from('expert_profiles').update(changes).eq('id',profile.id).eq('publication_status','approved').eq('public_consent',true).eq('work_photos',JSON.stringify(profile.work_photos||[]));q=profile.image===null?q.is('image',null):q.eq('image',profile.image);const{data,error}=await q.select('id,image,image_alt,work_photos').maybeSingle();if(error)throw Error('public photo profile update failed');check(data,'공개 사진이 변경되었습니다. 새로고침 후 다시 시도해 주세요.',409);return data;}
 Deno.serve(async req=>{
@@ -58,9 +58,9 @@ Deno.serve(async req=>{
    if(route.startsWith('/api/photos/')){const id=route.split('/').pop()!;check(uuid(id),'사진을 찾을 수 없습니다.',404);const adminSession=await session(req,'admin'),ownerSession=await session(req,'owner'),s=adminSession||ownerSession;check(s,'본인 확인이 필요합니다.',403);const p=await rpc('photo',{id,hash:s.hash}),{data,error}=await db.storage.from(BUCKET).download(p.storage_path);check(data&&!error,'사진을 찾을 수 없습니다.',404);return new Response(data,{headers:{...headers,'Content-Type':'image/jpeg','Content-Disposition':'inline; filename="private-application-photo.jpg"'}});}
    if(route.startsWith('/api/admin/applications?')||route==='/api/admin/applications'){const s=await admin(req),q=new URL(route,'https://local'),state=q.searchParams.get('state')||'';check(!state||states.includes(state),'상태를 확인해 주세요.');return json(await rpc('admin-list',{hash:s.hash,state,page:Number(q.searchParams.get('page'))||1}));}
    const caseList=route.match(/^\/api\/admin\/applications\/([a-f0-9-]{36})\/work-cases$/i);
-   if(caseList){const s=await admin(req),id=caseList[1];check(!IS_TEST,'테스트 접수에서는 사용할 수 없습니다.',409);await rpc('admin-detail',{id,hash:s.hash});const profile=await photoProfile(id);return json({cases:(profile.work_photos||[]).filter((p:any)=>p.kind==='case'),version:JSON.stringify(profile.work_photos||[]),photos:publicPhotos(profile)});}
+   if(caseList){const s=await admin(req),id=caseList[1];check(!IS_TEST,'테스트 접수에서는 사용할 수 없습니다.',409);await rpc('admin-detail',{id,hash:s.hash});const profile=await photoProfile(id);return json({cases:(profile.work_photos||[]).filter((p:any)=>p.kind==='case'),image:profile.image,version:JSON.stringify(profile.work_photos||[]),photos:publicPhotos(profile)});}
    const photoList=route.match(/^\/api\/admin\/applications\/([a-f0-9-]{36})\/public-photos$/i);
-   if(photoList){const s=await admin(req),id=photoList[1];check(!IS_TEST,'테스트 접수의 사진은 공개할 수 없습니다.',409);await rpc('admin-detail',{id,hash:s.hash});const profile=await photoProfile(id);return json({photos:publicPhotos(profile),image:profile.image});}
+   if(photoList){const s=await admin(req),id=photoList[1];check(!IS_TEST,'테스트 접수의 사진은 공개할 수 없습니다.',409);await rpc('admin-detail',{id,hash:s.hash});const profile=await photoProfile(id);return json({photos:publicPhotos(profile),image:profile.image,version:JSON.stringify(profile.work_photos||[])});}
    const publicProfile=route.match(/^\/api\/admin\/applications\/([a-f0-9-]{36})\/public-profile$/i);
    if(publicProfile){const s=await admin(req),id=publicProfile[1];await rpc('admin-detail',{id,hash:s.hash});check(!IS_TEST,'테스트 접수에서는 운영 프로필을 조회할 수 없습니다.',409);const{data,error}=await db.from('expert_profiles').select('id,name,publication_status').eq('id','technician-'+id).maybeSingle();if(error)throw Error('public profile lookup failed');return json({profile:data});}
    const detail=route.match(/^\/api\/(admin\/)?applications\/([a-f0-9-]{36})$/i);if(detail){const s=detail[1]?await admin(req):await auth(req,detail[2]);return json(addPhotoUrls(await rpc(detail[1]?'admin-detail':'detail',{id:detail[2],hash:s.hash})));}
@@ -101,14 +101,27 @@ Deno.serve(async req=>{
    let next;
    if(p.action==='delete'){check(p.confirm===true&&cases.some((c:any)=>c.id===p.id),'삭제할 작업 사례를 확인해 주세요.');next=cases.filter((c:any)=>c.id!==p.id);}
    else{check(!p.id||cases.some((c:any)=>c.id===p.id),'수정할 작업 사례가 없습니다.',404);check(p.id||cases.length<30,'작업 사례는 최대 30개입니다.');const title=text(p.title,1,120,'제목'),description=text(p.description,1,6000,'설명'),date=text(p.date,10,10,'작업일');check(/^\d{4}-\d{2}-\d{2}$/.test(date)&&Number.isFinite(Date.parse(date+'T00:00:00Z'))&&new Date(date+'T00:00:00Z').toISOString().slice(0,10)===date,'작업일을 확인해 주세요.');check(Array.isArray(p.photos)&&p.photos.length<=10&&new Set(p.photos).size===p.photos.length,'사진을 확인해 주세요.');const photos=publicPhotos(profile);check(p.photos.every((url:any)=>typeof url==='string'&&photos.some((photo:any)=>photo.image===url)),'이 업체의 공개 사진만 선택할 수 있습니다.');const item={kind:'case',id:p.id||crypto.randomUUID(),title,description,date,photos:p.photos.map((url:string)=>photos.find((photo:any)=>photo.image===url))};next=p.id?cases.map((c:any)=>c.id===p.id?item:c):[item,...cases];}
-   const updated=await updatePhotoProfile(profile,{work_photos:[...all.filter((p:any)=>p.kind!=='case'),...next],replaceCases:true});return json({cases:next,version:JSON.stringify(updated.work_photos||[]),photos:publicPhotos({...profile,...updated})});
+   const updated=await updatePhotoProfile(profile,{work_photos:[...all.filter((p:any)=>p.kind!=='case'),...next],replaceCases:true});return json({cases:next,image:profile.image,version:JSON.stringify(updated.work_photos||[]),photos:publicPhotos({...profile,...updated})});
   }
   const managePhotos=route.match(/^\/api\/admin\/applications\/([a-f0-9-]{36})\/public-photos$/i);
   if(managePhotos){
    const s=await admin(req),id=managePhotos[1];check(!IS_TEST,'테스트 접수의 사진은 공개할 수 없습니다.',409);
    await rpc('admin-detail',{id,hash:s.hash});
-   check(['upload','select','delete'].includes(p.action),'사진 작업을 확인해 주세요.');
+   check(['upload','select','delete','edit','reorder','replace'].includes(p.action),'사진 작업을 확인해 주세요.');
    const profile=await photoProfile(id),photos=publicPhotos(profile);
+   if(['edit','reorder','replace'].includes(p.action)){
+    check(p.version===JSON.stringify(profile.work_photos||[]),'사진이 변경되었습니다. 새로고침 후 다시 시도해 주세요.',409);
+    let ordered=photos.slice(),image=profile.image;const cases=(profile.work_photos||[]).filter((c:any)=>c.kind==='case');let nextCases=cases;
+    if(p.action==='reorder'){check(Array.isArray(p.order)&&p.order.length===photos.length&&new Set(p.order).size===photos.length&&p.order.every((url:any)=>photos.some((photo:any)=>photo.image===url)),'사진 순서를 확인해 주세요.');ordered=p.order.map((url:string)=>photos.find((photo:any)=>photo.image===url));nextCases=cases.map((c:any)=>({...c,photos:(c.photos||[]).slice().sort((a:any,b:any)=>p.order.indexOf(a.image)-p.order.indexOf(b.image))}));}
+    else{check(typeof p.image==='string'&&photos.some((photo:any)=>photo.image===p.image),'등록된 공개 사진을 선택해 주세요.',404);const caption=text(p.caption??'',0,500,'사진 설명');let replacement={...photos.find((photo:any)=>photo.image===p.image),caption,imageAlt:caption||profile.name+' 공개 사진'};
+     let uploadedPath='';
+     if(p.action==='replace'){check(p.imageConsent===true,'교체 사진의 공개를 확인해 주세요.');const bytes=await decodePhoto(p.photo),imageId=crypto.randomUUID();uploadedPath='public-profiles/'+id+'/'+imageId+'.jpg';const url=URL_ROOT+'/functions/v1/technician-api?route='+encodeURIComponent('/api/public-profile-images/'+id+'/'+imageId+'.jpg');const{error}=await db.storage.from(BUCKET).upload(uploadedPath,bytes,{contentType:'image/jpeg',upsert:false});if(error)throw Error('public photo replacement upload failed');replacement={...replacement,image:url};if(image===p.image)image=url;}
+     ordered=ordered.map((photo:any)=>photo.image===p.image?replacement:photo);nextCases=cases.map((c:any)=>({...c,photos:(c.photos||[]).map((photo:any)=>photo.image===p.image?replacement:photo)}));
+     try{await updatePhotoProfile(profile,{image,work_photos:[...ordered,...nextCases],replaceCases:true});}catch(e){if(uploadedPath)await db.storage.from(BUCKET).remove([uploadedPath]);throw e;}
+    }
+    if(p.action==='reorder')await updatePhotoProfile(profile,{work_photos:[...ordered,...nextCases],replaceCases:true});
+    const result=await photoProfile(id);return json({photos:publicPhotos(result),image:result.image,version:JSON.stringify(result.work_photos||[])});
+   }
    if(p.action==='upload'){
     check(p.imageConsent===true,'추가할 사진의 공개를 확인해 주세요.');check(photos.length<10,'공개 사진은 최대 10장까지 등록할 수 있습니다.');
     const bytes=await decodePhoto(p.photo),imageId=crypto.randomUUID(),path='public-profiles/'+id+'/'+imageId+'.jpg';
@@ -119,12 +132,12 @@ Deno.serve(async req=>{
     check(typeof p.image==='string'&&photos.some((photo:any)=>photo.image===p.image),'등록된 공개 사진을 선택해 주세요.',404);
     if(p.action==='select'){check(p.imageConsent===true,'대표 이미지 변경을 확인해 주세요.');await updatePhotoProfile(profile,{image:p.image,image_alt:profile.name+' 대표 이미지',image_type:'work',image_position:'center',work_photos:photos});}
     else{
-     check(!(profile.work_photos||[]).some((c:any)=>c.kind==='case'&&(c.photos||[]).some((photo:any)=>photo.image===p.image)),'작업 사례에서 사용 중인 사진입니다. 사례에서 먼저 제외해 주세요.',409);check(p.confirm===true,'공개 사진 삭제를 확인해 주세요.');await updatePhotoProfile(profile,{work_photos:photos.filter((photo:any)=>photo.image!==p.image),...(profile.image===p.image?{image:null,image_alt:null}:{})});
+     check(!(profile.work_photos||[]).some((c:any)=>c.kind==='case'&&(c.photos||[]).some((photo:any)=>photo.image===p.image)),'사용 중인 작업 사례: '+(profile.work_photos||[]).filter((c:any)=>c.kind==='case'&&(c.photos||[]).some((photo:any)=>photo.image===p.image)).map((c:any)=>c.title).join(', ')+' — 해당 사례에서 먼저 제외해 주세요.',409);check(p.confirm===true,'공개 사진 삭제를 확인해 주세요.');await updatePhotoProfile(profile,{work_photos:photos.filter((photo:any)=>photo.image!==p.image),...(profile.image===p.image?{image:null,image_alt:null}:{})});
      // Only remove our separate public copy, never an application attachment path.
      try{const imageUrl=new URL(p.image),imageRoute=imageUrl.searchParams.get('route')||'',match=imageRoute.match(/^\/api\/public-profile-images\/([a-f0-9-]{36})\/([a-f0-9-]{36})\.jpg$/i);if(imageUrl.origin===new URL(URL_ROOT).origin&&match&&match[1]===id)await db.storage.from(BUCKET).remove(['public-profiles/'+id+'/'+match[2]+'.jpg']);}catch{console.error('public copy cleanup failed');}
     }
    }
-   const result=await photoProfile(id);return json({photos:publicPhotos(result),image:result.image});
+   const result=await photoProfile(id);return json({photos:publicPhotos(result),image:result.image,version:JSON.stringify(result.work_photos||[])});
   }
   const representativeImage=route.match(/^\/api\/admin\/applications\/([a-f0-9-]{36})\/representative-image$/i);
   if(representativeImage){

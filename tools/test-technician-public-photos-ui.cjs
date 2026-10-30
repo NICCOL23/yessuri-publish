@@ -28,10 +28,10 @@ const server=http.createServer((req,res)=>{
       posts++;const body=route.request().postDataJSON();
       if(fail)return route.fulfill({status:500,json:{error:'저장 실패'}});
       if(body.action==='upload'){assert.equal(body.imageConsent,true);assert.equal(body.photo.type,'image/jpeg');assert.ok(body.photo.data.length>0);gallery.push({image:origin+'/published.png?new='+posts,imageAlt:'추가 사진'});}
-      if(body.action==='select')selected=body.image;
+      if(body.action==='select')selected=body.image;if(body.action==='edit')gallery=gallery.map(p=>p.image===body.image?{...p,caption:body.caption}:p);if(body.action==='reorder')gallery=body.order.map(url=>gallery.find(p=>p.image===url));if(body.action==='replace'){const next=origin+'/published.png?replacement='+posts;gallery=gallery.map(p=>p.image===body.image?{...p,image:next,caption:body.caption}:p);if(selected===body.image)selected=next;}
       if(body.action==='delete'){assert.equal(body.confirm,true);gallery=gallery.filter(p=>p.image!==body.image);if(selected===body.image)selected=null;}
      }
-     return route.fulfill({json:{photos:gallery,image:selected}});
+     return route.fulfill({json:{photos:gallery,image:selected,version:String(posts)}});
     }
     if(api.endsWith('/public-profile'))return route.fulfill({json:{profile:profile()}});
     return route.fulfill({json:{application:{id,version:3,company:'시험 업체',contact:'담당',phone:'01012345678',fields:'컴퓨터·IT',areas:'전체',status:'접수',created_at:new Date().toISOString(),expires_at:new Date().toISOString()},photos:[{id:photoId,url:'/api/photos/'+photoId}],messages:[],history:[]}});
@@ -46,17 +46,21 @@ const server=http.createServer((req,res)=>{
   await manager.locator('input[type=file]').setInputFiles({name:'test.png',mimeType:'image/png',buffer:Buffer.from(fileBytes,'base64')});
   await manager.locator('input[type=checkbox]').check();
   fail=true;await manager.getByRole('button',{name:'사진 추가',exact:true}).click();await manager.getByText('저장 실패',{exact:true}).waitFor();assert.equal(await manager.getByRole('button',{name:'사진 추가',exact:true}).isEnabled(),true);
-  fail=false;await manager.getByRole('button',{name:'사진 추가',exact:true}).click();await manager.locator('figure').nth(1).waitFor();
+  fail=false;await manager.getByRole('button',{name:'사진 추가',exact:true}).click();await manager.locator('.file-grid > figure').nth(1).waitFor();
   assert.equal(gallery.length,2);assert.equal(selected,origin+'/published.png?initial=1');
-  const added=manager.locator('figure').nth(1);page.once('dialog',d=>d.dismiss());
+  const added=manager.locator('.file-grid > figure').nth(1);page.once('dialog',d=>d.dismiss());
   await added.getByRole('button',{name:'대표 이미지로 변경',exact:true}).click();assert.equal(selected,origin+'/published.png?initial=1');
   page.once('dialog',d=>d.accept());await added.getByRole('button',{name:'대표 이미지로 변경',exact:true}).click();await manager.getByText('대표 이미지를 변경했습니다.',{exact:true}).waitFor();assert.equal(selected,gallery[1].image);
   await page.setViewportSize({width:390,height:844});assert.ok(await manager.evaluate(n=>n.getBoundingClientRect().right<=innerWidth));await page.setViewportSize({width:1440,height:1000});
   await page.goto(origin+'/expert.html?id=technician-'+id);await page.locator('#expert-icon img').waitFor();assert.equal(await page.locator('#expert-icon img').getAttribute('src'),selected);assert.equal(await page.locator('#work-heading').innerText(),'작업 사진');assert.equal(await page.locator('.work-figure img').count(),1);assert.equal(await page.locator('.work-figure img').getAttribute('src'),gallery[0].image);assert.equal(await page.locator('.work-figure img').evaluateAll(nodes=>nodes.some(n=>n.src===document.querySelector('#expert-icon img').src)),false,'representative image is excluded from work photos');
-  await page.goto(origin+'/technician-detail.html?id='+id+'&admin=1');await manager.locator('figure').nth(1).waitFor();
-  page.once('dialog',d=>d.accept());await manager.locator('figure').filter({hasText:'현재 대표 이미지'}).getByRole('button',{name:'공개 사진 삭제',exact:true}).click();await manager.getByText('공개 사진을 삭제했습니다. 신청서 원본 사진은 유지됩니다.',{exact:true}).waitFor();assert.equal(selected,null);assert.equal(gallery.length,1);
+  await page.goto(origin+'/technician-detail.html?id='+id+'&admin=1');await manager.locator('.file-grid > figure').nth(1).waitFor();
+  page.once('dialog',d=>d.accept());await manager.locator('.file-grid > figure').filter({hasText:'현재 대표 이미지'}).getByRole('button',{name:'공개 사진 삭제',exact:true}).click();await manager.getByText('공개 사진을 삭제했습니다. 신청서 원본 사진은 유지됩니다.',{exact:true}).waitFor();assert.equal(selected,null);assert.equal(gallery.length,1);
   assert.equal(await page.locator('#root > .layout > div > section.card').first().locator('figure.photo').count(),1,'private source remains');
   await page.goto(origin+'/expert.html?id=technician-'+id);await page.locator('#profile-content').waitFor();assert.equal(await page.locator('#expert-icon img').count(),0);assert.equal(await page.locator('.work-figure img').count(),1);assert.equal(await page.locator('.work-figure img').getAttribute('src'),gallery[0].image);
+  await page.goto(origin+'/technician-detail.html?id='+id+'&admin=1');await manager.locator('.file-grid > figure').first().waitFor();page.on('dialog',d=>d.accept());
+  await manager.locator('.file-grid > figure').first().locator('input[type=text]').fill('사진 설명 테스트');await manager.getByRole('button',{name:'설명 저장',exact:true}).first().click();await manager.getByText('사진 설명을 저장했습니다.',{exact:true}).waitFor();assert.equal(gallery[0].caption,'사진 설명 테스트');
+  await manager.locator('input[type=file]').setInputFiles({name:'test.png',mimeType:'image/png',buffer:Buffer.from(fileBytes,'base64')});await manager.locator('input[type=checkbox]').check();await manager.getByRole('button',{name:'사진 추가',exact:true}).click();await manager.locator('.file-grid > figure').nth(1).waitFor();const newest=gallery[1].image;await manager.getByRole('button',{name:'앞으로 이동',exact:true}).nth(1).click();await manager.getByText('사진 순서를 변경했습니다.',{exact:true}).waitFor();assert.equal(gallery[0].image,newest);
+  await manager.locator('input[type=file]').setInputFiles({name:'replacement.png',mimeType:'image/png',buffer:Buffer.from(fileBytes,'base64')});await manager.locator('input[type=checkbox]').check();await manager.getByRole('button',{name:'선택한 파일로 교체',exact:true}).first().click();await manager.getByText('사진을 교체했습니다.',{exact:true}).waitFor();assert.notEqual(gallery[0].image,newest);assert.equal(await manager.locator('.ys-work-gallery > figure').count(),2);
   await page.goto(origin+'/technician-detail.html?id='+id);await page.locator('.file-grid').first().waitFor();assert.equal(await page.locator('#admin-public-photos').count(),0);
   assert.deepEqual(errors,[]);console.log('PASS: admin public photo upload, failure recovery, cancel/select, representative display, responsive layout, delete keeps original, no broken image after removal, owner cannot manage photos');
  }finally{await browser.close();}
