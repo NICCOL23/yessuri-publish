@@ -203,7 +203,7 @@ function renderConditionChips() {
   else if (appliedFilters.category !== '전체') chip(appliedFilters.category, () => {appliedFilters.category='전체';requestedService='';}, '수리 분야 조건 해제');
   if (appliedFilters.query) chip('검색: '+appliedFilters.query, () => {appliedFilters.query='';}, '검색어 조건 해제');
 }
-function createExpertCard(expert){return window.YESSURI_EXPERT_CARD.create(expert,{compare:true});}
+function createExpertCard(expert){return window.YESSURI_EXPERT_CARD.create(expert,{compare:true,compact:true});}
 function refreshCardControls() {
   resultGrid.querySelectorAll('.find-favorite').forEach(button=>{const saved=window.YESSURI_FAVORITES.saved(button.dataset.expertId);button.textContent=saved?'관심 저장됨':'관심 저장';button.dataset.saved=String(saved);const label=button.dataset.expertName+(saved?' 관심 해제':' 관심 저장');button.setAttribute('aria-label',label);button.title=button.disabled?button.title:label;});
   resultGrid.querySelectorAll('.compare-button').forEach(button=>{const selected=window.YESSURI_COMPARE.selected(button.dataset.expertId);button.textContent='비교 선택';button.setAttribute('aria-checked',String(selected));button.removeAttribute('aria-pressed');button.setAttribute('aria-label',button.dataset.expertName+' 비교 선택');});
