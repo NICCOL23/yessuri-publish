@@ -20,7 +20,7 @@
     const cover=make('figure','','journal-cover'),coverPhoto=photos[0];
     if(coverPhoto||person.isExample!==false){
       const image=window.YESSURI_EXPERT_CARD.photo({...person,...(coverPhoto||{})});image.loading='eager';image.decoding='async';
-      cover.append(image,make('figcaption',person.isExample!==false?'분야 설명용 예시 이미지 · 실제 작업 사진이 아닙니다.':'업체에서 공개 등록한 작업 사진'));
+      cover.append(image,make('figcaption',person.isExample!==false?'분야 설명용 예시 이미지 · 실제 작업 사진이 아닙니다.':(coverPhoto?.caption||'업체에서 공개 등록한 작업 사진')));
     }else{
       cover.classList.add('journal-cover-empty');
       cover.append(make('strong','작업 공간을 소개해 주세요'),make('p','공개 작업 사진을 등록하면 이곳에 표시됩니다. 대표 이미지는 프로필 상단의 작은 칸에 표시됩니다.'));
