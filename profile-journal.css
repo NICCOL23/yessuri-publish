@@ -69,3 +69,13 @@ html[data-type-system] .profile-journal .journal-title{font-size:2rem;line-heigh
 .profile-journal .journal-cover-empty strong{font-size:1.375rem;line-height:1.6}
 .profile-journal .journal-cover-empty p{font-size:1rem;line-height:1.9;color:#52657a;margin-top:14px}
 @media(max-width:760px){.profile-journal .detail-main .journal-section{padding:24px 18px}.profile-journal .journal-cover-empty{min-height:230px;padding:24px}}
+
+.profile-journal .journal-case{border-bottom:1px solid #dde6e6;padding:0 0 24px;margin:0 0 24px}.profile-journal .journal-case:last-child{border:0;margin:0;padding:0}.profile-journal .journal-case h3{font-size:1.25rem;line-height:1.6;margin:0 0 8px}.profile-journal .journal-case time{font-size:.875rem;color:#52657a}.profile-journal .journal-case-description{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.9;margin:16px 0}
+.profile-journal .detail-main .pending-card.journal-section{padding:18px 24px;gap:20px;align-items:center}
+.profile-journal .pending-card .pending-grid{gap:12px}
+.profile-journal .pending-card .pending-grid>div{padding:10px 12px;background:transparent;border:0}
+.profile-journal .pending-card .pending-grid>div>span{display:none}
+.profile-journal .pending-card .pending-grid p{margin:4px 0 0}
+.profile-journal .pending-card h2{font-size:1.125rem!important;padding-top:0!important}
+.profile-journal .pending-card h2:before{display:none}
+@media(max-width:760px){.profile-journal .detail-main .pending-card.journal-section{padding:16px 18px;gap:8px}.profile-journal .pending-card .pending-grid{grid-template-columns:minmax(0,1fr);gap:4px}.profile-journal .pending-card .pending-grid>div{padding:6px 0}}

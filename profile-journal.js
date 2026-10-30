@@ -38,6 +38,8 @@
     const storyHeading=make('h2','작업 이야기');stories.append(storyHeading);
     const storyBody=make('div','','journal-section-body');
     storyBody.append(make('p','작업 이야기를 소개해 주세요.','journal-empty-title'),make('p','작업 전 상태, 진행 과정, 완료 결과를 사진과 함께 정리하는 공간입니다. 아직 등록된 작업 이야기가 없습니다.','journal-reading-note'));
+    const cases=(person.workPhotos||[]).filter(p=>p.kind==='case');
+    if(cases.length){storyBody.replaceChildren();for(const item of cases){const article=make('article','','journal-case');const heading=make('h3',item.title),date=make('time',item.date);date.dateTime=item.date;const description=make('p',item.description,'journal-case-description');article.append(heading,date,description);const gallery=make('div','','journal-photo-grid');for(const photo of item.photos||[]){const image=window.YESSURI_EXPERT_CARD.photo({...person,...photo});image.alt=item.title;gallery.append(image);}article.append(gallery);storyBody.append(article);}}
     stories.append(storyBody);
 
     work.id='journal-photos';work.classList.add('journal-section','journal-photos');
