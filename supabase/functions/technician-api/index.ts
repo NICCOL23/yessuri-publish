@@ -37,6 +37,16 @@ Deno.serve(async req=>{
  try{check(allowed,'허용되지 않은 요청입니다.',403);if(req.method==='OPTIONS')return new Response(null,{status:204,headers});const u=new URL(req.url),route=u.searchParams.get('route')||'/api/health';
   if(u.searchParams.get('action')==='cleanup'){const{data,error}=await db.rpc(IS_TEST?'technician_cleanup_secret_test':'technician_cleanup_secret');check(!error&&data&&req.headers.get('x-cleanup-secret')===data,'접근 권한이 없습니다.',403);await cleanup();return json({ok:true});}
   if(req.method==='GET'){
+   const publicImage=route.match(/^\/api\/public-profile-images\/([a-f0-9-]{36})\/([a-f0-9-]{36})\.jpg$/i);
+   if(publicImage){
+    check(!IS_TEST,'사진을 찾을 수 없습니다.',404);
+    const imageUrl=URL_ROOT+'/functions/v1/technician-api?route='+encodeURIComponent(route);
+    const{data:profile,error:lookupError}=await db.from('expert_profiles').select('id').eq('id','technician-'+publicImage[1]).eq('image',imageUrl).eq('publication_status','approved').eq('public_consent',true).maybeSingle();
+    check(!lookupError&&profile,'사진을 찾을 수 없습니다.',404);
+    const{data,error}=await db.storage.from(BUCKET).download('public-profiles/'+publicImage[1]+'/'+publicImage[2]+'.jpg');
+    check(data&&!error,'사진을 찾을 수 없습니다.',404);
+    return new Response(data,{headers:{...headers,'Content-Type':'image/jpeg','Content-Disposition':'inline; filename="profile-image.jpg"'}});
+   }
    if(route==='/api/health')return json({mode:IS_TEST?'isolated-test':'production',ready:true,maxPhotos:5,maxPhotoBytes:10485760,transferPhotoBytes:1048576,retentionMonths:6});
    if(route.startsWith('/api/applications?')){const query=new URL(route,'https://local');return json(await rpc('list',{page:Number(query.searchParams.get('page'))||1}));}
    if(route==='/api/applications')return json(await rpc('list',{page:1}));
@@ -77,6 +87,34 @@ Deno.serve(async req=>{
    if(op==='password'){const old=await rpc('password-hash',{id,hash:s.hash});check(await passwordMatches(typeof p.currentPassword==='string'&&p.currentPassword.length<=128?p.currentPassword:'',old.password_hash),'현재 비밀번호를 확인해 주세요.',403);const pass=pw(p.password);check(pass===p.passwordConfirm,'비밀번호 확인이 일치하지 않습니다.');const token=random();await rpc('password',{id,hash:s.hash,expectedHash:old.password_hash,password_hash:await passwordHash(pass),newHash:await sha(token)});return json({ok:true,ownerSession:{token,expiresAt:Date.now()+900000}});}
    let mutation:any={id,hash:s.hash};if(op==='edit'){mutation.data=fields(p);check(Number.isInteger(p.version),'수정 버전을 확인해 주세요.');mutation.version=p.version;check(Array.isArray(p.keepPhotoIds)&&p.keepPhotoIds.every(uuid)&&new Set(p.keepPhotoIds).size===p.keepPhotoIds.length,'보관할 사진을 확인해 주세요.');mutation.keepPhotoIds=p.keepPhotoIds;check(p.keepPhotoIds.length+(p.photos?.length||0)<=5,'사진은 합계5장까지 첨부할 수 있습니다.');}else mutation.body=text(p.body,1,6000,'답변');
    const photos=await preparePhotos(p.photos||[],id);mutation.photos=photos;try{await rpc(op,mutation);await cleanup();return json({ok:true});}catch(e){await abandon(photos);throw e;}
+  }
+  const representativeImage=route.match(/^\/api\/admin\/applications\/([a-f0-9-]{36})\/representative-image$/i);
+  if(representativeImage){
+   const s=await admin(req),id=representativeImage[1];
+   check(!IS_TEST,'테스트 접수의 사진은 공개할 수 없습니다.',409);
+   check(p.imageConsent===true,'선택한 사진의 공개를 확인해 주세요.');
+   const detail=await rpc('admin-detail',{id,hash:s.hash});
+   check(Number.isInteger(p.version)&&p.version===detail.application.version,'신청이 변경되었습니다. 새로고침 후 다시 확인해 주세요.',409);
+   check(uuid(p.photoId)&&detail.photos.some((photo:any)=>photo.id===p.photoId),'이 신청에 첨부된 사진을 선택해 주세요.',404);
+   const{data:profile,error:lookupError}=await db.from('expert_profiles').select('id,name,image').eq('id','technician-'+id).eq('publication_status','approved').eq('public_consent',true).maybeSingle();
+   if(lookupError)throw Error('public profile image lookup failed');
+   check(profile,'먼저 공개 프로필을 등록해 주세요.',409);
+   const photo=await rpc('photo',{id:p.photoId,hash:s.hash});
+   check(photo.application_id===id,'이 신청에 첨부된 사진을 선택해 주세요.',404);
+   const{data:bytes,error:downloadError}=await db.storage.from(BUCKET).download(photo.storage_path);
+   check(bytes&&!downloadError,'첨부사진을 읽을 수 없습니다.',404);
+   const imageId=crypto.randomUUID(),path='public-profiles/'+id+'/'+imageId+'.jpg';
+   const imageUrl=URL_ROOT+'/functions/v1/technician-api?route='+encodeURIComponent('/api/public-profile-images/'+id+'/'+imageId+'.jpg');
+   const{error:uploadError}=await db.storage.from(BUCKET).upload(path,bytes,{contentType:'image/jpeg',upsert:false});
+   if(uploadError)throw Error('public profile image upload failed');
+   try{
+    let update=db.from('expert_profiles').update({image:imageUrl,image_alt:profile.name+' 대표 이미지',image_type:'work',image_position:'center'}).eq('id',profile.id).eq('publication_status','approved').eq('public_consent',true);
+    update=profile.image===null?update.is('image',null):update.eq('image',profile.image);
+    const{data:updated,error:updateError}=await update.select('id,image').maybeSingle();
+    if(updateError)throw Error('public profile image update failed');
+    check(updated,'프로필이 변경되었습니다. 다시 확인해 주세요.',409);
+    return json({profile:updated});
+   }catch(error){await db.storage.from(BUCKET).remove([path]);throw error;}
   }
   const publishProfile=route.match(/^\/api\/admin\/applications\/([a-f0-9-]{36})\/public-profile$/i);
   if(publishProfile){

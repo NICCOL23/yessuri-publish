@@ -27,6 +27,15 @@ if (!person) {
   const image = document.querySelector('#expert-image');
   const src=person.image||'';image.src=/^(https?:|\/|assets\/)/.test(src)?src:'assets/images/'+src;image.style.objectFit=person.imageType==='card'?'contain':'cover';image.style.objectPosition=person.imagePosition||'center';image.addEventListener('error',()=>{image.hidden=true;},{once:true});
   image.alt = person.imageAlt;
+  if(person.isExample===false && person.image){
+    const avatar=document.querySelector('#expert-icon');
+    const portrait=window.YESSURI_EXPERT_CARD.photo(person);
+    portrait.style.width='100%';portrait.style.height='100%';portrait.style.objectFit='cover';portrait.style.borderRadius='inherit';
+    avatar.replaceChildren(portrait);
+    document.querySelector('#work-heading').textContent='대표 이미지';
+    document.querySelector('#work-heading').parentElement.querySelector('.section-description').textContent='업체에서 등록한 대표 이미지입니다.';
+  }
+
   const tags = document.querySelector('#expert-fields');
   person.fields.forEach(field => {
     const tag = document.createElement('span');

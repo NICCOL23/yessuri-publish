@@ -1,4 +1,4 @@
-/* Admin application detail only. Private attachments are never copied to a public profile. */
+/* Admin application detail only. Only explicitly selected attachments may be published. */
 (() => {
   'use strict';
   const element = (tag, text, className) => {
@@ -8,7 +8,8 @@
     return node;
   };
   const split = value => [...new Set(value.split(/[,，\n]+/).map(s => s.trim()).filter(Boolean))];
-  function mount({application, api}) {
+  function mount({application, api, photos = []}) {
+    mountPhotoButtons({application, api, photos});
     const anchor = document.querySelector('#root .layout > div > section.card');
     if (!anchor) return;
     const section = element('section', '', 'card section');
@@ -115,6 +116,44 @@
         controls.forEach(control => { control.disabled = false; });
         open.disabled = false;
       }
+    });
+  }
+  function mountPhotoButtons({application, api, photos}) {
+    if (!photos.length) return;
+    const figures = document.querySelectorAll('#root .file-grid figure.photo');
+    let saving = false;
+    const buttons = [];
+    photos.forEach((photo, index) => {
+      const figure = figures[index];
+      if (!figure) return;
+      const button = element('button','대표 이미지로 등록','btn');
+      button.type = 'button';
+      button.setAttribute('aria-label','첨부사진 '+(index+1)+' 대표 이미지로 등록');
+      const status = element('p','','hint');
+      status.setAttribute('role','status');
+      figure.append(button,status);
+      buttons.push(button);
+      button.addEventListener('click', async () => {
+        if (saving || !window.confirm('첨부사진 '+(index+1)+'을 공개 대표 이미지로 등록할까요? 신청자가 사진 공개에 동의했는지 확인해 주세요. 선택한 사진은 메인 카드와 공개 프로필에 표시됩니다.')) return;
+        saving = true;
+        buttons.forEach(node => { node.disabled = true; });
+        status.textContent = '대표 이미지를 등록하고 있습니다.';
+        try {
+          await api('admin/applications/'+application.id+'/representative-image', {
+            version: application.version, photoId: photo.id, imageConsent: true
+          });
+          for (const node of buttons) node.textContent = '대표 이미지로 등록';
+          button.textContent = '대표 이미지 등록됨';
+          status.replaceChildren(document.createTextNode('메인 카드와 프로필에 반영했습니다. '));
+          const link = element('a','프로필 확인');
+          link.href = 'expert.html?id='+encodeURIComponent('technician-'+application.id);
+          status.append(link);
+        } catch (err) { status.textContent = err.message; }
+        finally {
+          saving = false;
+          buttons.forEach(node => { node.disabled = false; });
+        }
+      });
     });
   }
   window.YESSURI_TECHNICIAN_PUBLIC_PROFILE = {mount};
