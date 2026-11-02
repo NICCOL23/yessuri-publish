@@ -22,7 +22,7 @@
         : /^(technician-.+|register|register-form)\.html$/.test(page) ? 'technician' : '';
       const root = this.shadowRoot || this.attachShadow({ mode: 'open' });
       root.innerHTML = `
-        <link rel="stylesheet" href="${url('site-header.css?v=4')}">
+        <link rel="stylesheet" href="${url('site-header.css?v=5')}">
         <header aria-label="사이트 상단">
           <div class="header-inner">
             <a class="brand" href="${url('index.html#top')}" aria-label="YESSURI 예스수리 홈">
@@ -34,7 +34,8 @@
             <nav id="home-menu" aria-label="주요 메뉴">
               ${navigation.map(item => {
                 const current = group === item.key ? ` aria-current="${page === item.href ? 'page' : 'location'}"` : '';
-                const link = `<a class="nav-link${item.key === 'technician' ? ' register-link' : ''}${item.key === 'shop' ? ' shop-link' : ''}" href="${url(item.href)}"${current}>${item.label}</a>`;
+                const label = item.key === 'shop' ? '<span>전문 업체 상품</span><small class="shop-status">준비 중</small>' : item.label;
+                const link = `<a class="nav-link${item.key === 'technician' ? ' register-link' : ''}${item.key === 'shop' ? ' shop-link' : ''}" href="${url(item.href)}"${current}>${label}</a>`;
                 return item.children ? `<div class="guide-nav">${link}<button class="guide-toggle" type="button" aria-label="비용·이용안내 하위 메뉴" aria-controls="guide-submenu" aria-expanded="false"><span class="chevron" aria-hidden="true"></span></button><div id="guide-submenu" hidden>${item.children.map(([id, label]) => `<a href="${url(item.href + '#' + id)}">${label}</a>`).join('')}</div></div>` : link;
               }).join('')}
             </nav>
