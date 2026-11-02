@@ -1,4 +1,4 @@
-/* Question fields use the same 19-field source as the home/search UI. */
+/* Question fields use the same shared field source as the home/search UI. */
 const fs=require('fs'),assert=require('assert'),path=require('path');
 const root=path.resolve(__dirname,'..'),read=p=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8'));
 const catalog=read('data/work-catalog.json'),services=read('data/service-fields.json');

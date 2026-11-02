@@ -10,4 +10,4 @@ assert(!acceptsWork('도배','bath-ceiling'));
 assert(!acceptsWork('욕실·설비','not-a-work'));
 assert.equal(fieldFilter('general'),'group_id.eq.general');
 assert.equal(fieldFilter('invalid,group'),null);
-console.log('19 fields, work validation, legacy editing/filtering and invalid selections passed');
+console.log(`${data.fields.length} fields, work validation, legacy editing/filtering and invalid selections passed`);

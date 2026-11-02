@@ -120,6 +120,14 @@
     "id": "doors"
   },
   {
+    "value": "열쇠·도어락",
+    "label": "열쇠·도어락",
+    "description": "잠금장치·도어락 점검·교체",
+    "image": "assets/images/service-locksmith.svg",
+    "href": "guide.html?group=general&field=locksmith#work-guide",
+    "id": "locksmith"
+  },
+  {
     "value": "에어컨",
     "label": "에어컨",
     "description": "수리·설치·청소",

@@ -1196,7 +1196,10 @@ window.YESSURI_EXPERTS = [
     "imageType": "work",
     "career": "경력 정보 입력 예시",
     "intro": "컴퓨터 수리·업그레이드 전문가 카드 구성을 확인하기 위한 가상 프로필입니다. 실제 업체 정보나 연락처가 아닙니다."
-  }
+  },
+  {"id":"example-locksmith-a","name":"열쇠·도어락 업체 가","fields":["열쇠·도어락"],"serviceAreas":["해운대구","수영구"],"profileType":"가상 업체 예시","publicationStatus":"approved","isExample":true,"phonePublic":false,"icon":"🔑","image":"category-locksmith.webp","imageAlt":"열쇠·도어락 분야 AI 예시 이미지","imageType":"work","career":"경력 정보 입력 예시","intro":"열쇠·도어락 점검·수리·교체 분야의 카드와 프로필 구성을 보여주는 가상 업체입니다. 사진은 AI 예시이며 실제 업체 정보나 작업 이력이 아닙니다."},
+  {"id":"example-locksmith-b","name":"열쇠·도어락 업체 나","fields":["열쇠·도어락"],"serviceAreas":["부산진구","연제구"],"profileType":"가상 업체 예시","publicationStatus":"approved","isExample":true,"phonePublic":false,"icon":"🔑","image":"category-locksmith.webp","imageAlt":"열쇠·도어락 분야 AI 예시 이미지","imageType":"work","career":"경력 정보 입력 예시","intro":"열쇠·도어락 점검·수리·교체 분야의 카드와 프로필 구성을 보여주는 가상 업체입니다. 사진은 AI 예시이며 실제 업체 정보나 작업 이력이 아닙니다."},
+  {"id":"example-locksmith-c","name":"열쇠·도어락 업체 다","fields":["열쇠·도어락"],"serviceAreas":["남구","동래구"],"profileType":"가상 업체 예시","publicationStatus":"approved","isExample":true,"phonePublic":false,"icon":"🔑","image":"category-locksmith.webp","imageAlt":"열쇠·도어락 분야 AI 예시 이미지","imageType":"work","career":"경력 정보 입력 예시","intro":"열쇠·도어락 점검·수리·교체 분야의 카드와 프로필 구성을 보여주는 가상 업체입니다. 사진은 AI 예시이며 실제 업체 정보나 작업 이력이 아닙니다."}
 ];
 
 // 정적 시안의 표시 기준입니다. 실제 승인·비공개 통제는 서버에서 처리해야 합니다.

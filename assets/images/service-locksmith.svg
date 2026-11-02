@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="열쇠·도어락">
+ <g transform="translate(32 32) rotate(-38) translate(-30 -18)">
+  <path d="M28 14h31v10h-7v8h-9v-8H28z" fill="#d5a523" stroke="#ad7e15" stroke-width="1.8" stroke-linejoin="round"/>
+  <circle cx="17" cy="19" r="15" fill="#edc348" stroke="#b88d21" stroke-width="2"/>
+  <circle cx="15" cy="17" r="6" fill="#fff" stroke="#b88d21" stroke-width="1.7"/>
+  <path d="M34 17h20" stroke="#ffe59a" stroke-width="2" stroke-linecap="round"/>
+ </g>
+</svg>

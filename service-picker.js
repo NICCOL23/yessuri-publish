@@ -7,6 +7,7 @@
     {label:'도배·장판', categories:[], details:[]},
     {label:'페인트', categories:['페인트'], details:[]},
     {label:'목공·문·창호', categories:['목공','문·창호'], details:['목공 보수','문·창호 보수']},
+    {label:'열쇠·도어락', categories:['열쇠·도어락'], details:['잠금장치 점검·수리','도어락 교체']},
     {label:'철거·기타 보수', categories:['철거'], details:['철거']},
     {label:'에어컨', categories:['에어컨'], details:['수리','설치·이전','청소']},
     {label:'TV', categories:[], details:['화면 문제','전원 문제','소리 문제']},

@@ -1,8 +1,8 @@
-/* Registration-only multiselect using the existing nineteen service-field definitions. */
+/* Registration and admin multiselect using the shared service-field definitions. */
 (() => {
  'use strict';
- function mount(form) {
-  const input=form.querySelector('#t-fields');
+ function mount(form, options = {}) {
+  const input=options.input||form.querySelector('#t-fields');
   if(!input||input.dataset.fieldPicker)return;
   input.dataset.fieldPicker='true';input.hidden=true;
   const items=window.YESSURI_SERVICE_FIELDS.items;
@@ -22,7 +22,7 @@
   dialog.setAttribute('aria-labelledby','service-field-dialog-title');dialog.setAttribute('aria-describedby','service-field-dialog-help');
   const head=make('div','','ys-area-dialog-head'),heading=make('h2','전문 분야 선택');heading.id='service-field-dialog-title';
   const close=make('button','닫기','ys-area-close');close.type='button';close.setAttribute('aria-label','전문 분야 선택 창 닫기');head.append(heading,close);
-  const help=make('p','19개 종목 중 작업 가능한 전문 분야를 모두 선택해 주세요.','ys-area-help');help.id='service-field-dialog-help';dialog.append(head,help);
+  const help=make('p',items.length+'개 종목 중 작업 가능한 전문 분야를 모두 선택해 주세요.','ys-area-help');help.id='service-field-dialog-help';dialog.append(head,help);
   const grid=make('div','','ys-area-grid'),choices=new Map();
   items.forEach((item,index)=>{
    const label=make('label','','ys-area-option'),control=document.createElement('input');

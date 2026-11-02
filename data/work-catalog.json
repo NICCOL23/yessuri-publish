@@ -509,6 +509,24 @@
         "width": 512,
         "height": 512
       }
+    },
+    {
+      "id": "locksmith",
+      "groupId": "general",
+      "name": "열쇠·도어락",
+      "sortOrder": 0.5,
+      "representativeArt": 0,
+      "guidance": [
+        "잠금장치·도어락의 증상과 제품 정보",
+        "문 두께와 기존 제품의 호환 여부",
+        "작동 상태와 작업 후 점검 범위"
+      ],
+      "cardImage": {
+        "src": "assets/images/category-locksmith.webp",
+        "alt": "열쇠·도어락 분야 AI 예시 이미지",
+        "width": 1024,
+        "height": 1024
+      }
     }
   ],
   "tasks": [
@@ -5367,6 +5385,52 @@
         "status": "new-content",
         "reviewedDate": null
       }
+    },
+    {
+      "id": "locksmith-service",
+      "fieldId": "locksmith",
+      "name": "열쇠·도어락 점검·수리·교체",
+      "summary": "잠금장치의 증상과 제품 정보를 확인하고 점검·수리·교체 범위를 상담하세요.",
+      "section": null,
+      "sortOrder": 0,
+      "keywords": "열쇠 잠금장치 도어락 번호키 고장 교체",
+      "query": "",
+      "before": [
+        "제품명·모델과 발생 증상",
+        "문 두께·재질과 기존 제품 호환 여부",
+        "방문 가능 여부와 출장·진단비"
+      ],
+      "rows": [
+        {
+          "name": "잠금장치 점검·수리",
+          "parts": "제품 모델·사용 부품 확인",
+          "conditions": "증상 진단 후 수리 가능 범위 협의"
+        },
+        {
+          "name": "도어락 교체",
+          "parts": "문 두께·제품 규격·전원 방식",
+          "conditions": "제품·설치·추가 가공 포함 여부 확인"
+        }
+      ],
+      "after": [
+        "개폐·잠금과 정상 작동 확인",
+        "사용 제품과 작업 내역",
+        "사후 점검·보증 범위 확인"
+      ],
+      "photoPreparation": [
+        "문 전체와 잠금장치 외관 사진",
+        "제품명·모델 정보",
+        "방문 지역과 희망 일정"
+      ],
+      "expertCategory": "열쇠·도어락",
+      "imageIds": [
+        "work-image-locksmith-service"
+      ],
+      "contentUpdatedDate": "2026-11-02",
+      "contentReview": {
+        "status": "service-added",
+        "reviewedDate": "2026-11-02"
+      }
     }
   ],
   "images": [
@@ -8434,6 +8498,17 @@
         "date": "2026-10-23",
         "notes": "사용자가 3D 샘플 확인 후 적용·배포 요청. 실제 제품·시공 사례가 아닌 참고 이미지."
       }
+    },
+    {
+      "id": "work-image-locksmith-service",
+      "taskId": "locksmith-service",
+      "file": "../../category-locksmith.webp",
+      "alt": "열쇠·도어락 기술자 AI 예시 이미지",
+      "caption": "분야를 설명하기 위한 AI 예시 이미지이며 실제 작업 사진이 아닙니다.",
+      "width": 1024,
+      "height": 1024,
+      "format": "webp",
+      "sortOrder": 0
     }
   ],
   "meta": {

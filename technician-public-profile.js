@@ -39,6 +39,7 @@
     }
     field('name','공개 업체명',application.company,100,true);
     field('fields','전문 분야 (여러 분야는 쉼표로 구분)',application.fields,2000,true);
+    window.YESSURI_TECHNICIAN_FIELDS?.mount(form,{input:inputs.fields});
     field('serviceAreas','출장 지역 (예: 해운대구, 수영구)',application.areas,1000,true);
     field('intro','공개 소개 (개인정보가 포함되어 있지 않은지 확인)',application.intro,6000,false,true);
     field('career','공개 경력', '',200);

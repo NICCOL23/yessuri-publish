@@ -1,0 +1,33 @@
+{
+  "production_access": false,
+  "results": [
+    {
+      "name": "기존 DB와 분리된 새 로컬 검증 DB",
+      "result": "PASS"
+    },
+    {
+      "name": "기존25개 분야/legacy 허용값 전부 보존",
+      "result": "PASS"
+    },
+    {
+      "name": "열쇠 분야만 추가·중복 없음",
+      "result": "PASS"
+    },
+    {
+      "name": "마이그레이션 후 기존 질문 행 불변",
+      "result": "PASS"
+    },
+    {
+      "name": "신규 분야 저장·재조회",
+      "result": "PASS"
+    },
+    {
+      "name": "미허용 분야는 계속 차단",
+      "result": "PASS"
+    },
+    {
+      "name": "기존 행 수와 값 재확인",
+      "result": "PASS"
+    }
+  ]
+}
