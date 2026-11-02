@@ -1,7 +1,7 @@
 // Independent, read-only regression against Git HEAD. No network or production writes.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),cp=require('node:child_process'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),json=p=>JSON.parse(read(p));
-const head=p=>cp.execFileSync('git',['show','HEAD:'+p],{cwd:root,encoding:'utf8'});
+const head=p=>cp.execFileSync('git',['show','5ff3a6cd5977e5aa66db2f0ef83fda12e4a6bb58:'+p],{cwd:root,encoding:'utf8'});
 const plain=x=>JSON.parse(JSON.stringify(x));const checks=[];
 function check(name,fn){fn();checks.push(name);console.log('PASS '+name)}
 function evaluate(source,key){const w={};vm.runInNewContext(source,{window:w,document:{querySelectorAll:()=>[]}});return plain(w[key]);}
@@ -17,4 +17,3 @@ check('New guide field and task correctly mapped',()=>{assert.equal(catalog.task
 const board=evaluate(read('board-fields.js'),'YESSURI_BOARD_FIELDS'),edge=json('supabase/functions/board-api/fields.json');
 check('Question UI and server generated taxonomies agree',()=>{assert.deepEqual(board,edge);assert.equal(board.fields.length,20);assert.deepEqual(board.fields.map(f=>f.id),fields.map(f=>f.value));for(const f of board.fields)assert.deepEqual(f.works,catalog.tasks.filter(t=>t.expertCategory===f.id||(f.id==='욕실·설비'&&t.fieldId==='bath')).map(t=>t.id));assert.deepEqual(json('supabase/functions/board-api/catalog.json'),catalog.tasks.map(t=>({id:t.id,group_id:catalog.fields.find(f=>f.id===t.fieldId).groupId})));});
 console.log(JSON.stringify({result:'PASS',checks:checks.length,experts:current.length,fields:fields.length,tasks:catalog.tasks.length}));
-
