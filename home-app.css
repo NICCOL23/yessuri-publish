@@ -19,7 +19,7 @@
  html body.home-modern.ys-home-installed .full-motion-background:after{background:linear-gradient(180deg,#ffffffb8 0%,#ffffffa3 24%,#ffffff80 39%,#ffffff26 56%,#ffffff0d 75%),linear-gradient(90deg,#ffffff40,transparent 70%)}
  html body.home-modern.ys-home-installed .full-bg-scene:nth-child(n){background:transparent}
  html body.home-modern.ys-home-installed .full-bg-scene:nth-child(n)::before{display:none}
- html body.home-modern.ys-home-installed .full-bg-scene:nth-child(n) img{object-fit:cover;object-position:center;transform:none!important;animation:none!important}
+ html body.home-modern.ys-home-installed .full-bg-scene:nth-child(n) img{object-fit:cover;object-position:center}
  html body.home-modern.ys-home-installed #categories{flex:none;margin:0;padding:12px 0 max(12px,env(safe-area-inset-bottom));position:relative;background:transparent;border:0;border-radius:0}
  html body.home-modern.ys-home-installed #categories:before{content:"";position:absolute;inset:-24px 0 0;z-index:0;pointer-events:none;background:linear-gradient(180deg,transparent 0%,rgba(247,250,249,.28) 15%,rgba(247,250,249,.10) 42%,transparent 75%)}
  html body.home-modern.ys-home-installed #categories>.container{position:relative;z-index:1}

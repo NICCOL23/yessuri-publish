@@ -7,7 +7,8 @@
   if (!body.classList.contains('home-modern')) return;
   const pictures = [...document.querySelectorAll('.hero-showcase .full-bg-scene')];
   const originals = pictures.map(p => p.querySelector('img').getAttribute('src'));
-  const images = ['home', 'interior', 'devices'].map(name => `assets/images/app-home-20261023/hero-${name}-portrait.jpg`);
+  // Keep the same sample background photos in the installed app and browser.
+  const images = originals;
   const labels = new Map();
   const expertHeading = document.querySelector('#experts .section-head h2');
   const expertDescription = document.querySelector('#experts .section-head p');
