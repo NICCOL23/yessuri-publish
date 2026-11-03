@@ -5,14 +5,18 @@
   const scenes = [...document.querySelectorAll('.hero-showcase .full-bg-scene')];
   if (!root || scenes.length < 2) return;
   let index = 0, timer;
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   function show(next) {
-    index = next;
+    index = next % scenes.length;
     scenes.forEach((scene, i) => scene.classList.toggle('active', i === index));
   }
   function start() {
     clearInterval(timer);
-    timer = setInterval(() => show((index + 1) % scenes.length), 8000);
+    if (reducedMotion.matches || document.hidden) return;
+    timer = setInterval(() => show((index + 1) % scenes.length), 7000);
   }
+  document.addEventListener('visibilitychange', start);
+  reducedMotion.addEventListener('change', start);
   const tabs = [...root.querySelectorAll('[role="tab"]')];
   // Observe the existing slider so clicks, arrow keys and touch all stay in sync.
   const observer = new MutationObserver(() => {
