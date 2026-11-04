@@ -1,0 +1,7 @@
+/* Main hero copy only. Background photography and every other section stay intact. */
+html[data-type-system] body.home-modern #top #hero-panel-1 #hero-heading{font-size:clamp(44px,4vw,58px);line-height:1.24;letter-spacing:-.045em;font-weight:800;color:#142e3b;margin:18px 0 20px;min-height:0!important;word-break:keep-all;overflow-wrap:normal}
+html[data-type-system] body.home-modern #top #hero-panel-1 #hero-heading span{display:block;color:#00888d}
+html[data-type-system] body.home-modern #top #hero-panel-1 .hero-description{font-size:16px;line-height:1.8;font-weight:400;color:#52636a;margin:0 0 12px;min-height:0!important;word-break:keep-all}
+@media(max-width:900px){html[data-type-system] body.home-modern #top #hero-panel-1 #hero-heading{font-size:38px;line-height:1.28;letter-spacing:-.045em;margin:16px 0 18px}html[data-type-system] body.home-modern #top #hero-panel-1 .hero-description{font-size:14px;line-height:1.85;margin-bottom:12px}}
+@media(max-width:900px){html[data-type-system] body.home-modern:not(.ys-home-installed) #top.hero-carousel .revised-hero-grid{padding-top:36px}}
+@media(max-width:359px){html[data-type-system] body.home-modern #top #hero-panel-1 #hero-heading{font-size:34px}html[data-type-system] body.home-modern #top #hero-panel-1 .hero-description{font-size:12px}}
