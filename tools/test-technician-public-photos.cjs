@@ -20,7 +20,8 @@ const upload={action:'upload',imageConsent:true,photo:{type:'image/jpeg',data:jp
  assert.equal((await f.request({url,body:{action:'delete',image:sourcePath,confirm:true}})).status,404,'private source is never accepted as public image');
  assert.equal((await f.request({url,body:{action:'delete',image:first,confirm:true}})).status,200);assert.equal(f.profile.image,second);assert.equal(f.stored.size,2);assert.equal((await f.request({url:first,method:'GET',token:false})).status,404);
  assert.equal((await f.request({url,body:{action:'delete',image:second,confirm:true}})).status,200);assert.equal(f.profile.image,null);assert.equal(f.profile.work_photos.length,0);assert.equal(f.stored.size,1);assert.ok(f.stored.has(sourcePath),'application original must survive all public photo operations');
- assert.ok(f.operations.every(op=>['session','admin-detail'].includes(op)),'no application mutation or private upload reservation');
+ assert.ok(f.operations.every(op=>['session','admin-detail','record'].includes(op)),'only permission reads and administrator audit; no application mutation or private upload reservation');
+ assert.ok(f.operations.filter(op=>op==='record').length>=6,'successful public photo changes append server audit events');
  const failure=fixture({updateFails:true});assert.equal((await failure.request({url,body:upload})).status,500);assert.equal(failure.stored.size,1,'failed upload rolls back public copy only');
  const missing=fixture({profileMissing:true});assert.equal((await missing.request({url,body:upload})).status,409);assert.equal(missing.uploads,0);
  console.log('PASS: admin-only photo upload/select/delete, validation, public gallery, representative change/removal, failed upload rollback; original application files and records unchanged');

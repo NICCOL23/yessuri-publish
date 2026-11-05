@@ -1,5 +1,6 @@
 import {createClient} from 'npm:@supabase/supabase-js@2';
 import {profileFromReview} from './public-profile.ts';
+import {reviewedManagement,managementRpc} from './admin-management.ts';
 const IS_TEST=false;
 const URL_ROOT=Deno.env.get('SUPABASE_URL')!,KEY=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const db=createClient(URL_ROOT,KEY,{auth:{persistSession:false,autoRefreshToken:false}});
@@ -21,6 +22,8 @@ function fields(p:any){const result:Record<string,string>={};const limits:Record
 async function readBody(req:Request){check((req.headers.get('content-type')||'').split(';')[0]==='application/json','지원하지 않는 요청 형식입니다.',415);const reader=req.body?.getReader();check(reader,'입력 내용을 확인해 주세요.');let size=0;const chunks:Uint8Array[]=[];while(true){const{value,done}=await reader.read();if(done)break;size+=value.length;if(size>7500000){await reader.cancel();throw new UserError('전송할 사진 용량을 줄여 주세요.',413);}chunks.push(value);}const bytes=new Uint8Array(size);let offset=0;for(const c of chunks){bytes.set(c,offset);offset+=c.length;}let p;try{p=JSON.parse(new TextDecoder().decode(bytes));}catch{throw new UserError('입력 내용을 확인해 주세요.');}check(p&&typeof p==='object'&&!Array.isArray(p),'입력 내용을 확인해 주세요.');return p;}
 async function rate(req:Request,action:string,max:number,seconds:number){const ip=req.headers.get('x-forwarded-for')?.split(',')[0].trim()||req.headers.get('cf-connecting-ip')||'unknown';const key=await sha(action+':'+ip);const d=await rpc('rate',{key,max,seconds});check(d.allowed,'반복 시도가 많습니다. 잠시 후 다시 시도해 주세요.',429);return key;}
 async function session(req:Request,role:'owner'|'admin'){const token=req.headers.get(role==='admin'?'x-admin-token':'x-owner-token')||'';if(!/^[a-f0-9]{64}$/.test(token))return null;const hash=await sha(token),s=await rpc('session',{hash});return s.role===role?{...s,hash}:null;}
+async function adminManagement(hash:string,op:string,p:Record<string,unknown>={}){try{return await managementRpc(db,hash,op,p);}catch(e){throw new UserError(e instanceof Error?e.message:'관리 기능을 처리하지 못했습니다.',typeof(e as any)?.status==='number'?(e as any).status:500);}}
+async function adminRecord(s:any,action:string,target='session',outcome='success'){const{error}=await db.rpc('technician_admin_management',{op:'record',p:{hash:s.hash,action,target,outcome}});if(error)throw new UserError('변경 결과는 저장되었을 수 있으나 이력 기록을 확인하지 못했습니다. 새로고침 후 확인해 주세요.',500);}
 async function owner(req:Request,id:string){const s=await session(req,'owner');check(s&&s.application_id===id,'신청 목록에서 본인 글을 선택하고 비밀번호로 확인해 주세요.',403);return s;}
 async function admin(req:Request){const s=await session(req,'admin');check(s,'관리자 로그인이 필요합니다.',403);return s;}
 async function auth(req:Request,id?:string){const s=await session(req,'admin')||await session(req,'owner');check(s&&(s.role==='admin'||s.application_id===id),'본인 확인이 필요합니다.',403);return s;}
@@ -51,6 +54,10 @@ Deno.serve(async req=>{
     check(data&&!error,'사진을 찾을 수 없습니다.',404);
     return new Response(data,{headers:{...headers,'Content-Type':'image/jpeg','Content-Disposition':'inline; filename="profile-image.jpg"'}});
    }
+   if(route==='/api/admin/audit'){const s=await admin(req);return json(await adminManagement(s.hash,'audit'));}
+   const managementGet=route.match(/^\/api\/admin\/applications\/([a-f0-9-]{36})\/profile-management$/i);
+   if(managementGet){const s=await admin(req);check(!IS_TEST,'분리 시험에서는 운영 프로필을 조회할 수 없습니다.',409);return json(await adminManagement(s.hash,'profile-get',{id:managementGet[1]}));}
+   if(route==='/api/admin/operations'){await admin(req);return json({productionVerified:false,lastBackup:null,lastRestoreTest:null,cleanup:null,notes:'운영 백업·복구·자동 삭제 현황은 별도로 확인해야 합니다. 웹 관리자에서 복원·삭제 시험을 실행하지 않습니다.'});}
    if(route==='/api/health')return json({mode:IS_TEST?'isolated-test':'production',ready:true,maxPhotos:5,maxPhotoBytes:10485760,transferPhotoBytes:1048576,retentionMonths:6});
    if(route.startsWith('/api/applications?')){const query=new URL(route,'https://local');return json(await rpc('list',{page:Number(query.searchParams.get('page'))||1}));}
    if(route==='/api/applications')return json(await rpc('list',{page:1}));
@@ -80,9 +87,9 @@ Deno.serve(async req=>{
   }
   if(route==='/api/admin/login'){
    const key=await rate(req,'admin-login',5,900),email=text(p.username,3,250,'관리자 이메일'),pass=text(p.password,1,128,'비밀번호');const client=createClient(URL_ROOT,Deno.env.get('SUPABASE_ANON_KEY')||KEY,{auth:{persistSession:false,autoRefreshToken:false}});
-   const{data,error}=await client.auth.signInWithPassword({email,password:pass});check(!error&&data.user,'관리자 로그인 정보를 확인해 주세요.',403);const token=random();await rpc('grant-admin',{user_id:data.user.id,newHash:await sha(token)});await rpc('rate-clear',{key});return json({ok:true,adminSession:{token,expiresAt:Date.now()+1800000}});
+   const{data,error}=await client.auth.signInWithPassword({email,password:pass});check(!error&&data.user,'관리자 로그인 정보를 확인해 주세요.',403);const token=random();await rpc('grant-admin',{user_id:data.user.id,newHash:await sha(token)});await adminRecord({hash:await sha(token)},'login');await rpc('rate-clear',{key});return json({ok:true,adminSession:{token,expiresAt:Date.now()+1800000}});
   }
-  if(route==='/api/logout'){const role=p.role==='admin'?'admin':'owner',s=await session(req,role);if(s)await rpc('logout',{hash:s.hash});return json({ok:true});}
+  if(route==='/api/logout'){const role=p.role==='admin'?'admin':'owner',s=await session(req,role);if(s){try{if(role==='admin')await adminRecord(s,'logout');}finally{await rpc('logout',{hash:s.hash});}}return json({ok:true});}
   if(route==='/api/applications'){
    await rate(req,'create',10,3600);const data=fields(p);check(p.consent===true,'개인정보 수집·이용 동의가 필요합니다.');const pass=pw(p.password);check(pass===p.passwordConfirm,'비밀번호 확인이 일치하지 않습니다.');check(uuid(p.request_id),'접수 요청을 확인해 주세요.');const existing=await rpc('find-request',{request_id:p.request_id}),token=random();
    if(existing.id){check(await passwordMatches(pass,existing.password_hash),'이미 처리된 요청입니다.',409);await rpc('grant-owner',{id:existing.id,expectedHash:existing.password_hash,newHash:await sha(token)});return json({id:existing.id,receipt:existing.receipt,ownerSession:{token,expiresAt:Date.now()+900000}});}
@@ -96,12 +103,14 @@ Deno.serve(async req=>{
    let mutation:any={id,hash:s.hash};if(op==='edit'){mutation.data=fields(p);check(Number.isInteger(p.version),'수정 버전을 확인해 주세요.');mutation.version=p.version;check(Array.isArray(p.keepPhotoIds)&&p.keepPhotoIds.every(uuid)&&new Set(p.keepPhotoIds).size===p.keepPhotoIds.length,'보관할 사진을 확인해 주세요.');mutation.keepPhotoIds=p.keepPhotoIds;check(p.keepPhotoIds.length+(p.photos?.length||0)<=5,'사진은 합계5장까지 첨부할 수 있습니다.');}else mutation.body=text(p.body,1,6000,'답변');
    const photos=await preparePhotos(p.photos||[],id);mutation.photos=photos;try{await rpc(op,mutation);await cleanup();return json({ok:true});}catch(e){await abandon(photos);throw e;}
   }
+  const managementPost=route.match(/^\/api\/admin\/applications\/([a-f0-9-]{36})\/profile-management$/i);
+  if(managementPost){const s=await admin(req);check(!IS_TEST,'분리 시험에서는 운영 프로필을 변경할 수 없습니다.',409);let reviewed;try{reviewed=reviewedManagement(p,managementPost[1]);}catch(e){throw new UserError(e instanceof Error?e.message:'공개 내용을 확인해 주세요.');}return json(await adminManagement(s.hash,'profile-manage',{id:managementPost[1],...reviewed}));}
   const caseAction=route.match(/^\/api\/admin\/applications\/([a-f0-9-]{36})\/work-cases$/i);
   if(caseAction){const s=await admin(req),id=caseAction[1];check(!IS_TEST,'테스트 접수에서는 사용할 수 없습니다.',409);await rpc('admin-detail',{id,hash:s.hash});const profile=await photoProfile(id),all=profile.work_photos||[],cases=all.filter((p:any)=>p.kind==='case');check(p.version===JSON.stringify(all),'내용이 변경되었습니다. 새로고침 후 다시 시도해 주세요.',409);check(['save','delete'].includes(p.action),'작업을 확인해 주세요.');
    let next;
    if(p.action==='delete'){check(p.confirm===true&&cases.some((c:any)=>c.id===p.id),'삭제할 작업 사례를 확인해 주세요.');next=cases.filter((c:any)=>c.id!==p.id);}
    else{check(!p.id||cases.some((c:any)=>c.id===p.id),'수정할 작업 사례가 없습니다.',404);check(p.id||cases.length<30,'작업 사례는 최대 30개입니다.');const title=text(p.title,1,120,'제목'),description=text(p.description,1,6000,'설명'),date=text(p.date,10,10,'작업일');check(/^\d{4}-\d{2}-\d{2}$/.test(date)&&Number.isFinite(Date.parse(date+'T00:00:00Z'))&&new Date(date+'T00:00:00Z').toISOString().slice(0,10)===date,'작업일을 확인해 주세요.');check(Array.isArray(p.photos)&&p.photos.length<=10&&new Set(p.photos).size===p.photos.length,'사진을 확인해 주세요.');const photos=publicPhotos(profile);check(p.photos.every((url:any)=>typeof url==='string'&&photos.some((photo:any)=>photo.image===url)),'이 업체의 공개 사진만 선택할 수 있습니다.');const item={kind:'case',id:p.id||crypto.randomUUID(),title,description,date,photos:p.photos.map((url:string)=>photos.find((photo:any)=>photo.image===url))};next=p.id?cases.map((c:any)=>c.id===p.id?item:c):[item,...cases];}
-   const updated=await updatePhotoProfile(profile,{work_photos:[...all.filter((p:any)=>p.kind!=='case'),...next],replaceCases:true});return json({cases:next,image:profile.image,version:JSON.stringify(updated.work_photos||[]),photos:publicPhotos({...profile,...updated})});
+   const updated=await updatePhotoProfile(profile,{work_photos:[...all.filter((p:any)=>p.kind!=='case'),...next],replaceCases:true});await adminRecord(s,p.action==='delete'?'work-case-delete':'work-case-save',id);return json({cases:next,image:profile.image,version:JSON.stringify(updated.work_photos||[]),photos:publicPhotos({...profile,...updated})});
   }
   const managePhotos=route.match(/^\/api\/admin\/applications\/([a-f0-9-]{36})\/public-photos$/i);
   if(managePhotos){
@@ -120,7 +129,7 @@ Deno.serve(async req=>{
      try{await updatePhotoProfile(profile,{image,work_photos:[...ordered,...nextCases],replaceCases:true});}catch(e){if(uploadedPath)await db.storage.from(BUCKET).remove([uploadedPath]);throw e;}
     }
     if(p.action==='reorder')await updatePhotoProfile(profile,{work_photos:[...ordered,...nextCases],replaceCases:true});
-    const result=await photoProfile(id);return json({photos:publicPhotos(result),image:result.image,version:JSON.stringify(result.work_photos||[])});
+    const result=await photoProfile(id);await adminRecord(s,'photo-'+p.action,id);return json({photos:publicPhotos(result),image:result.image,version:JSON.stringify(result.work_photos||[])});
    }
    if(p.action==='upload'){
     check(p.imageConsent===true,'추가할 사진의 공개를 확인해 주세요.');check(photos.length<10,'공개 사진은 최대 10장까지 등록할 수 있습니다.');
@@ -137,7 +146,7 @@ Deno.serve(async req=>{
      try{const imageUrl=new URL(p.image),imageRoute=imageUrl.searchParams.get('route')||'',match=imageRoute.match(/^\/api\/public-profile-images\/([a-f0-9-]{36})\/([a-f0-9-]{36})\.jpg$/i);if(imageUrl.origin===new URL(URL_ROOT).origin&&match&&match[1]===id)await db.storage.from(BUCKET).remove(['public-profiles/'+id+'/'+match[2]+'.jpg']);}catch{console.error('public copy cleanup failed');}
     }
    }
-   const result=await photoProfile(id);return json({photos:publicPhotos(result),image:result.image,version:JSON.stringify(result.work_photos||[])});
+   const result=await photoProfile(id);await adminRecord(s,'photo-'+p.action,id);return json({photos:publicPhotos(result),image:result.image,version:JSON.stringify(result.work_photos||[])});
   }
   const representativeImage=route.match(/^\/api\/admin\/applications\/([a-f0-9-]{36})\/representative-image$/i);
   if(representativeImage){
@@ -159,23 +168,24 @@ Deno.serve(async req=>{
    const imageUrl=URL_ROOT+'/functions/v1/technician-api?route='+encodeURIComponent('/api/public-profile-images/'+id+'/'+imageId+'.jpg');
    const{error:uploadError}=await db.storage.from(BUCKET).upload(path,bytes,{contentType:'image/jpeg',upsert:false});
    if(uploadError)throw Error('public profile image upload failed');
+   let updated;
    try{
-    const updated=await updatePhotoProfile(profile,{image:imageUrl,image_alt:profile.name+' 대표 이미지',image_type:'work',image_position:'center',work_photos:[...publicPhotos(profile),{image:imageUrl,imageAlt:profile.name+' 공개 사진',imageType:'work'}]});
-    return json({profile:updated});
+    updated=await updatePhotoProfile(profile,{image:imageUrl,image_alt:profile.name+' 대표 이미지',image_type:'work',image_position:'center',work_photos:[...publicPhotos(profile),{image:imageUrl,imageAlt:profile.name+' 공개 사진',imageType:'work'}]});
    }catch(error){await db.storage.from(BUCKET).remove([path]);throw error;}
+   await adminRecord(s,'representative-image',id);return json({profile:updated});
   }
   const publishProfile=route.match(/^\/api\/admin\/applications\/([a-f0-9-]{36})\/public-profile$/i);
   if(publishProfile){
    const s=await admin(req),id=publishProfile[1];check(!IS_TEST,'테스트 접수는 운영 프로필로 등록할 수 없습니다.',409);
    const detail=await rpc('admin-detail',{id,hash:s.hash});
    check(Number.isInteger(p.version)&&p.version===detail.application.version,'신청이 변경되었습니다. 새로고침 후 다시 확인해 주세요.',409);
-   let profile;try{profile=profileFromReview(p,id);}catch(e){throw new UserError(e instanceof Error?e.message:'공개 정보를 확인해 주세요.');}
-   const{data,error}=await db.from('expert_profiles').insert(profile).select('id,name,publication_status').single();
-   if(error){if(error.code==='23505')throw new UserError('이미 공개 프로필로 등록된 신청입니다. 중복 등록하지 않았습니다.',409);throw Error('public profile insert failed');}
-   return json({profile:data},201);
+   check(p.publicConsent===true,'공개할 정보에 대한 신청자의 동의를 확인해 주세요.');
+   let reviewed;try{reviewed=reviewedManagement({...p,action:'create',version:'none'},id);}catch(e){throw new UserError(e instanceof Error?e.message:'공개 내용을 확인해 주세요.');}
+   const result=await adminManagement(s.hash,'profile-manage',{id,...reviewed,applicationVersion:p.version});
+   return json(result,201);
   }
   const adminAction=route.match(/^\/api\/admin\/applications\/([a-f0-9-]{36})\/(update|reset-password)$/i);
-  if(adminAction){const[,id,op]=adminAction,s=await admin(req);if(op==='update'){check(states.includes(p.status),'상태를 확인해 주세요.');await rpc('admin-update',{id,hash:s.hash,status:p.status,body:text(p.body||'',0,6000,'답변')});return json({ok:true});}check(p.identityConfirmed===true,'본인 확인 절차를 완료해 주세요.');const reason=text(p.reason,10,500,'본인 확인 처리 기록'),temporaryPassword=random().slice(0,24);await rpc('reset-password',{id,hash:s.hash,identityConfirmed:true,reason,password_hash:await passwordHash(temporaryPassword)});return json({temporaryPassword});}
+  if(adminAction){const[,id,op]=adminAction,s=await admin(req);if(op==='update'){check(states.includes(p.status),'상태를 확인해 주세요.');await rpc('admin-update',{id,hash:s.hash,status:p.status,body:text(p.body||'',0,6000,'답변')});await adminRecord(s,'application-update',id);return json({ok:true});}check(p.identityConfirmed===true,'본인 확인 절차를 완료해 주세요.');const reason=text(p.reason,10,500,'본인 확인 처리 기록'),temporaryPassword=random().slice(0,24);await rpc('reset-password',{id,hash:s.hash,identityConfirmed:true,reason,password_hash:await passwordHash(temporaryPassword)});await adminRecord(s,'password-reset',id);return json({temporaryPassword});}
   throw new UserError('요청을 찾을 수 없습니다.',404);
- }catch(e){if(!(e instanceof UserError))console.error('Technician operation failed:',e instanceof Error?e.message:'unknown');return json({error:e instanceof UserError?e.message:'처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'},e instanceof UserError?e.status:500);}
+ }catch(e){try{const s=await session(req,'admin');if(s)await adminRecord(s,'request-failure','admin-request','failure');}catch{}if(!(e instanceof UserError))console.error('Technician operation failed:',e instanceof Error?e.message:'unknown');return json({error:e instanceof UserError?e.message:'처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'},e instanceof UserError?e.status:500);}
 });

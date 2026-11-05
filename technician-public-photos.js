@@ -10,9 +10,9 @@
     const file=node('input');file.type='file';file.accept='image/jpeg,image/png,image/webp';file.id='public-photo-file';label.htmlFor=file.id;
     const consentLabel=node('label','','check section'),consent=node('input');consent.type='checkbox';consent.required=true;
     consentLabel.append(consent,document.createTextNode('이 사진을 프로필에 공개하는 데 동의했습니다.'));
-    const upload=node('button','사진 추가','btn primary');upload.type='submit';
+    const upload=node('button','공개 사진 추가','btn primary');upload.type='submit';
     const status=node('p');status.setAttribute('role','status');
-    const preview=node('div');const list=node('div','','file-grid');section.append(node('h3','공개 프로필 작업 사진 미리보기'),preview);form.append(label,file,consentLabel,upload);section.append(form,status,list);anchor.after(section);
+    const preview=node('div');const list=node('div','','file-grid');section.append(node('h3','공개 프로필 작업 사진 미리보기'),preview);form.append(label,file,consentLabel,node('p','추가한 사진은 즉시 공개 프로필에 반영됩니다. 작업 사례 저장 여부와 관계없이 공개 사진으로 남습니다.','hint'),upload);section.append(form,status,list);anchor.after(section);
     let busy=false,current=null;
     const lock=value=>{busy=value;section.querySelectorAll('button,input').forEach(n=>{n.disabled=value||n.dataset.current==='true'||n.dataset.boundary==='true';});};
     function render(data){
@@ -48,6 +48,7 @@
       if(!['image/jpeg','image/png','image/webp'].includes(chosen.type)||chosen.size>10485760){status.textContent='10MB 이내의 JPG·PNG·WebP 사진을 선택해 주세요.';return;}
       if(!consent.checked){status.textContent='사진 공개에 동의했는지 확인해 주세요.';return;}
       if(replacing&&!window.confirm('선택한 파일로 이 사진을 교체할까요? 작업 사례에서 사용하는 사진도 함께 바뀝니다. 신청서 원본은 유지됩니다.'))return;
+      if(!replacing&&!window.confirm('선택한 사진을 지금 공개 프로필에 추가할까요? 추가 즉시 공개되며 작업 사례를 저장하지 않아도 공개 사진으로 남습니다.'))return;
       lock(true);status.textContent='사진을 저장하고 있습니다.';
       try{
         const blob=await transfer(chosen),bytes=new Uint8Array(await blob.arrayBuffer());let binary='';

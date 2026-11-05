@@ -1,0 +1,5 @@
+.admin-session-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;padding:12px 16px;border:1px solid #cde5df;border-radius:10px;background:#eff8f5}
+.admin-session-bar p{margin:0;color:#235c5d;font-size:14px}.admin-session-actions{display:flex;flex-wrap:wrap;gap:8px;flex-shrink:0}.admin-session-actions .btn{min-height:44px}
+.admin-session-lock{width:min(520px,calc(100% - 32px));max-width:calc(100% - 32px);padding:28px;border:1px solid #cedde3;border-radius:14px;color:#17314c}
+.admin-session-lock::backdrop{background:#102a3ddd}.admin-session-lock h2{font-size:22px;margin:0 0 12px}.admin-session-lock p{margin-bottom:16px}.admin-session-lock .btn{min-height:48px;width:100%}
+@media(max-width:760px){.admin-session-bar{align-items:stretch;flex-direction:column;padding:12px}.admin-session-actions .btn{flex:1}.admin-session-lock{padding:22px}}
