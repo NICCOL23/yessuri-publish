@@ -28,3 +28,17 @@ body[data-technician-page="apply"] .apply-error-summary{border:2px solid #a12626
 #registration-complete-dialog p{font-size:1rem;line-height:1.6}
 #registration-complete-dialog .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
 #registration-complete-dialog .btn{font-size:1rem;line-height:1.5;min-height:44px}
+
+/* 신청서 전용: 헤더 메뉴의 전역 nav 규칙이 웹·앱 탭에 번지지 않도록 복원합니다. */
+@media(max-width:900px){
+ html[data-type-system] body[data-technician-page="apply"] #root > nav.tabs{
+  position:static;inset:auto;z-index:auto;
+  display:flex;flex-direction:row;flex-wrap:wrap;align-items:stretch;
+  flex:none;min-width:0;width:auto;margin:0 0 16px;padding:0;gap:0;
+  background:transparent;border:0;border-bottom:1px solid #d8e2ea;
+  box-shadow:none;max-height:none;overflow:visible;
+ }
+ html[data-type-system] body[data-technician-page="apply"] #root > nav.tabs a{
+  flex:1 1 140px;min-width:0;text-align:center;overflow-wrap:anywhere;
+ }
+}
