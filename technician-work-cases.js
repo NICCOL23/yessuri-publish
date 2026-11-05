@@ -17,7 +17,7 @@
   const save=el('button','작업 사례 저장');save.type='submit';save.className='btn primary';const cancel=el('button','새 사례 작성');cancel.type='button';cancel.className='btn';
   const status=el('p');status.setAttribute('role','status');const draftStatus=el('p');draftStatus.className='hint';draftStatus.setAttribute('role','status');
   form.append(uploadLabel,file,agreement,upload,el('p','사진 업로드 즉시 공개 사진에 반영됩니다. 작업 사례를 저장하지 않거나 취소해도 업로드한 사진은 공개 사진으로 남습니다.'),save,cancel,draftStatus);section.append(list,form,status);anchor.after(section);
-  const route='admin/applications/'+application.id+'/work-cases';let data={cases:[],photos:[],version:''},editing='',busy=false,loaded=false,refreshAfterBusy=false,loadSequence=0;
+  const route='admin/profiles/'+encodeURIComponent('technician-'+application.id)+'/work-cases';let data={cases:[],photos:[],version:''},editing='',busy=false,loaded=false,refreshAfterBusy=false,loadSequence=0;
   const selected=()=>[...photos.querySelectorAll('input:checked')].map(n=>n.value);
   const state=()=>({editing,...Object.fromEntries(Object.entries(controls).map(([key,input])=>[key,input.value])),photos:selected()});
   const serialize=value=>JSON.stringify({...value,photos:[...value.photos].sort()});
@@ -66,14 +66,15 @@
    if(!window.confirm('이 사진은 업로드 즉시 공개 사진에 추가됩니다. 작업 사례를 저장하지 않아도 공개됩니다. 계속할까요?'))return;
    lock(true);try{
     const chosen=selected(),blob=await transfer(f),bytes=new Uint8Array(await blob.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));
-    const result=await api('admin/applications/'+application.id+'/public-photos',{action:'upload',photo:{type:'image/jpeg',data:btoa(binary)},imageConsent:true});const old=new Set(data.photos.map(p=>p.image));data=await api(route);choices([...chosen,...result.photos.filter(p=>!old.has(p.image)).map(p=>p.image)]);file.value='';consent.checked=false;remember();window.dispatchEvent(new Event('yessuri:public-photo-changed'));status.textContent='공개 사진을 추가했습니다. 제목·설명은 유지했습니다. 작업 사례 저장을 눌러 주세요.';
+    const result=await api('admin/profiles/'+encodeURIComponent('technician-'+application.id)+'/public-photos',{action:'upload',photo:{type:'image/jpeg',data:btoa(binary)},imageConsent:true});const old=new Set(data.photos.map(p=>p.image));data=await api(route);choices([...chosen,...result.photos.filter(p=>!old.has(p.image)).map(p=>p.image)]);file.value='';consent.checked=false;remember();window.dispatchEvent(new Event('yessuri:public-photo-changed'));status.textContent=result.pending?'사진 파일 반영 대기 중입니다. 공개 사진 관리에서 재시도 후 확인하세요. 제목·설명은 유지했습니다.':'공개 사진을 추가했습니다. 제목·설명은 유지했습니다. 작업 사례 저장을 눌러 주세요.';
    }catch(e){status.textContent=e.message;}finally{await unlock();}
   };
   const beforeUnload=e=>{if(!section.isConnected||!dirty())return;e.preventDefault();e.returnValue='';};
   const onNavigate=e=>{if(!section.isConnected)return;const link=e.target.closest?.('a[href]');if(!link||e.defaultPrevented||link.target==='_blank')return;const next=new URL(link.href,location.href),current=new URL(location.href);if(next.origin===current.origin&&next.pathname===current.pathname&&next.search===current.search)return;if(!confirmDiscard()){e.preventDefault();e.stopImmediatePropagation();}};
   const onRefresh=()=>{if(!section.isConnected){window.removeEventListener('yessuri:photo-library-updated',onRefresh);return;}load();};
-  const onLocked=()=>{drafts.delete(application.id);baseline=serialize(state());file.value='';window.removeEventListener('beforeunload',beforeUnload);document.removeEventListener('click',onNavigate,true);window.removeEventListener('yessuri:photo-library-updated',onRefresh);window.removeEventListener('yessuri:admin-locked',onLocked);};
-  window.addEventListener('beforeunload',beforeUnload);document.addEventListener('click',onNavigate,true);window.addEventListener('yessuri:photo-library-updated',onRefresh);window.addEventListener('yessuri:admin-locked',onLocked);
+  const onSwitch=e=>{if(section.isConnected&&!confirmDiscard())e.preventDefault();};
+  const onLocked=()=>{drafts.delete(application.id);baseline=serialize(state());file.value='';window.removeEventListener('beforeunload',beforeUnload);document.removeEventListener('click',onNavigate,true);window.removeEventListener('yessuri:photo-library-updated',onRefresh);window.removeEventListener('yessuri:admin-profile-switch-request',onSwitch);window.removeEventListener('yessuri:admin-locked',onLocked);};
+  window.addEventListener('beforeunload',beforeUnload);document.addEventListener('click',onNavigate,true);window.addEventListener('yessuri:photo-library-updated',onRefresh);window.addEventListener('yessuri:admin-profile-switch-request',onSwitch);window.addEventListener('yessuri:admin-locked',onLocked);
   load();
  }
  window.YESSURI_TECHNICIAN_WORK_CASES={mount};

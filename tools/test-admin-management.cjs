@@ -6,9 +6,9 @@ const code=name=>stripTypeScriptTypes(fs.readFileSync(path.join(base,name),'utf8
 const id='12345678-1234-1234-1234-123456789abc';
 const body={action:'create',name:'가상 시험 업체',fields:['욕실·설비'],serviceAreas:['부산진구'],intro:'시험',career:'',phone:'',phonePublic:false,consent:{scope:['profile'],confirmedAt:'2026-01-01',evidence:'TEST-001',note:''}};
 function fixture(role='admin',error=null){
- let handler;const calls=[];const db={rpc:async(name,{op,p})=>{calls.push({name,op,p});if(name==='technician_admin_management')return{data:error?null:{profile:op==='profile-get'?null:{id:'technician-'+id,version:'version-1'},consents:[],events:[]},error};return{data:op==='session'?{role,application_id:id,hash:'server-hash'}:{},error:null};}};
+ let handler;const calls=[];const db={rpc:async(name,{op,p})=>{calls.push({name,op,p});if(name==='technician_admin_management_v2')return{data:error?null:{profile:op==='profile-get'?null:{id:'technician-'+id,version:'version-1'},consents:[],events:[]},error};return{data:op==='session'?{role,application_id:id,hash:'server-hash'}:{},error:null};}};
  const box={Deno:{env:{get:()=> 'test-only'},serve:fn=>handler=fn},createClient:()=>db,TextEncoder,TextDecoder,Uint8Array,URL,Request,Response,crypto:webcrypto,console};
- vm.runInNewContext(code('public-profile.ts')+'\n'+code('admin-management.ts')+'\n'+code('index.ts'),box);
+ vm.runInNewContext(code('public-profile.ts')+'\n'+code('admin-management.ts')+'\n'+code('admin-v2.ts')+'\n'+code('index.ts'),box);
  return{calls,request:async(route,p,token=true)=>{const response=await handler(new Request('https://test.invalid/?route='+encodeURIComponent(route),{method:p?'POST':'GET',headers:{origin:'https://yessuri.com','content-type':'application/json',...(token?{'x-admin-token':'a'.repeat(64)}:{})},...(p?{body:JSON.stringify(p)}:{})}));return{status:response.status,data:await response.json()};}};
 }
 (async()=>{
@@ -27,7 +27,7 @@ function fixture(role='admin',error=null){
  assert.equal((await fixture('admin',{message:'permission denied'}).request(route)).status,403);
  const restorePhotoConsent=await fixture('admin',{message:'invalid photo consent'}).request(route,{...body,action:'restore',version:'current'});
  assert.equal(restorePhotoConsent.status,400);assert.match(restorePhotoConsent.data.error,/사진 공개 동의/);
- const log=fixture();assert.equal((await log.request('/api/admin/audit')).status,200);assert.ok(log.calls.some(c=>c.op==='audit'&&c.name==='technician_admin_management'));
+ const log=fixture();assert.equal((await log.request('/api/admin/audit')).status,200);assert.ok(log.calls.some(c=>c.op==='audit'&&c.name==='technician_admin_management_v2'));
  const ops=fixture();assert.equal((await ops.request('/api/admin/operations')).data.productionVerified,false);
  const logoutFailure=fixture('admin',{message:'audit unavailable'});await logoutFailure.request('/api/logout',{role:'admin'});assert.ok(logoutFailure.calls.some(c=>c.op==='logout'),'audit failure must not prevent server session revocation');
  const migration=fs.readFileSync(path.join(base,'../../migrations/202611050001_admin_hardening.sql'),'utf8');

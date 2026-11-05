@@ -1,10 +1,11 @@
 import {createClient} from 'npm:@supabase/supabase-js@2';
 import {profileFromReview} from './public-profile.ts';
 import {reviewedManagement,managementRpc} from './admin-management.ts';
+import {adminV2Route,drainPublicFiles} from './admin-v2.ts';
 const IS_TEST=false;
 const URL_ROOT=Deno.env.get('SUPABASE_URL')!,KEY=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const db=createClient(URL_ROOT,KEY,{auth:{persistSession:false,autoRefreshToken:false}});
-const RPC=IS_TEST?'technician_rpc_test':'technician_rpc',BUCKET=IS_TEST?'technician-private-test':'technician-private';
+const RPC=IS_TEST?'technician_rpc_test':'technician_rpc_v2',BUCKET=IS_TEST?'technician-private-test':'technician-private';
 const encoder=new TextEncoder(),states=['접수','확인 중','자료 보완 요청','검토 완료'];
 const origins=new Set(['https://yessuri.com','https://www.yessuri.com','https://niccol23.github.io','http://127.0.0.1:8097','http://127.0.0.1:8099']);
 class UserError extends Error{constructor(message:string,public status=400){super(message);}}
@@ -23,11 +24,20 @@ async function readBody(req:Request){check((req.headers.get('content-type')||'')
 async function rate(req:Request,action:string,max:number,seconds:number){const ip=req.headers.get('x-forwarded-for')?.split(',')[0].trim()||req.headers.get('cf-connecting-ip')||'unknown';const key=await sha(action+':'+ip);const d=await rpc('rate',{key,max,seconds});check(d.allowed,'반복 시도가 많습니다. 잠시 후 다시 시도해 주세요.',429);return key;}
 async function session(req:Request,role:'owner'|'admin'){const token=req.headers.get(role==='admin'?'x-admin-token':'x-owner-token')||'';if(!/^[a-f0-9]{64}$/.test(token))return null;const hash=await sha(token),s=await rpc('session',{hash});return s.role===role?{...s,hash}:null;}
 async function adminManagement(hash:string,op:string,p:Record<string,unknown>={}){try{return await managementRpc(db,hash,op,p);}catch(e){throw new UserError(e instanceof Error?e.message:'관리 기능을 처리하지 못했습니다.',typeof(e as any)?.status==='number'?(e as any).status:500);}}
-async function adminRecord(s:any,action:string,target='session',outcome='success'){const{error}=await db.rpc('technician_admin_management',{op:'record',p:{hash:s.hash,action,target,outcome}});if(error)throw new UserError('변경 결과는 저장되었을 수 있으나 이력 기록을 확인하지 못했습니다. 새로고침 후 확인해 주세요.',500);}
+async function adminRecord(s:any,action:string,target='session',outcome='success'){const{error}=await db.rpc('technician_admin_management_v2',{op:'record',p:{hash:s.hash,action,target,outcome}});if(error)throw new UserError('변경 결과는 저장되었을 수 있으나 이력 기록을 확인하지 못했습니다. 새로고침 후 확인해 주세요.',500);}
 async function owner(req:Request,id:string){const s=await session(req,'owner');check(s&&s.application_id===id,'신청 목록에서 본인 글을 선택하고 비밀번호로 확인해 주세요.',403);return s;}
 async function admin(req:Request){const s=await session(req,'admin');check(s,'관리자 로그인이 필요합니다.',403);return s;}
 async function auth(req:Request,id?:string){const s=await session(req,'admin')||await session(req,'owner');check(s&&(s.role==='admin'||s.application_id===id),'본인 확인이 필요합니다.',403);return s;}
-async function cleanup(){const d=await rpc('cleanup');if(d.paths?.length){const{error}=await db.storage.from(BUCKET).remove(d.paths);if(!error)await rpc('cleanup-done',{paths:d.paths});}}
+async function cleanup(){const d=await rpc('cleanup');if(d.paths?.length){const{error}=await db.storage.from(BUCKET).remove(d.paths);if(!error)await rpc('cleanup-done',{paths:d.paths});}if(!IS_TEST)await drainPublicFiles(v2Dependencies());}
+function v2Dependencies(){return {db,root:URL_ROOT,bucket:BUCKET,admin,rpc,decode:decodePhoto,sha};}
+async function securityEvent(event:string,req?:Request){let hash=null;const token=req?.headers.get('x-admin-token')||'';if(/^[a-f0-9]{64}$/.test(token))hash=await sha(token);await db.rpc('technician_security_event_v2',{event_name:event,p_hash:hash});}
+async function adminLogAllowed(req:Request,status:number){
+ if(status===429)return false;
+ // Error logging is best effort and has its own small budget. Never log raw addresses.
+ const ip=req.headers.get('cf-connecting-ip')||req.headers.get('x-forwarded-for')?.split(',')[0].trim()||'unknown';
+ try{const global=await rpc('rate',{key:await sha('admin-log-global'),max:1000,seconds:60});if(!global.allowed)return false;const client=await rpc('rate',{key:await sha('admin-log:'+ip),max:10,seconds:60});return client.allowed===true;}catch{return false;}
+}
+async function commandMeta(p:any){if(p.operationId!==undefined)check(uuid(p.operationId),'요청 식별자를 확인해 주세요.');return {operationId:p.operationId||crypto.randomUUID(),requestDigest:await sha(JSON.stringify({...p,operationId:undefined}))};}
 async function decodePhoto(p:any){check(p&&p.type==='image/jpeg'&&typeof p.data==='string'&&p.data.length<=1398110&&/^[A-Za-z0-9+/]*={0,2}$/.test(p.data),'사진을 다시 선택해 주세요. 전송용 이미지는1MB 이하여야 합니다.');let raw:Uint8Array;try{raw=Uint8Array.from(atob(p.data),c=>c.charCodeAt(0));}catch{throw new UserError('올바른 사진이 아닙니다.');}check(raw.length>0&&raw.length<=1048576&&raw[0]===255&&raw[1]===216&&raw[2]===255,'올바른 JPG 전송 이미지가 아닙니다.');let w=0,h=0;for(let i=2;i+8<raw.length;){if(raw[i]!==255){i++;continue;}const marker=raw[i+1];if(marker===0xda||marker===0xd9)break;const len=(raw[i+2]<<8)|raw[i+3];if([0xc0,0xc1,0xc2].includes(marker)){h=(raw[i+5]<<8)|raw[i+6];w=(raw[i+7]<<8)|raw[i+8];break;}check(len>=2,'손상된 사진입니다.');i+=len+2;}check(w>0&&h>0&&w*h<=4000000&&w<=4000&&h<=4000,'전송 사진 크기가 너무 크거나 손상되었습니다.');let bytes:Uint8Array;try{const{Image}=await import('https://deno.land/x/imagescript@1.3.0/mod.ts');const image=await Image.decode(raw);if(Math.max(image.width,image.height)>1280){const scale=1280/Math.max(image.width,image.height);image.resize(Math.round(image.width*scale),Math.round(image.height*scale));}bytes=await image.encodeJPEG(80);}catch{throw new UserError('사진을 읽을 수 없습니다. 다른 사진을 선택해 주세요.');}check(bytes.length<=2097152,'사진 용량을 줄여 주세요.');return bytes;}
 async function preparePhotos(list:any,id:string){check(Array.isArray(list)&&list.length<=5,'사진은 합계5장까지 첨부할 수 있습니다.');const planned=list.map(()=>{const pid=crypto.randomUUID();return{id:pid,storage_path:id+'/'+pid+'.jpg'};});if(!planned.length)return[];await rpc('reserve-uploads',{id,photos:planned});const uploaded:any[]=[];
  try{for(let n=0;n<list.length;n++){const p=list[n];const bytes=await decodePhoto(p);const item=planned[n],{error}=await db.storage.from(BUCKET).upload(item.storage_path,bytes,{contentType:'image/jpeg',upsert:false});if(error)throw Error('private photo upload failed');uploaded.push({...item,bytes:bytes.length});}return uploaded;
@@ -43,6 +53,8 @@ Deno.serve(async req=>{
  const json=(d:unknown,status=200)=>new Response(JSON.stringify(d),{status,headers:{...headers,'Content-Type':'application/json; charset=utf-8'}});
  try{check(allowed,'허용되지 않은 요청입니다.',403);if(req.method==='OPTIONS')return new Response(null,{status:204,headers});const u=new URL(req.url),route=u.searchParams.get('route')||'/api/health';
   if(u.searchParams.get('action')==='cleanup'){const{data,error}=await db.rpc(IS_TEST?'technician_cleanup_secret_test':'technician_cleanup_secret');check(!error&&data&&req.headers.get('x-cleanup-secret')===data,'접근 권한이 없습니다.',403);await cleanup();return json({ok:true});}
+  const input=req.method==='POST'?await readBody(req):undefined;
+  if(!IS_TEST){try{const handled=await adminV2Route(req,route,input,v2Dependencies());if(handled!==undefined)return json(handled);}catch(error){throw error instanceof UserError?error:new UserError(error instanceof Error?error.message:'관리 작업을 처리하지 못했습니다.',typeof(error as any)?.status==='number'?(error as any).status:400);}}
   if(req.method==='GET'){
    const publicImage=route.match(/^\/api\/public-profile-images\/([a-f0-9-]{36})\/([a-f0-9-]{36})\.jpg$/i);
    if(publicImage){
@@ -61,7 +73,7 @@ Deno.serve(async req=>{
    if(route==='/api/health')return json({mode:IS_TEST?'isolated-test':'production',ready:true,maxPhotos:5,maxPhotoBytes:10485760,transferPhotoBytes:1048576,retentionMonths:6});
    if(route.startsWith('/api/applications?')){const query=new URL(route,'https://local');return json(await rpc('list',{page:Number(query.searchParams.get('page'))||1}));}
    if(route==='/api/applications')return json(await rpc('list',{page:1}));
-   if(route==='/api/session')return json({owner:!!await session(req,'owner'),admin:!!await session(req,'admin')});
+   if(route==='/api/session'){const a=await session(req,'admin');return json({owner:!!await session(req,'owner'),admin:!!a,...(a?{expiresAt:Date.parse(a.expires_at),idleExpiresAt:Date.parse(a.last_active_at)+900000}:{})});}
    if(route.startsWith('/api/photos/')){const id=route.split('/').pop()!;check(uuid(id),'사진을 찾을 수 없습니다.',404);const adminSession=await session(req,'admin'),ownerSession=await session(req,'owner'),s=adminSession||ownerSession;check(s,'본인 확인이 필요합니다.',403);const p=await rpc('photo',{id,hash:s.hash}),{data,error}=await db.storage.from(BUCKET).download(p.storage_path);check(data&&!error,'사진을 찾을 수 없습니다.',404);return new Response(data,{headers:{...headers,'Content-Type':'image/jpeg','Content-Disposition':'inline; filename="private-application-photo.jpg"'}});}
    if(route.startsWith('/api/admin/applications?')||route==='/api/admin/applications'){const s=await admin(req),q=new URL(route,'https://local'),state=q.searchParams.get('state')||'';check(!state||states.includes(state),'상태를 확인해 주세요.');return json(await rpc('admin-list',{hash:s.hash,state,page:Number(q.searchParams.get('page'))||1}));}
    const caseList=route.match(/^\/api\/admin\/applications\/([a-f0-9-]{36})\/work-cases$/i);
@@ -73,7 +85,7 @@ Deno.serve(async req=>{
    const detail=route.match(/^\/api\/(admin\/)?applications\/([a-f0-9-]{36})$/i);if(detail){const s=detail[1]?await admin(req):await auth(req,detail[2]);return json(addPhotoUrls(await rpc(detail[1]?'admin-detail':'detail',{id:detail[2],hash:s.hash})));}
    throw new UserError('요청을 찾을 수 없습니다.',404);
   }
-  check(req.method==='POST','지원하지 않는 요청입니다.',405);const p=await readBody(req);
+  check(req.method==='POST','지원하지 않는 요청입니다.',405);const p=input!;
   if(route==='/api/verify'){
    const key=await rate(req,'verify',5,900),pass=typeof p.password==='string'&&p.password.length<=128?p.password:'';
    let a;
@@ -181,11 +193,11 @@ Deno.serve(async req=>{
    check(Number.isInteger(p.version)&&p.version===detail.application.version,'신청이 변경되었습니다. 새로고침 후 다시 확인해 주세요.',409);
    check(p.publicConsent===true,'공개할 정보에 대한 신청자의 동의를 확인해 주세요.');
    let reviewed;try{reviewed=reviewedManagement({...p,action:'create',version:'none'},id);}catch(e){throw new UserError(e instanceof Error?e.message:'공개 내용을 확인해 주세요.');}
-   const result=await adminManagement(s.hash,'profile-manage',{id,...reviewed,applicationVersion:p.version});
+   const result=await adminManagement(s.hash,'profile-manage',{id,...reviewed,applicationVersion:p.version,...await commandMeta({...p,target:id,operation:'profile-create'})});
    return json(result,201);
   }
   const adminAction=route.match(/^\/api\/admin\/applications\/([a-f0-9-]{36})\/(update|reset-password)$/i);
-  if(adminAction){const[,id,op]=adminAction,s=await admin(req);if(op==='update'){check(states.includes(p.status),'상태를 확인해 주세요.');await rpc('admin-update',{id,hash:s.hash,status:p.status,body:text(p.body||'',0,6000,'답변')});await adminRecord(s,'application-update',id);return json({ok:true});}check(p.identityConfirmed===true,'본인 확인 절차를 완료해 주세요.');const reason=text(p.reason,10,500,'본인 확인 처리 기록'),temporaryPassword=random().slice(0,24);await rpc('reset-password',{id,hash:s.hash,identityConfirmed:true,reason,password_hash:await passwordHash(temporaryPassword)});await adminRecord(s,'password-reset',id);return json({temporaryPassword});}
+  if(adminAction){const[,id,op]=adminAction,s=await admin(req);if(op==='update'){check(states.includes(p.status),'상태를 확인해 주세요.');await rpc('admin-update',{id,hash:s.hash,status:p.status,body:text(p.body||'',0,6000,'답변'),...await commandMeta({...p,target:id,operation:op})});return json({ok:true});}check(p.identityConfirmed===true,'본인 확인 절차를 완료해 주세요.');const reason=text(p.reason,10,500,'본인 확인 처리 기록'),temporaryPassword=random().slice(0,24);await rpc('reset-password',{id,hash:s.hash,identityConfirmed:true,reason,password_hash:await passwordHash(temporaryPassword),...await commandMeta({...p,target:id,operation:op})});return json({temporaryPassword});}
   throw new UserError('요청을 찾을 수 없습니다.',404);
- }catch(e){try{const s=await session(req,'admin');if(s)await adminRecord(s,'request-failure','admin-request','failure');}catch{}if(!(e instanceof UserError))console.error('Technician operation failed:',e instanceof Error?e.message:'unknown');return json({error:e instanceof UserError?e.message:'처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'},e instanceof UserError?e.status:500);}
+ }catch(e){const errorStatus=e instanceof UserError?e.status:500;try{if(await adminLogAllowed(req,errorStatus)){const route=new URL(req.url).searchParams.get('route')||'';if(route==='/api/admin/login')await securityEvent('login-failure',req);else if(route.startsWith('/api/admin/')&&errorStatus===403)await securityEvent('access-denied',req);const s=await session(req,'admin');if(s)await adminRecord(s,'request-failure','admin-request','failure');}}catch{}if(!(e instanceof UserError))console.error('Technician operation failed:',e instanceof Error?e.message:'unknown');return json({error:e instanceof UserError?e.message:'처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'},errorStatus);}
 });

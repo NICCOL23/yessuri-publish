@@ -5,7 +5,7 @@
     const anchor=document.querySelector('#admin-public-profile');
     if(!anchor)return;
     const section=node('section','','card section');section.id='admin-public-photos';
-    section.append(node('h2','공개 사진 관리'),node('p','사진 추가·교체·설명·순서를 관리합니다. 교체할 파일은 아래에서 선택하고 사진별 교체 버튼을 누르세요. 신청서 원본 사진은 유지됩니다.'));
+    section.append(node('h2','공개 사진 관리'),node('p','사진마다 교체할 파일을 선택하고 기존 사진과 비교합니다. 공개 사진 변경은 즉시 반영되며 신청서 원본은 유지됩니다.'));
     const form=node('form','','section'),label=node('label','추가할 사진 (JPG·PNG·WebP, 10MB 이내)');
     const file=node('input');file.type='file';file.accept='image/jpeg,image/png,image/webp';file.id='public-photo-file';label.htmlFor=file.id;
     const consentLabel=node('label','','check section'),consent=node('input');consent.type='checkbox';consent.required=true;
@@ -13,9 +13,11 @@
     const upload=node('button','공개 사진 추가','btn primary');upload.type='submit';
     const status=node('p');status.setAttribute('role','status');
     const preview=node('div');const list=node('div','','file-grid');section.append(node('h3','공개 프로필 작업 사진 미리보기'),preview);form.append(label,file,consentLabel,node('p','추가한 사진은 즉시 공개 프로필에 반영됩니다. 작업 사례 저장 여부와 관계없이 공개 사진으로 남습니다.','hint'),upload);section.append(form,status,list);anchor.after(section);
-    let busy=false,current=null;
+    let busy=false,current=null,reviewing=false;
+    const retry=node('button','대기 중인 사진 반영 재시도','btn');retry.type='button';retry.hidden=true;status.after(retry);retry.onclick=async()=>{if(busy)return;lock(true);try{const d=await api('admin/retry-files',{});if(!d.ok)throw Error('대기 중인 파일을 다시 확인해 주세요.');retry.hidden=true;await load();status.textContent='사진 파일 반영 상태를 다시 확인했습니다.';}catch(e){status.textContent=e.message;}finally{lock(false);}};
     const lock=value=>{busy=value;section.querySelectorAll('button,input').forEach(n=>{n.disabled=value||n.dataset.current==='true'||n.dataset.boundary==='true';});};
     function render(data){
+      if(!section.isConnected)return;
       current=data;window.YESSURI_WORK_GALLERY.render(preview,(data.photos||[]).filter(p=>p.image!==data.image));list.replaceChildren();
       const photos=(data.photos||[]).filter(p=>typeof p.image==='string');
       if(!photos.length){list.append(node('p','등록된 공개 사진이 없습니다.','hint'));return;}
@@ -28,37 +30,46 @@
         remove.onclick=()=>mutate({action:'delete',image:photo.image,confirm:true},'이 공개 사진을 삭제할까요? 신청서 원본 사진은 유지됩니다.'+(data.image===photo.image?' 대표 이미지도 해제됩니다.':''),'공개 사진을 삭제했습니다. 신청서 원본 사진은 유지됩니다.');
         const caption=node('input');caption.type='text';caption.maxLength=500;caption.value=photo.caption||'';caption.setAttribute('aria-label','공개 사진 '+(index+1)+' 설명');
         const describe=node('button','설명 저장','btn');describe.type='button';describe.onclick=()=>mutate({action:'edit',image:photo.image,caption:caption.value,version:current.version},'사진 설명을 저장할까요?','사진 설명을 저장했습니다.');
-        const replace=node('button','선택한 파일로 교체','btn');replace.type='button';replace.onclick=()=>uploadPhoto(photo,caption.value);
+        const replacement=node('input');replacement.type='file';replacement.accept='image/jpeg,image/png,image/webp';replacement.hidden=true;replacement.setAttribute('aria-label','공개 사진 '+(index+1)+' 교체 파일');
+        const replace=node('button','이 사진 교체','btn');replace.type='button';replace.onclick=()=>replacement.click();replacement.onchange=()=>{const chosen=replacement.files[0];replacement.value='';if(chosen)void uploadPhoto(photo,caption.value,chosen,index+1);};
         const up=node('button','앞으로 이동','btn'),down=node('button','뒤로 이동','btn');up.type=down.type='button';up.disabled=index===0;down.disabled=index===photos.length-1;up.dataset.boundary=String(up.disabled);down.dataset.boundary=String(down.disabled);
         const move=offset=>{const order=photos.map(p=>p.image);[order[index],order[index+offset]]=[order[index+offset],order[index]];mutate({action:'reorder',order,version:current.version},'사진 순서를 변경할까요?','사진 순서를 변경했습니다.');};up.onclick=()=>move(-1);down.onclick=()=>move(1);
-        figure.append(caption,describe,up,down,select,replace,remove);list.append(figure);
+        figure.append(caption,describe,up,down,select,replace,replacement,remove);list.append(figure);
       });
     }
-    const route='admin/applications/'+application.id+'/public-photos';
-    async function load(){try{render(await api(route));status.textContent='';}catch(e){status.textContent=e.message;}}
+    const route='admin/profiles/'+encodeURIComponent('technician-'+application.id)+'/public-photos';
+    async function load(){if(!section.isConnected)return;try{render(await api(route));status.textContent='';}catch(e){status.textContent=e.message;}}
     async function mutate(data,question,message){
       if(busy||!window.confirm(question))return;lock(true);status.textContent='저장하고 있습니다.';
-      try{render(await api(route,data));status.textContent=message;window.dispatchEvent(new Event('yessuri:photo-library-updated'));}catch(e){status.textContent=e.message;}
+      try{const result=await api(route,{...data,version:current?.version});render(result);retry.hidden=!result.pending;status.textContent=result.pending?'변경·이력은 기록했지만 사진 파일 반영이 대기 중입니다. 재시도 후 확인하세요.':message;window.dispatchEvent(new Event('yessuri:photo-library-updated'));}catch(e){status.textContent=e.message;}
       finally{lock(false);section.querySelectorAll('[data-current="true"]').forEach(n=>{n.disabled=true;});}
     }
     form.onsubmit=event=>{event.preventDefault();uploadPhoto();};
-    async function uploadPhoto(replacing=null,caption=''){
-      if(busy)return;const chosen=file.files[0];
+    async function replacementReview(replacing,chosen,index){
+      const dialog=node('dialog','','admin-replace-dialog');dialog.setAttribute('aria-labelledby','replace-title');const title=node('h2','공개 사진 '+index+' 교체 확인');title.id='replace-title';
+      const compare=node('div','','replace-compare'),url=URL.createObjectURL(chosen);for(const [src,label]of [[replacing.image,'기존 공개 사진 '+index],[url,'새 사진 · '+chosen.name]]){const figure=node('figure'),img=node('img');img.src=src;img.alt=label;figure.append(img,node('figcaption',label));compare.append(figure);}
+      const agreement=node('label','','check section'),check=node('input');check.type='checkbox';agreement.append(check,document.createTextNode('이 새 사진을 공개하는 데 동의했음을 확인했습니다.'));
+      const actions=node('div','','actions'),cancel=node('button','취소','btn'),apply=node('button','확인한 사진으로 교체','btn primary');cancel.type=apply.type='button';apply.disabled=true;check.onchange=()=>apply.disabled=!check.checked;actions.append(cancel,apply);
+      dialog.append(title,node('p','기존 사진을 사용하는 작업 사례도 새 사진으로 바뀝니다. 신청서 원본 사진은 유지됩니다.'),compare,agreement,actions);document.body.append(dialog);
+      return new Promise(resolve=>{let done=false;const stop=()=>close(false),close=value=>{if(done)return;done=true;window.removeEventListener('yessuri:admin-locked',stop);window.removeEventListener('yessuri:admin-profile-switch',stop);dialog.close();dialog.remove();URL.revokeObjectURL(url);resolve(value);};cancel.onclick=()=>close(false);apply.onclick=()=>{if(check.checked)close(true);};dialog.addEventListener('cancel',e=>{e.preventDefault();close(false);});window.addEventListener('yessuri:admin-locked',stop);window.addEventListener('yessuri:admin-profile-switch',stop);dialog.showModal();cancel.focus();});
+    }
+    async function uploadPhoto(replacing=null,caption='',replacementFile=null,index=0){
+      if(busy||reviewing)return;const chosen=replacementFile||file.files[0];
       if(!chosen){status.textContent='추가할 사진을 선택해 주세요.';return;}
       if(!['image/jpeg','image/png','image/webp'].includes(chosen.type)||chosen.size>10485760){status.textContent='10MB 이내의 JPG·PNG·WebP 사진을 선택해 주세요.';return;}
-      if(!consent.checked){status.textContent='사진 공개에 동의했는지 확인해 주세요.';return;}
-      if(replacing&&!window.confirm('선택한 파일로 이 사진을 교체할까요? 작업 사례에서 사용하는 사진도 함께 바뀝니다. 신청서 원본은 유지됩니다.'))return;
+      if(!replacing&&!consent.checked){status.textContent='사진 공개에 동의했는지 확인해 주세요.';return;}
+      if(replacing){reviewing=true;const accepted=await replacementReview(replacing,chosen,index);reviewing=false;if(!accepted)return;}
       if(!replacing&&!window.confirm('선택한 사진을 지금 공개 프로필에 추가할까요? 추가 즉시 공개되며 작업 사례를 저장하지 않아도 공개 사진으로 남습니다.'))return;
       lock(true);status.textContent='사진을 저장하고 있습니다.';
       try{
         const blob=await transfer(chosen),bytes=new Uint8Array(await blob.arrayBuffer());let binary='';
         for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));
-        render(await api(route,{action:replacing?'replace':'upload',image:replacing?.image,caption,version:current?.version,photo:{type:'image/jpeg',data:btoa(binary)},imageConsent:true}));
-        file.value='';consent.checked=false;status.textContent=replacing?'사진을 교체했습니다.':'사진을 추가했습니다.';window.dispatchEvent(new Event('yessuri:photo-library-updated'));
+        const result=await api(route,{action:replacing?'replace':'upload',image:replacing?.image,caption,version:current?.version,photo:{type:'image/jpeg',data:btoa(binary)},imageConsent:true});render(result);retry.hidden=!result.pending;
+        file.value='';consent.checked=false;status.textContent=result.pending?'변경·이력은 기록했지만 사진 파일 반영이 대기 중입니다. 재시도 후 확인하세요.':replacing?'사진을 교체했습니다.':'사진을 추가했습니다.';window.dispatchEvent(new Event('yessuri:photo-library-updated'));
       }catch(e){status.textContent=e.message;}
       finally{lock(false);section.querySelectorAll('[data-current="true"]').forEach(n=>{n.disabled=true;});}
     };
-    window.addEventListener('yessuri:public-photo-changed',load);
+    const refresh=()=>{if(!section.isConnected){window.removeEventListener('yessuri:public-photo-changed',refresh);return;}load();};window.addEventListener('yessuri:public-photo-changed',refresh);
     load();
   }
   window.YESSURI_TECHNICIAN_PUBLIC_PHOTOS={mount};

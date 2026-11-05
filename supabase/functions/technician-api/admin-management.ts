@@ -23,15 +23,17 @@ export function reviewedManagement(input:Record<string,any>,id:string) {
 }
 
 export async function managementRpc(db:any,hash:string,op:string,p:Record<string,unknown>={}){
- const {data,error}=await db.rpc('technician_admin_management',{op,p:{...p,hash}});
+ const {data,error}=await db.rpc('technician_admin_management_v2',{op,p:{...p,hash}});
  if(error){
   if(error.message.includes('permission denied'))throw Object.assign(Error('관리자 로그인이 필요합니다.'),{status:403});
   if(error.message.includes('version conflict'))throw Object.assign(Error('공개 정보가 변경되었습니다. 새로고침 후 다시 확인해 주세요.'),{status:409});
+  if(error.message.includes('command conflict'))throw Object.assign(Error('재시도 요청 내용이 다릅니다. 현재 상태를 다시 확인해 주세요.'),{status:409});
   if(error.message.includes('not found'))throw Object.assign(Error('대상 신청 또는 프로필을 찾지 못했습니다.'),{status:404});
   if(error.message.includes('invalid photo consent'))throw Object.assign(Error('기존 사진도 다시 공개됩니다. 사진 공개 동의를 확인해 주세요.'),{status:400});
   if(error.message.includes('invalid consent'))throw Object.assign(Error('동의 확인일·공개 범위·근거를 확인해 주세요.'),{status:400});
   if(error.message.includes('invalid profile'))throw Object.assign(Error('공개 업체 정보와 전문 분야·지역을 확인해 주세요.'),{status:400});
-  throw Error('관리자 기록을 처리하지 못했습니다. 변경 결과를 다시 확인해 주세요.');
+  if(error.message.includes('invalid classification'))throw Object.assign(Error('전문 분야·지역은 공통 목록에서 선택하거나 기타 항목으로 작성하세요.'),{status:400});
+  throw Object.assign(Error('관리자 기록을 처리하지 못했습니다. 변경 결과를 다시 확인해 주세요.'),{status:500});
  }
  return data;
 }

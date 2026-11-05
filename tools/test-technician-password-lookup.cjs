@@ -17,7 +17,8 @@ function backend(hash,{expired=false,changed=false,limited=false}={}){
  }};
  const helper=stripTypeScriptTypes(read('supabase/functions/technician-api/public-profile.ts'),{mode:'transform'}).replace('export function','function');
  const code=stripTypeScriptTypes(read('supabase/functions/technician-api/index.ts'),{mode:'transform'}).replace(/^import .*;\s*$/gm,'');
- vm.runInNewContext(helper+'\n'+code,{createClient:()=>db,Deno:{env:{get:()=> 'test'},serve:fn=>{handler=fn}},TextEncoder,TextDecoder,Uint8Array,URL,Response,Request,crypto:webcrypto,console});
+ const adminHelpers=['admin-management.ts','admin-v2.ts'].map(name=>stripTypeScriptTypes(read('supabase/functions/technician-api/'+name),{mode:'transform'}).replace(/^import .*;\s*$/gm,'').replace(/export /g,'')).join('\n');
+ vm.runInNewContext(helper+'\n'+adminHelpers+'\n'+code,{createClient:()=>db,Deno:{env:{get:()=> 'test'},serve:fn=>{handler=fn}},TextEncoder,TextDecoder,Uint8Array,URL,Response,Request,crypto:webcrypto,console});
  return {grants,targets,verify:async data=>{const r=await handler(new Request('https://test.invalid/?route=%2Fapi%2Fverify',{method:'POST',headers:{'content-type':'application/json',origin:'https://yessuri.com'},body:JSON.stringify(data)}));return {status:r.status,data:await r.json()}}};
 }
 async function ui({selected=id,action='',fail=false}={}){

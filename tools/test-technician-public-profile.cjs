@@ -6,11 +6,12 @@ const base=path.join(__dirname,'../supabase/functions/technician-api');
 const helper=stripTypeScriptTypes(fs.readFileSync(path.join(base,'public-profile.ts'),'utf8'),{mode:'transform'}).replace('export function','function');
 const backend=stripTypeScriptTypes(fs.readFileSync(path.join(base,'index.ts'),'utf8'),{mode:'transform'}).replace(/^import .*;\s*$/gm,'');
 const management=stripTypeScriptTypes(fs.readFileSync(path.join(base,'admin-management.ts'),'utf8'),{mode:'transform'}).replace(/^import .*;\s*$/gm,'').replace(/export /g,'');
+const v2=stripTypeScriptTypes(fs.readFileSync(path.join(base,'admin-v2.ts'),'utf8'),{mode:'transform'}).replace(/^import .*;\s*$/gm,'').replace(/export /g,'');
 const id='12345678-1234-1234-1234-123456789abc';
 const reviewed={version:3,name:'테스트 업체',fields:['누수·수도','누수·수도'],serviceAreas:['해운대구'],intro:'공개 소개',career:'10년',phone:'010-1234-5678',phonePublic:false,publicConsent:true,consent:{scope:['profile'],confirmedAt:'2026-01-01',evidence:'TEST-CONSENT-001',note:''}};
 function fixture({role='admin',existing=null,duplicate=false,version=3}={}){
  let handler,writes=[],reads=0;
- const db={rpc:async(_name,{op,p})=>{if(_name==='technician_admin_management'&&op==='profile-manage'){if(duplicate)return{data:null,error:{message:'version conflict'}};writes.push(p.profile);return{data:{profile:{id:p.profile.id,name:p.profile.name,publication_status:'approved'}},error:null};}return{data:op==='session'?{role,application_id:id,hash:'hash'}:op==='admin-detail'?{application:{id,version}}:{},error:null};},from:table=>{
+ const db={rpc:async(_name,{op,p})=>{if(_name==='technician_admin_management_v2'&&op==='profile-manage'){if(duplicate)return{data:null,error:{message:'version conflict'}};writes.push(p.profile);return{data:{profile:{id:p.profile.id,name:p.profile.name,publication_status:'approved'}},error:null};}return{data:op==='session'?{role,application_id:id,hash:'hash'}:op==='admin-detail'?{application:{id,version}}:{},error:null};},from:table=>{
    assert.equal(table,'expert_profiles');
    return {select:()=>({eq:()=>({maybeSingle:async()=>{reads++;return{data:existing,error:null}}})}),insert:profile=>{
      writes.push(profile);
@@ -18,7 +19,7 @@ function fixture({role='admin',existing=null,duplicate=false,version=3}={}){
    }};
  }};
  const sandbox={createClient:()=>db,Deno:{env:{get:()=> 'test-only'},serve:fn=>{handler=fn}},TextEncoder,TextDecoder,Uint8Array,URL,Response,Request,crypto:webcrypto,console};
- vm.runInNewContext(helper+'\n'+management+'\n'+backend,sandbox);
+ vm.runInNewContext(helper+'\n'+management+'\n'+v2+'\n'+backend,sandbox);
  return {writes,get reads(){return reads},request:async(data,{token=true,method='POST',origin='https://yessuri.com'}={})=>{
    const headers={'content-type':'application/json',origin};if(token)headers['x-admin-token']='a'.repeat(64);
    const response=await handler(new Request('https://test.invalid/?route='+encodeURIComponent('/api/admin/applications/'+id+'/public-profile'),{method,headers,...(method==='POST'?{body:JSON.stringify(data)}:{})}));
