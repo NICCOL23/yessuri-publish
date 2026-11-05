@@ -8,6 +8,6 @@
 #profile-safety-panel .actions{flex-wrap:wrap}
 #profile-safety-panel[hidden],#profile-safety-panel form[hidden],#profile-safety-panel .lifecycle[hidden]{display:none!important}
 @media(max-width:900px){
- body[data-technician-page="detail"] #root>nav.tabs{position:static;inset:auto;display:flex;flex-wrap:wrap;flex-direction:row;width:auto;min-width:0;padding:0;margin:0 0 16px;gap:0;background:transparent;box-shadow:none;max-height:none;overflow:visible}
- body[data-technician-page="detail"] #root>nav.tabs a{flex:1 1 90px;min-width:0;padding:10px 6px;text-align:center;overflow-wrap:anywhere}
+ body[data-admin-management="true"][data-technician-page="detail"] #root>nav.tabs{position:static;inset:auto;display:flex;flex-wrap:wrap;flex-direction:row;width:auto;min-width:0;padding:0;margin:0 0 16px;gap:0;background:transparent;box-shadow:none;max-height:none;overflow:visible}
+ body[data-admin-management="true"][data-technician-page="detail"] #root>nav.tabs a{flex:1 1 90px;min-width:0;padding:10px 6px;text-align:center;overflow-wrap:anywhere}
 }

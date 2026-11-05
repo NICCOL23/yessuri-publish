@@ -58,5 +58,5 @@
   const status=el('p');status.setAttribute('role','status');const list=el('div'),refresh=el('button','변경 이력 불러오기','btn');refresh.type='button';panel.append(refresh,status,list);root.append(panel);
   refresh.onclick=async()=>{refresh.disabled=true;try{const result=await api('admin/audit');list.replaceChildren();for(const item of result.events||[])list.append(el('p',[item.at||item.created_at,item.operatorId||item.admin_id,item.action,item.target,item.outcome].filter(Boolean).join(' / ')));status.textContent=list.childNodes.length?'최근 변경 이력을 불러왔습니다.':'표시할 기록이 없습니다.';}catch(e){status.textContent=e.message;}finally{refresh.disabled=false;}};
  } const original=window.YESSURI_ADMIN_GUIDE?.mount;
- if(original)window.YESSURI_ADMIN_GUIDE.mount=options=>{original(options);if(options.application)addProfileManager(options.api,options.application);else addOperations(options.api);};
+ if(original)window.YESSURI_ADMIN_GUIDE.mount=options=>{document.body.dataset.adminManagement='true';original(options);if(options.application)addProfileManager(options.api,options.application);else addOperations(options.api);};
 })();
