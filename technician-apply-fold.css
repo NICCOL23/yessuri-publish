@@ -1,0 +1,9 @@
+/* Local sample only: keep all control dimensions, reduce gaps and fold optional fields. */
+html[data-type-system] body[data-technician-page="apply"] #application-form .optional-fold{padding-top:0;border:0;border-radius:10px;margin-top:12px;background:#fff}
+html[data-type-system] body[data-technician-page="apply"] #application-form .optional-fold>summary{padding:14px 16px;min-height:52px;border:1px solid #dce5ea;border-radius:10px;font-weight:600;color:#284354;cursor:pointer;list-style-position:inside}
+html[data-type-system] body[data-technician-page="apply"] #application-form .optional-fold>summary:focus-visible{outline:3px solid #00858c;outline-offset:3px}
+html[data-type-system] body[data-technician-page="apply"] #application-form .optional-body{padding:12px 0 16px}
+html[data-type-system] body[data-technician-page="apply"] #application-form .optional-body .design-area-note{margin-top:0}
+html[data-type-system] body[data-technician-page="apply"] #application-form .fields{gap:10px 20px}
+html[data-type-system] body[data-technician-page="apply"] #application-form>.actions{column-gap:8px;grid-template-columns:120px minmax(0,1fr);padding-right:4px}
+@media(max-width:760px){html[data-type-system] body[data-technician-page="apply"] #application-form>.actions{grid-template-columns:80px minmax(0,1fr)}}
