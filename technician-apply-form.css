@@ -42,3 +42,6 @@ body[data-technician-page="apply"] .apply-error-summary{border:2px solid #a12626
   flex:1 1 140px;min-width:0;text-align:center;overflow-wrap:anywhere;
  }
 }
+/* 신청서 두 선택 버튼에만 문구·장식 화살표 간격을 적용합니다. */
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-area-trigger.ys-spaced-trigger{display:flex;align-items:center;justify-content:center;column-gap:12px}
+html[data-type-system] body[data-technician-page="apply"] #application-form .ys-spaced-trigger>span:last-child{flex:none}

@@ -1,6 +1,12 @@
 (() => {
 window.YESSURI_TECHNICIAN_APPLY_FORM=() => {
 const form=document.querySelector('#application-form');if(!form||form.dataset.enhanced)return;form.dataset.enhanced='true';form.noValidate=true;let submitted=false;
+for(const [id,text] of [['service-field-trigger','전문 분야 선택'],['service-area-trigger','출장 지역 선택']]){
+ const trigger=form.querySelector('#'+id);if(!trigger)continue;
+ const label=document.createElement('span');label.textContent=text;
+ const arrow=document.createElement('span');arrow.textContent='›';arrow.setAttribute('aria-hidden','true');
+ trigger.replaceChildren(label,arrow);trigger.classList.add('ys-spaced-trigger');
+}
 const note=document.createElement('p');note.className='required-note';note.textContent='* 필수 입력 항목입니다.';form.prepend(note);
 for(const id of ['intro','links','notes']){const label=form.querySelector('label[for="t-'+id+'"]');label.append(' (선택)');}
 for(const id of ['password','passwordConfirm']){const input=form.querySelector('#t-'+id);if(!input)continue;const wrap=document.createElement('div');wrap.className='password-wrap';input.before(wrap);wrap.append(input);input.setAttribute('spellcheck','false');input.setAttribute('autocapitalize','none');const toggle=document.createElement('button');toggle.type='button';toggle.className='btn password-toggle';toggle.textContent='보기';toggle.setAttribute('aria-controls',input.id);toggle.setAttribute('aria-label',(id==='password'?'비밀번호':'비밀번호 확인')+' 보기');toggle.onclick=()=>{const show=input.type==='password';input.type=show?'text':'password';toggle.textContent=show?'숨기기':'보기';toggle.setAttribute('aria-label',(id==='password'?'비밀번호':'비밀번호 확인')+(show?' 숨기기':' 보기'));};wrap.append(toggle);}
