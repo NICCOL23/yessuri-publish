@@ -46,9 +46,10 @@ function confirmAction(text) {
 
 function message(text, error = false) {
     statusBox.textContent = text;
-    statusBox.classList.toggle('error', error);
+    statusBox.classList.toggle('error', error);if(error)window.YESSURI_SAVE_RESULT?.uncertain(text);
 }
 function controls() {
+    window.YESSURI_SAVE_RESULT?.update({state,dirty,busy});
     if (locked) return;
     document.getElementById('slide-select').disabled = busy;
     form.querySelectorAll('input,button').forEach(control => { control.disabled = busy || locked; });
@@ -69,6 +70,7 @@ function changed() {
     controls();
 }
 async function api(path, data) {
+    if(data&&['/api/draft','/api/publish','/api/restore'].includes(path))window.YESSURI_SAVE_RESULT?.begin(path.slice(5));
     if (locked) throw new Error('관리자 화면이 잠겼습니다. 다시 로그인하세요.');
     const route = path === '/api/state' ? '/api/admin/hero' : path.replace('/api/', '/api/admin/hero/');
     const response = await fetch(endpoint(route), {
@@ -198,7 +200,7 @@ form.addEventListener('submit', async event => {
         if (locked) return;
         state = next;
         fill();
-        message('초안을 저장했습니다. 저장한 초안 미리보기에서 확인하세요.');
+        window.YESSURI_SAVE_RESULT?.success('draft',state.version);message('초안만 저장했습니다. 이번 저장으로 홈페이지는 바뀌지 않았습니다. 미리보기·변경 비교 후 게시하세요.');
     } catch (error) { message(error.message,true); }
     finally { busy = false; controls(); }
 });
@@ -278,7 +280,7 @@ document.getElementById('publish').addEventListener('click', async () => {
         state = next;
         fill();
         preview('published');
-        message('홈페이지에 게시했습니다. 게시 기록에서 이전 내용으로 복원할 수 있습니다.');
+        window.YESSURI_SAVE_RESULT?.success('publish',state.version);message('홈페이지 공개가 완료됐습니다. 저장한 초안이 홈페이지에 반영됐습니다.');
     } catch (error) { message(error.message,true); }
     finally { busy = false; controls(); }
 });
@@ -292,7 +294,7 @@ async function restore(id) {
         state = next;
         fill();
         preview('published');
-        message('선택한 내용으로 복원했습니다. 복원 전 게시본도 기록에 남아 있습니다.');
+        window.YESSURI_SAVE_RESULT?.success('restore',state.version);message('이전 버전으로 공개 내용을 복원했습니다. 홈페이지와 초안이 선택한 기록으로 바뀌었습니다.');
     } catch (error) { message(error.message,true); }
     finally { busy = false; controls(); }
 }
