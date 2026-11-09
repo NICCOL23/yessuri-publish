@@ -2,6 +2,7 @@ import {createClient} from 'npm:@supabase/supabase-js@2';
 import {profileFromReview} from './public-profile.ts';
 import {reviewedManagement,managementRpc} from './admin-management.ts';
 import {adminV2Route,drainPublicFiles} from './admin-v2.ts';
+import {fieldCmsRoute} from './field-cms.ts';
 import {heroCmsRoute} from './hero-cms.ts';
 const IS_TEST=false;
 const URL_ROOT=Deno.env.get('SUPABASE_URL')!,KEY=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -57,6 +58,8 @@ Deno.serve(async req=>{
   const input=req.method==='POST'?await readBody(req):undefined;
   if(!IS_TEST){
    try {
+    const fieldHandled=await fieldCmsRoute(req,route,input,v2Dependencies());
+    if(fieldHandled!==undefined)return json(fieldHandled);
     const handled=await heroCmsRoute(req,route,input,v2Dependencies());
     if(handled instanceof Response){
      const merged=new Headers(handled.headers);

@@ -23,7 +23,7 @@
     ]) {
       const card = document.querySelector(selector);
       const label = card && card.querySelector('span:not(.category-icon)');
-      if (!label || !active) continue;
+      if (!label || !active || card.dataset.fieldCustomLabel === 'true') continue;
       if (!labels.has(label)) labels.set(label, {html: label.innerHTML, card, aria: card.getAttribute('aria-label')});
       if (label.textContent !== text) label.textContent = text;
       if (card.hasAttribute('aria-label') && card.getAttribute('aria-label') !== text) card.setAttribute('aria-label', text);
