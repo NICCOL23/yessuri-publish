@@ -1,0 +1,2 @@
+*{box-sizing:border-box}body{margin:0;background:white;font:14px/1.5 system-ui,"Malgun Gothic",sans-serif;color:#183448}#preview-status{margin:0;padding:9px 14px;background:#edf8f5;border-bottom:1px solid #cde2de}#site-preview{display:block;width:100%;height:calc(100vh - 42px);border:0}#site-preview[hidden]{display:none}.admin-session-bar{margin:0;border-radius:0;font-size:12px}#root>a{display:inline-block;margin:20px}
+

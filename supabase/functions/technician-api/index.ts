@@ -2,6 +2,7 @@ import {createClient} from 'npm:@supabase/supabase-js@2';
 import {profileFromReview} from './public-profile.ts';
 import {reviewedManagement,managementRpc} from './admin-management.ts';
 import {adminV2Route,drainPublicFiles} from './admin-v2.ts';
+import {heroCmsRoute} from './hero-cms.ts';
 const IS_TEST=false;
 const URL_ROOT=Deno.env.get('SUPABASE_URL')!,KEY=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const db=createClient(URL_ROOT,KEY,{auth:{persistSession:false,autoRefreshToken:false}});
@@ -54,6 +55,17 @@ Deno.serve(async req=>{
  try{check(allowed,'허용되지 않은 요청입니다.',403);if(req.method==='OPTIONS')return new Response(null,{status:204,headers});const u=new URL(req.url),route=u.searchParams.get('route')||'/api/health';
   if(u.searchParams.get('action')==='cleanup'){const{data,error}=await db.rpc(IS_TEST?'technician_cleanup_secret_test':'technician_cleanup_secret');check(!error&&data&&req.headers.get('x-cleanup-secret')===data,'접근 권한이 없습니다.',403);await cleanup();return json({ok:true});}
   const input=req.method==='POST'?await readBody(req):undefined;
+  if(!IS_TEST){
+   try {
+    const handled=await heroCmsRoute(req,route,input,v2Dependencies());
+    if(handled instanceof Response){
+     const merged=new Headers(handled.headers);
+     for(const [key,value] of Object.entries(headers))merged.set(key,value);
+     return new Response(handled.body,{status:handled.status,headers:merged});
+    }
+    if(handled!==undefined)return json(handled);
+   }catch(error){throw error instanceof UserError?error:new UserError(error instanceof Error?error.message:'히어로 작업을 처리하지 못했습니다.',typeof(error as any)?.status==='number'?(error as any).status:400);}
+  }
   if(!IS_TEST){try{const handled=await adminV2Route(req,route,input,v2Dependencies());if(handled!==undefined)return json(handled);}catch(error){throw error instanceof UserError?error:new UserError(error instanceof Error?error.message:'관리 작업을 처리하지 못했습니다.',typeof(error as any)?.status==='number'?(error as any).status:400);}}
   if(req.method==='GET'){
    const publicImage=route.match(/^\/api\/public-profile-images\/([a-f0-9-]{36})\/([a-f0-9-]{36})\.jpg$/i);
