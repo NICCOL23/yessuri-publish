@@ -5,4 +5,6 @@
 .admin-unified-navigation a:hover{background:#f3f8f8}
 .admin-unified-navigation a[aria-current=page]{background:#e8f5f3;border-color:#c2e5e1;color:#007a7e}
 .admin-unified-navigation a:focus-visible{outline:3px solid #00878c;outline-offset:2px}
+/* Isolate the administrator menu from the global mobile header nav rules. */
+@media(max-width:900px){.admin-unified-navigation{position:static;inset:auto;width:100%;min-width:0;max-width:100%;max-height:none;overflow:visible;box-sizing:border-box;box-shadow:none;align-items:stretch;flex:none}}
 @media(max-width:760px){.admin-unified-navigation{grid-template-columns:repeat(2,minmax(0,1fr));padding:6px;gap:6px;margin:12px 0 18px}.admin-unified-navigation a{padding:10px;min-height:68px;font-size:14px}.admin-unified-navigation a span{font-size:11px}}
