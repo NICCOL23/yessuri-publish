@@ -1,4 +1,5 @@
 'use strict';
+const selectedSlide = Number(new URLSearchParams(location.search).get('slide')||1);
 const form = document.getElementById('hero-form');
 const statusBox = document.getElementById('status');
 const reloadButton = document.getElementById('reload');
@@ -17,7 +18,7 @@ let viewportWidth = 1440;
 let locked = false;
 
 function endpoint(path) {
-    return config.endpoint + '?route=' + encodeURIComponent(path);
+    return config.endpoint + '?route=' + encodeURIComponent(path)+'&slide='+selectedSlide;
 }
 function headers() {
     let session;
@@ -49,6 +50,7 @@ function message(text, error = false) {
 }
 function controls() {
     if (locked) return;
+    document.getElementById('slide-select').disabled = busy;
     form.querySelectorAll('input,button').forEach(control => { control.disabled = busy || locked; });
     document.getElementById('preview-published').disabled = busy || !state;
     document.querySelectorAll('.viewport-button').forEach(button => { button.disabled = busy || !state; });
@@ -160,8 +162,8 @@ function content() {
 }
 function preview(mode) {
     if (locked) return;
-    previewFrame.src = 'hero-preview.html?mode=' + mode + '&v=' + state.version;
-    document.getElementById('open-preview').href = 'hero-preview.html?mode=' + mode;
+    previewFrame.src = 'hero-preview.html?slide='+selectedSlide+'&mode=' + mode + '&v=' + state.version;
+    document.getElementById('open-preview').href = 'hero-preview.html?slide='+selectedSlide+'&mode=' + mode;
     document.getElementById('preview-mode').textContent = mode === 'draft' ? '저장한 초안' : '현재 게시본';
     document.getElementById('preview-help').textContent = mode === 'draft'
         ? '저장한 초안입니다. PC와 휴대폰 버튼으로 화면을 확인한 뒤 아래 확인란을 선택하세요.'
@@ -330,3 +332,13 @@ async function start() {
     }
 }
 start();
+
+const slideSelector=document.getElementById('slide-select');
+slideSelector.value=String(selectedSlide);
+slideSelector.addEventListener('change',async()=>{
+ const target=slideSelector.value;
+ slideSelector.value=String(selectedSlide);
+ if(dirty && !await confirmAction('저장하지 않은 변경을 버리고 다른 히어로로 이동할까요?')) return;
+ if(locked) return;
+ dirty=false;location.href='hero-admin.html?slide='+target;
+});

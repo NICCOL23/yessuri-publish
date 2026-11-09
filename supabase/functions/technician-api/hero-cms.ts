@@ -1,5 +1,6 @@
 type HeroDependencies = {
     db: any;
+    slide?: number;
     bucket: string;
     admin: (request: Request) => Promise<{ hash: string }>;
     decode: (photo: unknown) => Promise<Uint8Array>;
@@ -41,6 +42,10 @@ export function validateHeroContent(input: unknown) {
     const originalImages = new Set([
         '/assets/images/hero-branded-20261020-v1/home-desktop.webp',
         '/assets/images/hero-branded-20261020-v1/home-mobile.webp',
+        '/assets/images/hero-branded-20261020-v1/interior-desktop.webp',
+        '/assets/images/hero-branded-20261020-v1/interior-mobile.webp',
+        '/assets/images/hero-tv-20261021-v1/devices-tv-desktop.webp',
+        '/assets/images/hero-tv-20261021-v1/devices-tv-mobile.webp',
     ]);
     for (const field of ['desktopImage', 'mobileImage']) {
         requireValue(originalImages.has(content[field]) || fileRoutePattern.test(content[field]), '관리자에서 올린 히어로 사진을 선택해 주세요.');
@@ -49,7 +54,7 @@ export function validateHeroContent(input: unknown) {
 }
 
 async function heroRpc(dependencies: HeroDependencies, operation: string, payload: Record<string, unknown> = {}) {
-    const { data, error } = await dependencies.db.rpc('technician_hero_cms_v1', { op: operation, p: payload });
+    const { data, error } = await dependencies.db.rpc(dependencies.slide && dependencies.slide > 1 && ['state','published','draft','publish','restore'].includes(operation) ? 'technician_hero_cms_slide'+dependencies.slide+'_v1' : 'technician_hero_cms_v1', { op: operation, p: payload });
     if (error) {
         const message = String(error.message || '');
         if (message.includes('permission denied')) fail('관리자 로그인이 필요합니다.', 403);
@@ -74,6 +79,9 @@ async function heroImage(dependencies: HeroDependencies, id: string, hash?: stri
 }
 
 export async function heroCmsRoute(request: Request, route: string, input: unknown, dependencies: HeroDependencies): Promise<unknown | Response | undefined> {
+    const slide = Number(new URL(request.url).searchParams.get('slide') || '1');
+    if (route.startsWith('/api/hero') || route.startsWith('/api/admin/hero')) requireValue([1,2,3].includes(slide), '히어로 선택을 확인해 주세요.');
+    dependencies = {...dependencies, slide};
     if (route === '/api/hero-content') {
         requireValue(request.method === 'GET', '지원하지 않는 요청입니다.', 405);
         return heroRpc(dependencies, 'published');
@@ -99,7 +107,7 @@ export async function heroCmsRoute(request: Request, route: string, input: unkno
     const payload = input as Record<string, unknown>;
     requireValue(typeof payload.operationId === 'string' && uuidPattern.test(payload.operationId), '요청 식별자를 확인해 주세요.');
     const operationId = payload.operationId;
-    const requestDigest = await dependencies.sha(route + '\n' + JSON.stringify({ ...payload, operationId: undefined }));
+    const requestDigest = await dependencies.sha(route + '?slide='+slide + '\n' + JSON.stringify({ ...payload, operationId: undefined }));
     const common = { hash: session.hash, operationId, requestDigest };
     if (action === 'image') {
         const bytes = await dependencies.decode(payload.photo);

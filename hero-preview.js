@@ -1,12 +1,13 @@
 (() => {
     'use strict';
+    const selectedSlide=Number(new URLSearchParams(location.search).get('slide')||1);
     const config = window.YESSURI_TECHNICIAN;
     const status = document.getElementById('preview-status');
     const frame = document.getElementById('site-preview');
     const urls = new Set();
     let locked = false;
     function endpoint(route) {
-        return config.endpoint + '?route=' + encodeURIComponent(route);
+        return config.endpoint + '?route=' + encodeURIComponent(route)+'&slide='+selectedSlide;
     }
     function headers() {
         let session;
@@ -35,12 +36,12 @@
     }
     function apply(content, desktop, mobile) {
         const doc = frame.contentDocument;
-        const panel = doc.getElementById('hero-panel-1');
+        const panel = doc.getElementById('hero-panel-'+selectedSlide);
         if (!panel) throw new Error('미리보기 화면을 준비하지 못했습니다.');
         const badge = panel.querySelector('.local-service-badge');
         const badgeIcon = badge.querySelector('svg');
         badge.replaceChildren(...(badgeIcon ? [badgeIcon,doc.createTextNode(content.badge)] : [doc.createTextNode(content.badge)]));
-        const heading = panel.querySelector('#hero-heading');
+        const heading = panel.querySelector('h1,h2');
         const accent = doc.createElement('span');
         accent.textContent = content.title2;
         heading.replaceChildren(doc.createTextNode(content.title1),accent);
@@ -54,7 +55,7 @@
         source.srcset = desktop;
         image.src = mobile;
         image.alt = content.alt;
-        const background = doc.querySelector('.full-bg-scene');
+        const background = doc.querySelectorAll('.full-bg-scene')[selectedSlide-1];
         if (background) {
             background.querySelector('source').srcset = desktop;
             background.querySelector('img').src = mobile;
@@ -73,6 +74,7 @@
                 if (locked) return;
                 try {
                     apply(content,desktop,mobile);
+                    frame.contentDocument.querySelector('.hero-swiper')?.swiper?.slideTo(selectedSlide-1,0);
                     status.textContent = mode === 'draft' ? '저장한 초안 미리보기 · 아직 홈페이지에 게시되지 않은 내용입니다.' : '현재 게시본 미리보기';
                     frame.hidden = false;
                 } catch (error) { status.textContent = error.message; }
