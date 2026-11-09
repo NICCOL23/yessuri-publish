@@ -48,6 +48,7 @@ function message(text, error = false) {
     statusBox.classList.toggle('error', error);
 }
 function controls() {
+    if (locked) return;
     form.querySelectorAll('input,button').forEach(control => { control.disabled = busy || locked; });
     document.getElementById('preview-published').disabled = busy || !state;
     document.querySelectorAll('.viewport-button').forEach(button => { button.disabled = busy || !state; });
@@ -97,14 +98,24 @@ async function imageSource(path) {
     return url;
 }
 function updateThumbnails() {
+    if (locked) return;
     for (const url of imageUrls) URL.revokeObjectURL(url);
     imageUrls.clear();
     ['desktop','mobile'].forEach(async kind => {
         const path = images[kind + 'Image'];
         const image = document.getElementById(kind + '-thumb');
+        const label = document.getElementById(kind + '-name');
+        if (!image || !label) return;
         image.removeAttribute('src');
-        try { image.src = await imageSource(path); } catch { image.alt = '사진을 불러오지 못했습니다.'; }
-        document.getElementById(kind + '-name').textContent = path.split('/').pop();
+        try {
+            const source = await imageSource(path);
+            if (locked) return;
+            image.src = source;
+        } catch {
+            if (locked) return;
+            image.alt = '사진을 불러오지 못했습니다.';
+        }
+        label.textContent = path.split('/').pop();
     });
 }
 function history() {
@@ -133,6 +144,7 @@ function history() {
     document.getElementById('version-label').textContent = '현재 버전 ' + state.version;
 }
 function fill() {
+    if (locked) return;
     fields.forEach(name => { form.elements[name].value = state.draft[name]; });
     images = {desktopImage:state.draft.desktopImage,mobileImage:state.draft.mobileImage};
     updateThumbnails();
@@ -147,6 +159,7 @@ function content() {
     return Object.fromEntries([...fields.map(name => [name,form.elements[name].value.trim()]), ...Object.entries(images)]);
 }
 function preview(mode) {
+    if (locked) return;
     previewFrame.src = 'hero-preview.html?mode=' + mode + '&v=' + state.version;
     document.getElementById('open-preview').href = 'hero-preview.html?mode=' + mode;
     document.getElementById('preview-mode').textContent = mode === 'draft' ? '저장한 초안' : '현재 게시본';
@@ -161,7 +174,9 @@ async function load() {
     busy = true;
     controls();
     try {
-        state = await api('/api/state');
+        const next = await api('/api/state');
+        if (locked) return;
+        state = next;
         fill();
         preview('published');
         message('저장된 내용을 불러왔습니다. 수정한 뒤 초안을 저장하세요.');
@@ -175,7 +190,9 @@ form.addEventListener('submit', async event => {
     busy = true;
     controls();
     try {
-        state = await api('/api/draft', {content:content(),version:state.version});
+        const next = await api('/api/draft', {content:content(),version:state.version});
+        if (locked) return;
+        state = next;
         fill();
         message('초안을 저장했습니다. 저장한 초안 미리보기에서 확인하세요.');
     } catch (error) { message(error.message,true); }
@@ -217,6 +234,7 @@ document.querySelectorAll('[data-image-field]').forEach(input => {
                 reader.readAsDataURL(blob);
             });
             const result = await api('/api/image', {photo:{type:'image/jpeg',data:dataUrl.split(',')[1]}});
+            if (locked) return;
             images[input.dataset.imageField] = result.path;
             updateThumbnails();
             changed();
@@ -231,7 +249,9 @@ document.getElementById('preview-draft').addEventListener('click', () => {
 });
 document.getElementById('preview-published').addEventListener('click', () => preview('published'));
 function fitPreview() {
+    if (locked) return;
     const container = document.querySelector('.frame-scroll');
+    if (!container) return;
     const scale = Math.min(1,container.clientWidth / viewportWidth);
     previewFrame.style.width = viewportWidth + 'px';
     previewFrame.style.transform = 'scale(' + scale + ')';
@@ -249,7 +269,9 @@ document.getElementById('publish').addEventListener('click', async () => {
     busy = true;
     controls();
     try {
-        state = await api('/api/publish',{version:state.version});
+        const next = await api('/api/publish',{version:state.version});
+        if (locked) return;
+        state = next;
         fill();
         preview('published');
         message('홈페이지에 게시했습니다. 게시 기록에서 이전 내용으로 복원할 수 있습니다.');
@@ -261,7 +283,9 @@ async function restore(id) {
     busy = true;
     controls();
     try {
-        state = await api('/api/restore',{revisionId:id,version:state.version});
+        const next = await api('/api/restore',{revisionId:id,version:state.version});
+        if (locked) return;
+        state = next;
         fill();
         preview('published');
         message('선택한 내용으로 복원했습니다. 복원 전 게시본도 기록에 남아 있습니다.');
