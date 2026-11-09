@@ -2,3 +2,6 @@ project_id = "yessuri"
 
 [functions.board-api]
 verify_jwt = false
+
+[functions.guide-cms]
+verify_jwt = false

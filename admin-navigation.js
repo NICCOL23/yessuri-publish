@@ -12,7 +12,8 @@
     ['등록 신청 관리', 'technician-admin.html', '신청 확인·답변'],
     ['공개 업체 관리', 'technician-admin.html#independent-profile-list', '소개·동의·사진'],
     ['히어로 관리', 'hero-admin.html', '메인 사진·문구'],
-    ['수리 분야 관리', 'field-admin.html', '20개 분야·표시 순서']
+    ['수리 분야 관리', 'field-admin.html', '20개 분야·표시 순서'],
+    ['준비 안내 관리', 'guide-admin.html', '이용 순서·비용·준비물']
   ];
   for (const [title, href, description] of links) {
     const link = document.createElement('a');
@@ -30,7 +31,7 @@
   function update() {
     nav.hidden = locked || !main.querySelector('.admin-session-bar, #admin-logout');
     const page = location.pathname.split('/').pop();
-    const active = page === 'hero-admin.html' ? 2 : page === 'field-admin.html' ? 3 : location.hash === '#independent-profile-list' ? 1 : 0;
+    const active = page === 'guide-admin.html' ? 4 : page === 'hero-admin.html' ? 2 : page === 'field-admin.html' ? 3 : location.hash === '#independent-profile-list' ? 1 : 0;
     [...nav.children].forEach((link, index) => {
       if (index === active) link.setAttribute('aria-current', 'page');
       else link.removeAttribute('aria-current');

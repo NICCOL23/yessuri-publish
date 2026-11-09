@@ -6,10 +6,13 @@
  Object.assign(sentences,{'representative-image':'신청 사진을 공개 대표 이미지로 등록했습니다','password-reset':'신청자 비밀번호를 재설정했습니다','work-case-save':'공개 작업 사례를 저장했습니다','work-case-delete':'공개 작업 사례를 삭제했습니다'});
  for(const prefix of ['photo-','public-photo-'])for(const [action,sentence]of Object.entries({upload:'공개 사진을 추가했습니다',select:'대표 이미지를 변경했습니다',replace:'공개 사진을 교체했습니다',delete:'공개 사진을 삭제했습니다',edit:'공개 사진 설명을 저장했습니다',reorder:'공개 사진 순서를 변경했습니다'}))sentences[prefix+action]=sentence;
  const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
+ Object.assign(labels,{'guide-draft-save':'준비 안내 초안 저장','guide-publish':'준비 안내 게시','guide-restore':'준비 안내 이전 버전 복원'});
+ Object.assign(sentences,{'guide-draft-save':'집수리 준비 안내 초안을 저장했습니다','guide-publish':'집수리 준비 안내를 게시했습니다','guide-restore':'집수리 준비 안내를 이전 버전으로 복원했습니다'});
  function key(event){if(event.target==='service-fields'&&['hero-draft-save','hero-publish','hero-restore'].includes(event.action))return event.action.replace('hero-','field-');return Object.hasOwn(labels,event.action)?event.action:'unclassified';}
  function actor(event){const id=event.operatorId||event.admin_id;return typeof id==='string'&&uuid.test(id)?'관리자 계정 · 끝 8자리 '+id.slice(-8):'관리자 확인 필요';}
  function target(event,k){const t=event.target;
   if(k==='hero-image-upload')return '관리용 이미지 보관 영역';
+  if(t==='home-guide')return '집수리, 이렇게 준비하세요';
   if(t==='service-fields')return '메인 수리 분야 설정';
   if(['hero','hero-2','hero-3'].includes(t))return {'hero':'메인 히어로 1번 · 집수리','hero-2':'메인 히어로 2번 · 인테리어','hero-3':'메인 히어로 3번 · 수리·설치'}[t];
   if(t==='session')return '관리자 접속';if(t==='security')return '로그인·접근 권한';if(t==='admin-request')return '관리자 작업 요청';
@@ -20,7 +23,8 @@
   return '대상 확인 필요';
  }
  function context(k){
-  if(k==='hero-draft-save'||k==='field-draft-save')return '초안 저장만으로 홈페이지에 공개되지는 않습니다.';
+  if(k==='hero-draft-save'||k==='field-draft-save'||k==='guide-draft-save')return '초안 저장만으로 홈페이지에 공개되지는 않습니다.';
+  if(k==='guide-restore')return '안내 문구의 복원 기록이며 신청·업체 정보나 사이트 전체를 복원한 것은 아닙니다.';
   if(k==='hero-publish'||k==='field-publish')return '홈페이지에 게시한 기록입니다. 지금의 내용은 해당 관리 화면에서 확인하세요.';
   if(k==='hero-restore')return '히어로 내용의 복원 기록이며 사이트 전체나 DB 전체를 복원한 것은 아닙니다.';
   if(k==='field-restore')return '수리 분야 설정의 복원 기록이며 실제 신청·업체 정보를 되돌린 것은 아닙니다.';
