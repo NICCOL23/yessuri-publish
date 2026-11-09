@@ -1,0 +1,14 @@
+.admin-search{margin:16px 0;padding:18px;border:1px solid #dce6eb;border-radius:10px;background:#f7fbfb}
+.admin-search-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:12px}
+.admin-search-grid>div{min-width:0}.admin-search label{display:block;margin-bottom:6px}
+.admin-search input,.admin-search select{box-sizing:border-box;width:100%;min-width:0;min-height:48px;border:1px solid #bfced8;border-radius:6px;padding:9px 10px;background:white;color:#193447;font:inherit}
+.admin-search input::placeholder{font-size:12px}.admin-search-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:12px}
+.admin-search-actions .btn{min-height:44px}.admin-search-status{overflow-wrap:anywhere;color:#00787e;font-size:13px}
+.admin-search-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 0;border-top:1px solid #e2ebef}
+.admin-search-row>div{min-width:0;overflow-wrap:anywhere}.admin-search-row>.btn{flex:none;min-height:44px}
+.admin-search :is(input,select,button):focus-visible{outline:3px solid #00858a;outline-offset:3px}
+.admin-search-results[hidden],#admin-applications>[hidden],.manage-profile-row[hidden]{display:none!important}
+/* Existing list pagination must stay in normal flow when search is reset. */
+@media(max-width:900px){#admin-applications>.list-region{position:static;inset:auto;max-width:100%;max-height:none;overflow:visible;box-shadow:none;margin-left:0;flex-wrap:wrap}}
+@media(max-width:850px){.admin-search-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.admin-search{padding:12px}.admin-search-grid{grid-template-columns:1fr;gap:12px}.admin-search-actions button{flex:1}.admin-search-row{align-items:flex-start;flex-direction:column;gap:8px}}
