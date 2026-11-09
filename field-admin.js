@@ -31,3 +31,5 @@ $('field-login').onsubmit=async event=>{event.preventDefault();const form=event.
 initialize();
 
 window.addEventListener('yessuri:admin-locked',()=>{locked=true;dirty=false;for(const u of imageUrls)URL.revokeObjectURL(u);imageUrls.clear();$('frame').src='about:blank';fields=[];state=null;$('dialog').close();});
+
+window.YESSURI_UNSAVED?.register('편집 중인 초안',()=>dirty,()=>{dirty=false;},false);

@@ -342,3 +342,5 @@ slideSelector.addEventListener('change',async()=>{
  if(locked) return;
  dirty=false;location.href='hero-admin.html?slide='+target;
 });
+
+window.YESSURI_UNSAVED?.register('편집 중인 초안',()=>dirty,()=>{dirty=false;},false);
