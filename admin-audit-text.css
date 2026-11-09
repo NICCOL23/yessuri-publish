@@ -1,0 +1,12 @@
+#admin-change-log .audit-readable-list{list-style:none;padding:0;margin:0}
+#admin-change-log .audit-readable-event{padding:18px 0;border-top:1px solid #e1e9ee;overflow-wrap:anywhere}
+#admin-change-log .audit-readable-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+#admin-change-log .audit-readable-actor{font-size:13px;font-weight:700;color:#36566c}
+#admin-change-log .audit-readable-result{font-size:12px;border-radius:5px;padding:3px 8px;background:#eaf6f1;color:#197159}
+#admin-change-log .audit-readable-result.failure{background:#fff0ee;color:#9c4535}#admin-change-log .audit-readable-result.unknown{background:#fff6e5;color:#856022}
+#admin-change-log .audit-readable-event h3{font-size:16px;line-height:1.7;margin:10px 0 6px}
+#admin-change-log .audit-readable-event p{font-size:13px;line-height:1.85;margin:5px 0;color:#597282}
+#admin-change-log .audit-readable-event time{font-size:12px;color:#6c8290}
+#admin-change-log .audit-readable-event details{margin-top:8px;font-size:12px}#admin-change-log .audit-readable-event summary{min-height:44px;align-content:center;cursor:pointer;color:#466a7e}
+#admin-change-log .audit-readable-event summary:focus-visible{outline:3px solid #00858a;outline-offset:3px}
+@media(max-width:600px){#admin-change-log .audit-readable-event{padding:14px 0}#admin-change-log .manage-audit-filters{grid-template-columns:1fr}#admin-change-log .manage-audit-filters input,#admin-change-log .manage-audit-filters select{box-sizing:border-box;width:100%;min-width:0;min-height:44px}}
