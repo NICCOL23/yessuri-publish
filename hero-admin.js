@@ -69,7 +69,7 @@ function changed() {
     reviewed.checked = false;
     controls();
 }
-async function api(path, data) {
+async function apiRequest(path, data) {
     if(data&&['/api/draft','/api/publish','/api/restore'].includes(path))window.YESSURI_SAVE_RESULT?.begin(path.slice(5));
     if (locked) throw new Error('관리자 화면이 잠겼습니다. 다시 로그인하세요.');
     const route = path === '/api/state' ? '/api/admin/hero' : path.replace('/api/', '/api/admin/hero/');
@@ -81,14 +81,14 @@ async function api(path, data) {
     const result = await response.json();
     if (!response.ok) {
         if (response.status === 401 || response.status === 403) {
-            throw new Error('관리자 로그인이 만료되었거나 권한이 없습니다. 관리자 첫 화면에서 다시 로그인하세요.');
+            throw Object.assign(new Error('관리자 로그인이 만료되었거나 권한이 없습니다. 관리자 첫 화면에서 다시 로그인하세요.'),{status:response.status});
         }
         if (response.status === 409) {
             conflict = true;
             reloadButton.hidden = false;
-            throw new Error('다른 창에서 내용이 바뀌었습니다. 입력 내용은 유지되어 있습니다. 최신 상태를 불러오기 전에 필요한 내용을 복사하세요.');
+            throw Object.assign(new Error('다른 창에서 내용이 바뀌었습니다. 입력 내용은 유지되어 있습니다. 최신 상태를 불러오기 전에 필요한 내용을 복사하세요.'),{status:response.status});
         }
-        throw new Error(result.error || result.message || '요청을 처리하지 못했습니다.');
+        throw Object.assign(new Error(result.error || result.message || '요청을 처리하지 못했습니다.'),{status:response.status});
     }
     if (locked) throw new Error('관리자 화면이 잠겼습니다. 다시 로그인하세요.');
     return result;
@@ -319,20 +319,22 @@ async function start() {
     try {
         const response = await fetch(endpoint('/api/session'), {headers:headers(),credentials:'omit',cache:'no-store'});
         const session = await response.json();
-        if (!response.ok || !session.admin) throw new Error();
+        if (!response.ok || !session.admin) throw Object.assign(new Error(),{status:response.ok?401:response.status});
         document.getElementById('root').hidden = false;
         await load();
-    } catch {
+    } catch (error) {
         if (locked) return;
         const root = document.getElementById('root');
         root.replaceChildren();
         const heading = document.createElement('h1');
-        heading.textContent = '관리자 로그인이 필요합니다.';
+        const needsAuth=error?.status===401||error?.status===403;
+        heading.textContent = needsAuth?'관리자 로그인이 필요합니다.':'관리자 연결을 확인해 주세요.';
         const link = document.createElement('a');
         link.href = 'technician-admin.html';
-        link.textContent = '관리자 첫 화면에서 로그인';
+        link.textContent = needsAuth?'관리자 첫 화면에서 로그인':'관리자 첫 화면에서 다시 확인';
         root.append(heading,link);
         root.hidden = false;
+        window.YESSURI_ERROR_HELP?.report(error,{route:'state'});
     }
 }
 start();
@@ -348,3 +350,6 @@ slideSelector.addEventListener('change',async()=>{
 });
 
 window.YESSURI_UNSAVED?.register('편집 중인 초안',()=>dirty,()=>{dirty=false;},false);
+
+// Preserve request/auth/command behavior; add typed display-only recovery help.
+async function api(...args){try{const result=await apiRequest(...args);window.YESSURI_ERROR_HELP?.clear();return result;}catch(error){window.YESSURI_ERROR_HELP?.report(error,{route:args[0]});throw error;}}
