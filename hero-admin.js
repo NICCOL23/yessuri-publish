@@ -60,6 +60,7 @@ function controls() {
     document.getElementById('preview-draft').disabled = busy || !state || conflict;
     document.querySelectorAll('[data-restore]').forEach(button => { button.disabled = busy || dirty || conflict; });
     document.getElementById('dirty-state').textContent = dirty ? '저장하지 않은 변경' : '초안 저장됨';
+    window.YESSURI_PUBLISH_COMPARE?.update({kind:'hero',state,dirty,busy,imageSource});
 }
 function changed() {
     dirty = true;
@@ -146,6 +147,7 @@ function history() {
     document.getElementById('version-label').textContent = '현재 버전 ' + state.version;
 }
 function fill() {
+    window.YESSURI_PUBLISH_COMPARE?.invalidate();
     if (locked) return;
     fields.forEach(name => { form.elements[name].value = state.draft[name]; });
     images = {desktopImage:state.draft.desktopImage,mobileImage:state.draft.mobileImage};
