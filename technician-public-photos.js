@@ -2,6 +2,7 @@
 (() => {
   const node=(tag,text='',className='')=>{const n=document.createElement(tag);n.textContent=text;n.className=className;return n;};
   function mount({application,api,transfer}) {
+    window.YESSURI_PHOTO_USAGE?.selectProfile(application.id);
     const anchor=document.querySelector('#admin-public-profile');
     if(!anchor)return;
     const section=node('section','','card section');section.id='admin-public-photos';
@@ -13,6 +14,7 @@
     const upload=node('button','공개 사진 추가','btn primary');upload.type='submit';
     const status=node('p');status.setAttribute('role','status');
     const preview=node('div');const list=node('div','','file-grid');section.append(node('h3','공개 프로필 작업 사진 미리보기'),preview);form.append(label,file,consentLabel,node('p','추가한 사진은 즉시 공개 프로필에 반영됩니다. 작업 사례 저장 여부와 관계없이 공개 사진으로 남습니다.','hint'),upload);section.append(form,status,list);anchor.after(section);
+    window.YESSURI_PHOTO_USAGE?.publicIntro(section);
     let busy=false,current=null,reviewing=false;
     const retry=node('button','대기 중인 사진 반영 재시도','btn');retry.type='button';retry.hidden=true;status.after(retry);retry.onclick=async()=>{if(busy)return;lock(true);try{const d=await api('admin/retry-files',{});if(!d.ok)throw Error('대기 중인 파일을 다시 확인해 주세요.');retry.hidden=true;await load();status.textContent='사진 파일 반영 상태를 다시 확인했습니다.';}catch(e){status.textContent=e.message;}finally{lock(false);}};
     const lock=value=>{busy=value;section.querySelectorAll('button,input').forEach(n=>{n.disabled=value||n.dataset.current==='true'||n.dataset.boundary==='true';});};
@@ -23,7 +25,7 @@
       if(!photos.length){list.append(node('p','등록된 공개 사진이 없습니다.','hint'));return;}
       photos.forEach((photo,index)=>{
         const figure=node('figure','','photo file-card'),image=node('img');image.src=photo.image;image.alt=photo.imageAlt||'공개 사진 '+(index+1);
-        figure.append(image,node('figcaption','공개 사진 '+(index+1)+(data.image===photo.image?' · 현재 대표 이미지':'')));
+        figure.append(image,node('figcaption','공개 사진 '+(index+1)+(data.image===photo.image?' · 현재 대표 이미지':'')));window.YESSURI_PHOTO_USAGE?.publicPhoto(figure,{profile:application.id,image:photo.image,representative:data.image===photo.image});
         const select=node('button',data.image===photo.image?'현재 대표 이미지':'대표 이미지로 변경','btn');select.type='button';select.disabled=data.image===photo.image;select.dataset.current=data.image===photo.image?'true':'false';
         select.onclick=()=>mutate({action:'select',image:photo.image,imageConsent:true},'이 사진을 대표 이미지로 변경할까요?','대표 이미지를 변경했습니다.');
         const remove=node('button','공개 사진 삭제','btn danger');remove.type='button';

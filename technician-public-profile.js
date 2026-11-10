@@ -133,6 +133,7 @@
       button.setAttribute('aria-label','첨부사진 '+(index+1)+' 대표 이미지로 등록');
       const status = element('p','','hint');
       status.setAttribute('role','status');
+      window.YESSURI_PHOTO_USAGE?.privatePhoto(figure);
       figure.append(button,status);
       buttons.push(button);
       button.addEventListener('click', async () => {

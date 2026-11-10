@@ -34,8 +34,9 @@
   function applyDraft(draft){editing=draft.editing||'';for(const key of Object.keys(controls))controls[key].value=draft[key]||'';const missing=choices(draft.photos||[]);save.textContent=editing?'작업 사례 수정 저장':'작업 사례 저장';if(draft.baseline)baseline=draft.baseline;return missing;}
   function reset(){editing='';form.reset();choices();save.textContent='작업 사례 저장';baseline=serialize(state());drafts.delete(application.id);remember();}
   function render(){
+   window.YESSURI_PHOTO_USAGE?.setCases(application.id,data.cases);
    list.replaceChildren();for(const item of data.cases){
-    const card=el('article');card.className='card section';card.append(el('h3',item.title),el('p',item.date),el('p',item.description));const gallery=el('div');window.YESSURI_WORK_GALLERY.render(gallery,(item.photos||[]).filter(p=>p.image!==data.image));card.append(gallery);
+    const card=el('article');card.className='card section';card.append(el('h3',item.title),el('p',item.date),el('p',item.description));const gallery=el('div');window.YESSURI_WORK_GALLERY.render(gallery,(item.photos||[]).filter(p=>p.image!==data.image));card.append(gallery);if((item.photos||[]).some(p=>p.image!==data.image))window.YESSURI_PHOTO_USAGE?.workCase(card,item.title);
     const edit=el('button','수정'),remove=el('button','삭제');edit.type=remove.type='button';edit.className='btn';remove.className='btn danger';
     edit.onclick=()=>{if(busy||!confirmDiscard())return;editing=item.id;for(const key of Object.keys(controls))controls[key].value=item[key]||'';choices((item.photos||[]).map(p=>p.image));file.value='';consent.checked=false;save.textContent='작업 사례 수정 저장';baseline=serialize(state());drafts.delete(application.id);remember();form.scrollIntoView({block:'start'});};
     remove.onclick=()=>{if(!confirmDiscard())return;mutate({action:'delete',id:item.id,confirm:true},'이 작업 사례를 삭제할까요? 공개 사진과 신청서 원본은 유지됩니다.');};card.append(edit,remove);list.append(card);

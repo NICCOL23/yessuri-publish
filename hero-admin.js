@@ -49,6 +49,7 @@ function message(text, error = false) {
     statusBox.classList.toggle('error', error);if(error)window.YESSURI_SAVE_RESULT?.uncertain(text);
 }
 function controls() {
+    window.YESSURI_PHOTO_USAGE?.hero(selectedSlide);
     window.YESSURI_SAVE_RESULT?.update({state,dirty,busy});
     if (locked) return;
     document.getElementById('slide-select').disabled = busy;
