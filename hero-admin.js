@@ -49,6 +49,7 @@ function message(text, error = false) {
     statusBox.classList.toggle('error', error);if(error)window.YESSURI_SAVE_RESULT?.uncertain(text);
 }
 function controls() {
+    window.YESSURI_PHOTO_CHECK?.update({state,dirty,busy});
     window.YESSURI_RESTORE_COMPARE?.status({dirty,busy});
     window.YESSURI_PHOTO_USAGE?.hero(selectedSlide);
     window.YESSURI_SAVE_RESULT?.update({state,dirty,busy});
