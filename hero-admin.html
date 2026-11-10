@@ -43,8 +43,8 @@
             <legend>사진</legend>
             <p class="help">JPG·PNG·WebP, 한 장당 5MB 이내의 사진을 선택하세요. 업로드 후 초안을 저장하면 미리보기에 반영됩니다.</p>
             <div class="two-fields image-fields">
-              <div><label for="desktop-file">PC 사진 선택</label><input id="desktop-file" type="file" accept="image/jpeg,image/png,image/webp" data-image-field="desktopImage"><img id="desktop-thumb" class="thumbnail" alt="현재 선택한 PC 히어로 사진"><p id="desktop-name" class="filename"></p></div>
-              <div><label for="mobile-file">휴대폰 사진 선택</label><input id="mobile-file" type="file" accept="image/jpeg,image/png,image/webp" data-image-field="mobileImage"><img id="mobile-thumb" class="thumbnail" alt="현재 선택한 휴대폰 히어로 사진"><p id="mobile-name" class="filename"></p></div>
+              <div><label for="desktop-file">PC 사진 선택</label><input id="desktop-file" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="desktop-image-help" data-image-field="desktopImage"><small id="desktop-image-help"><strong>권장 2160 × 720px · 약 3:1 가로형</strong><br>왼쪽은 제목·설명 자리이므로 여백을 두고, 주요 피사체는 중앙 오른쪽에 배치하세요. 화면 비율에 따라 가장자리가 잘리거나 여백이 생깁니다.</small><img id="desktop-thumb" class="thumbnail" alt="현재 선택한 PC 히어로 사진"><p id="desktop-name" class="filename"></p></div>
+              <div><label for="mobile-file">휴대폰 사진 선택</label><input id="mobile-file" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="mobile-image-help" data-image-field="mobileImage"><small id="mobile-image-help"><strong>권장 1280 × 720px · 16:9 가로형</strong><br>세로 사진이 아닌 가로 사진을 준비하세요. 휴대폰 웹·앱에서 1·2번은 확대되어 좌우가 많이 잘리므로 핵심 피사체를 중앙 부근에 두세요. 3번은 전체 맞춤이라 여백이 생길 수 있습니다. 제목이 겹치는 부분은 단순한 배경으로 두세요.</small><img id="mobile-thumb" class="thumbnail" alt="현재 선택한 휴대폰 히어로 사진"><p id="mobile-name" class="filename"></p></div>
             </div>
             <label for="alt">사진 설명</label><input id="alt" name="alt" maxlength="160" required><small>사진을 볼 수 없는 방문자에게 전달할 설명입니다.</small>
           </fieldset>
