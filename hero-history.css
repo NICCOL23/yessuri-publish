@@ -1,1 +1,14 @@
 #hero-history-toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}#hero-history-toolbar p{flex:1 1 220px;margin:0;font-size:.875rem;line-height:1.5}.hero-history-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;max-width:100%}.hero-history-actions button,#hero-history-toolbar button,#hero-history-more{min-height:44px;font-size:1rem;line-height:1.5;letter-spacing:0;white-space:normal;overflow-wrap:anywhere}.hero-history-delete{color:#9c3030;border:1px solid #d9b6b6;background:white}.history-panel #history>li{grid-template-columns:minmax(0,1fr) auto}.history-panel #history .restore-compare{grid-column:1/-1}#hero-history-more{margin-top:12px}.history-panel #history strong{overflow-wrap:anywhere}@media(max-width:760px){.history-panel #history>li{grid-template-columns:1fr}.hero-history-actions{justify-content:flex-start}}
+/* Compact only the hero history; retain readable text, full comparisons and 44px targets. */
+.history-panel{padding:14px 18px}
+.history-panel #hero-history-toolbar{margin:8px 0;gap:8px}
+.history-panel #history>li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:8px;padding:18px 0}
+.history-panel #history>li>div:first-child{min-width:0}
+.history-panel #history .hero-history-actions{grid-column:2;grid-row:1;gap:6px}
+.history-panel #history .restore-compare{margin:0;padding:0;min-width:0;max-width:100%}
+.history-panel #history .restore-compare:not([open]){grid-column:3;grid-row:1}
+.history-panel #history .restore-compare>summary{box-sizing:border-box;display:flex;align-items:center;min-height:44px;margin:0;padding:8px 10px;line-height:1.5;overflow-wrap:anywhere;cursor:pointer}
+.history-panel #history .restore-compare>summary::before{content:'▸';margin-right:6px}
+.history-panel #history .restore-compare[open]{grid-column:1/-1;grid-row:2;padding:0 10px 8px}
+.history-panel #history .restore-compare[open]>summary::before{content:'▾'}
+@media(max-width:1099px){.history-panel #history>li{grid-template-columns:minmax(0,1fr);gap:6px;padding:8px 0}.history-panel #history .hero-history-actions{grid-column:1;grid-row:2;justify-content:flex-start}.history-panel #history .restore-compare:not([open]),.history-panel #history .restore-compare[open]{grid-column:1;grid-row:3}.history-panel #history .restore-compare:not([open]){justify-self:start}.history-panel{padding:12px}}
