@@ -1,6 +1,6 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import catalog from './catalog.json' with { type: 'json' };
-import {groups, acceptsWork, fieldFilter} from './field-rules.mjs';
+import {createFieldRules} from './field-rules.mjs';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -26,11 +26,16 @@ async function rate(req: Request,action: string,limit: number,id=''){
 function password(v: unknown){check(typeof v==='string'&&Array.from(v).length>=6&&encoder.encode(v).length<=128,'글 비밀번호는 6자 이상, 128바이트 이하로 입력해 주세요.');return v;}
 async function hashPassword(p: string,salt?: string){salt ||= crypto.randomUUID();const key=await crypto.subtle.importKey('raw',encoder.encode(p),'PBKDF2',false,['deriveBits']);const h=hex(await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:encoder.encode(salt),iterations:600000},key,256));return 'pbkdf2$600000$'+salt+'$'+h;}
 function equal(a: string,b: string){let diff=a.length^b.length;for(let i=0;i<Math.max(a.length,b.length);i++)diff|=(a.charCodeAt(i)||0)^(b.charCodeAt(i)||0);return diff===0;}
-function fields(p: Record<string,unknown>){
-  const group_id=text(p.group_id,1,20,'분야');check(groups.has(group_id),'분야를 선택해 주세요.');
+async function publishedFieldRules(){
+  const {data,error}=await db.rpc('technician_field_cms_v1',{op:'published'});
+  if(error)throw new UserError('수리 분야를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.',503);
+  try{return createFieldRules(data?.content,data?.retired||[]);}catch{throw new UserError('수리 분야를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.',503);}
+}
+function fields(p: Record<string,unknown>,rules: ReturnType<typeof createFieldRules>,existingGroup=''){
+  const group_id=text(p.group_id,1,20,'분야');check(rules.canSelect(group_id,existingGroup),'사용 중인 분야를 선택해 주세요. 기존 글의 분야는 유지할 수 있습니다.');
   const district=text(p.district,1,20,'지역');check(districts.has(district),'부산 구·군을 선택해 주세요.');
   const work_id=p.work_id ? text(p.work_id,1,100,'세부 작업') : '';
-  if(work_id)check(acceptsWork(group_id,work_id),'선택한 분야와 작업이 맞지 않습니다.');
+  if(work_id)check(rules.acceptsWork(group_id,work_id),'선택한 분야와 작업이 맞지 않습니다.');
   return {nickname:text(p.nickname,1,30,'닉네임'),district,group_id,work_id,title:text(p.title,2,120,'제목'),body:text(p.body,10,10000,'질문 내용')};
 }
 async function admin(req: Request){
@@ -89,7 +94,7 @@ Deno.serve(async(req)=>{
       check(action==='list','지원하지 않는 요청입니다.');await rate(req,'read',600);
       const page=Math.max(1,Math.min(1000,Number(u.searchParams.get('page'))||1)),group=u.searchParams.get('group')||'',district=u.searchParams.get('district')||'',search=(u.searchParams.get('q')||'').trim().slice(0,100);
       let q=db.from('board_questions').select('id,nickname,district,group_id,work_id,title,body,created_at,edited_at,board_answers(id),board_photos(id,position)',{count:'exact'}).eq('state','published').eq('board_answers.published',true);
-      if(group&&groups.has(group))q=q.or(fieldFilter(group)!);if(district&&districts.has(district))q=q.eq('district',district);
+      if(group){const rules=await publishedFieldRules(),filter=rules.fieldFilter(group);if(filter)q=q.or(filter);}if(district&&districts.has(district))q=q.eq('district',district);
       if(search){const safe=search.replace(/[%,().*\\]/g,' ');q=q.or('title.ilike.%'+safe+'%,body.ilike.%'+safe+'%');}
       if(u.searchParams.get('waiting')==='1')q=q.is('board_answers','null');
       const {data,error,count}=await q.order('created_at',{ascending:false}).order('id',{ascending:false}).range((page-1)*10,page*10-1);if(error)throw Error('list query failed');
@@ -105,11 +110,14 @@ Deno.serve(async(req)=>{
     }
     if(action==='create'||action==='edit'){
       await rate(req,action,action==='create'?10:30);
-      const {p,files}=await parseForm(req),f=fields(p);let qid=crypto.randomUUID();
+      const {p,files}=await parseForm(req);let qid=crypto.randomUUID(),existingGroup='';
+      // An inactive-field exception is available only after authenticating this post's owner.
+      if(action==='edit'){qid=p.id;check(uuid(qid),'질문 주소를 확인해 주세요.');await owner(req,qid);existingGroup=(await question(qid)).group_id;}
+      const f=fields(p,await publishedFieldRules(),existingGroup);
       if(action==='create'){
         password(p.password);check(p.password===p.password_confirm,'비밀번호 확인이 일치하지 않습니다.');check(uuid(p.request_id),'등록 정보를 다시 확인해 주세요.');
         const {data:existing}=await db.from('board_questions').select('id').eq('request_id',p.request_id).eq('state','published').maybeSingle();if(existing)return json({id:existing.id});
-      }else{qid=p.id;check(uuid(qid),'질문 주소를 확인해 주세요.');await owner(req,qid);await question(qid);}
+      }
       const old=action==='edit'?await photos(qid):[],keep=Array.isArray(p.keep_photos)?p.keep_photos:[];
       check(keep.every((id: unknown)=>old.some(x=>x.id===id)),'사진 선택을 확인해 주세요.');check(keep.length+files.length<=3,'사진은 최대 3장입니다.');
       const added: Awaited<ReturnType<typeof upload>>[]=[];

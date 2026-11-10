@@ -1,5 +1,5 @@
 /* Opt-in field picker. The native select remains the search/form source of truth. */
-(()=>{'use strict';
+(async()=>{'use strict';await window.YESSURI_FIELDS_READY;
 document.querySelectorAll('select[data-service-field-picker]').forEach(select=>{
  const isRegion=select.dataset.serviceFieldPicker==='region',name=isRegion?'수리받을 지역':'수리 분야',titleText=isRegion?'수리받을 지역 선택':'수리 분야 선택';
  const host=document.createElement('span');host.className='ys-field-picker';

@@ -1,3 +1,4 @@
+(async()=>{await window.YESSURI_FIELDS_READY;
 // Presentation-only examples retain original IDs, fields and profile destinations.
 const directoryPresentation = window.YESSURI_EXPERT_PRESENTATION;
 // A provider's confirmed coverage flag is separate from their primary service areas.
@@ -6,7 +7,8 @@ const servesAllBusan = expert => expert.serviceAllBusan === true || expert.servi
 const servesRegion = (expert, region) => servesAllBusan(expert) || window.YESSURI_SERVES_REGION(expert, region);
 const directoryExperts = () => window.YESSURI_PUBLIC_EXPERTS().map(window.YESSURI_EXPERT_CARD.present);
 const validRegions = window.YESSURI_REGIONS;
-const validCategories = ['전체', ...window.YESSURI_SERVICE_FIELDS.values];
+const validCategories = ['전체', ...window.YESSURI_SERVICE_FIELDS.allItems.map(f=>f.value)];
+const requestedField=new URLSearchParams(location.search).get('category');if(requestedField&&window.YESSURI_SERVICE_FIELDS.allItems.some(f=>f.value===requestedField)&&![...document.querySelector('#find-category').options].some(o=>o.value===requestedField)){const option=document.createElement('option');option.value=requestedField;option.textContent=window.YESSURI_SERVICE_FIELDS.label(requestedField)+' (비활성)';document.querySelector('#find-category').append(option);}
 const queryInput = document.querySelector('#find-query');
 const regionSelect = document.querySelector('#find-region');
 const categorySelect = document.querySelector('#find-category');
@@ -95,8 +97,8 @@ async function renderDirectory(syncUrl = true) {
   const query = appliedFilters.query.normalize('NFKC').toLocaleLowerCase('ko-KR');
   const examples = directoryExperts().filter(e=>e.isExample!==false).filter(expert =>
     servesRegion(expert, appliedFilters.region) &&
-    (requestedCategories.length ? requestedCategories.some(field => expert.fields.includes(field)) : (appliedFilters.category === '전체' || expert.fields.includes(appliedFilters.category))) &&
-    (!query || query.split(' ').every(term => [expert.name, expert.keywords || '', ...expert.fields].join(' ').normalize('NFKC').toLocaleLowerCase('ko-KR').includes(term)))
+    (requestedCategories.length ? requestedCategories.some(field => window.YESSURI_SERVICE_FIELDS.matches(expert.fields,field)) : (appliedFilters.category === '전체' || window.YESSURI_SERVICE_FIELDS.matches(expert.fields,appliedFilters.category))) &&
+    (!query || query.split(' ').every(term => [expert.name, expert.keywords || '', ...expert.fields,...expert.fields.map(window.YESSURI_SERVICE_FIELDS.label)].join(' ').normalize('NFKC').toLocaleLowerCase('ko-KR').includes(term)))
   );
   const matches=[...new Map([...realItems,...examples].map(expert=>[expert.id,expert])).values()];
   if(searchIds===null)searchIds=[...realItems,...searchState.rotate(examples,searchHour)].map(expert=>expert.id);
@@ -199,8 +201,8 @@ function renderConditionChips() {
     currentConditions.append(element);
   };
   chip(appliedFilters.region === '전체' ? '부산 전체' : appliedFilters.region, appliedFilters.region !== '전체' ? () => {appliedFilters.region='전체';} : null, '지역 조건 해제');
-  if (requestedCategories.length) chip(requestedCategories.join(' · '), () => {requestedCategories=[];requestedService='';appliedFilters.category='전체';}, '선택한 수리 분야 조건 해제');
-  else if (appliedFilters.category !== '전체') chip(appliedFilters.category, () => {appliedFilters.category='전체';requestedService='';}, '수리 분야 조건 해제');
+  if (requestedCategories.length) chip(requestedCategories.map(window.YESSURI_SERVICE_FIELDS.label).join(' · '), () => {requestedCategories=[];requestedService='';appliedFilters.category='전체';}, '선택한 수리 분야 조건 해제');
+  else if (appliedFilters.category !== '전체') chip(window.YESSURI_SERVICE_FIELDS.label(appliedFilters.category), () => {appliedFilters.category='전체';requestedService='';}, '수리 분야 조건 해제');
   if (appliedFilters.query) chip('검색: '+appliedFilters.query, () => {appliedFilters.query='';}, '검색어 조건 해제');
 }
 function createExpertCard(expert){return window.YESSURI_EXPERT_CARD.create(expert,{compare:true,compact:true});}
@@ -223,3 +225,5 @@ window.addEventListener('yessuri:favorites-changed',updateSavedAccess);window.ad
 document.querySelector('#compare-access').addEventListener('click',event=>{if(window.YESSURI_COMPARE.selectedExperts().length<2){event.preventDefault();compareStatus.textContent='비교할 업체를 2곳 이상 선택하세요.';}});
 
 document.querySelectorAll('#favorites-access,#compare-access').forEach(link=>link.addEventListener('click',saveSearch));
+
+})();

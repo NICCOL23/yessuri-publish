@@ -1,5 +1,6 @@
-(() => {
+(async () => {
  'use strict';
+ await window.YESSURI_BOARD_FIELDS_READY;
  const config=window.YESSURI_BOARD, cat=window.YESSURI_WORK_CATALOG, root=document.getElementById('board-root');
  if(!config||!cat||!root)return;
  const fieldData=window.YESSURI_BOARD_FIELDS,groups=fieldData.fields,legacyGroups=fieldData.legacy;
@@ -8,10 +9,10 @@
  const $=(s,p=document)=>p.querySelector(s), all=(s,p=document)=>[...p.querySelectorAll(s)];
  const el=(tag,props={},children=[])=>{const n=document.createElement(tag);for(const[k,v]of Object.entries(props)){if(k==='text')n.textContent=v;else if(k==='class')n.className=v;else n.setAttribute(k,v);}for(const c of children)n.append(c);return n;};
  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const groupName=id=>groups.find(x=>x.id===id)?.name||legacyGroups.find(x=>x.id===id)?.name||'분야 미정';
+ const groupName=id=>(fieldData.allFields||groups).find(x=>x.id===id)?.name||legacyGroups.find(x=>x.id===id)?.name||'분야 미정';
  const workName=id=>cat.tasks.find(t=>t.id===id)?.name||'';
- const groupWork=id=>{const f=groups.find(f=>f.id===id);return f?cat.tasks.filter(t=>f.works.includes(t.id)):cat.tasks.filter(t=>cat.fields.find(f=>f.id===t.fieldId)?.groupId===id);};
- const selectionGroups=()=>{const id=currentQuestion?.group_id;return id&&!groups.some(g=>g.id===id)?[...groups,...legacyGroups.filter(g=>g.id===id)]:groups;};
+ const groupWork=id=>{const f=(fieldData.allFields||groups).find(f=>f.id===id);return f?cat.tasks.filter(t=>f.works.includes(t.id)):cat.tasks.filter(t=>cat.fields.find(f=>f.id===t.fieldId)?.groupId===id);};
+ const selectionGroups=()=>{const id=currentQuestion?.group_id;return id&&!groups.some(g=>g.id===id)?[...groups,...(fieldData.allFields||[]).filter(g=>g.id===id),...legacyGroups.filter(g=>g.id===id)]:groups;};
  const date=s=>new Date(s).toLocaleDateString('ko-KR');
  const detailUrl=id=>'question.html?id='+encodeURIComponent(id);
  const photoUrl=id=>config.endpoint+'?action=photo&id='+encodeURIComponent(id);
@@ -51,7 +52,7 @@
  async function renderList(){
   const params=new URLSearchParams(location.search);
   if(params.has('q')){params.delete('q');params.delete('page');const clean=new URL(location.href);clean.search=params.toString();history.replaceState(history.state,'',clean);}
-  root.innerHTML=`<div class="b-heading"><div><h1>수리 질문</h1><p>집수리부터 컴퓨터까지, 궁금한 점을 남겨주세요.</p></div><a class="b-btn b-primary" href="question-write.html">질문하기</a></div><div id="b-computer" hidden>${computer}</div><section class="b-table-section" aria-label="질문 목록"><div class="b-filters"><select id="b-group" data-service-field-picker aria-label="분야">${options([...groups,...legacyGroups.filter(g=>g.id===params.get('group'))],'전체 분야')}</select><select id="b-district" data-service-field-picker="region" aria-label="부산 구·군">${options(regions,'부산 전체')}</select><label class="b-check"><input id="b-waiting" type="checkbox">답변 대기만 보기</label><p class="b-count" id="b-count"></p></div><div class="b-list-notice"><p>증상·발생 시점과 사진을 준비하세요. 전화번호·상세 주소는 공개하지 마세요.</p><button type="button" class="b-textbtn" id="b-guide-toggle" aria-expanded="false" aria-controls="b-help-content">이용 안내</button></div><div id="b-help-content" class="b-help-content" hidden>${side}</div><p id="b-error" class="b-error" role="alert" tabindex="-1"></p><div id="b-list" aria-live="polite"><p class="b-empty">질문을 불러오고 있습니다.</p></div><nav class="b-pages" id="b-pages" aria-label="질문 페이지"></nav></section>`;
+  root.innerHTML=`<div class="b-heading"><div><h1>수리 질문</h1><p>집수리부터 컴퓨터까지, 궁금한 점을 남겨주세요.</p></div><a class="b-btn b-primary" href="question-write.html">질문하기</a></div><div id="b-computer" hidden>${computer}</div><section class="b-table-section" aria-label="질문 목록"><div class="b-filters"><select id="b-group" data-service-field-picker aria-label="분야">${options([...groups,...(fieldData.allFields||[]).filter(g=>g.id===params.get('group')&&!groups.some(active=>active.id===g.id)),...legacyGroups.filter(g=>g.id===params.get('group'))],'전체 분야')}</select><select id="b-district" data-service-field-picker="region" aria-label="부산 구·군">${options(regions,'부산 전체')}</select><label class="b-check"><input id="b-waiting" type="checkbox">답변 대기만 보기</label><p class="b-count" id="b-count"></p></div><div class="b-list-notice"><p>증상·발생 시점과 사진을 준비하세요. 전화번호·상세 주소는 공개하지 마세요.</p><button type="button" class="b-textbtn" id="b-guide-toggle" aria-expanded="false" aria-controls="b-help-content">이용 안내</button></div><div id="b-help-content" class="b-help-content" hidden>${side}</div><p id="b-error" class="b-error" role="alert" tabindex="-1"></p><div id="b-list" aria-live="polite"><p class="b-empty">질문을 불러오고 있습니다.</p></div><nav class="b-pages" id="b-pages" aria-label="질문 페이지"></nav></section>`;
   $('#b-guide-toggle').onclick=()=>{const b=$('#b-guide-toggle'),open=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',String(!open));$('#b-help-content').hidden=open;};
   $('#b-group').value=params.get('group')||'';$('#b-district').value=params.get('district')||'';$('#b-waiting').checked=params.get('waiting')==='1';$('#b-computer').hidden=!isComputer($('#b-group').value);
   function apply(){const p=new URLSearchParams();for(const[k,v]of Object.entries({group:$('#b-group').value,district:$('#b-district').value,waiting:$('#b-waiting').checked?'1':''}))if(v)p.set(k,v);location.href='questions.html'+(p.size?'?'+p:'');}

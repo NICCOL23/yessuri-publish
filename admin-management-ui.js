@@ -13,11 +13,11 @@
  }
  function picker(form,key,label,items){
   const group=el('div',undefined,'manage-field'),button=el('button',label+' 선택','btn manage-picker-trigger'),summary=el('p','','hint');button.type='button';button.setAttribute('aria-haspopup','dialog');group.append(el('span',label,'manage-label'),button,summary);form.append(group);let selected=[],legacy=[],other=[];
-  const update=()=>summary.textContent=[...selected.map(v=>items.find(i=>i.value===v)?.label||v),...legacy.map(v=>v+' (기존값 유지)'),...other].join(' · ')||'선택한 항목이 없습니다.';
+  const update=()=>summary.textContent=[...selected.map(v=>items.find(i=>i.value===v)?.label||v),...legacy.map(v=>(window.YESSURI_SERVICE_FIELDS?.label(v)||v)+' (기존값 유지)'),...other].join(' · ')||'선택한 항목이 없습니다.';
   button.onclick=()=>{
    const dialog=el('dialog',undefined,'manage-picker-dialog'),title=el('h2',label+' 선택');title.id='picker-'+key;dialog.setAttribute('aria-labelledby',title.id);const grid=el('div',undefined,'manage-picker-grid'),choices=new Set(selected);
    for(const item of items){const l=el('label',undefined,'check'),c=el('input');c.type='checkbox';c.checked=choices.has(item.value);c.onchange=()=>c.checked?choices.add(item.value):choices.delete(item.value);l.append(c,document.createTextNode(item.label));grid.append(l);}
-   dialog.append(title,el('p','여러 항목을 선택하세요. 목록 밖의 기존 값은 삭제하지 않고 유지합니다.','hint'),grid,el('p',legacy.length?'기존 기타값: '+legacy.join(' · '):'기존 기타값 없음','hint'));
+   dialog.append(title,el('p','여러 항목을 선택하세요. 목록 밖의 기존 값은 삭제하지 않고 유지합니다.','hint'),grid,el('p',legacy.length?'기존 선택값 (유지): '+legacy.map(v=>window.YESSURI_SERVICE_FIELDS?.label(v)||v).join(' · '):'기존 선택값 없음','hint'));
    const extra=field(dialog,key+'-other','기타 '+label+' (선택 · 한 줄에 하나)','textarea');extra.value=other.map(v=>v.replace(/^기타:\s*/,'' )).join('\n');extra.maxLength=1000;const actions=el('div',undefined,'actions'),cancel=el('button','취소','btn'),done=el('button','선택 적용','btn primary');cancel.type=done.type='button';actions.append(cancel,done);dialog.append(actions);document.body.append(dialog);button.setAttribute('aria-expanded','true');
    const close=()=>{dialog.close();dialog.remove();button.setAttribute('aria-expanded','false');button.focus();};cancel.onclick=close;done.onclick=()=>{const values=extra.value.split(/\n/).map(v=>v.trim()).filter(Boolean);if(values.length>20||values.some(v=>v.length>95)){extra.setCustomValidity('기타는 20개 이내, 항목당 95자 이내로 작성하세요.');extra.reportValidity();return;}selected=items.filter(i=>choices.has(i.value)).map(i=>i.value);other=[...new Set(values.map(v=>'기타: '+v.replace(/^기타:\s*/,'')))];update();mark();close();};dialog.addEventListener('cancel',e=>{e.preventDefault();close();});dialog.showModal();dialog.querySelector('input,textarea,button')?.focus();
   };

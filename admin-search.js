@@ -7,7 +7,7 @@
   const norm = s => String(s || '').normalize('NFKC').toLocaleLowerCase('ko').replace(/\s+/g, '');
   const digits = s => String(s || '').replace(/\D/g, '');
   const values = v => Array.isArray(v) ? v : String(v || '').split(/,\s*|\n/).filter(Boolean);
-  const matches = (row, q) => (!q.company || norm(row.company).includes(norm(q.company))) && (!q.phone || digits(row.phone).includes(digits(q.phone))) && (!q.field || values(row.fields).includes(q.field)) && (!q.area || values(row.areas).some(a => a === q.area || a === '전체'));
+  const matches = (row, q) => (!q.company || norm(row.company).includes(norm(q.company))) && (!q.phone || digits(row.phone).includes(digits(q.phone))) && (!q.field || window.YESSURI_SERVICE_FIELDS?.matches(row.fields,q.field)) && (!q.area || values(row.areas).some(a => a === q.area || a === '전체'));
 
   function panel(kind) {
     const form = el('form', undefined, 'admin-search');
@@ -22,7 +22,7 @@
       if (input.tagName === 'INPUT') {input.type = 'search'; input.maxLength = key === 'phone' ? 40 : 100; input.autocomplete = 'off'; input.placeholder = key === 'phone' ? '하이픈 없이도 검색 가능' : '업체명 일부 입력'; if (key === 'phone') input.inputMode = 'tel';}
       else {
         const all = el('option', key === 'field' ? '전체 분야' : '전체 지역'); all.value = ''; input.append(all);
-        const items = key === 'field' ? window.YESSURI_SERVICE_FIELDS?.items || [] : (window.YESSURI_REGIONS || []).filter(v => v !== '전체').map(v => ({value:v,label:v}));
+        const items = key === 'field' ? window.YESSURI_SERVICE_FIELDS?.allItems || [] : (window.YESSURI_REGIONS || []).filter(v => v !== '전체').map(v => ({value:v,label:v}));
         for (const item of items) {const option = el('option', item.label); option.value = item.value; input.append(option);}
       }
       wrap.append(title, input); grid.append(wrap); inputs[key] = input;
@@ -56,7 +56,7 @@
       if (kind === 'applications') {
         for (const row of found.slice((currentPage - 1) * 10, currentPage * 10)) {
           const article = el('article', undefined, 'admin-search-row'), body = el('div');
-          body.append(el('strong', row.company || '업체명 없음'), el('p', row.phone || '', 'hint'), el('p', values(row.fields).join(' · ') + ' / ' + values(row.areas).join(' · '), 'hint'));
+          body.append(el('strong', row.company || '업체명 없음'), el('p', row.phone || '', 'hint'), el('p', values(row.fields).map(v=>window.YESSURI_SERVICE_FIELDS?.label(v)||v).join(' · ') + ' / ' + values(row.areas).join(' · '), 'hint'));
           const link = el('a', '열기', 'btn'); link.href = 'technician-detail.html?id=' + encodeURIComponent(row.id) + '&admin=1'; link.setAttribute('aria-label', (row.company || '업체') + ' 신청 열기'); article.append(body, link); output.append(article);
         }
         if (pages > 1) {

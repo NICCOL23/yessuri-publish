@@ -68,7 +68,7 @@ form.addEventListener('submit', event => {
   }
   if (!form.reportValidity()) return;
   document.querySelector('#review-photo-image').src = photoUrl;
-  document.querySelector('#review-type').textContent = typeInput.value;
+  document.querySelector('#review-type').textContent = window.YESSURI_SERVICE_FIELDS?.label(typeInput.value)||typeInput.selectedOptions[0]?.textContent||typeInput.value;
   document.querySelector('#review-region').textContent = regionInput.value;
   document.querySelector('#review-description').textContent = descriptionInput.value.trim();
   form.hidden = true;

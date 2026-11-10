@@ -5,12 +5,12 @@
   const input=options.input||form.querySelector('#t-fields');
   if(!input||input.dataset.fieldPicker)return;
   input.dataset.fieldPicker='true';input.hidden=true;
-  const items=window.YESSURI_SERVICE_FIELDS.items;
+  const previous=input.value.split(/[,，\n]+/).map(v=>v.trim());const items=window.YESSURI_SERVICE_FIELDS.allItems.filter(f=>f.active!==false||previous.some(v=>window.YESSURI_SERVICE_FIELDS.matches([v],f.value)));
   const parent=input.closest('.field'),title=parent.querySelector('label');
   parent.classList.add('ys-service-fields');title.id='service-field-title';
   const selected=new Set(),other=[];
   for(const token of input.value.split(/[,，\n]+/).map(s=>s.trim()).filter(Boolean)){
-   const item=items.find(item=>item.value===token||item.label===token);
+   const item=items.find(item=>window.YESSURI_SERVICE_FIELDS.matches([token],item.value));
    if(item)selected.add(item.value);else other.push(token);
   }
   const make=(tag,text='',className='')=>{const node=document.createElement(tag);node.textContent=text;if(className)node.className=className;return node;};
@@ -58,7 +58,7 @@
    if(notify)input.dispatchEvent(new Event('input',{bubbles:true}));
   }
   custom.addEventListener('input',()=>sync());
-  trigger.addEventListener('click',()=>{dialog.showModal();trigger.setAttribute('aria-expanded','true');choices.get(items[0].value).control.focus({preventScroll:true});});
+  trigger.addEventListener('click',()=>{dialog.showModal();trigger.setAttribute('aria-expanded','true');choices.get(items[0]?.value)?.control.focus({preventScroll:true});});
   close.addEventListener('click',()=>dialog.close());done.addEventListener('click',()=>dialog.close());
   dialog.addEventListener('close',()=>{trigger.setAttribute('aria-expanded','false');trigger.focus({preventScroll:true});});
   dialog.addEventListener('click',event=>{if(event.target!==dialog)return;const box=dialog.getBoundingClientRect();if(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom)dialog.close();});

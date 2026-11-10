@@ -12,7 +12,7 @@
 
     const masthead=make('div','','journal-masthead'),identity=make('div','','journal-identity');
     const kicker=make('p','BUSAN · TECHNICIAN JOURNAL','journal-kicker');
-    const title=make('h2',person.fields[0]+' 전문가의 작업 공간','journal-title');
+    const title=make('h2',(window.YESSURI_SERVICE_FIELDS?.label(person.fields[0])||person.fields[0])+' 전문가의 작업 공간','journal-title');
     const subtitle=make('p','전문 분야와 출장 지역, 공개된 작업 기록을 살펴보세요.','journal-subtitle');
     const actions=make('div','','journal-actions');
     for(const selector of ['#expert-favorite','#expert-compare','.compare-detail-link','#expert-compare-status'])actions.append(hero.querySelector(selector));

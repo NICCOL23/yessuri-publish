@@ -1,4 +1,4 @@
-(async()=>{await window.YESSURI_PUBLIC_READY;
+(async()=>{await window.YESSURI_FIELDS_READY;await window.YESSURI_PUBLIC_READY;
 const profileId = new URLSearchParams(window.location.search).get('id');
 const rawPerson = window.YESSURI_PUBLIC_EXPERTS().find(expert => expert.id === profileId);
 const person=rawPerson?window.YESSURI_EXPERT_CARD.present(rawPerson):null;
@@ -12,7 +12,7 @@ if (!person) {
   document.querySelector('#expert-name').textContent = person.name;
   document.querySelector('#expert-region').textContent = `예시 출동 가능 지역: 부산 ${window.YESSURI_AREAS_LABEL(person)} · ${person.profileType} 예시`;
   document.querySelector('#expert-region-fact').textContent = `부산 ${window.YESSURI_AREAS_LABEL(person)} · 예시`;
-  document.querySelector('#expert-fields-fact').textContent = person.fields.join(' · ');
+  document.querySelector('#expert-fields-fact').textContent = person.fields.map(window.YESSURI_SERVICE_FIELDS.label).join(' · ');
   document.querySelector('#expert-career').textContent = person.career;
   document.querySelector('#expert-intro').textContent = person.intro;
   window.YESSURI_FAVORITES.bindButton(document.querySelector('#expert-favorite'), person.id);
@@ -56,7 +56,7 @@ if (!person) {
   const tags = document.querySelector('#expert-fields');
   person.fields.forEach(field => {
     const tag = document.createElement('span');
-    tag.textContent = field;
+    tag.textContent = window.YESSURI_SERVICE_FIELDS.label(field);
     tags.append(tag);
   });
   if(person.isExample===false){

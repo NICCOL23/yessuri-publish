@@ -85,7 +85,7 @@ function renderComparison() {
     const name=document.createElement('h3');name.textContent=person.name;cell.append(photo,name);heading.append(cell);});
   head.append(heading);table.append(head);
   const body=document.createElement('tbody');
-  [['전문 분야',p=>p.fields.join(' · ')],['주요 출장 지역',p=>window.YESSURI_AREAS_LABEL(p)],['출장·진단비',()=> '상담 시 확인']].forEach(([label,value])=>{
+  [['전문 분야',p=>p.fields.map(window.YESSURI_SERVICE_FIELDS.label).join(' · ')],['주요 출장 지역',p=>window.YESSURI_AREAS_LABEL(p)],['출장·진단비',()=> '상담 시 확인']].forEach(([label,value])=>{
     const row=document.createElement('tr'),term=document.createElement('th');term.scope='row';term.textContent=label;row.append(term);
     people.forEach(person=>{const cell=document.createElement('td');cell.textContent=value(person);row.append(cell);});body.append(row);});
   const row=document.createElement('tr'),term=document.createElement('th');term.scope='row';term.textContent='상세 확인';row.append(term);
