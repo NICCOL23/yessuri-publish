@@ -22,8 +22,8 @@ export function validateHeroContent(input: unknown) {
         badge: 40, title1: 40, title2: 40, description1: 100, description2: 100,
         buttonText: 24, buttonHref: 300, desktopImage: 300, mobileImage: 300, alt: 160,
     };
-    requireValue(Object.keys(source).length === Object.keys(limits).length, '히어로 항목을 확인해 주세요.');
-    const content: Record<string, string> = {};
+    requireValue(Object.keys(source).filter(k=>k!=='textColors').length === Object.keys(limits).length, '히어로 항목을 확인해 주세요.');
+    const content: Record<string, any> = {};
     for (const [field, maximum] of Object.entries(limits)) {
         const value = source[field];
         requireValue(typeof value === 'string' && value.trim().length > 0 && value.length <= maximum && !/[\u0000-\u001f\u007f]/.test(value), '입력 길이와 필수 항목을 확인해 주세요.');
@@ -50,6 +50,7 @@ export function validateHeroContent(input: unknown) {
     for (const field of ['desktopImage', 'mobileImage']) {
         requireValue(originalImages.has(content[field]) || fileRoutePattern.test(content[field]), '관리자에서 올린 히어로 사진을 선택해 주세요.');
     }
+    if(Object.hasOwn(source,'textColors')){const values=source.textColors;requireValue(values&&typeof values==='object'&&!Array.isArray(values),'글자색 항목을 확인하세요.');const colors:Record<string,string>={};for(const[k,v]of Object.entries(values)){requireValue(['title1','title2','description1','description2'].includes(k)&&typeof v==='string'&&/^#[0-9a-fA-F]{6}$/.test(v),'글자색 코드를 확인하세요.');colors[k]=(v as string).toUpperCase();}if(Object.keys(colors).length)content.textColors=colors;}
     return content;
 }
 

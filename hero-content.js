@@ -61,6 +61,7 @@
         image.src = mobile;
         if (picture.closest('.hero-panel')) image.alt = content.alt;
       }
+      window.YESSURI_TEXT_COLOR?.hero(panel,content.textColors);
       window.dispatchEvent(new Event('resize'));
     } catch {
       // An unavailable content service leaves the original first hero usable.

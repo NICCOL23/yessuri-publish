@@ -156,6 +156,7 @@ function fill() {
     if (locked) return;
     fields.forEach(name => { form.elements[name].value = state.draft[name]; });
     images = {desktopImage:state.draft.desktopImage,mobileImage:state.draft.mobileImage};
+    window.YESSURI_TEXT_COLORS_ADMIN?.fill({kind:'hero',content:state.draft,onChange:changed});
     updateThumbnails();
     dirty = false;
     conflict = false;
@@ -165,7 +166,7 @@ function fill() {
     history();
 }
 function content() {
-    return Object.fromEntries([...fields.map(name => [name,form.elements[name].value.trim()]), ...Object.entries(images)]);
+    const result=Object.fromEntries([...fields.map(name => [name,form.elements[name].value.trim()]), ...Object.entries(images)]);const colors=window.YESSURI_TEXT_COLORS_ADMIN?.read()||{};if(Object.keys(colors).length)result.textColors=colors;return result;
 }
 function preview(mode) {
     if (locked) return;
@@ -196,6 +197,7 @@ form.addEventListener('input', changed);
 form.addEventListener('submit', async event => {
     event.preventDefault();
     if (!form.reportValidity()) return;
+    try{window.YESSURI_TEXT_COLORS_ADMIN?.read();}catch(e){message(e.message,true);return;}
     busy = true;
     controls();
     try {

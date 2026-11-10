@@ -5,7 +5,7 @@ function changes(kind,s){const result=[],add=(label,before,after,image=false)=>{
 if(kind==='hero'){for(const [key,label]of Object.entries(heroLabels))add(label,s.published[key]??'',s.draft[key]??'',key.endsWith('Image'));}
 else if(kind==='guide'){for(const f of s.fields||[])add(f.group+' · '+f.label,s.published[f.id]??'',s.draft[f.id]??'');}
 else {const published=new Map(s.published.map((f,i)=>[f.id,{...f,position:i+1}]));s.draft.forEach((f,i)=>{const old=published.get(f.id);if(!old){result.push({label:'분야 자료 확인 필요',before:'현재 게시본에 없는 식별자',after:f.id});return;}for(const [key,label]of [['label','표시 이름'],['description','설명'],['image','아이콘']])add(old.label+' · '+label,old[key]??'',f[key]??'',key==='image');add(old.label+' · 메인 표시',old.visible===false?'숨김':'표시',f.visible===false?'숨김':'표시');add(old.label+' · 표시 순서',old.position+'번째',(i+1)+'번째');});}
-return result;}
+if(kind==='hero'||kind==='guide'){const colorLabels=kind==='hero'?Object.entries(heroLabels).filter(([k])=>['title1','title2','description1','description2'].includes(k)):(s.fields||[]).map(f=>[f.id,f.group+' · '+f.label]);for(const[k,label]of colorLabels)add(label+' 글자색',s.published.textColors?.[k]||'원래 색상',s.draft.textColors?.[k]||'원래 색상');}return result;}
 
 function status({dirty,busy}){for(const n of document.querySelectorAll('.restore-compare-state'))n.textContent=busy?'처리 중입니다. 완료 후 비교를 다시 확인하세요.':dirty?'저장하지 않은 입력은 비교에 포함되지 않습니다. 복원 시 홈페이지와 초안이 함께 바뀌므로 먼저 입력을 정리하세요.':'현재 불러온 공개 내용과 선택한 기록을 비교합니다. 비교를 열어도 복원되지 않습니다.';}
 function safe(p){return typeof p==='string'&&/^(?:\/?assets\/|\/api\/hero-images\/)/.test(p)&&!p.includes('..')&&!/[\x00-\x1f]/.test(p);}

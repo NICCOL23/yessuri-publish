@@ -47,6 +47,7 @@
         heading.replaceChildren(doc.createTextNode(content.title1),accent);
         const description = panel.querySelector('.hero-description');
         description.replaceChildren(doc.createTextNode(content.description1),doc.createElement('br'),doc.createTextNode(content.description2));
+        frame.contentWindow.YESSURI_TEXT_COLOR?.hero(panel,content.textColors);
         const button = panel.querySelector('.home-quote');
         button.textContent = content.buttonText;
         button.setAttribute('href',content.buttonHref);
