@@ -8,7 +8,9 @@ const body={action:'create',name:'가상 시험 업체',fields:['욕실·설비'
 function fixture(role='admin',error=null){
  let handler;const calls=[];const db={rpc:async(name,{op,p})=>{calls.push({name,op,p});if(name==='technician_admin_management_v2')return{data:error?null:{profile:op==='profile-get'?null:{id:'technician-'+id,version:'version-1'},consents:[],events:[]},error};return{data:op==='session'?{role,application_id:id,hash:'server-hash'}:{},error:null};}};
  const box={Deno:{env:{get:()=> 'test-only'},serve:fn=>handler=fn},createClient:()=>db,TextEncoder,TextDecoder,Uint8Array,URL,Request,Response,crypto:webcrypto,console};
- vm.runInNewContext(code('public-profile.ts')+'\n'+code('admin-management.ts')+'\n'+code('admin-v2.ts')+'\n'+code('index.ts'),box);
+ // Load the actual CMS route modules too; index.ts routes through them before admin-v2.
+ const cms='const fieldCmsRoute=(()=>{'+code('field-cms.ts')+';return fieldCmsRoute;})();const heroCmsRoute=(()=>{'+code('hero-cms.ts')+';return heroCmsRoute;})();';
+ vm.runInNewContext(code('public-profile.ts')+'\n'+code('admin-management.ts')+'\n'+code('admin-v2.ts')+'\n'+cms+'\n'+code('index.ts'),box);
  return{calls,request:async(route,p,token=true)=>{const response=await handler(new Request('https://test.invalid/?route='+encodeURIComponent(route),{method:p?'POST':'GET',headers:{origin:'https://yessuri.com','content-type':'application/json',...(token?{'x-admin-token':'a'.repeat(64)}:{})},...(p?{body:JSON.stringify(p)}:{})}));return{status:response.status,data:await response.json()};}};
 }
 (async()=>{
