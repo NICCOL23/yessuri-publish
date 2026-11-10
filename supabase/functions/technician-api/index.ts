@@ -114,7 +114,7 @@ Deno.serve(async req=>{
   }
   if(route==='/api/admin/login'){
    const key=await rate(req,'admin-login',5,900),email=text(p.username,3,250,'관리자 이메일'),pass=text(p.password,1,128,'비밀번호');const client=createClient(URL_ROOT,Deno.env.get('SUPABASE_ANON_KEY')||KEY,{auth:{persistSession:false,autoRefreshToken:false}});
-   const{data,error}=await client.auth.signInWithPassword({email,password:pass});check(!error&&data.user,'관리자 로그인 정보를 확인해 주세요.',403);const token=random();await rpc('grant-admin',{user_id:data.user.id,newHash:await sha(token)});await adminRecord({hash:await sha(token)},'login');await rpc('rate-clear',{key});return json({ok:true,adminSession:{token,expiresAt:Date.now()+3600000}});
+   const{data,error}=await client.auth.signInWithPassword({email,password:pass});check(!error&&data.user,'관리자 로그인 정보를 확인해 주세요.',403);const token=random();await rpc('grant-admin',{user_id:data.user.id,newHash:await sha(token)});await adminRecord({hash:await sha(token)},'login');await rpc('rate-clear',{key});return json({ok:true,adminSession:{token,expiresAt:null}});
   }
   if(route==='/api/logout'){const role=p.role==='admin'?'admin':'owner',s=await session(req,role);if(s){try{if(role==='admin')await adminRecord(s,'logout');}finally{await rpc('logout',{hash:s.hash});}}return json({ok:true});}
   if(route==='/api/applications'){
