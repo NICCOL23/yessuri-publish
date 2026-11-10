@@ -54,6 +54,7 @@ function controls() {
     window.YESSURI_PHOTO_USAGE?.hero(selectedSlide);
     window.YESSURI_SAVE_RESULT?.update({state,dirty,busy});
     if (locked) return;
+    window.dispatchEvent(new Event('yessuri:hero-controls'));
     document.getElementById('slide-select').disabled = busy;
     form.querySelectorAll('input,button').forEach(control => { control.disabled = busy || locked; });
     document.getElementById('preview-published').disabled = busy || !state;
@@ -221,30 +222,8 @@ document.querySelectorAll('[data-image-field]').forEach(input => {
         busy = true;
         controls();
         try {
-            const bitmap = await createImageBitmap(file);
-            const canvas = document.createElement('canvas');
-            const scale = Math.min(1,1280 / Math.max(bitmap.width,bitmap.height));
-            canvas.width = Math.max(1,Math.round(bitmap.width * scale));
-            canvas.height = Math.max(1,Math.round(bitmap.height * scale));
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#fff';
-            ctx.fillRect(0,0,canvas.width,canvas.height);
-            ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
-            bitmap.close();
-            let quality = .82;
-            let blob;
-            do {
-                blob = await new Promise(resolve => canvas.toBlob(resolve,'image/jpeg',quality));
-                quality -= .12;
-            } while (blob?.size > 1048576 && quality > .2);
-            if (!blob || blob.size > 1048576) throw new Error('사진 크기를 줄여 다시 선택하세요.');
-            const dataUrl = await new Promise((resolve,reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = () => reject(new Error('사진을 읽지 못했습니다.'));
-                reader.readAsDataURL(blob);
-            });
-            const result = await api('/api/image', {photo:{type:'image/jpeg',data:dataUrl.split(',')[1]}});
+            const photo = await prepareHeroPhoto(file);
+            const result = await api('/api/image', {photo});
             if (locked) return;
             images[input.dataset.imageField] = result.path;
             updateThumbnails();
@@ -358,3 +337,30 @@ window.YESSURI_UNSAVED?.register('편집 중인 초안',()=>dirty,()=>{dirty=fal
 
 // Preserve request/auth/command behavior; add typed display-only recovery help.
 async function api(...args){try{const result=await apiRequest(...args);window.YESSURI_ERROR_HELP?.clear();return result;}catch(error){window.YESSURI_ERROR_HELP?.report(error,{route:args[0]});throw error;}}
+
+async function prepareHeroPhoto(file) {
+            const bitmap = await createImageBitmap(file);
+            const canvas = document.createElement('canvas');
+            const scale = Math.min(1,1280 / Math.max(bitmap.width,bitmap.height));
+            canvas.width = Math.max(1,Math.round(bitmap.width * scale));
+            canvas.height = Math.max(1,Math.round(bitmap.height * scale));
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0,0,canvas.width,canvas.height);
+            ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
+            bitmap.close();
+            let quality = .82;
+            let blob;
+            do {
+                blob = await new Promise(resolve => canvas.toBlob(resolve,'image/jpeg',quality));
+                quality -= .12;
+            } while (blob?.size > 1048576 && quality > .2);
+            if (!blob || blob.size > 1048576) throw new Error('사진 크기를 줄여 다시 선택하세요.');
+            const dataUrl = await new Promise((resolve,reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(new Error('사진을 읽지 못했습니다.'));
+                reader.readAsDataURL(blob);
+            });
+    return {type:'image/jpeg',data:dataUrl.split(',')[1]};
+}

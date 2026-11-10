@@ -93,9 +93,17 @@ export async function heroCmsRoute(request: Request, route: string, input: unkno
         return heroImage(dependencies, publicImage[1]);
     }
     const privateImage = route.match(/^\/api\/admin\/hero\/images\/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})\.jpg$/);
+    const isLibrary = route === '/api/admin/hero/library';
     const action = route.match(/^\/api\/admin\/hero\/(draft|publish|restore|image)$/)?.[1];
-    if (route !== '/api/admin/hero' && !privateImage && !action) return undefined;
+    if (route !== '/api/admin/hero' && !privateImage && !action && !isLibrary) return undefined;
     const session = await dependencies.admin(request);
+    if (isLibrary) {
+        requireValue(request.method === 'GET', '지원하지 않는 요청입니다.', 405);
+        const params = new URL(request.url).searchParams;
+        const offset = params.get('offset') || '0', kind = params.get('kind') || 'all', query = params.get('q') || '';
+        requireValue(/^(0|[1-9][0-9]{0,5})$/.test(offset) && ['all','any','desktop','mobile'].includes(kind) && query.length <= 100, '보관함 검색 조건을 확인해 주세요.');
+        return heroLibraryRpc(dependencies, 'list', {hash:session.hash, offset:Number(offset), kind, query});
+    }
     if (privateImage) {
         requireValue(request.method === 'GET', '지원하지 않는 요청입니다.', 405);
         return heroImage(dependencies, privateImage[1], session.hash);
@@ -111,6 +119,9 @@ export async function heroCmsRoute(request: Request, route: string, input: unkno
     const requestDigest = await dependencies.sha(route + '?slide='+slide + '\n' + JSON.stringify({ ...payload, operationId: undefined }));
     const common = { hash: session.hash, operationId, requestDigest };
     if (action === 'image') {
+        const name = payload.libraryName, kind = payload.libraryKind;
+        const hasLabel = name !== undefined || kind !== undefined;
+        if (hasLabel) requireValue(typeof name === 'string' && name.trim().length > 0 && name.length <= 160 && !/[\u0000-\u001f\u007f]/.test(name) && ['any','desktop','mobile'].includes(String(kind)), '이미지 이름과 용도를 확인해 주세요.');
         const bytes = await dependencies.decode(payload.photo);
         const stage = await heroRpc(dependencies, 'stage-image', common);
         requireValue(stage?.path === 'hero-content/' + operationId + '.jpg', '히어로 사진 경로를 확인하지 못했습니다.', 500);
@@ -119,6 +130,7 @@ export async function heroCmsRoute(request: Request, route: string, input: unkno
             if (error && !['409', 'Duplicate'].includes(String(error.statusCode || error.error))) fail('사진을 올리지 못했습니다. 같은 요청으로 다시 시도해 주세요.', 500);
             await heroRpc(dependencies, 'ready-image', { ...common, bytes: bytes.length });
         }
+        if (hasLabel) await heroLibraryRpc(dependencies, 'register', {...common, name:String(name).trim(), kind});
         return {
             id: operationId,
             path: '/api/hero-images/' + operationId + '.jpg',
@@ -133,4 +145,10 @@ export async function heroCmsRoute(request: Request, route: string, input: unkno
         changes.revisionId = payload.revisionId;
     }
     return heroRpc(dependencies, action!, changes);
+}
+
+async function heroLibraryRpc(dependencies: HeroDependencies, op: string, p: Record<string, unknown>) {
+    const {data,error}=await dependencies.db.rpc('technician_hero_library_v1',{op,p});
+    if(error){const text=String(error.message||'');if(text.includes('permission denied'))fail('관리자 로그인이 필요합니다.',403);if(text.includes('not found'))fail('보관함 이미지를 찾지 못했습니다.',404);if(text.includes('command conflict'))fail('이미지 저장 요청을 확인해 주세요.',409);fail('보관함을 불러오거나 저장하지 못했습니다. 다시 시도해 주세요.',500);}
+    return data;
 }
