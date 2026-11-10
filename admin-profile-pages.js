@@ -1,0 +1,7 @@
+/* Authenticated read-only paging; no mutations, caching or browser storage. */
+(()=>{'use strict';const LIMIT=100,MAX_OFFSET=10000;
+function requireCurrent(current){if(!current())throw Error('조회 중 화면이 바뀌었습니다. 필요한 화면에서 다시 확인하세요.');}
+async function scan(api,current){const rows=[],seen=new Set();for(let offset=0;offset<=MAX_OFFSET;offset+=LIMIT){requireCurrent(current);const result=await api('admin/profiles?offset='+offset);requireCurrent(current);const page=result?.profiles,meta=result?.pagination;if(!Array.isArray(page)||page.length>LIMIT||result.count!==page.length||meta?.offset!==offset||meta?.limit!==LIMIT||meta?.hasMore!==(page.length===LIMIT))throw Error('업체 목록의 페이지 응답을 확인하지 못했습니다. 새로고침 후 다시 확인하세요.');for(const row of page){if(typeof row?.id!=='string'||!row.id||seen.has(row.id))throw Error('조회 중 업체 목록이 변경되었거나 중복되었습니다. 다시 조회하세요.');seen.add(row.id);rows.push(row);}if(!meta.hasMore)return rows;}throw Error('현재 조회 가능한 범위를 넘었습니다. 전체 조회가 완료되지 않았으므로 검색 범위 점검이 필요합니다.');}
+const signature=rows=>JSON.stringify(rows.map(r=>[r.id,r.name,r.publication_status,r.public_consent,r.applicationAvailable]));
+window.YESSURI_ADMIN_PROFILES=Object.freeze({async readAll(api,{current=()=>true}={}){const before=await scan(api,current),after=await scan(api,current);requireCurrent(current);if(signature(before)!==signature(after))throw Error('조회 중 업체 목록이 바뀌었습니다. 다시 조회하세요.');return{profiles:after,count:after.length};}});
+})();

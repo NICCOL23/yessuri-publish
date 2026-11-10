@@ -86,10 +86,10 @@
           if (new Set(rows.map(r => r.id)).size !== total) throw Error('검색 중 신청 목록이 바뀌었습니다. 다시 검색하세요.');
         } else {
           // Search precisely the same existing management list. Never silently claim a truncated list is complete.
-          const result = await api('admin/profiles'); if (!current(ticket)) return;
+          const result = await (window.YESSURI_ADMIN_PROFILES?.readAll(api,{current:()=>current(ticket)}) || api('admin/profiles')); if (!current(ticket)) return;
           const profiles = Array.isArray(result) ? result : result.profiles;
           if (!Array.isArray(profiles)) throw Error('업체 목록을 확인하지 못했습니다. 다시 검색하세요.');
-          if (profiles.length >= 100) throw Error('업체가 100개 이상이라 전체 검색을 완료하지 못했습니다. 기존 업체 목록을 이용해 주세요. 검색 범위 점검이 필요합니다.');
+          if (!window.YESSURI_ADMIN_PROFILES && profiles.length >= 100) throw Error('업체가 100개 이상이라 전체 검색을 완료하지 못했습니다. 기존 업체 목록을 이용해 주세요. 검색 범위 점검이 필요합니다.');
           if (profiles.length !== original.length || profiles.some(p => !original.some(n => n.dataset.profileId === p.id))) throw Error('업체 목록이 변경되었습니다. 새로고침 후 다시 검색하세요.');
           total = profiles.length;
           let index = 0;
