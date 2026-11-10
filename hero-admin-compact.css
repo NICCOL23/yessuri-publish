@@ -18,3 +18,12 @@ main{padding:14px 24px 28px}.intro{margin-bottom:12px}.intro p{margin:4px 0}h1{f
 @media(min-width:1100px){.local-color-row{display:flex;align-items:center}.local-color-row label{display:flex!important}.two-fields .local-color-row{display:grid;grid-template-columns:auto auto minmax(0,1fr);align-items:end}.two-fields .local-color-row label{display:grid!important}.two-fields .local-color-row button{justify-self:start}}
 #slide-select{margin:4px 0 8px;padding:6px 10px}.photo-use-note{padding:6px 8px;margin:6px 0;font-size:.875rem;line-height:1.5}.photo-use-note p{margin:0}.thumbnail{height:64px}.history-panel #history>li{padding-top:6px;padding-bottom:6px}.admin-save-result-steps p{line-height:1.5}
 @media(min-width:1100px){.two-fields .local-color-row{grid-template-columns:repeat(auto-fit,minmax(min(100%,6rem),1fr))}.local-color-control legend,.local-color-row label,.local-color-control button{overflow-wrap:anywhere}}
+/* Compact the requested color controls; keep control sizes and status text. */
+#hero-form .local-color-control{display:flex;flex-wrap:wrap;align-items:center;column-gap:6px;row-gap:0;padding:2px 4px;margin:2px 0 4px;min-width:0}
+#hero-form .local-color-control legend{float:left;flex:1 1 auto;width:auto;max-width:100%;margin:0;padding:0;font-size:1rem;line-height:1.5;order:0}
+#hero-form .local-color-control output{flex:0 1 auto;order:1;margin:0;font-size:.875rem;line-height:1.5;overflow-wrap:anywhere}
+#hero-form .local-color-row{display:flex;flex:1 0 100%;flex-wrap:wrap;align-items:center;gap:4px;order:2;min-width:0}
+#hero-form .local-color-row label{display:flex!important;flex-wrap:wrap;align-items:center;gap:4px;line-height:1.5}
+#hero-form .local-color-control button{padding:4px 8px;min-height:44px}
+#hero-form>fieldset:nth-of-type(3){margin-top:6px}#hero-form>fieldset:nth-of-type(3)>legend{margin-bottom:3px}#hero-form>fieldset:nth-of-type(3)>.help{margin:3px 0 6px}
+.thumbnail{height:110px}@media(max-width:540px){.thumbnail{height:90px}}
