@@ -94,7 +94,7 @@ export async function heroCmsRoute(request: Request, route: string, input: unkno
     }
     const privateImage = route.match(/^\/api\/admin\/hero\/images\/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})\.jpg$/);
     const isLibrary = route === '/api/admin/hero/library';
-    const action = route.match(/^\/api\/admin\/hero\/(draft|publish|restore|image)$/)?.[1];
+    const action = route.match(/^\/api\/admin\/hero\/(draft|publish|restore|image|history|history-hide|history-delete)$/)?.[1];
     if (route !== '/api/admin/hero' && !privateImage && !action && !isLibrary) return undefined;
     const session = await dependencies.admin(request);
     if (isLibrary) {
@@ -108,9 +108,13 @@ export async function heroCmsRoute(request: Request, route: string, input: unkno
         requireValue(request.method === 'GET', '지원하지 않는 요청입니다.', 405);
         return heroImage(dependencies, privateImage[1], session.hash);
     }
+    if (action === 'history') {
+        requireValue(request.method === 'GET', '지원하지 않는 요청입니다.',405);
+        return heroHistoryRpc(dependencies,'list',{hash:session.hash,slide});
+    }
     if (route === '/api/admin/hero') {
         requireValue(request.method === 'GET', '지원하지 않는 요청입니다.', 405);
-        return heroRpc(dependencies, 'state', { hash: session.hash });
+        return heroStateWithHistory(dependencies,session.hash);
     }
     requireValue(request.method === 'POST' && input && typeof input === 'object' && !Array.isArray(input), '입력 내용을 확인해 주세요.');
     const payload = input as Record<string, unknown>;
@@ -118,6 +122,13 @@ export async function heroCmsRoute(request: Request, route: string, input: unkno
     const operationId = payload.operationId;
     const requestDigest = await dependencies.sha(route + '?slide='+slide + '\n' + JSON.stringify({ ...payload, operationId: undefined }));
     const common = { hash: session.hash, operationId, requestDigest };
+    if (action === 'history-hide' || action === 'history-delete') {
+        requireValue(typeof payload.revisionId === 'string' && uuidPattern.test(payload.revisionId) && Number.isSafeInteger(payload.version) && Number(payload.version)>0,'게시 기록과 편집 버전을 확인해 주세요.');
+        if(action==='history-hide')requireValue(typeof payload.hidden==='boolean','숨김 상태를 확인해 주세요.');
+        else requireValue(payload.confirmed===true,'영구 삭제 확인이 필요합니다.');
+        await heroHistoryRpc(dependencies,action==='history-hide'?'hide':'delete',{...common,slide,revisionId:payload.revisionId,version:payload.version,hidden:payload.hidden,confirmed:payload.confirmed});
+        return heroStateWithHistory(dependencies,session.hash);
+    }
     if (action === 'image') {
         const name = payload.libraryName, kind = payload.libraryKind;
         const hasLabel = name !== undefined || kind !== undefined;
@@ -144,11 +155,22 @@ export async function heroCmsRoute(request: Request, route: string, input: unkno
         requireValue(typeof payload.revisionId === 'string' && uuidPattern.test(payload.revisionId), '복원할 버전을 선택해 주세요.');
         changes.revisionId = payload.revisionId;
     }
-    return heroRpc(dependencies, action!, changes);
+    const result=await heroRpc(dependencies, action!, changes);
+    return {...result,historyInfo:await heroHistoryRpc(dependencies,'list',{hash:session.hash,slide})};
 }
 
 async function heroLibraryRpc(dependencies: HeroDependencies, op: string, p: Record<string, unknown>) {
     const {data,error}=await dependencies.db.rpc('technician_hero_library_v1',{op,p});
     if(error){const text=String(error.message||'');if(text.includes('permission denied'))fail('관리자 로그인이 필요합니다.',403);if(text.includes('not found'))fail('보관함 이미지를 찾지 못했습니다.',404);if(text.includes('command conflict'))fail('이미지 저장 요청을 확인해 주세요.',409);fail('보관함을 불러오거나 저장하지 못했습니다. 다시 시도해 주세요.',500);}
     return data;
+}
+
+async function heroHistoryRpc(dependencies: HeroDependencies, op:string,p:Record<string,unknown>){
+ const {data,error}=await dependencies.db.rpc('technician_hero_history_v1',{op,p});
+ if(error){const message=String(error.message||'');if(message.includes('permission denied'))fail('관리자 로그인이 필요합니다.',403);if(message.includes('protected revision'))fail('최초 원본과 현재 게시 기록은 영구 삭제할 수 없습니다.');if(message.includes('version conflict')||message.includes('command conflict'))fail('기록이나 편집 내용이 바뀌었습니다. 최신 상태를 다시 불러오세요.',409);if(message.includes('not found'))fail('게시 기록을 찾지 못했습니다.',404);fail('게시 기록 요청을 처리하지 못했습니다.',500);}
+ return data;
+}
+async function heroStateWithHistory(dependencies:HeroDependencies,hash:string){
+ const result=await heroRpc(dependencies,'state',{hash});
+ return {...result,historyInfo:await heroHistoryRpc(dependencies,'list',{hash,slide:dependencies.slide||1})};
 }

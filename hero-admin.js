@@ -64,6 +64,7 @@ function controls() {
     document.getElementById('save').disabled = busy || conflict || !state;
     document.getElementById('preview-draft').disabled = busy || !state || conflict;
     document.querySelectorAll('[data-restore]').forEach(button => { button.disabled = busy || dirty || conflict; });
+    window.YESSURI_HERO_HISTORY?.controls();
     document.getElementById('dirty-state').textContent = dirty ? '저장하지 않은 변경' : '초안 저장됨';
     window.YESSURI_PUBLISH_COMPARE?.update({kind:'hero',state,dirty,busy,imageSource});
 }
@@ -130,7 +131,7 @@ function updateThumbnails() {
 function history() {
     const list = document.getElementById('history');
     list.replaceChildren();
-    state.revisions.slice().reverse().forEach(revision => {
+    (window.YESSURI_HERO_HISTORY?.select(state.revisions) || state.revisions.slice().sort((a,b)=>b.version-a.version).slice(0,5)).forEach(revision => {
         const item = document.createElement('li');
         const content = document.createElement('div');
         const title = document.createElement('strong');
@@ -147,7 +148,7 @@ function history() {
         button.dataset.restore = revision.id;
         button.textContent = '이 내용으로 복원';
         button.addEventListener('click', () => restore(revision.id));
-        item.append(content,button);window.YESSURI_RESTORE_COMPARE?.mount({host:item,kind:"hero",state,revision,imageSource});
+        const actions=document.createElement('div');actions.className='hero-history-actions';actions.append(button);window.YESSURI_HERO_HISTORY?.decorate(actions,revision);item.append(content,actions);window.YESSURI_RESTORE_COMPARE?.mount({host:item,kind:"hero",state,revision,imageSource});
         list.append(item);
     });
     document.getElementById('version-label').textContent = '현재 버전 ' + state.version;
