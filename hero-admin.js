@@ -49,6 +49,7 @@ function message(text, error = false) {
     statusBox.classList.toggle('error', error);if(error)window.YESSURI_SAVE_RESULT?.uncertain(text);
 }
 function controls() {
+    window.YESSURI_RESTORE_COMPARE?.status({dirty,busy});
     window.YESSURI_PHOTO_USAGE?.hero(selectedSlide);
     window.YESSURI_SAVE_RESULT?.update({state,dirty,busy});
     if (locked) return;
@@ -144,7 +145,7 @@ function history() {
         button.dataset.restore = revision.id;
         button.textContent = '이 내용으로 복원';
         button.addEventListener('click', () => restore(revision.id));
-        item.append(content,button);
+        item.append(content,button);window.YESSURI_RESTORE_COMPARE?.mount({host:item,kind:"hero",state,revision,imageSource});
         list.append(item);
     });
     document.getElementById('version-label').textContent = '현재 버전 ' + state.version;
