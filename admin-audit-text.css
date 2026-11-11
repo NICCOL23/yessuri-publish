@@ -10,3 +10,8 @@
 #admin-change-log .audit-readable-event details{margin-top:8px;font-size:12px}#admin-change-log .audit-readable-event summary{min-height:44px;align-content:center;cursor:pointer;color:#466a7e}
 #admin-change-log .audit-readable-event summary:focus-visible{outline:3px solid #00858a;outline-offset:3px}
 @media(max-width:600px){#admin-change-log .audit-readable-event{padding:14px 0}#admin-change-log .manage-audit-filters{grid-template-columns:1fr}#admin-change-log .manage-audit-filters input,#admin-change-log .manage-audit-filters select{box-sizing:border-box;width:100%;min-width:0;min-height:44px}}
+
+#admin-change-log .audit-readable-event{padding:0}
+#admin-change-log .audit-readable-event > .audit-event-disclosure{margin:0}
+#admin-change-log .audit-event-summary{font-size:1rem;line-height:1.5;padding-block:4px}
+#admin-change-log .audit-event-summary time,#admin-change-log .audit-event-summary .audit-readable-result{font-size:.875rem}

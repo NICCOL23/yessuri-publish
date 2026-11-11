@@ -83,10 +83,36 @@
   }
   const toolbar=el('div',undefined,'admin-toolbar');
   toolbar.append(refresh,makeCloseButton());
-  panel.append(filters,toolbar,status,box,makeCloseButton());
-  root.append(panel);let events=[];
-  function render(){box.replaceChildren();const formatter=window.YESSURI_AUDIT_TEXT,list=el('ul',undefined,'audit-readable-list'),filtered=events.filter(e=>(!date.value||day(e.at||e.created_at)===date.value)&&(!select.value||(formatter?formatter.key(e):e.action)===select.value));list.setAttribute('aria-label','관리자 변경 이력 · 한국시간');for(const item of filtered){const info=formatter?formatter.describe(item):{actor:'관리자 확인 필요',target:'대상 확인 필요',title:actionNames[item.action]||'작업 내용을 확인해야 합니다',detail:'현재 상태는 해당 관리 화면에서 확인하세요.',result:item.outcome==='success'?'처리 완료':item.outcome==='failure'?'처리 실패':'결과 확인 필요',resultClass:item.outcome==='success'?'success':item.outcome==='failure'?'failure':'unknown'},entry=el('li',undefined,'audit-readable-event'),top=el('div',undefined,'audit-readable-top');top.append(el('span',info.actor,'audit-readable-actor'),el('span',info.result,'audit-readable-result '+info.resultClass));const time=el('time',kst(item.at||item.created_at)),at=item.at||item.created_at;if(at&&Number.isFinite(Date.parse(at)))time.dateTime=new Date(at).toISOString();const identifiers=el('details');identifiers.append(el('summary','식별자 보기'),el('p','대상: '+(item.target||'-')),el('p','운영자: '+(item.operatorId||item.admin_id||'-')));entry.append(top,el('h3',info.title),el('p','대상: '+info.target),el('p',info.detail),time,identifiers);list.append(entry);}if(filtered.length)box.append(list);else box.append(el('p','현재 조건에 맞는 이력이 없습니다. 날짜나 작업 종류를 확인하세요.','hint'));status.textContent=filtered.length+'건 표시 · 현재 불러온 이력에 필터를 적용합니다.';}
-  date.onchange=render;select.onchange=()=>{trigger.textContent=select.selectedOptions[0].textContent;render();};refresh.onclick=async()=>{refresh.disabled=true;try{events=(await api('admin/audit')).events||[];if(!locked)render();}catch(e){status.textContent=e.message;}finally{refresh.disabled=false;}};
+  const more=el('button','이전 기록 5건 더 보기','btn');
+  const fewer=el('button','이전 기록 접기','btn');
+  more.type=fewer.type='button';
+  more.hidden=fewer.hidden=true;
+  const paging=el('div',undefined,'admin-toolbar');
+  paging.append(more,fewer);
+  panel.append(filters,toolbar,status,box,paging,makeCloseButton());
+  root.append(panel);
+  const pageSize=5;
+  let events=[],limit=pageSize;
+  function resetResults(){limit=pageSize;render();}
+  more.onclick=()=>{
+   const previousLimit=limit;
+   limit+=pageSize;
+   render();
+   box.querySelectorAll('.audit-event-summary')[previousLimit]?.focus();
+  };
+  fewer.onclick=()=>{resetResults();more.focus();};
+  function render(){box.replaceChildren();const formatter=window.YESSURI_AUDIT_TEXT,list=el('ul',undefined,'audit-readable-list'),filtered=events.filter(e=>(!date.value||day(e.at||e.created_at)===date.value)&&(!select.value||(formatter?formatter.key(e):e.action)===select.value));list.setAttribute('aria-label','관리자 변경 이력 · 한국시간');for(const item of filtered.slice(0,limit)){const info=formatter?formatter.describe(item):{actor:'관리자 확인 필요',target:'대상 확인 필요',title:actionNames[item.action]||'작업 내용을 확인해야 합니다',detail:'현재 상태는 해당 관리 화면에서 확인하세요.',result:item.outcome==='success'?'처리 완료':item.outcome==='failure'?'처리 실패':'결과 확인 필요',resultClass:item.outcome==='success'?'success':item.outcome==='failure'?'failure':'unknown'},entry=el('li',undefined,'audit-readable-event'),top=el('div',undefined,'audit-readable-top');top.append(el('span',info.actor,'audit-readable-actor'));
+   const disclosure=el('details',undefined,'audit-event-disclosure');
+   const heading=el('summary',undefined,'audit-event-summary');
+   const at=item.at||item.created_at;
+   const time=el('time',kst(at));
+   heading.append(el('strong',info.title),document.createTextNode(' · '),time,document.createTextNode(' · '),el('span',info.result,'audit-readable-result '+info.resultClass));if(at&&Number.isFinite(Date.parse(at)))time.dateTime=new Date(at).toISOString();const identifiers=el('details');identifiers.append(el('summary','식별자 보기'),el('p','대상: '+(item.target||'-')),el('p','운영자: '+(item.operatorId||item.admin_id||'-')));disclosure.append(heading,top,el('p','대상: '+info.target),el('p',info.detail),identifiers);entry.append(disclosure);list.append(entry);}if(filtered.length)box.append(list);else box.append(el('p','현재 조건에 맞는 이력이 없습니다. 날짜나 작업 종류를 확인하세요.','hint'));const visible=Math.min(limit,filtered.length);
+   more.hidden=visible>=filtered.length;
+   fewer.hidden=visible<=pageSize;
+   status.textContent=filtered.length>visible
+    ? filtered.length+'건 중 최신 '+visible+'건 표시'
+    : visible+'건 표시';}
+  date.onchange=resetResults;select.onchange=()=>{trigger.textContent=select.selectedOptions[0].textContent;resetResults();};refresh.onclick=async()=>{refresh.disabled=true;try{events=(await api('admin/audit')).events||[];if(!locked){events.sort((a,b)=>(Date.parse(b.at||b.created_at)||0)-(Date.parse(a.at||a.created_at)||0));resetResults();}}catch(e){status.textContent=e.message;}finally{refresh.disabled=false;}};
  }
  function organizeDetail(){for(const[selector,title]of [['#admin-public-photos','공개 사진 · 변경 즉시 반영'],['#admin-work-cases','공개 작업 사례 · 저장 후 반영']]){const node=document.querySelector(selector);if(node){node.classList.add('manage-public');node.prepend(el('p',title,'manage-eyebrow'));}}const form=document.querySelector('#admin-update');if(form){const section=form.closest('section');section?.classList.add('manage-private');if(section&&!section.querySelector('.manage-eyebrow'))section.prepend(el('p','비공개 신청 답변 · 공개 프로필을 변경하지 않습니다.','manage-eyebrow'));}}
  const original=window.YESSURI_ADMIN_GUIDE?.mount;if(original)window.YESSURI_ADMIN_GUIDE.mount=options=>{document.body.dataset.adminManagement='true';transferPhoto=options.transfer||transferPhoto;original(options);if(options.application){addProfileManager(options.api,options.application);organizeDetail();}else{profileList(options.api);addOperations(options.api);}};
