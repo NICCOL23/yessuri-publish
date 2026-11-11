@@ -11,3 +11,10 @@
 @media(min-width:800px){
   .private-photo-header + .file-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
 }
+
+.line:has(+ .private-photo-header){margin-block:8px 2px}
+.private-photo-header + .file-grid{margin-top:4px}
+.private-photo-header + .file-grid .photo img{
+  height:auto;
+  aspect-ratio:4 / 3;
+}
