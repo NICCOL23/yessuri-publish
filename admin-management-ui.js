@@ -24,9 +24,16 @@
   return {set(values){const all=[...new Set((values||[]).filter(v=>typeof v==='string'&&v.trim()))];selected=all.filter(v=>items.some(i=>i.value===v));legacy=all.filter(v=>!items.some(i=>i.value===v));other=[];update();},get:()=>[...new Set([...selected,...legacy,...other])]};
  }
  function consentFields(form){
-  const box=el('fieldset',undefined,'consent-record');box.append(el('legend','비공개 동의 확인 기록'),el('p','명함 수신 자체는 공개 동의가 아닙니다. 공개 범위와 근거 식별자만 기록하세요.','hint'));
+  const disclosure=el('details',undefined,'manage-consent-disclosure');
+  const summary=el('summary','비공개 동의 확인 기록');
+  summary.id='manage-consent-heading';
+  const box=el('fieldset',undefined,'consent-record');
+  box.setAttribute('aria-labelledby',summary.id);
+  box.addEventListener('invalid',()=>{disclosure.open=true;},true);
+  disclosure.append(summary,box);
+  box.append(el('p','명함 수신 자체는 공개 동의가 아닙니다. 공개 범위와 근거 식별자만 기록하세요.','hint'));
   const date=field(box,'consentDate','동의 확인일','date'),evidence=field(box,'evidence','근거 식별자 (연락처·대화 원문 제외)'),note=field(box,'note','확인 메모 (개인정보 원문 제외)','textarea');note.maxLength=500;evidence.maxLength=200;const scopes={};
-  for(const[key,text]of [['profile','업체 소개·분야·지역 공개 동의'],['phone','연락처 공개 동의'],['photos','사진 공개 동의']]){const l=el('label',undefined,'check'),c=el('input');c.type='checkbox';l.append(c,document.createTextNode(text));box.append(l);scopes[key]=c;}form.append(box);return ()=>({confirmedAt:date.value,evidence:evidence.value,note:note.value,scope:Object.keys(scopes).filter(k=>scopes[k].checked)});
+  for(const[key,text]of [['profile','업체 소개·분야·지역 공개 동의'],['phone','연락처 공개 동의'],['photos','사진 공개 동의']]){const l=el('label',undefined,'check'),c=el('input');c.type='checkbox';l.append(c,document.createTextNode(text));box.append(l);scopes[key]=c;}form.append(disclosure);return ()=>({confirmedAt:date.value,evidence:evidence.value,note:note.value,scope:Object.keys(scopes).filter(k=>scopes[k].checked)});
  }
  function addProfileManager(api,application,host){
   const old=document.querySelector('#profile-safety-panel');if(old){if(!mayLeave())return;if(!window.dispatchEvent(new Event('yessuri:admin-profile-switch-request',{cancelable:true})))return;window.dispatchEvent(new Event('yessuri:admin-profile-switch'));old.remove();if(host)for(const id of ['admin-public-profile','admin-public-photos','admin-work-cases'])document.getElementById(id)?.remove();}dirty=false;

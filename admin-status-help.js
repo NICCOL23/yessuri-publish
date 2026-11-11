@@ -26,9 +26,9 @@
   const signature=label;if(signatures.get(host)===signature&&host.querySelector('#'+id))return;
   signatures.set(host,signature);
   const isApplicationList=id==='admin-application-status-help';
-  const isApplicationDetail=id==='admin-detail-status-help';
-  const titleTag=isApplicationDetail?'summary':'h3';
-  let box=host.querySelector('#'+id);if(!box){box=node(isApplicationList||isApplicationDetail?'details':'section');box.id=id;box.className='admin-status-live-guide';box.setAttribute('aria-label',heading);const anchor=host.querySelector('.publication-badge');if(anchor)anchor.after(box);else host.prepend(box);}
+  const isDetailStatus=id==='admin-detail-status-help'||id==='admin-publication-status-help';
+  const titleTag=isDetailStatus?'summary':'h3';
+  let box=host.querySelector('#'+id);if(!box){box=node(isApplicationList||isDetailStatus?'details':'section');box.id=id;box.className='admin-status-live-guide';box.setAttribute('aria-label',heading);const anchor=host.querySelector('.publication-badge');if(anchor)anchor.after(box);else host.prepend(box);}
   const item=items[label];
   if(isApplicationList){
    box.replaceChildren(node('summary',heading));
