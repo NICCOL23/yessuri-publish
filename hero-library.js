@@ -34,6 +34,7 @@
     if(!/^[a-f0-9-]{36}$/.test(item.id)||item.path!=='/api/hero-images/'+item.id+'.jpg'||seen.has(item.id))continue;
     seen.add(item.id);const card=document.createElement('article');card.className='library-card';const img=document.createElement('img');img.alt=item.name+' 미리보기';const title=document.createElement('h3');title.textContent=item.name;const meta=document.createElement('p');const date=new Date(item.createdAt);meta.textContent=(names[item.kind]||'공용')+' · '+(Number.isNaN(date.getTime())?'날짜 미확인':date.toLocaleDateString('ko-KR'))+' · '+Math.ceil((Number(item.bytes)||0)/1024)+'KB';const button=document.createElement('button');button.type='button';button.className='secondary';button.textContent=images[target]===item.path?'현재 선택됨':(target==='desktopImage'?'PC 사진으로 선택':'휴대폰 사진으로 선택');button.onclick=()=>{
      if(busy||locked||!state)return;
+     if (images[target] !== item.path) openPhotoDescription();
      images[target]=item.path;updateThumbnails();changed();dialog.close();message((target==='desktopImage'?'PC':'휴대폰')+' 사진을 보관함에서 선택했습니다. 초안 저장·미리보기 후 게시하세요. 홈페이지는 아직 바뀌지 않았습니다.');
     };card.append(img,title,meta,button);grid.append(card);void thumbnail(item,img,run);
    }

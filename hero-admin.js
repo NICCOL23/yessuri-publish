@@ -198,6 +198,12 @@ async function load() {
 form.addEventListener('input', event => {
     if (event.target.id !== 'slide-select') changed();
 });
+function openPhotoDescription() {
+    document.getElementById('hero-photo-description').open = true;
+}
+
+document.getElementById('alt').addEventListener('invalid', openPhotoDescription);
+
 document.getElementById('buttonHref').addEventListener('invalid', () => {
     document.getElementById('hero-link-settings').open = true;
 });
@@ -233,6 +239,7 @@ document.querySelectorAll('[data-image-field]').forEach(input => {
             const result = await api('/api/image', {photo});
             if (locked) return;
             images[input.dataset.imageField] = result.path;
+            openPhotoDescription();
             updateThumbnails();
             changed();
             message('사진을 준비했습니다. 수정 내용 저장 후 미리보기에서 확인하세요.');

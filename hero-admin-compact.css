@@ -26,7 +26,7 @@ main{padding:14px 24px 28px}.intro{margin-bottom:12px}.intro p{margin:4px 0}h1{f
 #hero-form .local-color-row label{display:flex!important;flex-wrap:wrap;align-items:center;gap:4px;line-height:1.5}
 #hero-form .local-color-control button{padding:4px 8px;min-height:44px}
 #hero-form>fieldset:nth-of-type(3){margin-top:6px}#hero-form>fieldset:nth-of-type(3)>legend{margin-bottom:3px}#hero-form>fieldset:nth-of-type(3)>.help{margin:3px 0 6px}
-.thumbnail{height:110px}@media(max-width:540px){.thumbnail{height:90px}}
+.image-fields .thumbnail{height:180px}@media(max-width:540px){.image-fields .thumbnail{height:140px}}
 
 /* Keep the editor actions in view while scrolling through the form. */
 #hero-form .hero-editor-toolbar {
