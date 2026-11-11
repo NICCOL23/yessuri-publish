@@ -25,3 +25,11 @@ body[data-technician-page="admin"] .container,body[data-technician-page="detail"
 #admin-process-guide[open] > summary {
   margin-bottom: 6px;
 }
+
+body[data-technician-page="admin"] .today.card {
+  position: sticky;
+  top: var(--ys-page-back-scroll-offset, 90px);
+  z-index: 20;
+  max-height: min(45dvh, calc(100dvh - var(--ys-page-back-scroll-offset, 90px) - 1rem));
+  overflow-y: auto;
+}
