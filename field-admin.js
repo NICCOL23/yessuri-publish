@@ -108,7 +108,6 @@ let mountedEditor=null;
 
 function syncFieldEditor({focus=false}={}){
   const panel=$('field-side-panel');
-  const preview=$('field-preview-panel');
   const card=desktopFieldEditor.matches&&selectedFieldId
     ? $('fields').querySelector('[data-id="'+selectedFieldId+'"]')
     : null;
@@ -129,7 +128,6 @@ function syncFieldEditor({focus=false}={}){
   }
 
   panel.hidden=!editor;
-  preview.hidden=!!editor;
   if(editor){
     $('field-side-title').textContent=card.querySelector('h3').textContent+' 편집';
     if(focus)$('field-side-title').focus();
@@ -184,7 +182,7 @@ if(!fields.some(field=>field.id===selectedFieldId))selectedFieldId=null;
 syncFieldEditor();controls();}
 function fill(s){if(locked)return;if(!Array.isArray(s.draft)||s.draft.length<1||s.draft.length>200||!Array.isArray(s.revisions))throw Error('분야 자료를 정상적으로 불러오지 못했습니다. 다시 불러오기를 눌러 주세요.');state=s;$('field-workspace').hidden=false;$('load-recovery').hidden=true;fields=structuredClone(s.draft);dirty=false;previewed=false;$('reviewed').checked=false;render();$('version').textContent='현재 버전 '+s.version;$('history').replaceChildren();for(const r of s.revisions){const li=make('li',({original:'원본 보존',publish:'게시',restore:'복원'}[r.action]||r.action)+' · '+new Date(r.date).toLocaleString('ko-KR'));const b=make('button','이 버전으로 복원');b.onclick=async()=>{if(dirty){notice('변경 내용을 먼저 저장하세요.',true);return;}if(await confirmAction('선택한 기록으로 게시본과 수정 내용을 복원할까요? 기록에 없는 사용 중 분야는 기존 연결을 유지하도록 비활성으로 남습니다.'))work(async()=>{fill(await api('restore',{id:r.id,version:state.version}));show('published');window.YESSURI_SAVE_RESULT?.success('restore',state.version);notice('이전 버전으로 공개 내용을 복원했습니다. 홈페이지와 수정 내용이 선택한 기록으로 바뀌었습니다.');});};li.append(b);window.YESSURI_RESTORE_COMPARE?.mount({host:li,kind:"fields",state,revision:r,imageSource});$('history').append(li);}controls();}
 function fit(){if(locked||!$('frame'))return;const scale=Math.min(1,$('frame').parentElement.clientWidth/width);$('frame').style.width=width+'px';$('frame').style.transform='scale('+scale+')';$('frame').parentElement.style.height=(1000*scale)+'px';}
-function show(mode){if(locked)return;closeFieldEditor();$('frame').src='field-preview.html?mode='+mode+'&v='+state.version;$('open').href='field-preview.html?mode='+mode;const modeLabel=$('mode');
+function show(mode){if(locked)return;$('frame').src='field-preview.html?mode='+mode+'&v='+state.version;$('open').href='field-preview.html?mode='+mode;const modeLabel=$('mode');
   modeLabel.hidden=mode!=='draft';
   modeLabel.textContent=mode==='draft'?'저장한 수정 내용 · 공개 전':'';
   previewed=mode==='draft'&&!dirty;$('reviewed').checked=false;fit();controls();}
