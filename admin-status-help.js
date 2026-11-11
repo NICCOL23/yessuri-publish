@@ -30,6 +30,10 @@
   const titleTag=isDetailStatus?'summary':'h3';
   let box=host.querySelector('#'+id);if(!box){box=node(isApplicationList||isDetailStatus?'details':'section');box.id=id;box.className='admin-status-live-guide';box.setAttribute('aria-label',heading);const anchor=host.querySelector('.publication-badge');if(anchor)anchor.after(box);else host.prepend(box);}
   const item=items[label];
+  if(id==='admin-publication-status-help'){
+   const badge=host.querySelector('.publication-badge');
+   if(badge)badge.hidden=Boolean(item);
+  }
   if(isApplicationList){
    box.replaceChildren(node('summary',heading));
    if(item)box.append(content(label,item));
