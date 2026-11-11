@@ -219,3 +219,24 @@ html:has(.field-work-toolbar) {
     transform: translateX(0) scale(1);
   }
 }
+
+#field-history-panel summary {
+  cursor: pointer;
+}
+#field-history-panel > details > summary {
+  padding-block: 4px;
+  line-height: 1.6;
+}
+#field-history-panel .field-history-title {
+  font-weight: 700;
+}
+#field-history-panel #version {
+  margin-inline-start: .5em;
+  color: #41666c;
+  font-size: .875rem;
+  white-space: nowrap;
+}
+#history:not(.show-older) > .older-record,
+#history-more[hidden] {
+  display: none;
+}
