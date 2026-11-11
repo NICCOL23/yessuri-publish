@@ -11,7 +11,7 @@ function guide(detail){
   box.append(summary);
  box.append(node('p','한 단계씩 확인하세요. 사전등록 완료와 공개 등록은 서로 다른 작업입니다.'));
  const steps=[['신청 내용 확인','업체 정보·전문 분야·지역·사진 확인',detail?'#application-review':'#admin-applications'],['보완 요청·답변','필요한 자료를 요청하고 상태 저장',detail?'#admin-update':'#admin-applications'],['공개 동의 확인','소개·연락처·사진의 공개 범위를 별도로 확인',detail?'#admin-public-profile':'#admin-applications'],['공개 등록','동의한 정보만 공개 등록한 뒤 프로필 확인',detail?'#admin-public-profile':'#admin-applications']];
- const list=node('ol',null,'process-steps');steps.forEach(([name,help,href],i)=>{const li=node('li'),a=node('a');a.href=href;a.append(node('span',String(i+1).padStart(2,'0'),'step-number'),node('strong',name),node('span',help,'step-help'));li.append(a);list.append(li);});box.append(list);if(!detail)box.append(node('p','아래 신청 목록에서 ‘열기’를 누르면 해당 신청의 처리 화면으로 이동합니다.','hint'));return box;
+ const list=node('ol',null,'process-steps');steps.forEach(([name,help,href],i)=>{const li=node('li'),a=node('a');a.href=href;a.append(node('span',String(i+1).padStart(2,'0'),'step-number'),node('strong',name),node('span',help,'step-help'));li.append(a);list.append(li);});box.append(list);if(!detail)box.append(node('p','아래 신청 목록에서 ‘신청 상세 보기’를 누르면 해당 신청의 처리 화면으로 이동합니다.','hint'));return box;
 }
 let generation=0;
 async function mount({api,application}){

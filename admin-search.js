@@ -66,7 +66,7 @@
         for (const row of found.slice((currentPage - 1) * 10, currentPage * 10)) {
           const article = el('article', undefined, 'admin-search-row'), body = el('div');
           body.append(el('strong', row.company || '업체명 없음'), el('p', row.phone || '', 'hint'), el('p', values(row.fields).map(v=>window.YESSURI_SERVICE_FIELDS?.label(v)||v).join(' · ') + ' / ' + values(row.areas).join(' · '), 'hint'));
-          const link = el('a', '열기', 'btn'); link.href = 'technician-detail.html?id=' + encodeURIComponent(row.id) + '&admin=1'; link.setAttribute('aria-label', (row.company || '업체') + ' 신청 열기'); article.append(body, link); output.append(article);
+          const link = el('a', '신청 상세 보기', 'btn'); link.href = 'technician-detail.html?id=' + encodeURIComponent(row.id) + '&admin=1'; link.setAttribute('aria-label', (row.company || '업체') + ' 신청 상세 보기'); article.append(body, link); output.append(article);
         }
         if (pages > 1) {
           const pagination = el('div', undefined, 'admin-search-actions'), previous = el('button', '이전', 'btn'), next = el('button', '다음', 'btn'); previous.type = next.type = 'button'; previous.disabled = currentPage === 1; next.disabled = currentPage === pages;
