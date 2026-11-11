@@ -3,3 +3,17 @@
 .admin-session-lock{width:min(520px,calc(100% - 32px));max-width:calc(100% - 32px);padding:28px;border:1px solid #cedde3;border-radius:14px;color:#17314c}
 .admin-session-lock::backdrop{background:#102a3ddd}.admin-session-lock h2{font-size:22px;margin:0 0 12px}.admin-session-lock p{margin-bottom:16px}.admin-session-lock .btn{min-height:48px;width:100%}
 @media(max-width:760px){.admin-session-bar{align-items:stretch;flex-direction:column;padding:12px}.admin-session-actions .btn{flex:1}.admin-session-lock{padding:22px}}
+
+.admin-session-bar.admin-session-bar-with-disclosure {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.admin-session-bar-with-disclosure > details { flex: 1 1 8rem; min-width: 0; }
+.admin-session-bar-with-disclosure > details > summary {
+  min-height: 44px;
+  align-content: center;
+  cursor: pointer;
+  font-weight: 600;
+}
+.admin-session-bar-with-disclosure > .admin-session-actions { margin-inline-start: auto; }
