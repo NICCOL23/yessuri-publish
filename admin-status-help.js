@@ -19,14 +19,22 @@
  const names={'접수':'접수완료','확인 중':'확인중','자료 보완 요청':'보완요청','검토 완료':'사전등록 완료'};
  const node=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
  function content(title,item){const fragment=document.createDocumentFragment();fragment.append(node('h3',title),node('p',item.meaning));const next=node('p');next.append(node('strong','다음 할 일 '),document.createTextNode(item.next));const note=node('p',item.note);note.className='admin-status-note';fragment.append(next,note);return fragment;}
- function reference(){const details=node('details'),summary=node('summary','상태별 뜻과 다음 할 일 전체 보기'),grid=node('div');grid.className='admin-status-reference';for(const [title,items]of [['신청 검토 상태',applications],['업체 공개 상태',publications]]){const column=node('section');column.append(node('h3',title));for(const[label,item]of Object.entries(items)){const entry=node('div');entry.append(content(label,item));column.append(entry);}grid.append(column);}details.append(summary,grid);return details;}
+ function reference(){const grid=node('div');grid.className='admin-status-reference';for(const [title,items]of [['신청 검토 상태',applications],['업체 공개 상태',publications]]){const column=node('section');column.append(node('h3',title));for(const[label,item]of Object.entries(items)){const entry=node('div');entry.append(content(label,item));column.append(entry);}grid.append(column);}return grid;}
  let locked=false;const signatures=new WeakMap();
  function sync(host,label,items,id,heading){
   if(!host||locked)return;
   const signature=label;if(signatures.get(host)===signature&&host.querySelector('#'+id))return;
   signatures.set(host,signature);
-  let box=host.querySelector('#'+id);if(!box){box=node('section');box.id=id;box.className='admin-status-live-guide';box.setAttribute('aria-label',heading);const anchor=host.querySelector('.publication-badge');if(anchor)anchor.after(box);else host.prepend(box);}
+  const isApplicationList=id==='admin-application-status-help';
+  let box=host.querySelector('#'+id);if(!box){box=node(isApplicationList?'details':'section');box.id=id;box.className='admin-status-live-guide';box.setAttribute('aria-label',heading);const anchor=host.querySelector('.publication-badge');if(anchor)anchor.after(box);else host.prepend(box);}
   const item=items[label];
+  if(isApplicationList){
+   box.replaceChildren(node('summary',heading));
+   if(item)box.append(content(label,item));
+   else box.append(node('p','전체 신청을 보고 있습니다. 각 신청의 상태를 확인하고 ‘열기’를 누르면 해당 신청의 뜻과 다음 할 일을 볼 수 있습니다.'));
+   box.append(node('p','사전등록 완료는 신청 검토 완료이며, 업체 공개는 별도로 확인합니다.'),reference());
+   return;
+  }
   if(item)box.replaceChildren(content(heading+' · '+label,item));
   else box.replaceChildren(node('h3',heading),node('p',label==='공개 상태 확인 중'?'공개 상태를 불러오고 있습니다. 확인되면 뜻과 다음 할 일을 표시합니다.':'상태를 확인하지 못했습니다. 기존 상태 표시와 조회 결과를 먼저 확인하세요.'));
  }
@@ -35,8 +43,6 @@
   const list=document.getElementById('admin-applications');
   if(list){const filter=list.querySelector('#state-filter');const label=names[filter?.value];
    sync(list,label||'전체',applications,'admin-application-status-help','신청 상태 안내');
-   const box=list.querySelector('#admin-application-status-help');
-   if(box&&!box.querySelector('details')){if(!label){box.replaceChildren(node('h3','신청 상태 안내'),node('p','전체 신청을 보고 있습니다. 각 신청의 상태를 확인하고 ‘열기’를 누르면 해당 신청의 뜻과 다음 할 일을 볼 수 있습니다.'));}box.append(node('p','사전등록 완료는 신청 검토 완료이며, 업체 공개는 별도로 확인합니다.'),reference());}
   }
   const review=document.getElementById('application-review');if(review){const label=review.querySelector('.status')?.textContent.trim()||'';review.classList.add('admin-status-explained');sync(review,label,applications,'admin-detail-status-help','현재 신청 상태');}
   const profile=document.getElementById('profile-safety-panel');if(profile){const label=profile.querySelector('.publication-badge')?.textContent.trim()||'';sync(profile,label,publications,'admin-publication-status-help','현재 업체 공개 상태');}
