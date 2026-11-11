@@ -46,7 +46,9 @@
   const phonePublic=el('input'),phoneLabel=el('label',undefined,'check');
   phonePublic.type='checkbox';
   phoneLabel.append(phonePublic,document.createTextNode('연락처 공개 (별도 동의 필요)'));
-  phoneField.append(phoneLabel);
+  const phoneHeading=el('div',undefined,'manage-phone-heading');
+  phoneHeading.append(phoneField.firstElementChild,phoneLabel);
+  phoneField.prepend(phoneHeading);
   const fields=picker(profileFields,'fields','전문 분야',(window.YESSURI_SERVICE_FIELDS?.items||[]).map(i=>({value:i.value,label:i.label}))),areas=picker(profileFields,'serviceAreas','출장 지역',[...new Set(['전체',...(window.YESSURI_REGIONS||[])])].map(v=>({value:v,label:v==='전체'?'부산 전 지역':v})));
   inputs.career=field(profileFields,'career','공개 경력');
   inputs.intro=field(profileFields,'intro','공개 소개','textarea');
