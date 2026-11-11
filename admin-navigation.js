@@ -40,6 +40,7 @@
     const target = anchorPending && !nav.hidden && root.querySelector('#independent-profile-list');
     if (target) {
       anchorPending = false;
+      if (target instanceof HTMLDetailsElement) target.open = true;
       target.setAttribute('tabindex', '-1');
       target.scrollIntoView({block: 'start'});
       target.focus({preventScroll: true});
