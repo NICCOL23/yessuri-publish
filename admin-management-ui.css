@@ -48,6 +48,19 @@
 #manage-profile-form .manage-profile-description > .manage-field{margin:0;padding:0;min-width:0}
 @media(min-width:800px){
   #manage-profile-form .manage-profile-fields{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}
+  #manage-profile-form .manage-profile-fields > .manage-field:has(> :is(#manage-name,#manage-phone)){
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    align-self:stretch;
+  }
+  #manage-profile-form .manage-profile-fields label[for="manage-name"]{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    min-height:44px;
+    margin:0;
+  }
   #manage-profile-form .manage-profile-description{
     grid-column:1 / -1;
     grid-template-columns:minmax(0,2fr) minmax(0,1fr);
