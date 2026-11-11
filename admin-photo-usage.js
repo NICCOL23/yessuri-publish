@@ -10,7 +10,8 @@ function hero(slot) {
 function field(host){const n=note(host,'field');if(n)n.textContent='사용 위치: 메인 ‘어떤 수리가 필요하세요?’ 분야 박스의 아이콘입니다. 변경은 게시 후 반영되며 검색·등록 신청의 분야 연결은 유지됩니다.';}
 function privatePhoto(figure){
   const gallery=figure?.closest('.file-grid');
-  if(locked||!gallery||gallery.previousElementSibling?.matches('.photo-use-note[data-kind="private"]'))return;
+  const heading=gallery?.previousElementSibling;
+  if(locked||!heading?.matches('h3'))return;
   const details=el('details');
   details.className='photo-use-note';
   details.dataset.kind='private';
@@ -18,7 +19,10 @@ function privatePhoto(figure){
     el('summary','대표 이미지 사용 안내'),
     el('p','첨부사진은 비공개입니다. ‘대표 이미지로 등록’하면 선택한 사진이 메인·전문가 찾기 카드와 업체 소개에 공개됩니다. 신청서 원본 사진은 그대로 유지됩니다.')
   );
-  gallery.before(details);
+  const header=el('div');
+  header.className='private-photo-header';
+  heading.before(header);
+  header.append(heading,details);
 }
 function publicIntro(host){const n=note(host,'intro');if(n){n.textContent='업체가 공개 상태일 때의 사용 위치입니다. 대표 사진은 메인·전문가 찾기 카드에도 쓰이며, 실제 목록 표시는 공개 상태·검색 조건에 따릅니다.';host.querySelector('h2')?.nextElementSibling?.after(n);}}
 function selectProfile(id){if(locked)return;if(active!==id){active=id;cases.clear();}}
