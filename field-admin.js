@@ -108,6 +108,7 @@ let mountedEditor=null;
 
 function syncFieldEditor({focus=false}={}){
   const panel=$('field-side-panel');
+  const editorRow=$('field-editor-row');
   const card=desktopFieldEditor.matches&&selectedFieldId
     ? $('fields').querySelector('[data-id="'+selectedFieldId+'"]')
     : null;
@@ -120,6 +121,11 @@ function syncFieldEditor({focus=false}={}){
     mountedEditor=null;
   }
   if(editor&&!mountedEditor){
+    const cards=[...$('fields').querySelectorAll(':scope > .field')];
+    const cardIndex=cards.indexOf(card);
+    const rowEnd=Math.min(cardIndex+3-cardIndex%4,cards.length-1);
+    cards[rowEnd].after(editorRow);
+    panel.style.setProperty('--editor-origin', (cardIndex%4+.5)*25+'%');
     const body=editor.querySelector('.field-editor-body');
     $('field-side-body').append(body);
     editor.open=true;
@@ -127,6 +133,7 @@ function syncFieldEditor({focus=false}={}){
     mountedEditor={editor,card,body};
   }
 
+  editorRow.hidden=!editor;
   panel.hidden=!editor;
   if(editor){
     $('field-side-title').textContent=card.querySelector('h3').textContent+' 편집';
@@ -156,7 +163,7 @@ desktopFieldEditor.addEventListener('change',()=>{
 function render(){if(locked)return;const focus=document.activeElement?.dataset.focus;
 const expandedCards=new Set([...$('fields').querySelectorAll('.field-editor[open]')].map(editor=>editor.parentElement.dataset.id));
 mountedEditor=null;$('field-side-body').replaceChildren();
-$('fields').replaceChildren();fields.forEach((f,index)=>{const li=make('li');li.className='field';li.dataset.id=f.id;const heading=make('div');heading.className='field-card-heading';heading.append(make('h3',(index+1)+'. '+f.label));const enabledLabel=make('label');enabledLabel.className='check';const enabled=make('input');enabled.type='checkbox';enabled.checked=f.active!==false;enabled.setAttribute('aria-label',f.label+' 분야 사용');enabled.onchange=()=>{f.active=enabled.checked;changed();li.classList.toggle('is-inactive',!enabled.checked);};enabledLabel.append(enabled,make('span','분야 사용'));heading.append(enabledLabel);li.classList.toggle('is-inactive',f.active===false);addFieldDrag(li,heading,f.label);li.append(heading);const connection=Object.assign(make('p','연결 고정: '+f.id+' / '+f.value+' / '+f.href),{className:'fixed'});const row=make('div');row.className='field-media-row';const img=make('img');void thumbnail(img,f.image);img.alt='';img.className='icon';const inputs=make('div');inputs.className='field-edit-grid';const media=make('div');media.className='field-upload';
+$('fields').replaceChildren($('field-editor-row'));fields.forEach((f,index)=>{const li=make('li');li.className='field';li.dataset.id=f.id;const heading=make('div');heading.className='field-card-heading';heading.append(make('h3',(index+1)+'. '+f.label));const enabledLabel=make('label');enabledLabel.className='check';const enabled=make('input');enabled.type='checkbox';enabled.checked=f.active!==false;enabled.setAttribute('aria-label',f.label+' 분야 사용');enabled.onchange=()=>{f.active=enabled.checked;changed();li.classList.toggle('is-inactive',!enabled.checked);};enabledLabel.append(enabled,make('span','분야 사용'));heading.append(enabledLabel);li.classList.toggle('is-inactive',f.active===false);addFieldDrag(li,heading,f.label);li.append(heading);const connection=Object.assign(make('p','연결 고정: '+f.id+' / '+f.value+' / '+f.href),{className:'fixed'});const row=make('div');row.className='field-media-row';const img=make('img');void thumbnail(img,f.image);img.alt='';img.className='icon';const inputs=make('div');inputs.className='field-edit-grid';const media=make('div');media.className='field-upload';
 for(const [key,label,max]of [['label','표시 이름',40],['description','설명',100]]){const title=make('label',label),input=make(key==='description'?'textarea':'input');input.value=f[key];if(key==='description')input.rows=2;input.maxLength=max;input.dataset.focus=f.id+'-'+key;input.setAttribute('aria-label',f.label+' '+label);input.addEventListener('input',()=>{f[key]=input.value;changed();});title.append(input);inputs.append(title);}
 const uploadLabel=make('label','아이콘 교체 · JPG·PNG·WebP / 5MB 이내'),file=make('input');file.type='file';file.accept='image/jpeg,image/png,image/webp';file.setAttribute('aria-label',f.label+' 아이콘 교체');uploadLabel.append(file);media.append(uploadLabel);file.onchange=()=>work(async()=>{const photo=file.files[0];if(!photo)return;if(!['image/jpeg','image/png','image/webp'].includes(photo.type)||photo.size>5*1024*1024)throw Error('JPG·PNG·WebP 형식의 5MB 이하 사진을 선택하세요.');const bitmap=await createImageBitmap(photo);if(bitmap.width*bitmap.height>40000000){bitmap.close();throw Error('이미지 해상도가 너무 큽니다.');}const canvas=document.createElement('canvas'),scale=Math.min(1,512/Math.max(bitmap.width,bitmap.height));canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();const result=await api('upload',{data:canvas.toDataURL('image/jpeg',.9)});f.image=result.path;void thumbnail(img,f.image);changed();notice('아이콘을 준비했습니다. 수정 내용을 저장하세요.');file.value='';});
 const visibleLabel=make('label');visibleLabel.className='check';const visible=make('input');visible.type='checkbox';visible.checked=f.visible;visible.setAttribute('aria-label',f.label+' 메인에 표시');visible.onchange=()=>{f.visible=visible.checked;changed();};visibleLabel.append(visible,make('span','메인에 표시 · 검색·등록 목록은 유지'));row.append(img,media,visibleLabel);const editor=make('details');
