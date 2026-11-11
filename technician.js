@@ -65,7 +65,17 @@
   $('#cancel-lookup').onclick=()=>{$('#lookup-password').value='';location.href='technician-board.html';};
   const form=$('#lookup-form');form.onsubmit=async e=>{e.preventDefault();await busy(form,async()=>{try{const d=await api('verify',{id,password:$('#lookup-password').value});$('#lookup-password').value='';location.href=(params.get('action')==='edit'?'technician-apply.html':'technician-detail.html')+'?id='+encodeURIComponent(d.id);}catch(e){$('#lookup-password').value='';error($('#form-error'),e.message);}});};
  }
- const summary=(a,adminView=false)=>`<dl class="summary private-fields">${[['created_at','실제 접수일'],['company','업체명 또는 활동명'],['contact','담당자 이름'],['phone','연락 가능한 전화번호'],['fields','전문 분야'],['areas','실제 출장 가능한 구·군'],...(a.areaNotes?[['areaNotes','기타 출장 안내']]:[]),['intro','업체·활동 소개와 주로 하는 작업'],['links','사이트·블로그·SNS 또는 작업 사례 링크'],['notes','추가 문의 또는 요청 사항']].map(([key,label])=>`<div class="${['intro','links','notes','fields','areas','areaNotes'].includes(key)?'wide':''}"><dt>${label}</dt><dd>${key==='created_at'?date(a[key]):esc((key==='fields'?window.YESSURI_SERVICE_FIELDS?.format(a[key]):a[key])||'작성하지 않음')}</dd></div>`).join('')}</dl>`;
+ function summary(a,adminView=false){
+  const basic=[['created_at','실제 접수일'],['company','업체명 또는 활동명'],['contact','담당자 이름'],['phone','연락 가능한 전화번호']];
+  const service=[['fields','전문 분야'],['areas','실제 출장 가능한 구·군'],...(a.areaNotes?[['areaNotes','기타 출장 안내']]:[])];
+  const additional=[['intro','업체·활동 소개와 주로 하는 작업'],['links','사이트·블로그·SNS 또는 작업 사례 링크'],['notes','추가 문의 또는 요청 사항']];
+  const value=key=>key==='created_at'?date(a[key]):esc((key==='fields'?window.YESSURI_SERVICE_FIELDS?.format(a[key]):a[key])||'작성하지 않음');
+  if(adminView){
+   const table=(label,rows)=>`<table class="application-data-table" aria-label="${label}"><tbody>${rows.map(([key,name])=>`<tr><th scope="row">${name}</th><td>${value(key)}</td></tr>`).join('')}</tbody></table>`;
+   return `<div class="admin-application-data"><div class="admin-application-data-columns">${table('기본 정보',basic)}${table('전문 분야와 출장 지역',service)}</div>${table('소개와 추가 정보',additional)}</div>`;
+  }
+  return `<dl class="summary private-fields">${[...basic,...service,...additional].map(([key,label])=>`<div class="${basic.some(([basicKey])=>basicKey===key)?'':'wide'}"><dt>${label}</dt><dd>${value(key)}</dd></div>`).join('')}</dl>`;
+ }
  function photoGallery(photos){return photos.length?`<div class="file-grid">${photos.map((p,i)=>`<figure class="photo"><a href="${esc(p.url)}" target="_blank" rel="noopener" aria-label="비공개 첨부사진 ${i+1} 크게 보기"><img class="detail-photo" ${cloud?'data-private-src':'src'}="${esc(p.url)}" alt="비공개 첨부사진 ${i+1}"></a><figcaption>첨부사진 ${i+1} · 비공개</figcaption></figure>`).join('')}</div>`:'<p class="hint">첨부한 사진이 없습니다.</p>';}
  function messages(rows){return rows.length?rows.map(m=>`<article class="reply"><strong>${m.role==='admin'?'예스수리 운영팀':'신청자'}</strong><p class="hint">${date(m.created_at)}</p><p class="plain">${esc(m.body)}</p></article>`).join(''):'<p class="hint">아직 답변이 없습니다. 자동 알림 없이 이 화면에서 확인할 수 있습니다.</p>';}
  async function detail(){if(!id){location.replace('technician-lookup.html');return;}const isAdmin=params.get('admin')==='1';let d;try{d=await api((isAdmin?'admin/':'')+'applications/'+id);}catch(e){if(isAdmin){location.replace('technician-admin.html');return;}authRequired(e);return;}const a=d.application;
