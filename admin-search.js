@@ -13,7 +13,7 @@
     const form = el('form', undefined, 'admin-search');
     form.setAttribute('role', 'search');
     form.setAttribute('aria-label', kind === 'applications' ? '등록 신청 검색' : '공개 업체 검색');
-    form.append(el('h3', kind === 'applications' ? '등록 신청 검색' : '공개 업체 검색'));
+    const heading = el('h3', kind === 'applications' ? '등록 신청 검색' : '공개 업체 검색');
     const grid = el('div', undefined, 'admin-search-grid'), inputs = {};
     for (const [key, label] of [['company', '업체명·활동명'], ['phone', '연락처'], ['field', '전문 분야'], ['area', '출장 지역']]) {
       const wrap = el('div'), title = el('label', label), input = el(['field', 'area'].includes(key) ? 'select' : 'input');
@@ -31,7 +31,16 @@
     submit.type = 'submit'; reset.type = 'button'; actions.append(submit, reset);
     const hint = el('p', '여러 조건은 모두 일치해야 합니다. 연락처는 일부 번호로도 검색할 수 있습니다.', 'hint');
     const status = el('p', '', 'admin-search-status'); status.setAttribute('role', 'status'); status.setAttribute('aria-live', 'polite');
-    form.append(grid, actions, hint, status);
+    if (kind === 'applications') {
+      const header = el('div', undefined, 'admin-application-search-header');
+      const guide = el('details');
+      guide.append(el('summary', '검색 안내'), hint);
+      actions.append(guide);
+      header.append(heading, actions);
+      form.append(header, grid, status);
+    } else {
+      form.append(heading, grid, actions, hint, status);
+    }
     return {form, inputs, submit, reset, status};
   }
 

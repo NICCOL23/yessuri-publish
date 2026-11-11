@@ -12,3 +12,10 @@
 @media(max-width:900px){#admin-applications>.list-region{position:static;inset:auto;max-width:100%;max-height:none;overflow:visible;box-shadow:none;margin-left:0;flex-wrap:wrap}}
 @media(max-width:850px){.admin-search-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:480px){.admin-search{padding:12px}.admin-search-grid{grid-template-columns:1fr;gap:12px}.admin-search-actions button{flex:1}.admin-search-row{align-items:flex-start;flex-direction:column;gap:8px}}
+
+.admin-application-search-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px 16px}
+.admin-application-search-header h3{margin:0}
+.admin-application-search-header .admin-search-actions{justify-content:flex-end;margin:0 0 0 auto;max-width:100%}
+.admin-application-search-header .admin-search-actions button{flex:none}
+.admin-application-search-header summary{cursor:pointer;min-height:44px;align-content:center}
+.admin-application-search-header details[open]{flex-basis:100%;text-align:end}
