@@ -26,7 +26,7 @@
 @media (min-width: 1000px) {
   #field-publish-panels:has(#field-save-panel section):has(#field-compare-panel section) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: start;
+    align-items: stretch;
   }
 }
 
@@ -40,4 +40,69 @@
 .field-save-disclosure summary:focus-visible {
   outline: 3px solid #00858e;
   outline-offset: 3px;
+}
+
+#status:empty { display: none; }
+
+#field-compare-panel {
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid #c5dedf;
+  border-radius: 12px;
+  background: #fff;
+}
+#field-publish-panels > #field-compare-panel:not(:has(.publish-compare)) {
+  display: none;
+}
+#field-compare-panel > :is(.publish-compare, .admin-quick-guide) {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+#field-compare-panel > .admin-quick-guide {
+  border-top: 1px solid #dce7eb;
+}
+#field-compare-panel .admin-quick-guide ol {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (max-width: 600px) {
+  #field-compare-panel .admin-quick-guide ol {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+#field-save-panel {
+  display: grid;
+  min-width: 0;
+}
+
+#field-workspace > .field-work-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  padding: 8px 0;
+  background: #f2f6f7;
+  border-bottom: 1px solid #dce5e8;
+}
+html:has(.field-work-toolbar) {
+  scroll-padding-top: 72px;
+}
+@media (min-width: 851px) {
+  #field-workspace .preview {
+    top: 72px;
+  }
+}
+@media (max-width: 620px) {
+  html:has(.field-work-toolbar) {
+    scroll-padding-top: 164px;
+  }
+}
+
+#field-workspace .field-list-panel {
+  align-self: start;
+  background: #fff;
+  border: 1px solid #dce5e8;
+  border-radius: 12px;
 }
