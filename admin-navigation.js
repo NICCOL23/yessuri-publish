@@ -9,8 +9,8 @@
   nav.setAttribute('aria-label', '관리자 통합 메뉴');
   nav.hidden = true;
   const links = [
-    ['등록 신청 관리', 'technician-admin.html', '신청 확인·답변'],
-    ['공개 업체 관리', 'technician-admin.html#independent-profile-list', '소개·동의·사진'],
+    ['신규 업체 등록 관리', 'technician-admin.html', '신청 확인·공개 등록'],
+    ['공개 업체 정보 수정', 'technician-admin.html#independent-profile-list', '소개·동의·사진'],
     ['히어로 관리', 'hero-admin.html', '메인 사진·문구'],
     ['수리 분야 관리', 'field-admin.html', '추가·수정·표시 순서'],
     ['준비 안내 관리', 'guide-admin.html', '이용 순서·비용·준비물']
