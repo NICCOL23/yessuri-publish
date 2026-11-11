@@ -109,7 +109,19 @@ html:has(.field-work-toolbar) {
 
 #fields .field-card-heading { justify-content: flex-start; }
 #fields .field-card-heading > h3 { overflow-wrap: anywhere; }
-#fields .field-card-heading .check { white-space: nowrap; }
+.field-footer-settings {
+  display: flex;
+  flex: 1 0 100%;
+  justify-content: flex-end;
+}
+:is(#fields,#field-side-panel) .field-footer-settings .field-inactive-check {
+  gap: 6px;
+  min-height: 28px;
+  margin: 0;
+  font-size: .875rem;
+  line-height: 1.5;
+  white-space: nowrap;
+}
 #fields .field-drag-handle {
   cursor: grab;
   user-select: none;
@@ -133,6 +145,7 @@ html:has(.field-work-toolbar) {
   font-weight: 600;
   cursor: pointer;
 }
+#fields .field-editor:not([open]) > .field-editor-body { display: none; }
 #fields .field-editor > summary:focus-visible {
   outline: 3px solid #00858e;
   outline-offset: 2px;
@@ -162,11 +175,28 @@ html:has(.field-work-toolbar) {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 8px;
   }
-  #fields > .field { min-width: 0; position: relative; margin: 0; padding: 5px 8px; }
-  #fields .field-card-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px; margin-bottom: 0; }
-  #fields .field-card-heading .check { gap: 4px; min-height: 28px; font-size: .875rem; }
-  #fields .field-drag-handle { position: absolute; inset-inline-end: 8px; inset-block-end: 5px; padding: 2px 4px; font-size: .875rem; white-space: nowrap; }
-  #fields .field-editor > summary { min-height: 28px; padding-block: 2px; margin-inline-end: 68px; }
+  #fields > .field {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 106px;
+    position: relative;
+    margin: 0;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  #fields .field-card-heading { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; margin-bottom: 0; }
+  #fields .field-card-heading h3 { font-size: 1.125rem; line-height: 1.4; }
+  #fields > .field > .field-editor { margin-top: auto; padding-top: 8px; }
+  #fields .field-drag-handle { position: absolute; inset-inline-end: 10px; inset-block-end: 10px; padding: 4px 2px; color: #41666c; font-size: .875rem; white-space: nowrap; }
+  #fields .field-editor > summary {
+    width: fit-content;
+    min-height: 28px;
+    padding: 2px 7px;
+    border-radius: 5px;
+    background: #eaf6f5;
+  }
+  #fields .field-editor > summary:hover { background: #d8efed; }
   #fields .is-editing { border-color: #00858e; background: #eef9f8; }
   #fields .field[data-drop-side="before"] { box-shadow: -3px 0 #007a82; }
   #fields .field[data-drop-side="after"] { box-shadow: 3px 0 #007a82; }
