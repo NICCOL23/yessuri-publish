@@ -75,7 +75,16 @@
   trigger.onclick=()=>{picker.showModal();select.focus();};
   picker.onclose=()=>trigger.focus();
   wrap.append(label,trigger,picker);filters.append(wrap);
-  const refresh=el('button','변경 이력 불러오기','btn');refresh.type='button';const status=el('p'),box=el('div',undefined,'manage-table-wrap');status.setAttribute('role','status');const close=el('button','변경 이력 닫기','btn');close.type='button';close.onclick=()=>{panel.open=false;summary.focus();};panel.append(filters,refresh,status,box,close);root.append(panel);let events=[];
+  const refresh=el('button','변경 이력 불러오기','btn');refresh.type='button';const status=el('p'),box=el('div',undefined,'manage-table-wrap');status.setAttribute('role','status');function makeCloseButton(){
+   const button=el('button','변경 이력 닫기','btn');
+   button.type='button';
+   button.onclick=()=>{panel.open=false;summary.focus();};
+   return button;
+  }
+  const toolbar=el('div',undefined,'admin-toolbar');
+  toolbar.append(refresh,makeCloseButton());
+  panel.append(filters,toolbar,status,box,makeCloseButton());
+  root.append(panel);let events=[];
   function render(){box.replaceChildren();const formatter=window.YESSURI_AUDIT_TEXT,list=el('ul',undefined,'audit-readable-list'),filtered=events.filter(e=>(!date.value||day(e.at||e.created_at)===date.value)&&(!select.value||(formatter?formatter.key(e):e.action)===select.value));list.setAttribute('aria-label','관리자 변경 이력 · 한국시간');for(const item of filtered){const info=formatter?formatter.describe(item):{actor:'관리자 확인 필요',target:'대상 확인 필요',title:actionNames[item.action]||'작업 내용을 확인해야 합니다',detail:'현재 상태는 해당 관리 화면에서 확인하세요.',result:item.outcome==='success'?'처리 완료':item.outcome==='failure'?'처리 실패':'결과 확인 필요',resultClass:item.outcome==='success'?'success':item.outcome==='failure'?'failure':'unknown'},entry=el('li',undefined,'audit-readable-event'),top=el('div',undefined,'audit-readable-top');top.append(el('span',info.actor,'audit-readable-actor'),el('span',info.result,'audit-readable-result '+info.resultClass));const time=el('time',kst(item.at||item.created_at)),at=item.at||item.created_at;if(at&&Number.isFinite(Date.parse(at)))time.dateTime=new Date(at).toISOString();const identifiers=el('details');identifiers.append(el('summary','식별자 보기'),el('p','대상: '+(item.target||'-')),el('p','운영자: '+(item.operatorId||item.admin_id||'-')));entry.append(top,el('h3',info.title),el('p','대상: '+info.target),el('p',info.detail),time,identifiers);list.append(entry);}if(filtered.length)box.append(list);else box.append(el('p','현재 조건에 맞는 이력이 없습니다. 날짜나 작업 종류를 확인하세요.','hint'));status.textContent=filtered.length+'건 표시 · 현재 불러온 이력에 필터를 적용합니다.';}
   date.onchange=render;select.onchange=()=>{trigger.textContent=select.selectedOptions[0].textContent;render();};refresh.onclick=async()=>{refresh.disabled=true;try{events=(await api('admin/audit')).events||[];if(!locked)render();}catch(e){status.textContent=e.message;}finally{refresh.disabled=false;}};
  }
