@@ -11,8 +11,8 @@
   <link rel="stylesheet" href="admin-publish-compare.css?v=1"><link rel="stylesheet" href="admin-save-result.css?v=2"><link rel="stylesheet" href="admin-error-help.css?v=1"><link rel="stylesheet" href="admin-photo-usage.css?v=1"><link rel="stylesheet" href="admin-restore-compare.css?v=1"><link rel="stylesheet" href="admin-photo-check.css?v=1"><link rel="stylesheet" href="admin-mobile-compact.css?v=1"><script src="admin-mobile-compact.js?v=1" defer></script><script src="admin-photo-check.js?v=1" defer></script><script src="admin-restore-compare.js?v=dynamic-fields-20261110" defer></script><script src="admin-photo-usage.js?v=1" defer></script><script src="admin-error-help.js?v=2" defer></script><script src="admin-save-result.js?v=hero-fold-1" defer></script><script src="admin-publish-compare.js?v=hero-panels-2" defer></script><script src="admin-unsaved.js?v=1" defer></script><script src="technician-config.js?v=2" defer></script>
   <script src="admin-command-requests.js?v=1" defer></script>
   <script src="admin-session-guard.js?v=no-timeout-20261110" defer></script>
-  <script src="hero-admin.js?v=editor-toolbar-1" defer></script>
-<link rel="stylesheet" href="admin-navigation.css?v=2"><script src="admin-navigation.js?v=dynamic-fields-20261110" defer></script><link rel="stylesheet" href="admin-text-colors.css?v=1"><script src="admin-text-colors.js?v=live-input-20261110" defer></script><link rel="stylesheet" href="hero-library.css?v=1"><script src="hero-library.js?v=1" defer></script><link rel="stylesheet" href="hero-history.css?v=2"><script src="hero-history.js?v=1" defer></script><link rel="stylesheet" href="hero-admin-compact.css?v=selector-label-row-1"></head>
+  <script src="hero-admin.js?v=link-settings-1" defer></script>
+<link rel="stylesheet" href="admin-navigation.css?v=2"><script src="admin-navigation.js?v=dynamic-fields-20261110" defer></script><link rel="stylesheet" href="admin-text-colors.css?v=1"><script src="admin-text-colors.js?v=live-input-20261110" defer></script><link rel="stylesheet" href="hero-library.css?v=1"><script src="hero-library.js?v=1" defer></script><link rel="stylesheet" href="hero-history.css?v=2"><script src="hero-history.js?v=1" defer></script><link rel="stylesheet" href="hero-admin-compact.css?v=button-row-2"></head>
 <body data-technician-page="admin">
   <header class="topbar"><div><strong>YESSURI</strong><span>홈페이지 내용 관리</span></div><a href="technician-admin.html">관리자 첫 화면</a></header>
   <main id="main"><div id="root">
@@ -49,9 +49,17 @@
             <div class="two-fields"><div><label for="description1">설명 첫째 줄</label><input id="description1" name="description1" maxlength="100" required></div>
             <div><label for="description2">설명 둘째 줄</label><input id="description2" name="description2" maxlength="100" required></div></div>
           </fieldset>
-          <fieldset>
-            <legend>버튼</legend>
-            <div class="two-fields"><div><label for="buttonText">버튼 이름</label><input id="buttonText" name="buttonText" maxlength="24" required></div><div><label for="buttonHref">이동 주소</label><input id="buttonHref" name="buttonHref" maxlength="300" required><small>예: find.html 또는 https://로 시작하는 주소</small></div></div>
+          <fieldset aria-label="히어로 버튼 설정">
+            <label for="buttonText">히어로 버튼 이름</label>
+            <div class="hero-button-row">
+              <input id="buttonText" name="buttonText" maxlength="24" required>
+              <details id="hero-link-settings" class="hero-workflow-help">
+                <summary>링크 설정</summary>
+                <label for="buttonHref">이동 주소</label>
+                <input id="buttonHref" name="buttonHref" maxlength="300" aria-describedby="hero-link-help" required>
+                <small id="hero-link-help">예: find.html 또는 https://로 시작하는 주소</small>
+              </details>
+            </div>
           </fieldset>
           <fieldset>
             <legend>사진</legend>

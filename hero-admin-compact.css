@@ -167,3 +167,25 @@ main{padding:14px 24px 28px}.intro{margin-bottom:12px}.intro p{margin:4px 0}h1{f
   flex: 1 1 210px;
   min-width: 0;
 }
+
+.hero-button-row {
+  display: grid;
+  grid-template-columns: minmax(0, 20rem) minmax(min-content, 1fr);
+  align-items: start;
+  gap: 4px 12px;
+}
+
+.hero-button-row > details {
+  min-width: 0;
+}
+
+.hero-button-row > details > summary {
+  padding-block: 12px;
+  line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+  .hero-button-row:has(> details[open]) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

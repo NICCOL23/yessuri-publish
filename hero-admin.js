@@ -198,6 +198,10 @@ async function load() {
 form.addEventListener('input', event => {
     if (event.target.id !== 'slide-select') changed();
 });
+document.getElementById('buttonHref').addEventListener('invalid', () => {
+    document.getElementById('hero-link-settings').open = true;
+});
+
 form.addEventListener('submit', async event => {
     event.preventDefault();
     if (!form.reportValidity()) return;
