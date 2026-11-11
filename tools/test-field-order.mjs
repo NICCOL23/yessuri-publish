@@ -16,7 +16,7 @@ function element() {
 }
 
 const source = read('field-admin.js');
-const dragCode = source.slice(source.indexOf('let draggedField='), source.indexOf('function render(){'));
+const dragCode = source.slice(source.indexOf('let draggedField='), source.indexOf('const desktopFieldEditor='));
 let changes = 0;
 let clock = 0;
 let pendingFrame;
@@ -24,6 +24,7 @@ const scrolls = [];
 const documentEvents = {};
 const context = vm.createContext({
   make: element,
+  matchMedia: () => ({ matches: false }),
   document: {
     querySelector: () => ({ getBoundingClientRect: () => ({ bottom: 61 }) }),
     addEventListener: (type, callback) => { documentEvents[type] = callback; },
