@@ -18,8 +18,20 @@ function element() {
 const source = read('field-admin.js');
 const dragCode = source.slice(source.indexOf('let draggedField='), source.indexOf('function render(){'));
 let changes = 0;
+let clock = 0;
+let pendingFrame;
+const scrolls = [];
+const documentEvents = {};
 const context = vm.createContext({
   make: element,
+  document: {
+    querySelector: () => ({ getBoundingClientRect: () => ({ bottom: 61 }) }),
+    addEventListener: (type, callback) => { documentEvents[type] = callback; },
+  },
+  window: { innerHeight: 900, scrollBy: ({top}) => scrolls.push(top) },
+  performance: { now: () => clock },
+  requestAnimationFrame(callback) { pendingFrame = callback; return 1; },
+  cancelAnimationFrame() { pendingFrame = undefined; },
   fields: ['bath', 'wallpaper', 'flooring'].map(id => ({id})),
   locked: false, busy: false,
   changed() { changes++; },
@@ -49,6 +61,18 @@ assert.equal(cards[1].card.dataset.dropSide, undefined);
 assert.deepEqual(context.fields.map(f => f.id), ['bath', 'wallpaper', 'flooring']);
 
 assert.equal(changes, 2);
+cards[0].handle.events.dragstart(event(5));
+documentEvents.dragover(event(890));
+pendingFrame(clock += 16);
+assert(scrolls.at(-1) > 0);
+documentEvents.dragover(event(70));
+pendingFrame(clock += 16);
+assert(scrolls.at(-1) < 0);
+documentEvents.dragover(event(450));
+pendingFrame(clock += 16);
+assert.equal(scrolls.length, 2);
+cards[0].handle.events.dragend();
+assert.equal(pendingFrame, undefined);
 const expected = ['전체', '도배', '욕실·설비', '컴퓨터·IT'];
 const options = expected.map(value => ({ value, textContent: value }));
 const select = { ...element(), id: 'find-category', options, selectedOptions: [options[0]], value: options[0].value, dataset: {} };
@@ -65,4 +89,4 @@ const pickerContext = {
 select.after=()=>{}; select.currentValue=options[0].value;
 await vm.runInNewContext(read('service-field-picker.js'), pickerContext);
 assert.deepEqual(pickerButtons.filter(e => e.className === 'ys-field-option').map(e => e.dataset.value), expected);
-console.log('PASS field drag before/after/cancel and expert picker published order');
+console.log('PASS field drag before/after/cancel/edge scroll and expert picker published order');

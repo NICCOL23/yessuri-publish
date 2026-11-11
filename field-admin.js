@@ -16,8 +16,27 @@ function confirmAction(text){$('question').textContent=text;$('dialog').showModa
 async function work(task){if(locked)return;busy=true;controls();try{await task();}catch(e){if(!locked)notice(e.message,true);}finally{busy=false;controls();}}
 let draggedField=null;
 let dropTarget=null;
+let dragScrollFrame=0;
+let dragScrollY=0;
+let lastDragOver=0;
+
+function scrollWhileDragging(now){
+  dragScrollFrame=0;
+  if(!draggedField||locked||busy||now-lastDragOver>800)return;
+  const top=Math.max(0,document.querySelector('.field-work-toolbar').getBoundingClientRect().bottom);
+  const bottom=window.innerHeight;
+  const edge=Math.min(96,(bottom-top)/3);
+  if(edge<=0)return;
+  let speed=0;
+  if(dragScrollY>bottom-edge) speed=Math.min(1,(dragScrollY-bottom+edge)/edge);
+  else if(dragScrollY<top+edge) speed=-Math.min(1,(top+edge-dragScrollY)/edge);
+  if(speed)window.scrollBy({top:Math.sign(speed)*Math.ceil(Math.abs(speed)*18),behavior:'instant'});
+  dragScrollFrame=requestAnimationFrame(scrollWhileDragging);
+}
 
 function clearFieldDrag(){
+  if(dragScrollFrame)cancelAnimationFrame(dragScrollFrame);
+  dragScrollFrame=0;
   draggedField?.classList.remove('field-dragging');
   dropTarget?.removeAttribute('data-drop-side');
   draggedField=null;
@@ -71,6 +90,14 @@ function addFieldDrag(card,heading,label){
     render();
   });
 }
+
+document.addEventListener('dragover',event=>{
+  if(!draggedField||locked||busy)return;
+  dragScrollY=event.clientY;
+  lastDragOver=performance.now();
+  if(!dragScrollFrame)dragScrollFrame=requestAnimationFrame(scrollWhileDragging);
+});
+document.addEventListener('drop',clearFieldDrag);
 
 function render(){if(locked)return;const focus=document.activeElement?.dataset.focus;$('fields').replaceChildren();fields.forEach((f,index)=>{const li=make('li');li.className='field';li.dataset.id=f.id;const heading=make('div');heading.className='field-card-heading';heading.append(make('h3',(index+1)+'. '+f.label));const enabledLabel=make('label');enabledLabel.className='check';const enabled=make('input');enabled.type='checkbox';enabled.checked=f.active!==false;enabled.setAttribute('aria-label',f.label+' 분야 사용');enabled.onchange=()=>{f.active=enabled.checked;changed();li.classList.toggle('is-inactive',!enabled.checked);};enabledLabel.append(enabled,make('span','분야 사용'));heading.append(enabledLabel);li.classList.toggle('is-inactive',f.active===false);addFieldDrag(li,heading,f.label);li.append(heading);const connection=Object.assign(make('p','연결 고정: '+f.id+' / '+f.value+' / '+f.href),{className:'fixed'});const row=make('div');row.className='field-media-row';const img=make('img');void thumbnail(img,f.image);img.alt='';img.className='icon';const inputs=make('div');inputs.className='field-edit-grid';const media=make('div');media.className='field-upload';
 for(const [key,label,max]of [['label','표시 이름',40],['description','설명',100]]){const title=make('label',label),input=make(key==='description'?'textarea':'input');input.value=f[key];if(key==='description')input.rows=2;input.maxLength=max;input.dataset.focus=f.id+'-'+key;input.setAttribute('aria-label',f.label+' '+label);input.addEventListener('input',()=>{f[key]=input.value;changed();});title.append(input);inputs.append(title);}
