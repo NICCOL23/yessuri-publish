@@ -1,6 +1,6 @@
 (()=>{
 const root=document.querySelector('#root');
-const labels=['새 신청 확인','확인 중 이어서 보기','자료 보완 확인','사전등록 완료 확인'];
+const labels=['신규 접수','검토 진행 중','자료 보완 확인','사전등록 완료 확인'];
 const states=['접수','확인 중','자료 보완 요청','검토 완료'];
 const node=(tag,text,cls)=>{const e=document.createElement(tag);if(text)e.textContent=text;if(cls)e.className=cls;return e;};
 
