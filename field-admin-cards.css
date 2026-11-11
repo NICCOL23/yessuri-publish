@@ -8,3 +8,36 @@
 #fields .field-upload input[type=file]{font-size:1rem}
 
 #fields .field-card-heading{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:4px}#fields .field-card-heading h3{margin:0;min-width:0}#fields .field-card-heading .check{margin:0;min-height:44px;flex-shrink:0;font-size:1rem}#fields .field-footer .field-remove{color:#a53d3d;border-color:#dfb7b7}#fields .is-inactive .field-card-heading h3::after{content:' · 비활성';font-size:.875rem;color:#667b83}#new-field-dialog{padding:16px;width:min(500px,calc(100vw - 24px))}#new-field-dialog :is(input,textarea){width:100%;min-width:0}#new-field-dialog .error:empty{display:none}@media(max-width:540px){#fields .field-card-heading{flex-wrap:wrap}}
+
+#field-publish-panels {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+#field-publish-panels:has(section) {
+  margin-block: 10px;
+}
+#field-publish-panels > div:empty {
+  display: none;
+}
+.admin-density #field-publish-panels :is(.admin-save-result, .publish-compare) {
+  margin: 0;
+}
+@media (min-width: 1000px) {
+  #field-publish-panels:has(#field-save-panel section):has(#field-compare-panel section) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.field-save-disclosure summary {
+  box-sizing: border-box;
+  min-height: 44px;
+  padding-block: 9px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.field-save-disclosure summary:focus-visible {
+  outline: 3px solid #00858e;
+  outline-offset: 3px;
+}
