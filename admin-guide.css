@@ -33,3 +33,6 @@ body[data-technician-page="admin"] .today.card {
   max-height: min(45dvh, calc(100dvh - var(--ys-page-back-scroll-offset, 90px) - 1rem));
   overflow-y: auto;
 }
+
+.admin-profile-disclosure > summary { min-height: 44px; align-content: center; cursor: pointer; }
+.admin-profile-disclosure > summary > h2 { display: inline; margin: 0; }
