@@ -144,3 +144,26 @@ main{padding:14px 24px 28px}.intro{margin-bottom:12px}.intro p{margin:4px 0}h1{f
   border-radius: 6px;
   background: #eff8f7;
 }
+
+.hero-copy-heading {
+  justify-content: flex-end;
+}
+.hero-copy-heading .hero-color-help[open] > summary {
+  margin-inline-start: auto;
+}
+
+.hero-selector-label-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+  margin: 6px 0;
+}
+.hero-selector-label-row > label {
+  margin: 0;
+}
+.hero-selector-label-row > .hero-copy-heading {
+  flex: 1 1 210px;
+  min-width: 0;
+}
