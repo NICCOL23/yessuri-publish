@@ -122,3 +122,16 @@ html:has(.field-work-toolbar) {
 @media (hover: none), (pointer: coarse) {
   #fields .field-drag-handle { display: none; }
 }
+
+#fields .field-editor > summary {
+  box-sizing: border-box;
+  min-height: 44px;
+  padding-block: 9px;
+  color: #007a82;
+  font-weight: 600;
+  cursor: pointer;
+}
+#fields .field-editor > summary:focus-visible {
+  outline: 3px solid #00858e;
+  outline-offset: 2px;
+}
