@@ -8,11 +8,11 @@
   <title>메인 히어로 관리 | YESSURI</title>
   <link rel="stylesheet" href="hero-admin.css?v=2">
   <link rel="stylesheet" href="admin-session-guard.css?v=1">
-  <link rel="stylesheet" href="admin-publish-compare.css?v=1"><link rel="stylesheet" href="admin-save-result.css?v=2"><link rel="stylesheet" href="admin-error-help.css?v=1"><link rel="stylesheet" href="admin-photo-usage.css?v=1"><link rel="stylesheet" href="admin-restore-compare.css?v=1"><link rel="stylesheet" href="admin-photo-check.css?v=1"><link rel="stylesheet" href="admin-mobile-compact.css?v=1"><script src="admin-mobile-compact.js?v=1" defer></script><script src="admin-photo-check.js?v=1" defer></script><script src="admin-restore-compare.js?v=dynamic-fields-20261110" defer></script><script src="admin-photo-usage.js?v=1" defer></script><script src="admin-error-help.js?v=2" defer></script><script src="admin-save-result.js?v=hero-fold-1" defer></script><script src="admin-publish-compare.js?v=hero-panels-1" defer></script><script src="admin-unsaved.js?v=1" defer></script><script src="technician-config.js?v=2" defer></script>
+  <link rel="stylesheet" href="admin-publish-compare.css?v=1"><link rel="stylesheet" href="admin-save-result.css?v=2"><link rel="stylesheet" href="admin-error-help.css?v=1"><link rel="stylesheet" href="admin-photo-usage.css?v=1"><link rel="stylesheet" href="admin-restore-compare.css?v=1"><link rel="stylesheet" href="admin-photo-check.css?v=1"><link rel="stylesheet" href="admin-mobile-compact.css?v=1"><script src="admin-mobile-compact.js?v=1" defer></script><script src="admin-photo-check.js?v=1" defer></script><script src="admin-restore-compare.js?v=dynamic-fields-20261110" defer></script><script src="admin-photo-usage.js?v=1" defer></script><script src="admin-error-help.js?v=2" defer></script><script src="admin-save-result.js?v=hero-fold-1" defer></script><script src="admin-publish-compare.js?v=hero-panels-2" defer></script><script src="admin-unsaved.js?v=1" defer></script><script src="technician-config.js?v=2" defer></script>
   <script src="admin-command-requests.js?v=1" defer></script>
   <script src="admin-session-guard.js?v=no-timeout-20261110" defer></script>
-  <script src="hero-admin.js?v=sticky-actions-3" defer></script>
-<link rel="stylesheet" href="admin-navigation.css?v=2"><script src="admin-navigation.js?v=dynamic-fields-20261110" defer></script><link rel="stylesheet" href="admin-text-colors.css?v=1"><script src="admin-text-colors.js?v=live-input-20261110" defer></script><link rel="stylesheet" href="hero-library.css?v=1"><script src="hero-library.js?v=1" defer></script><link rel="stylesheet" href="hero-history.css?v=2"><script src="hero-history.js?v=1" defer></script><link rel="stylesheet" href="hero-admin-compact.css?v=sticky-actions-3"></head>
+  <script src="hero-admin.js?v=editor-toolbar-1" defer></script>
+<link rel="stylesheet" href="admin-navigation.css?v=2"><script src="admin-navigation.js?v=dynamic-fields-20261110" defer></script><link rel="stylesheet" href="admin-text-colors.css?v=1"><script src="admin-text-colors.js?v=live-input-20261110" defer></script><link rel="stylesheet" href="hero-library.css?v=1"><script src="hero-library.js?v=1" defer></script><link rel="stylesheet" href="hero-history.css?v=2"><script src="hero-history.js?v=1" defer></script><link rel="stylesheet" href="hero-admin-compact.css?v=color-help-inline-1"></head>
 <body data-technician-page="admin">
   <header class="topbar"><div><strong>YESSURI</strong><span>홈페이지 내용 관리</span></div><a href="technician-admin.html">관리자 첫 화면</a></header>
   <main id="main"><div id="root">
@@ -30,11 +30,17 @@
     <button id="reload" class="secondary" type="button" hidden>최신 상태 다시 불러오기</button>
     <div class="workspace">
       <section class="panel editor" aria-labelledby="edit-title">
-        <div class="panel-heading"><h2 id="edit-title">히어로 내용 수정</h2><span id="dirty-state" class="badge">불러오는 중</span></div>
-        <label for="slide-select">편집할 히어로</label><select id="slide-select"><option value="1">1 · 집수리</option><option value="2">2 · 인테리어</option><option value="3">3 · 수리·설치</option></select><details class="text-color-help hero-color-help"><summary>글자색 설정 안내</summary><p>글자색은 문구별로 선택하거나 #색상 코드를 입력하세요. 수정 내용 저장 → 미리보기 → 게시 후 홈페이지에 반영됩니다. 원래 색상은 기존 디자인을 사용합니다.</p></details><form id="hero-form">
-          <div class="action-row hero-editor-actions"><button id="save" class="primary" type="submit">수정 내용 저장</button><button id="preview-draft" class="secondary" type="button">저장한 수정 내용 미리보기</button></div>
-          <fieldset>
-            <legend>제목과 설명</legend>
+        <form id="hero-form">
+          <div class="hero-editor-toolbar">
+            <div class="panel-heading"><h2 id="edit-title">히어로 내용 수정</h2><span id="dirty-state" class="badge">불러오는 중</span></div>
+            <div class="action-row hero-editor-actions"><button id="save" class="primary" type="submit">수정 내용 저장</button><button id="preview-draft" class="secondary" type="button">저장한 수정 내용 미리보기</button></div>
+          </div>
+        <label for="slide-select">편집할 히어로</label><select id="slide-select"><option value="1">1 · 집수리</option><option value="2">2 · 인테리어</option><option value="3">3 · 수리·설치</option></select>
+          <fieldset aria-labelledby="hero-copy-title">
+            <div class="hero-copy-heading">
+              <h3 id="hero-copy-title">제목과 설명</h3>
+              <details class="text-color-help hero-color-help"><summary>글자색 설정 안내</summary><p>글자색은 문구별로 선택하거나 #색상 코드를 입력하세요. 수정 내용 저장 → 미리보기 → 게시 후 홈페이지에 반영됩니다. 원래 색상은 기존 디자인을 사용합니다.</p></details>
+            </div>
             <label for="badge">지역 표시</label><input id="badge" name="badge" maxlength="40" required>
             <div class="two-fields"><div><label for="title1">제목 첫째 줄</label><input id="title1" name="title1" maxlength="40" required></div><div><label for="title2">제목 둘째 줄</label><input id="title2" name="title2" maxlength="40" required></div></div>
             <div class="two-fields"><div><label for="description1">설명 첫째 줄</label><input id="description1" name="description1" maxlength="100" required></div>

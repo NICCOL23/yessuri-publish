@@ -29,7 +29,12 @@ main{padding:14px 24px 28px}.intro{margin-bottom:12px}.intro p{margin:4px 0}h1{f
 .thumbnail{height:110px}@media(max-width:540px){.thumbnail{height:90px}}
 
 /* Keep the editor actions in view while scrolling through the form. */
-#hero-form .hero-editor-actions {
+#hero-form .hero-editor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
   position: sticky;
   top: 0;
   z-index: 5;
@@ -38,8 +43,12 @@ main{padding:14px 24px 28px}.intro{margin-bottom:12px}.intro p{margin:4px 0}h1{f
   border-bottom: 1px solid var(--border);
   background: #fff;
 }
+#hero-form .hero-editor-toolbar .panel-heading,
+#hero-form .hero-editor-toolbar h2 {
+  margin: 0;
+}
 #hero-form :is(input, button, select) {
-  scroll-margin-top: 78px;
+  scroll-margin-top: 112px;
 }
 
 .hero-color-help {
@@ -57,13 +66,16 @@ main{padding:14px 24px 28px}.intro{margin-bottom:12px}.intro p{margin:4px 0}h1{f
   display: none;
 }
 .hero-workflow-help > summary,
-.hero-save-disclosure > summary {
+.hero-save-disclosure > summary,
+.hero-compare-disclosure > summary {
   cursor: pointer;
 }
-.hero-save-disclosure > summary > h2 {
+.hero-save-disclosure > summary > h2,
+.hero-compare-disclosure > summary > h2 {
   display: inline;
 }
-.hero-save-disclosure[open] > summary {
+.hero-save-disclosure[open] > summary,
+.hero-compare-disclosure[open] > summary {
   margin-bottom: 8px;
 }
 .hero-publish-panels {
@@ -99,4 +111,36 @@ main{padding:14px 24px 28px}.intro{margin-bottom:12px}.intro p{margin:4px 0}h1{f
   margin-inline-start: .5em;
   font-size: .875rem;
   white-space: nowrap;
+}
+
+.hero-copy-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 4px 12px;
+}
+.hero-copy-heading #hero-copy-title {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.hero-copy-heading .hero-color-help {
+  flex: 0 1 auto;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.hero-copy-heading .hero-color-help[open] {
+  flex-basis: 100%;
+}
+.hero-copy-heading .hero-color-help > summary {
+  width: fit-content;
+  color: #007b74;
+}
+.hero-copy-heading .hero-color-help > p {
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #eff8f7;
 }

@@ -195,7 +195,9 @@ async function load() {
     } catch (error) { message(error.message,true); }
     finally { busy = false; controls(); }
 }
-form.addEventListener('input', changed);
+form.addEventListener('input', event => {
+    if (event.target.id !== 'slide-select') changed();
+});
 form.addEventListener('submit', async event => {
     event.preventDefault();
     if (!form.reportValidity()) return;

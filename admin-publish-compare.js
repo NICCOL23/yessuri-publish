@@ -16,12 +16,18 @@ if(slot){
   slot.prepend(panel);
 }else{
   details.append(list);
-  panel.append(title,help,notice,details);
   const heroSlot=document.getElementById('hero-compare-panel');
   if(heroSlot){
-    details.open=false;
+    const disclosure=el('details',undefined,'hero-compare-disclosure');
+    const toggle=el('summary');
+    toggle.append(title);
+    disclosure.append(toggle,help,notice,details);
+    panel.append(disclosure);
     heroSlot.append(panel);
-  }else document.getElementById('status').after(panel);
+  }else{
+    panel.append(title,help,notice,details);
+    document.getElementById('status').after(panel);
+  }
 }}
 function safePath(value){return typeof value==='string'&&/^(?:\/?assets\/|\/api\/hero-images\/)/.test(value)&&!value.includes('..')&&!/[\x00-\x1f]/.test(value);}
 async function photo(host,path,label,resolve,version){const fallback=el('p',safePath(path)?'사진을 불러오는 중입니다.':'미리보기에서 사진을 확인하세요.','publish-compare-help');host.append(fallback);if(!safePath(path))return;try{const source=resolve?await resolve(path):path;if(locked||version!==generation||!host.isConnected)return;const u=new URL(source,location.href);if(u.protocol!=='blob:'&&u.origin!==location.origin)throw Error();const img=el('img');img.alt=label;img.onload=()=>fallback.remove();img.onerror=()=>{img.remove();fallback.textContent='사진을 불러오지 못했습니다. 기존 미리보기에서 확인하세요.';};img.src=source;host.prepend(img);}catch{if(host.isConnected)fallback.textContent='사진을 불러오지 못했습니다. 기존 미리보기에서 확인하세요.';}}
