@@ -17,3 +17,8 @@ html body :is(.ys-page-backbar,#wg-panel,#rt-panel) .ys-page-back{display:inline
 .ys-admin-top-actions > details > summary{min-height:44px;align-content:center;cursor:pointer;font-weight:600}
 .ys-admin-top-actions > details > p{margin:0 0 8px;color:#235c5d}
 .admin-session-bar-with-disclosure:empty{display:none}
+
+/* Match the technician admin content width, including its main padding. */
+.ys-page-backbar-admin{width:1072px}
+@media(max-width:1160px){.ys-page-backbar-admin{width:min(1072px,calc(100% - 96px))}}
+@media(max-width:760px){.ys-page-backbar-admin{width:calc(100% - 24px)}}
