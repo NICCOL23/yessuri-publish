@@ -7,16 +7,16 @@
  const create=(tag,text,cls)=>{const n=document.createElement(tag);if(text)n.textContent=text;if(cls)n.className=cls;return n;};
  function group(nodes,title,note,open){
   const first=nodes.find(Boolean);if(!first||first.closest('.admin-workspace'))return;
-  const d=create('details',null,'admin-workspace');d.open=!!open;d.append(create('summary',title));const content=create('div',null,'workspace-content');content.append(create('p',note,'workspace-note'));d.append(content);first.before(d);for(const n of nodes)if(n)content.append(n);
+  const d=create('details',null,'admin-workspace');d.open=!!open;d.append(create('summary',title));const content=create('div',null,'workspace-content');if(note)content.append(create('p',note,'workspace-note'));d.append(content);first.before(d);for(const n of nodes)if(n)content.append(n);
  }
  function controls(){return [...root.querySelectorAll('#admin-update textarea,#admin-update select,#admin-public-photos input[type="text"]')];}
  function key(n){if(n.id)return n.id;return 'caption:'+n.closest('figure')?.querySelector('img')?.getAttribute('src');}
  function decorate(){
   if(locked)return;
-  for(const details of root.querySelectorAll('.admin-workspace')){const content=details.querySelector('.workspace-content');if(content&&content.children.length===1)details.remove();}
+  for(const details of root.querySelectorAll('.admin-workspace')){const content=details.querySelector('.workspace-content');if(content&&!content.querySelector(':scope > :not(.workspace-note)'))details.remove();}
   const reply=root.querySelector('#admin-update')?.closest('section');group([reply],'신청 확인·비공개 답변','신청자와 관리자만 확인하는 답변입니다. 이 저장으로 공개 프로필은 바뀌지 않습니다.',true);
   group([root.querySelector('#admin-public-photos'),root.querySelector('#admin-work-cases')],'공개 사진·작업 사례','이 구획에서 저장한 정보는 공개 프로필에 반영됩니다. 신청서 원본 사진은 유지됩니다.',false);
-  const profile=root.querySelector('#profile-safety-panel');group([profile],'공개 정보·동의 관리','공개 범위와 동의 근거를 확인한 뒤 저장하세요.',true);
+  const profile=root.querySelector('#profile-safety-panel');group([profile],'공개 정보·동의 관리',null,true);
   for(const details of root.querySelectorAll('.admin-workspace')){const children=[...details.querySelector('.workspace-content').children].filter(n=>!n.classList.contains('workspace-note'));details.hidden=children.length>0&&children.every(n=>n.hidden);}
   for(const input of controls()){
    if(input.dataset.draftBound)continue;input.dataset.draftBound='true';
