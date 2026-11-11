@@ -27,3 +27,76 @@ main{padding:14px 24px 28px}.intro{margin-bottom:12px}.intro p{margin:4px 0}h1{f
 #hero-form .local-color-control button{padding:4px 8px;min-height:44px}
 #hero-form>fieldset:nth-of-type(3){margin-top:6px}#hero-form>fieldset:nth-of-type(3)>legend{margin-bottom:3px}#hero-form>fieldset:nth-of-type(3)>.help{margin:3px 0 6px}
 .thumbnail{height:110px}@media(max-width:540px){.thumbnail{height:90px}}
+
+/* Keep the editor actions in view while scrolling through the form. */
+#hero-form .hero-editor-actions {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  padding: 8px 0;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+}
+#hero-form :is(input, button, select) {
+  scroll-margin-top: 78px;
+}
+
+.hero-color-help {
+  margin: 8px 0;
+}
+.hero-color-help > summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.hero-color-help > p {
+  margin: 6px 0 0;
+}
+
+#root > #status:empty {
+  display: none;
+}
+.hero-workflow-help > summary,
+.hero-save-disclosure > summary {
+  cursor: pointer;
+}
+.hero-save-disclosure > summary > h2 {
+  display: inline;
+}
+.hero-save-disclosure[open] > summary {
+  margin-bottom: 8px;
+}
+.hero-publish-panels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.hero-publish-panels > div {
+  display: grid;
+  min-width: 0;
+}
+.hero-publish-panels > div:empty {
+  display: none;
+}
+.hero-publish-panels :is(.admin-save-result, .publish-compare) {
+  margin: 0 0 10px;
+}
+@media (max-width: 760px) {
+  .hero-publish-panels {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+}
+
+.hero-history-disclosure > summary {
+  cursor: pointer;
+  line-height: 1.6;
+}
+.hero-history-disclosure #history-title {
+  font-weight: 700;
+}
+.hero-history-disclosure #version-label {
+  margin-inline-start: .5em;
+  font-size: .875rem;
+  white-space: nowrap;
+}

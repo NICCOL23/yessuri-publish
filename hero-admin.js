@@ -65,7 +65,7 @@ function controls() {
     document.getElementById('preview-draft').disabled = busy || !state || conflict;
     document.querySelectorAll('[data-restore]').forEach(button => { button.disabled = busy || dirty || conflict; });
     window.YESSURI_HERO_HISTORY?.controls();
-    document.getElementById('dirty-state').textContent = dirty ? '저장하지 않은 변경' : '초안 저장됨';
+    document.getElementById('dirty-state').textContent = dirty ? '저장하지 않은 변경' : '수정 내용 저장됨';
     window.YESSURI_PUBLISH_COMPARE?.update({kind:'hero',state,dirty,busy,imageSource});
 }
 function changed() {
@@ -174,10 +174,10 @@ function preview(mode) {
     if (locked) return;
     previewFrame.src = 'hero-preview.html?slide='+selectedSlide+'&mode=' + mode + '&v=' + state.version;
     document.getElementById('open-preview').href = 'hero-preview.html?slide='+selectedSlide+'&mode=' + mode;
-    document.getElementById('preview-mode').textContent = mode === 'draft' ? '저장한 초안' : '현재 게시본';
+    document.getElementById('preview-mode').textContent = mode === 'draft' ? '저장한 수정 내용' : '현재 게시본';
     document.getElementById('preview-help').textContent = mode === 'draft'
-        ? '저장한 초안입니다. PC와 휴대폰 버튼으로 화면을 확인한 뒤 아래 확인란을 선택하세요.'
-        : '현재 홈페이지 게시본입니다. 초안 미리보기에서 수정 내용을 확인하세요.';
+        ? '저장한 수정 내용입니다. PC와 휴대폰 버튼으로 화면을 확인한 뒤 아래 확인란을 선택하세요.'
+        : '현재 홈페이지 게시본입니다. 수정 내용 미리보기에서 수정 내용을 확인하세요.';
     draftPreviewed = mode === 'draft' && !dirty;
     reviewed.checked = false;
     controls();
@@ -191,7 +191,7 @@ async function load() {
         state = next;
         fill();
         preview('published');
-        message('저장된 내용을 불러왔습니다. 수정한 뒤 초안을 저장하세요.');
+        message('');
     } catch (error) { message(error.message,true); }
     finally { busy = false; controls(); }
 }
@@ -207,7 +207,7 @@ form.addEventListener('submit', async event => {
         if (locked) return;
         state = next;
         fill();
-        window.YESSURI_SAVE_RESULT?.success('draft',state.version);message('초안만 저장했습니다. 이번 저장으로 홈페이지는 바뀌지 않았습니다. 미리보기·변경 비교 후 게시하세요.');
+        window.YESSURI_SAVE_RESULT?.success('draft',state.version);message('수정 내용을 저장했습니다. 이번 저장으로 홈페이지는 바뀌지 않았습니다. 미리보기·변경 비교 후 게시하세요.');
     } catch (error) { message(error.message,true); }
     finally { busy = false; controls(); }
 });
@@ -229,14 +229,14 @@ document.querySelectorAll('[data-image-field]').forEach(input => {
             images[input.dataset.imageField] = result.path;
             updateThumbnails();
             changed();
-            message('사진을 준비했습니다. 초안 저장 후 미리보기에서 확인하세요.');
+            message('사진을 준비했습니다. 수정 내용 저장 후 미리보기에서 확인하세요.');
         } catch (error) { message('사진을 준비하지 못했습니다. 정상적인 이미지 파일인지 확인하세요. ' + error.message,true); }
         finally { input.value = ''; busy = false; controls(); }
     });
 });
 document.getElementById('preview-draft').addEventListener('click', () => {
     preview('draft');
-    if (dirty) message('미리보기에는 마지막으로 저장한 초안이 표시됩니다. 현재 입력을 반영하려면 먼저 초안을 저장하세요.');
+    if (dirty) message('미리보기에는 마지막으로 저장한 수정 내용이 표시됩니다. 현재 입력을 반영하려면 먼저 수정 내용을 저장하세요.');
 });
 document.getElementById('preview-published').addEventListener('click', () => preview('published'));
 function fitPreview() {
@@ -256,7 +256,7 @@ document.querySelectorAll('.viewport-button').forEach(button => button.addEventL
 new ResizeObserver(fitPreview).observe(document.querySelector('.frame-scroll'));
 reviewed.addEventListener('change', controls);
 document.getElementById('publish').addEventListener('click', async () => {
-    if (!await confirmAction('확인한 초안을 예스수리 홈페이지에 게시할까요?')) return;
+    if (!await confirmAction('확인한 수정 내용을 예스수리 홈페이지에 게시할까요?')) return;
     busy = true;
     controls();
     try {
@@ -265,12 +265,12 @@ document.getElementById('publish').addEventListener('click', async () => {
         state = next;
         fill();
         preview('published');
-        window.YESSURI_SAVE_RESULT?.success('publish',state.version);message('홈페이지 공개가 완료됐습니다. 저장한 초안이 홈페이지에 반영됐습니다.');
+        window.YESSURI_SAVE_RESULT?.success('publish',state.version);message('홈페이지 공개가 완료됐습니다. 저장한 수정 내용이 홈페이지에 반영됐습니다.');
     } catch (error) { message(error.message,true); }
     finally { busy = false; controls(); }
 });
 async function restore(id) {
-    if (!await confirmAction('선택한 기록으로 홈페이지를 복원할까요? 현재 초안도 복원한 내용으로 바뀝니다.')) return;
+    if (!await confirmAction('선택한 기록으로 홈페이지를 복원할까요? 저장한 수정 내용도 복원한 내용으로 바뀝니다.')) return;
     busy = true;
     controls();
     try {
@@ -279,7 +279,7 @@ async function restore(id) {
         state = next;
         fill();
         preview('published');
-        window.YESSURI_SAVE_RESULT?.success('restore',state.version);message('이전 버전으로 공개 내용을 복원했습니다. 홈페이지와 초안이 선택한 기록으로 바뀌었습니다.');
+        window.YESSURI_SAVE_RESULT?.success('restore',state.version);message('이전 버전으로 공개 내용을 복원했습니다. 홈페이지와 수정 내용이 선택한 기록으로 바뀌었습니다.');
     } catch (error) { message(error.message,true); }
     finally { busy = false; controls(); }
 }
@@ -334,7 +334,7 @@ slideSelector.addEventListener('change',async()=>{
  dirty=false;location.href='hero-admin.html?slide='+target;
 });
 
-window.YESSURI_UNSAVED?.register('편집 중인 초안',()=>dirty,()=>{dirty=false;},false);
+window.YESSURI_UNSAVED?.register('편집 중인 수정 내용',()=>dirty,()=>{dirty=false;},false);
 
 // Preserve request/auth/command behavior; add typed display-only recovery help.
 async function api(...args){try{const result=await apiRequest(...args);window.YESSURI_ERROR_HELP?.clear();return result;}catch(error){window.YESSURI_ERROR_HELP?.report(error,{route:args[0]});throw error;}}
