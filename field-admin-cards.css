@@ -106,3 +106,19 @@ html:has(.field-work-toolbar) {
   border: 1px solid #dce5e8;
   border-radius: 12px;
 }
+
+#fields .field-card-heading > h3 { margin-inline-end: auto; }
+#fields .field-drag-handle {
+  cursor: grab;
+  user-select: none;
+  flex: none;
+  color: #007a82;
+  font-size: .875rem;
+  padding: 6px;
+}
+#fields .field-dragging { opacity: .55; }
+#fields .field[data-drop-side="before"] { box-shadow: 0 -3px #007a82; }
+#fields .field[data-drop-side="after"] { box-shadow: 0 3px #007a82; }
+@media (hover: none), (pointer: coarse) {
+  #fields .field-drag-handle { display: none; }
+}

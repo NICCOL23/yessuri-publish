@@ -14,7 +14,65 @@ function controls(){window.YESSURI_RESTORE_COMPARE?.status({dirty,busy});if(lock
 function changed(){dirty=true;previewed=false;$('reviewed').checked=false;controls();}
 function confirmAction(text){$('question').textContent=text;$('dialog').showModal();return new Promise(resolve=>{const end=v=>{$('dialog').close();resolve(v);};$('cancel').onclick=()=>end(false);$('ok').onclick=()=>end(true);$('dialog').oncancel=e=>{e.preventDefault();end(false);};});}
 async function work(task){if(locked)return;busy=true;controls();try{await task();}catch(e){if(!locked)notice(e.message,true);}finally{busy=false;controls();}}
-function render(){if(locked)return;const focus=document.activeElement?.dataset.focus;$('fields').replaceChildren();fields.forEach((f,index)=>{const li=make('li');li.className='field';li.dataset.id=f.id;const heading=make('div');heading.className='field-card-heading';heading.append(make('h3',(index+1)+'. '+f.label));const enabledLabel=make('label');enabledLabel.className='check';const enabled=make('input');enabled.type='checkbox';enabled.checked=f.active!==false;enabled.setAttribute('aria-label',f.label+' 분야 사용');enabled.onchange=()=>{f.active=enabled.checked;changed();li.classList.toggle('is-inactive',!enabled.checked);};enabledLabel.append(enabled,make('span','분야 사용'));heading.append(enabledLabel);li.classList.toggle('is-inactive',f.active===false);li.append(heading);const connection=Object.assign(make('p','연결 고정: '+f.id+' / '+f.value+' / '+f.href),{className:'fixed'});const row=make('div');row.className='field-media-row';const img=make('img');void thumbnail(img,f.image);img.alt='';img.className='icon';const inputs=make('div');inputs.className='field-edit-grid';const media=make('div');media.className='field-upload';
+let draggedField=null;
+let dropTarget=null;
+
+function clearFieldDrag(){
+  draggedField?.classList.remove('field-dragging');
+  dropTarget?.removeAttribute('data-drop-side');
+  draggedField=null;
+  dropTarget=null;
+}
+
+function addFieldDrag(card,heading,label){
+  const handle=make('span','↕ 드래그');
+  handle.className='field-drag-handle';
+  handle.draggable=true;
+  handle.title=label+' 순서 이동';
+  handle.setAttribute('aria-hidden','true');
+  heading.prepend(handle);
+  handle.addEventListener('dragstart',event=>{
+    if(locked||busy){event.preventDefault();return;}
+    clearFieldDrag();
+    draggedField=card;
+    card.classList.add('field-dragging');
+    event.dataTransfer.effectAllowed='move';
+    event.dataTransfer.setData('text/plain',card.dataset.id);
+  });
+  handle.addEventListener('dragend',clearFieldDrag);
+  const side=event=>{
+    const bounds=card.getBoundingClientRect();
+    return event.clientY<bounds.top+bounds.height/2?'before':'after';
+  };
+  card.addEventListener('dragover',event=>{
+    if(!draggedField||draggedField===card||locked||busy)return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect='move';
+    dropTarget?.removeAttribute('data-drop-side');
+    dropTarget=card;
+    card.dataset.dropSide=side(event);
+  });
+  card.addEventListener('drop',event=>{
+    if(!draggedField||locked||busy)return;
+    event.preventDefault();
+    const source=draggedField.dataset.id;
+    const target=card.dataset.id;
+    const after=side(event)==='after';
+    clearFieldDrag();
+    if(source===target)return;
+    const from=fields.findIndex(field=>field.id===source);
+    const destination=fields.findIndex(field=>field.id===target);
+    if(from<0||destination<0)return;
+    const insertAt=destination+(after?1:0)-(from<destination?1:0);
+    if(insertAt===from)return;
+    const [moved]=fields.splice(from,1);
+    fields.splice(insertAt,0,moved);
+    changed();
+    render();
+  });
+}
+
+function render(){if(locked)return;const focus=document.activeElement?.dataset.focus;$('fields').replaceChildren();fields.forEach((f,index)=>{const li=make('li');li.className='field';li.dataset.id=f.id;const heading=make('div');heading.className='field-card-heading';heading.append(make('h3',(index+1)+'. '+f.label));const enabledLabel=make('label');enabledLabel.className='check';const enabled=make('input');enabled.type='checkbox';enabled.checked=f.active!==false;enabled.setAttribute('aria-label',f.label+' 분야 사용');enabled.onchange=()=>{f.active=enabled.checked;changed();li.classList.toggle('is-inactive',!enabled.checked);};enabledLabel.append(enabled,make('span','분야 사용'));heading.append(enabledLabel);li.classList.toggle('is-inactive',f.active===false);addFieldDrag(li,heading,f.label);li.append(heading);const connection=Object.assign(make('p','연결 고정: '+f.id+' / '+f.value+' / '+f.href),{className:'fixed'});const row=make('div');row.className='field-media-row';const img=make('img');void thumbnail(img,f.image);img.alt='';img.className='icon';const inputs=make('div');inputs.className='field-edit-grid';const media=make('div');media.className='field-upload';
 for(const [key,label,max]of [['label','표시 이름',40],['description','설명',100]]){const title=make('label',label),input=make(key==='description'?'textarea':'input');input.value=f[key];if(key==='description')input.rows=2;input.maxLength=max;input.dataset.focus=f.id+'-'+key;input.setAttribute('aria-label',f.label+' '+label);input.addEventListener('input',()=>{f[key]=input.value;changed();});title.append(input);inputs.append(title);}
 const uploadLabel=make('label','아이콘 교체 · JPG·PNG·WebP / 5MB 이내'),file=make('input');file.type='file';file.accept='image/jpeg,image/png,image/webp';file.setAttribute('aria-label',f.label+' 아이콘 교체');uploadLabel.append(file);media.append(uploadLabel);file.onchange=()=>work(async()=>{const photo=file.files[0];if(!photo)return;if(!['image/jpeg','image/png','image/webp'].includes(photo.type)||photo.size>5*1024*1024)throw Error('JPG·PNG·WebP 형식의 5MB 이하 사진을 선택하세요.');const bitmap=await createImageBitmap(photo);if(bitmap.width*bitmap.height>40000000){bitmap.close();throw Error('이미지 해상도가 너무 큽니다.');}const canvas=document.createElement('canvas'),scale=Math.min(1,512/Math.max(bitmap.width,bitmap.height));canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();const result=await api('upload',{data:canvas.toDataURL('image/jpeg',.9)});f.image=result.path;void thumbnail(img,f.image);changed();notice('아이콘을 준비했습니다. 수정 내용을 저장하세요.');file.value='';});
 const visibleLabel=make('label');visibleLabel.className='check';const visible=make('input');visible.type='checkbox';visible.checked=f.visible;visible.setAttribute('aria-label',f.label+' 메인에 표시');visible.onchange=()=>{f.visible=visible.checked;changed();};visibleLabel.append(visible,make('span','메인에 표시 · 검색·등록 목록은 유지'));row.append(img,media,visibleLabel);li.append(inputs,row);window.YESSURI_PHOTO_USAGE?.field(li);const actions=make('div');actions.className='toolbar';for(const[d,text]of[[-1,'위로'],[1,'아래로']]){const b=make('button',text);b.dataset.move='true';b.dataset.to=index+d;b.setAttribute('aria-label',f.label+' '+text);b.onclick=()=>{[fields[index],fields[index+d]]=[fields[index+d],fields[index]];changed();render();$('fields').querySelector('[data-id="'+f.id+'"] button').focus();};actions.append(b);}const reset=make('button','원본 아이콘');reset.onclick=()=>{f.image=state.original.find(o=>o.id===f.id)?.image||'assets/images/service-icons.svg#icon5';void thumbnail(img,f.image);changed();};actions.append(reset);const remove=make('button','삭제');remove.type='button';remove.className='field-remove';remove.setAttribute('aria-label',f.label+' 분야 삭제');remove.onclick=async()=>{const count=state.usage?.find(u=>u.id===f.id)?.count||0;if(count){if(await confirmAction('이 분야는 '+count+'개 자료에 연결되어 있습니다. 기존 연결을 유지하고 비활성화할까요?')){f.active=false;changed();render();}}else if(fields.length===1){notice('최소 한 개의 분야를 남겨 주세요.',true);}else if(await confirmAction('이 분야를 목록에서 삭제할까요? 수정 내용 저장·미리보기·게시 후 반영됩니다.')){fields.splice(index,1);changed();render();}};actions.append(remove);const help=make('details');help.className='field-help';help.append(make('summary','연결·사용 안내'),connection);const usage=li.querySelector('.photo-use-note');if(usage)help.append(usage);const footer=make('div');footer.className='field-footer';footer.append(actions,help);li.append(footer);$('fields').append(li);});$('list-title').textContent='수리 분야 '+fields.length+'개';controls();}

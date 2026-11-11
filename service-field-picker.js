@@ -12,9 +12,7 @@ document.querySelectorAll('select[data-service-field-picker]').forEach(select=>{
  const count=document.createElement('span');count.className='ys-field-count';
  const dismiss=document.createElement('button');dismiss.type='button';dismiss.className='ys-field-dismiss';dismiss.setAttribute('aria-label',titleText+' 닫기');dismiss.textContent='×';heading.append(title,count,dismiss);
  const grid=document.createElement('div');grid.className='ys-field-options';grid.setAttribute('role','group');grid.setAttribute('aria-label',name);panel.append(heading,grid);trigger.setAttribute('aria-controls',panel.id);
- const options=Array.from(select.options);const first=options.shift();
- // Picker order only: preserve the main-page cards and shared service registry order.
- if(!isRegion)options.sort((a,b)=>Number(b.value==='컴퓨터·IT')-Number(a.value==='컴퓨터·IT'));if(first)options.unshift(first);
+ const options=Array.from(select.options);
  count.textContent=(options.length-1)+(isRegion?'개 구·군':'개 분야');
  const buttons=options.map(option=>{const button=document.createElement('button');button.type='button';button.className='ys-field-option';button.dataset.value=option.value;button.textContent=option.textContent;button.addEventListener('click',()=>{select.value=option.value;close(true);select.dispatchEvent(new Event('input',{bubbles:true}));select.dispatchEvent(new Event('change',{bubbles:true}));});grid.append(button);return button;});
  function sync(){caption.textContent=select.selectedOptions[0]?.textContent||(isRegion?'부산 전체':'전체 분야');trigger.setAttribute('aria-label',name+': '+caption.textContent);buttons.forEach(button=>{const selected=button.dataset.value===select.value;button.setAttribute('aria-pressed',String(selected));button.tabIndex=selected?0:-1;});}
