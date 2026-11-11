@@ -3,18 +3,9 @@
 function note(host,kind){if(locked||!host)return null;let n=Array.from(host.children).find(c=>c.classList.contains('photo-use-note')&&c.dataset.kind===kind);if(!n){n=el('div');n.className='photo-use-note';n.dataset.kind=kind;n.setAttribute('aria-label','사진 사용 위치');host.append(n);}return n;}
 function hero(slot) {
   if (locked || ![1, 2, 3].includes(Number(slot))) return;
-  for (const [id, screen] of [['desktop-thumb', 'PC용 화면'], ['mobile-thumb', '휴대폰용 화면']]) {
-    const host = document.getElementById(id)?.parentElement;
-    if (!host) continue;
-    let disclosure = host.querySelector('details.photo-use-note');
-    if (!disclosure) {
-      disclosure = el('details');
-      disclosure.className = 'photo-use-note';
-      disclosure.append(el('summary', '사진 사용 위치'), el('p'));
-      host.append(disclosure);
-    }
-    disclosure.querySelector('p').textContent = '예스수리 메인 ' + slot + '번째 히어로 · ' + screen + '. 수정 내용을 저장한 뒤 게시하면 새 사진이 반영됩니다.';
-  }
+  const usage = document.getElementById('hero-photo-usage');
+  if (!usage) return;
+  usage.textContent = '예스수리 메인 ' + slot + '번째 히어로의 PC·휴대폰 화면에 사용됩니다. 수정 내용을 저장한 뒤 게시하면 새 사진이 반영됩니다.';
 }
 function field(host){const n=note(host,'field');if(n)n.textContent='사용 위치: 메인 ‘어떤 수리가 필요하세요?’ 분야 박스의 아이콘입니다. 변경은 게시 후 반영되며 검색·등록 신청의 분야 연결은 유지됩니다.';}
 function privatePhoto(host){const n=note(host,'private');if(n)n.textContent='신청서 원본 사진 · 비공개. ‘대표 이미지로 등록’을 실행하면 메인·전문가 찾기 카드와 업체 소개의 공개용 대표 사진으로 사용됩니다. 신청서 원본은 그대로 유지됩니다.';}

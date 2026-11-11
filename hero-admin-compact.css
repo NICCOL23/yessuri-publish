@@ -189,3 +189,17 @@ main{padding:14px 24px 28px}.intro{margin-bottom:12px}.intro p{margin:4px 0}h1{f
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+@media (min-width: 541px) {
+  .image-fields > div {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 5;
+    row-gap: 0;
+    min-width: 0;
+  }
+
+  .image-fields [data-open-library] {
+    justify-self: start;
+  }
+}
