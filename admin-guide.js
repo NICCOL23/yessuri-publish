@@ -17,7 +17,26 @@ let generation=0;
 async function mount({api,application}){
  if(!root.querySelector('h1')||document.querySelector('#admin-process-guide'))return;
  const detail=document.body.dataset.technicianPage==='detail';if(detail&&!application)return;
- if(detail){const review=root.querySelector('.layout>div>section.card');if(!review)return;review.id='application-review';root.querySelector('.layout').before(guide(true));
+ if(detail){const review=root.querySelector('.layout>div>section.card');if(!review)return;review.id='application-review';const layout=review.parentElement.parentElement;
+  const process=guide(true);
+  const aside=layout.querySelector(':scope > aside.aside');
+  const privacyCard=aside?.querySelector(':scope > .card');
+  const privacyTitle=privacyCard?.querySelector(':scope > h3');
+  if(privacyTitle){
+   const row=node('div',null,'admin-detail-guides');
+   const privacy=node('details',null,'aside admin-process card');
+   privacy.id='admin-detail-privacy';
+   const summary=node('summary');
+   summary.append(node('h2',privacyTitle.textContent));
+   privacyTitle.remove();
+   privacy.append(summary,...privacyCard.childNodes);
+   row.append(process,privacy);
+   layout.before(row);
+   aside.remove();
+   layout.classList.add('admin-detail-full-width');
+  }else{
+   layout.before(process);
+  }
  const status=review.querySelector('.status')?.textContent||'';const advice=node('div',null,'next-action');advice.append(node('strong','지금 할 일'),node('p',status==='사전등록 완료'?'공개할 정보와 사진의 동의를 별도로 확인한 뒤, 아래 ‘공개 프로필 등록’을 진행하세요.':status==='보완요청'?'보완 자료와 신청자 답변을 확인하고, 아래에서 답변·처리 상태를 저장하세요.':'신청 내용과 사진을 확인하고, 아래에서 답변과 처리 상태를 저장하세요.'));review.prepend(advice);return;}
  if(!root.querySelector('#state-filter'))return;const ticket=++generation;const heading=root.querySelector('.page-title');const list=root.querySelector('#state-filter').closest('section');list.id='admin-applications';heading.after(guide(false));
  try{const results=await Promise.all(states.map(state=>api('admin/applications?state='+encodeURIComponent(state)+'&page=1')));if(ticket!==generation||!heading.isConnected)return;const counts={};states.forEach((state,i)=>{const count=results[i].count;if(!Number.isSafeInteger(count)||count<0)throw Error('집계 결과를 확인할 수 없습니다.');counts[state]=count;});

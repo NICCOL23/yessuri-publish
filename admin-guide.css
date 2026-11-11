@@ -13,17 +13,34 @@ body[data-technician-page="admin"] .container,body[data-technician-page="detail"
 @media(max-width:760px){.today,.admin-process{padding:18px}.today-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.process-steps{grid-template-columns:1fr 1fr}.today-card{padding:14px 12px}.today-card strong{font-size:26px}.process-steps a{min-height:140px}}
 @media(max-width:360px){.process-steps{grid-template-columns:1fr}.process-steps a{min-height:0}}
 
-#admin-process-guide > summary {
+:is(#admin-process-guide,#admin-detail-privacy) > summary {
   cursor: pointer;
 }
 
-#admin-process-guide > summary > h2 {
+:is(#admin-process-guide,#admin-detail-privacy) > summary > h2 {
   display: inline;
   margin: 0;
 }
 
-#admin-process-guide[open] > summary {
+:is(#admin-process-guide,#admin-detail-privacy)[open] > summary {
   margin-bottom: 6px;
+}
+
+.admin-detail-guides {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.admin-density .admin-detail-guides > .card { margin-bottom: 0; }
+.admin-detail-guides .process-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.layout.admin-detail-full-width { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 760px) {
+  .admin-detail-guides { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 360px) {
+  .admin-detail-guides .process-steps { grid-template-columns: minmax(0, 1fr); }
 }
 
 body[data-technician-page="admin"] .today.card {
