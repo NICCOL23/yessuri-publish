@@ -29,7 +29,21 @@
  align();const measure=new ResizeObserver(align);if(header)measure.observe(header);if(localNav)measure.observe(localNav);measure.observe(bar);window.addEventListener('resize',align);
  let legacyTarget=null;
  function target(){return safe(history.state?.ysPageBack?.previous)||legacyTarget||safe(defaults[file]);}
+ if(file==='technician-admin.html'){
+  bar.classList.add('ys-page-backbar-admin');
+  addEventListener('yessuri:admin-locked',()=>bar.querySelector('.ys-admin-top-actions')?.remove());
+ }
  function sync(){
+  if(file==='technician-admin.html'){
+   const notice=main.querySelector('.admin-session-bar-with-disclosure > details');
+   const actions=main.querySelector('.admin-session-bar-with-disclosure > .admin-session-actions');
+   if(notice&&actions){
+    const group=document.createElement('div');
+    group.className='ys-admin-top-actions';
+    group.append(notice,actions);
+    bar.append(group);
+   }
+  }
   const duplicates=document.querySelectorAll('#expert-back,a.b-back,a.case-back,a.request-back,a.recruit-back,.saved-return,#search-return-bar');
   for(const node of duplicates){if(node.id==='search-return-bar'&&node.hidden)continue;const a=node.matches('a')?node:node.querySelector('a');if(!legacyTarget&&a)legacyTarget=safe(a.href);node.setAttribute('data-page-back-duplicate','');}
   main.querySelectorAll('a').forEach(a=>{if(['← 분야 목록으로','분야 목록으로'].includes(a.textContent.trim())){if(!legacyTarget)legacyTarget=safe(a.href);a.setAttribute('data-page-back-duplicate','');}});

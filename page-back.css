@@ -9,3 +9,11 @@ html body :is(.ys-page-backbar,#wg-panel,#rt-panel) .ys-page-back{display:inline
 .ys-page-backbar-sticky{position:sticky;top:var(--ys-page-back-top,82px);z-index:30;background:inherit}
 
 .ys-page-backbar~main :is(h1,h2,h3,[tabindex="-1"]){scroll-margin-top:var(--ys-page-back-scroll-offset,150px)}
+
+.ys-page-backbar-admin{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.ys-page-backbar-admin > .ys-page-back{flex:none}
+.ys-admin-top-actions{display:flex;align-items:flex-start;justify-content:flex-end;gap:8px;min-width:0}
+.ys-admin-top-actions > details{min-width:0;overflow-wrap:anywhere;max-width:28rem}
+.ys-admin-top-actions > details > summary{min-height:44px;align-content:center;cursor:pointer;font-weight:600}
+.ys-admin-top-actions > details > p{margin:0 0 8px;color:#235c5d}
+.admin-session-bar-with-disclosure:empty{display:none}
