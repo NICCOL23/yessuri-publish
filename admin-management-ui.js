@@ -3,7 +3,7 @@
  'use strict';
  const root=document.querySelector('#root'),el=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
  let dirty=false,locked=false,transferPhoto=null;
- const notice=()=>{const n=document.querySelector('#manage-dirty');if(n)n.textContent=dirty?'저장하지 않은 변경이 있습니다. 아래 저장 버튼으로 저장하세요.':'저장된 내용을 보고 있습니다.';};
+ const notice=()=>{const n=document.querySelector('#manage-dirty');if(!n)return;n.hidden=!dirty;n.textContent=dirty?'저장하지 않은 변경이 있습니다. 아래 저장 버튼으로 저장하세요.':'';};
  const mark=()=>{dirty=true;notice();},mayLeave=()=>!dirty||confirm('저장하지 않은 공개 정보·동의 입력이 있습니다. 저장하지 않고 이동할까요?');
  window.addEventListener('beforeunload',e=>{if(dirty&&!locked){e.preventDefault();e.returnValue='';}});
  window.addEventListener('yessuri:admin-locked',()=>{locked=true;dirty=false;document.querySelectorAll('.manage-picker-dialog').forEach(e=>e.remove());});
@@ -55,7 +55,7 @@
   inputs.career=field(profileDescription,'career','공개 경력');
   profileFields.append(profileDescription);
   form.append(profileFields);
-  const readConsent=consentFields(form),dirtyText=el('p','','manage-dirty');dirtyText.id='manage-dirty';dirtyText.setAttribute('role','status');form.append(dirtyText);
+  const readConsent=consentFields(form),dirtyText=el('p','','manage-dirty');dirtyText.id='manage-dirty';dirtyText.hidden=true;dirtyText.setAttribute('role','status');form.append(dirtyText);
   const profileId=application.profileId||(application.id?.startsWith('technician-')?application.id:'technician-'+application.id),route='admin/profiles/'+encodeURIComponent(profileId)+'/profile-management';const actions=el('div',undefined,'actions'),save=el('button','공개 정보와 동의 기록 저장','btn primary'),preview=el('a','현재 공개 결과 보기','btn');save.type='submit';preview.href='expert.html?id='+encodeURIComponent(profileId);preview.target='_blank';preview.rel='noopener';const saveHint=el('span','저장하면 공개 프로필에 바로 반영됩니다','hint');
   saveHint.hidden=true;
   actions.append(saveHint,save,preview);form.append(actions);panel.append(form);
