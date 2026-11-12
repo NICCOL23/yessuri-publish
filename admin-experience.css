@@ -10,7 +10,8 @@
   border-top: 1px solid #e1e8ed;
 }
 
-.admin-detail-actions > .lifecycle {
+.admin-density .admin-detail-actions > .lifecycle {
+  align-self: flex-end;
   margin: 0;
   padding: 0;
   border: 0;
@@ -38,7 +39,9 @@
   padding: 0;
 }
 
-.admin-detail-actions > .field[for="status"] {
+.admin-density .admin-detail-actions > .field[for="status"] {
+  margin: 0;
+  padding: 0;
   flex: 0 1 9rem;
   min-width: 0;
   gap: 2px;
