@@ -96,3 +96,13 @@ body[data-technician-page="admin"] .today-cards {
 }
 
 #admin-applications > .admin-toolbar[hidden] { display: none; }
+
+body[data-technician-page="admin"] .today > .page-title {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+
+body[data-technician-page="admin"] .today > .page-title > .all-applications {
+  margin-inline-start: auto;
+}
