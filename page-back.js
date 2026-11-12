@@ -5,6 +5,7 @@
  decorateLocal(document);
  new MutationObserver(records=>{for(const record of records)for(const node of record.addedNodes)if(node.nodeType===1)decorateLocal(node);}).observe(document.body,{childList:true,subtree:true});
  const file=location.pathname.split('/').pop()||'index.html';
+ const adminDetail=file==='technician-detail.html'&&new URLSearchParams(location.search).get('admin')==='1';
  const defaults={'service-detail.html':'index.html','find.html':'index.html','guide.html':'index.html','boiler-guide.html':'guide.html?group=water&view=list#work-guide','computer-guide.html':'guide.html?group=computer#work-guide','expert.html':'find.html','favorites.html':'find.html','compare.html':'find.html','cases.html':'index.html','case.html':'cases.html','questions.html':'index.html','question.html':'questions.html','question-write.html':'questions.html','questions-example.html':'questions.html','board-notice.html':'questions.html','question-admin.html':'questions.html','technician-board.html':'index.html','technician-apply.html':'technician-board.html','technician-lookup.html':'technician-board.html','technician-detail.html':'technician-board.html','technician-recruit.html':'technician-board.html','technician-notice.html':'technician-board.html','technician-admin.html':'technician-board.html','register-form.html':'technician-board.html','request.html':'guide.html'};
  const safe=value=>{if(!value)return null;try{const u=new URL(value,location.href);return u.origin===location.origin&&(u.pathname.split('/').pop() in defaults||u.pathname.endsWith('/')||u.pathname.endsWith('/index.html'))?u:null;}catch{return null;}};
  const read=key=>{try{return JSON.parse(sessionStorage.getItem(key));}catch{return null;}};
@@ -22,13 +23,17 @@
  if(file==='index.html'||!(file in defaults))return;
  const main=document.querySelector('main');if(!main)return;
  const bar=document.createElement('div');bar.className='ys-page-backbar';
- const link=document.createElement('a');decorate(link);bar.append(link);main.before(bar);
+ const link=document.createElement('a');decorate(link);if(adminDetail)link.textContent='← 관리자 신청 목록으로';bar.append(link);main.before(bar);
  bar.classList.add('ys-page-backbar-sticky');
  const header=document.querySelector('yessuri-site-header'),localNav=document.querySelector('#guide-local-nav');
  const align=()=>{const navHeight=localNav&&getComputedStyle(localNav).position==='sticky'?localNav.getBoundingClientRect().height:0;const top=(header?.getBoundingClientRect().height||82)+navHeight;bar.style.setProperty('--ys-page-back-top',top+'px');document.documentElement.style.setProperty('--ys-page-back-scroll-offset',(top+bar.getBoundingClientRect().height+16)+'px');};
  align();const measure=new ResizeObserver(align);if(header)measure.observe(header);if(localNav)measure.observe(localNav);measure.observe(bar);window.addEventListener('resize',align);
  let legacyTarget=null;
- function target(){return safe(history.state?.ysPageBack?.previous)||legacyTarget||safe(defaults[file]);}
+ function target(){
+  const previous=safe(history.state?.ysPageBack?.previous);
+  if(adminDetail)return previous?.pathname.endsWith('/technician-admin.html')&&!previous.hash?previous:safe('technician-admin.html');
+  return previous||legacyTarget||safe(defaults[file]);
+ }
  if(file==='technician-admin.html'){
   bar.classList.add('ys-page-backbar-admin');
   addEventListener('yessuri:admin-locked',()=>bar.querySelector('.ys-admin-top-actions')?.remove());
@@ -55,7 +60,7 @@
  link.addEventListener('click',event=>{
   if(event.button||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;
   const previous=safe(history.state?.ysPageBack?.previous);
-  if(previous&&history.state?.ysPageBack?.canBack!==false&&history.length>1){event.preventDefault();history.back();return;}
+  if(previous&&(!adminDetail||previous.href===target()?.href)&&history.state?.ysPageBack?.canBack!==false&&history.length>1){event.preventDefault();history.back();return;}
   // Preserve the guide's existing search-restore hook on direct search-return links.
   const old=document.querySelector('#search-return-bar:not([hidden]) a');
   if(old&&safe(old.href)){event.preventDefault();old.click();}
