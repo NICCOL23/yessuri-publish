@@ -45,9 +45,9 @@ body[data-technician-page="admin"] .container,body[data-technician-page="detail"
 
 body[data-technician-page="admin"] .today.card {
   position: sticky;
-  top: var(--ys-page-back-scroll-offset, 90px);
+  top: calc(var(--ys-page-back-scroll-offset, 90px) + var(--admin-menu-height, 0px) + 4px);
   z-index: 20;
-  max-height: min(45dvh, calc(100dvh - var(--ys-page-back-scroll-offset, 90px) - 1rem));
+  max-height: min(45dvh, calc(100dvh - var(--ys-page-back-scroll-offset, 90px) - var(--admin-menu-height, 0px) - 1rem));
   overflow-y: auto;
 }
 

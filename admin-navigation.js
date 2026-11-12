@@ -26,10 +26,16 @@
     nav.append(link);
   }
   root.before(nav);
+  function updateMenuHeight() {
+    const height = Math.ceil(nav.getBoundingClientRect().height);
+    main.style.setProperty('--admin-menu-height', height + 'px');
+  }
+  new ResizeObserver(updateMenuHeight).observe(nav);
   let locked = false;
   let anchorPending = location.hash === '#independent-profile-list';
   function update() {
     nav.hidden = locked || !main.querySelector('.admin-session-bar, #admin-logout');
+    updateMenuHeight();
     const page = location.pathname.split('/').pop();
     const active = page === 'guide-admin.html' ? 4 : page === 'hero-admin.html' ? 2 : page === 'field-admin.html' ? 3 : location.hash === '#independent-profile-list' ? 1 : 0;
     [...nav.children].forEach((link, index) => {
