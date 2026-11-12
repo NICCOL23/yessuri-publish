@@ -175,9 +175,9 @@ function preview(mode) {
     previewFrame.src = 'hero-preview.html?slide='+selectedSlide+'&mode=' + mode + '&v=' + state.version;
     document.getElementById('open-preview').href = 'hero-preview.html?slide='+selectedSlide+'&mode=' + mode;
     document.getElementById('preview-mode').textContent = mode === 'draft' ? '저장한 수정 내용' : '현재 게시본';
-    document.getElementById('preview-help').textContent = mode === 'draft'
-        ? '저장한 수정 내용입니다. PC와 휴대폰 버튼으로 화면을 확인한 뒤 아래 확인란을 선택하세요.'
-        : '현재 홈페이지 게시본입니다. 수정 내용 미리보기에서 수정 내용을 확인하세요.';
+    const previewHelp = document.getElementById('preview-help');
+    previewHelp.hidden = mode !== 'draft';
+    previewHelp.textContent = '저장한 수정 내용입니다. PC와 휴대폰 버튼으로 화면을 확인한 뒤 아래 확인란을 선택하세요.';
     draftPreviewed = mode === 'draft' && !dirty;
     reviewed.checked = false;
     controls();

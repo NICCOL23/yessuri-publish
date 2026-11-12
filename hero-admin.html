@@ -8,10 +8,10 @@
   <title>메인 히어로 관리 | YESSURI</title>
   <link rel="stylesheet" href="hero-admin.css?v=2">
   <link rel="stylesheet" href="admin-session-guard.css?v=1">
-  <link rel="stylesheet" href="admin-publish-compare.css?v=1"><link rel="stylesheet" href="admin-save-result.css?v=2"><link rel="stylesheet" href="admin-error-help.css?v=1"><link rel="stylesheet" href="admin-photo-usage.css?v=1"><link rel="stylesheet" href="admin-restore-compare.css?v=1"><link rel="stylesheet" href="admin-photo-check.css?v=1"><link rel="stylesheet" href="admin-mobile-compact.css?v=1"><script src="admin-mobile-compact.js?v=1" defer></script><script src="admin-photo-check.js?v=1" defer></script><script src="admin-restore-compare.js?v=dynamic-fields-20261110" defer></script><script src="admin-photo-usage.js?v=hero-disclosure-3" defer></script><script src="admin-error-help.js?v=2" defer></script><script src="admin-save-result.js?v=hero-fold-1" defer></script><script src="admin-publish-compare.js?v=hero-panels-2" defer></script><script src="admin-unsaved.js?v=1" defer></script><script src="technician-config.js?v=2" defer></script>
+  <link rel="stylesheet" href="admin-publish-compare.css?v=1"><link rel="stylesheet" href="admin-save-result.css?v=2"><link rel="stylesheet" href="admin-error-help.css?v=1"><link rel="stylesheet" href="admin-photo-usage.css?v=1"><link rel="stylesheet" href="admin-restore-compare.css?v=1"><link rel="stylesheet" href="admin-photo-check.css?v=2"><link rel="stylesheet" href="admin-mobile-compact.css?v=1"><script src="admin-mobile-compact.js?v=1" defer></script><script src="admin-photo-check.js?v=2" defer></script><script src="admin-restore-compare.js?v=dynamic-fields-20261110" defer></script><script src="admin-photo-usage.js?v=hero-disclosure-3" defer></script><script src="admin-error-help.js?v=2" defer></script><script src="admin-save-result.js?v=hero-fold-1" defer></script><script src="admin-publish-compare.js?v=hero-panels-2" defer></script><script src="admin-unsaved.js?v=1" defer></script><script src="technician-config.js?v=2" defer></script>
   <script src="admin-command-requests.js?v=1" defer></script>
   <script src="admin-session-guard.js?v=no-timeout-20261110" defer></script>
-  <script src="hero-admin.js?v=photo-description-1" defer></script>
+  <script src="hero-admin.js?v=preview-help-2" defer></script>
 <link rel="stylesheet" href="admin-navigation.css?v=2"><script src="admin-navigation.js?v=vendor-admin-labels-2" defer></script><link rel="stylesheet" href="admin-text-colors.css?v=1"><script src="admin-text-colors.js?v=live-input-20261110" defer></script><link rel="stylesheet" href="hero-library.css?v=1"><script src="hero-library.js?v=photo-description-1" defer></script><link rel="stylesheet" href="hero-history.css?v=2"><script src="hero-history.js?v=1" defer></script><link rel="stylesheet" href="hero-admin-compact.css?v=photo-preview-3"></head>
 <body data-technician-page="admin">
   <header class="topbar"><div><strong>YESSURI</strong><span>홈페이지 내용 관리</span></div><a href="technician-admin.html">관리자 첫 화면</a></header>
@@ -83,7 +83,7 @@
       <section class="panel preview-panel" aria-labelledby="preview-title">
         <div class="panel-heading"><h2 id="preview-title">미리보기</h2><span id="preview-mode" class="badge">현재 게시본</span></div>
         <div class="preview-controls"><button id="preview-published" class="secondary" type="button">현재 게시본 보기</button><button class="viewport-button" type="button" data-width="1440" aria-pressed="true">PC</button><button class="viewport-button" type="button" data-width="390" aria-pressed="false">휴대폰</button></div>
-        <p id="preview-help" class="help">편집 중인 내용은 수정 내용을 저장한 뒤 미리보기에서 확인하세요.</p>
+        <p id="preview-help" class="help" hidden>편집 중인 내용은 수정 내용을 저장한 뒤 미리보기에서 확인하세요.</p>
         <a id="open-preview" href="hero-preview.html?mode=published" target="_blank" rel="noopener">미리보기를 새 탭에서 크게 보기</a>
         <div class="frame-scroll"><iframe id="preview-frame" title="예스수리 히어로 미리보기" src="about:blank"></iframe></div>
         <div class="publish-box"><label class="check-label"><input id="reviewed" type="checkbox"> 저장한 수정 내용의 PC·휴대폰 표시와 버튼 주소를 확인했습니다.</label><button id="publish" class="primary" type="button" disabled>홈페이지에 게시</button><p class="help">수정 내용을 저장하거나 수정하면 확인 표시가 해제됩니다.</p></div>
