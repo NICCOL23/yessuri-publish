@@ -39,7 +39,7 @@
 }
 
 .admin-detail-actions > .field[for="status"] {
-  flex: 0 1 20rem;
-  min-width: min(100%, 12rem);
+  flex: 0 1 9rem;
+  min-width: 0;
   gap: 2px;
 }
