@@ -41,9 +41,13 @@
    save.type = 'submit';
    save.setAttribute('form', 'admin-update');
    answerEditor.append(answerField, reply.querySelector('#admin-error'), saveActions);
+   const consentHistory = lifecycle.nextElementSibling;
+   const disclosures = create('div', null, 'admin-detail-disclosures');
+   disclosures.append(...reply.children);
+   if (consentHistory?.matches('details')) disclosures.append(consentHistory);
    actions.append(lifecycle, statusField, answerEditor);
    actions.before(replyForm);
-   actions.after(...reply.children);
+   actions.after(disclosures);
    reply.remove();
   }
   for(const details of root.querySelectorAll('.admin-workspace')){const children=[...details.querySelector('.workspace-content').children].filter(n=>!n.classList.contains('workspace-note'));details.hidden=children.length>0&&children.every(n=>n.hidden);}
