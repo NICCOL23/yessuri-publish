@@ -51,6 +51,17 @@
    reply.remove();
   }
   for(const details of root.querySelectorAll('.admin-workspace')){const children=[...details.querySelector('.workspace-content').children].filter(n=>!n.classList.contains('workspace-note'));details.hidden=children.length>0&&children.every(n=>n.hidden);}
+  const disclosures = profile?.querySelector('.admin-detail-disclosures');
+  const profileForm = profile?.querySelector('#manage-profile-form');
+  const profileSave = profileForm?.elements.namedItem('manage-profile-save');
+  if (disclosures && profileSave) {
+   const actions = profileForm.querySelector(':scope > .actions');
+   const destination = profile.dataset.profileAction === '기술자 추가' ? disclosures : actions;
+   if (profileSave.parentElement !== destination) {
+    if (destination === disclosures) destination.append(profileSave);
+    else actions.insertBefore(profileSave, actions.querySelector('a'));
+   }
+  }
   for(const input of controls()){
    if(input.dataset.draftBound)continue;input.dataset.draftBound='true';
    const id=key(input);if(drafts.has(id))input.value=drafts.get(id).value;

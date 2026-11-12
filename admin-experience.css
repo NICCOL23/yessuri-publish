@@ -99,3 +99,12 @@
 .admin-detail-disclosures > details[open] {
   flex-basis: 100%;
 }
+
+.admin-detail-disclosures > #manage-profile-save {
+  align-self: center;
+  margin-inline-start: auto;
+}
+
+#manage-profile-form > .actions:not(:has(button)) {
+  display: none;
+}
