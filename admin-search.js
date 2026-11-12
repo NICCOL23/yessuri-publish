@@ -27,7 +27,7 @@
       }
       wrap.append(title, input); grid.append(wrap); inputs[key] = input;
     }
-    const actions = el('div', undefined, 'admin-search-actions'), submit = el('button', '검색', 'btn primary'), reset = el('button', '검색 초기화', 'btn');
+    const actions = el('div', undefined, 'admin-search-actions'), submit = el('button', '검색', 'btn primary'), reset = el('button', kind === 'vendors' ? '전체 업체 보기' : '검색 초기화', 'btn');
     submit.type = 'submit'; reset.type = 'button'; actions.append(submit, reset);
     const hint = el('p', '여러 조건은 모두 일치해야 합니다. 연락처는 일부 번호로도 검색할 수 있습니다.', 'hint');
     const status = el('p', '', 'admin-search-status'); status.setAttribute('role', 'status'); status.setAttribute('aria-live', 'polite');
