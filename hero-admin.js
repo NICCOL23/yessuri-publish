@@ -173,7 +173,7 @@ function content() {
 function preview(mode) {
     if (locked) return;
     previewFrame.src = 'hero-preview.html?slide='+selectedSlide+'&mode=' + mode + '&v=' + state.version;
-    document.getElementById('open-preview').href = 'hero-preview.html?slide='+selectedSlide+'&mode=' + mode;
+    document.getElementById('open-preview').dataset.previewUrl = 'hero-preview.html?slide='+selectedSlide+'&mode=' + mode;
     document.getElementById('preview-mode').textContent = mode === 'draft' ? '저장한 수정 내용' : '현재 게시본';
     const previewHelp = document.getElementById('preview-help');
     previewHelp.hidden = mode !== 'draft';
@@ -250,6 +250,9 @@ document.querySelectorAll('[data-image-field]').forEach(input => {
 document.getElementById('preview-draft').addEventListener('click', () => {
     preview('draft');
     if (dirty) message('미리보기에는 마지막으로 저장한 수정 내용이 표시됩니다. 현재 입력을 반영하려면 먼저 수정 내용을 저장하세요.');
+});
+document.getElementById('open-preview').addEventListener('click', event => {
+    if (!locked) window.open(event.currentTarget.dataset.previewUrl, '_blank', 'noopener');
 });
 document.getElementById('preview-published').addEventListener('click', () => preview('published'));
 function fitPreview() {
