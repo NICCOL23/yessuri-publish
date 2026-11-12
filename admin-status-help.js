@@ -36,6 +36,7 @@
   }
   if(isApplicationList){
    box.replaceChildren(node('summary',heading));
+   const process=window.YESSURI_ADMIN_GUIDE?.applicationProcess();if(process)box.append(process);
    if(item)box.append(content(label,item));
    else box.append(node('p','전체 신청을 보고 있습니다. 각 신청의 상태를 확인하고 ‘신청 상세 보기’를 누르면 해당 신청의 뜻과 다음 할 일을 볼 수 있습니다.'));
    box.append(node('p','사전등록 완료는 신청 검토 완료이며, 업체 공개는 별도로 확인합니다.'),reference());
@@ -48,7 +49,7 @@
   if(locked)return;
   const list=document.getElementById('admin-applications');
   if(list){const filter=list.querySelector('#state-filter');const label=names[filter?.value];
-   sync(list,label||'전체',applications,'admin-application-status-help','신청 상태 안내');
+   sync(list,label||'전체',applications,'admin-application-status-help','신청 처리 안내');
   }
   const review=document.getElementById('application-review');if(review){const label=review.querySelector('.status')?.textContent.trim()||'';review.classList.add('admin-status-explained');sync(review,label,applications,'admin-detail-status-help','현재 신청 상태');}
   const profile=document.getElementById('profile-safety-panel');if(profile){const label=profile.querySelector('.publication-badge')?.textContent.trim()||'';sync(profile,label,publications,'admin-publication-status-help','현재 업체 공개 상태');}
