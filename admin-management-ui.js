@@ -23,17 +23,53 @@
   };
   return {set(values){const all=[...new Set((values||[]).filter(v=>typeof v==='string'&&v.trim()))];selected=all.filter(v=>items.some(i=>i.value===v));legacy=all.filter(v=>!items.some(i=>i.value===v));other=[];update();},get:()=>[...new Set([...selected,...legacy,...other])]};
  }
- function consentFields(form){
-  const disclosure=el('details',undefined,'manage-consent-disclosure');
-  const summary=el('summary','비공개 동의 확인 기록');
-  summary.id='manage-consent-heading';
+ function consentFields(form,phonePublic){
   const box=el('fieldset',undefined,'consent-record');
-  box.setAttribute('aria-labelledby',summary.id);
-  box.addEventListener('invalid',()=>{disclosure.open=true;},true);
-  disclosure.append(summary,box);
-  box.append(el('p','명함 수신 자체는 공개 동의가 아닙니다. 공개 범위와 근거 식별자만 기록하세요.','hint'));
-  const date=field(box,'consentDate','동의 확인일','date'),evidence=field(box,'evidence','근거 식별자 (연락처·대화 원문 제외)'),note=field(box,'note','확인 메모 (개인정보 원문 제외)','textarea');note.maxLength=500;evidence.maxLength=200;const scopes={};
-  for(const[key,text]of [['profile','업체 소개·분야·지역 공개 동의'],['phone','연락처 공개 동의'],['photos','사진 공개 동의']]){const l=el('label',undefined,'check'),c=el('input');c.type='checkbox';l.append(c,document.createTextNode(text));box.append(l);scopes[key]=c;}form.append(disclosure);return ()=>({confirmedAt:date.value,evidence:evidence.value,note:note.value,scope:Object.keys(scopes).filter(k=>scopes[k].checked)});
+  box.append(el('legend','업체 공개 동의 확인'));
+  const scope=(text,parent)=>{
+   const label=el('label',undefined,'check'),input=el('input');
+   input.type='checkbox';
+   label.append(input,document.createTextNode(text));
+   parent.append(label);
+   return input;
+  };
+  const profile=scope('업체가 소개·전문 분야·출장 지역 공개에 동의했습니다.',box);
+  const date=field(box,'consentDate','확인 날짜','date');
+  const evidence=field(box,'evidence','동의 기록');
+  evidence.placeholder='예: 문자 동의 01';
+  evidence.maxLength=200;
+  evidence.setAttribute('aria-describedby','manage-evidence-help');
+  const help=el('p','기록 이름이나 번호를 적어 주세요. 연락처와 대화 원문은 제외합니다.','hint');
+  help.id='manage-evidence-help';
+  box.append(help);
+  const extras=el('details',undefined,'manage-consent-disclosure');
+  extras.append(el('summary','연락처·사진 동의 및 메모'));
+  const phone=scope('연락처 공개 동의',extras);
+  const photos=scope('사진 공개 동의',extras);
+  const note=field(extras,'note','확인 메모 (선택 · 개인정보 원문 제외)','textarea');
+  note.maxLength=500;
+  phonePublic.addEventListener('change',()=>{if(phonePublic.checked)extras.open=true;});
+  box.append(extras);
+  form.append(box);
+  const scopes={profile,phone,photos};
+  return {
+   read:()=>({confirmedAt:date.value,evidence:evidence.value,note:note.value,scope:Object.keys(scopes).filter(key=>scopes[key].checked)}),
+   validate(status){
+    let problem;
+    if(!profile.checked)problem=[profile,'업체의 공개 동의를 확인하고 체크해 주세요.'];
+    else if(!date.value)problem=[date,'확인 날짜를 입력해 주세요.'];
+    else if(evidence.value.trim().length<3)problem=[evidence,'동의 기록을 3자 이상 입력해 주세요.'];
+    else if(phonePublic.checked&&!phone.checked){
+     extras.open=true;
+     problem=[phone,'연락처 공개 동의를 별도로 확인해 주세요.'];
+    }
+    if(!problem)return true;
+    const [input,message]=problem;
+    status.textContent=message;
+    input.focus();
+    return false;
+   }
+  };
  }
  function addProfileManager(api,application,host){
   const old=document.querySelector('#profile-safety-panel');if(old){if(!mayLeave())return;if(!window.dispatchEvent(new Event('yessuri:admin-profile-switch-request',{cancelable:true})))return;window.dispatchEvent(new Event('yessuri:admin-profile-switch'));old.remove();if(host)for(const id of ['admin-public-profile','admin-public-photos','admin-work-cases'])document.getElementById(id)?.remove();}dirty=false;
@@ -55,17 +91,17 @@
   inputs.career=field(profileDescription,'career','공개 경력');
   profileFields.append(profileDescription);
   form.append(profileFields);
-  const readConsent=consentFields(form),dirtyText=el('p','','manage-dirty');dirtyText.id='manage-dirty';dirtyText.hidden=true;dirtyText.setAttribute('role','status');form.append(dirtyText);
+  const consent=consentFields(form,phonePublic),dirtyText=el('p','','manage-dirty');dirtyText.id='manage-dirty';dirtyText.hidden=true;dirtyText.setAttribute('role','status');form.append(dirtyText);
   const profileId=application.profileId||(application.id?.startsWith('technician-')?application.id:'technician-'+application.id),route='admin/profiles/'+encodeURIComponent(profileId)+'/profile-management';const actions=el('div',undefined,'actions'),save=el('button','수정 내용 저장','btn primary'),preview=el('a','현재 공개 결과 보기','btn');save.type='submit';preview.href='expert.html?id='+encodeURIComponent(profileId);preview.target='_blank';preview.rel='noopener';const saveHint=el('span','저장하면 공개 프로필에 바로 반영됩니다','hint');
   saveHint.hidden=true;
   actions.append(saveHint,save,preview);form.append(actions);panel.append(form);
   const lifecycle=el('div',undefined,'actions lifecycle'),hide=el('button','일시 비공개','btn'),restore=el('button','동의 확인 후 다시 공개','btn'),withdraw=el('button','공개 철회','btn danger');for(const b of [hide,restore,withdraw])b.type='button';lifecycle.append(hide,restore,withdraw);panel.append(lifecycle);const records=el('details',undefined,'section'),history=el('div');records.append(el('summary','동의 확인 이력 · 비공개'),history);panel.append(records);let current=null,busy=false,loaded=false;
-  const lock=v=>{busy=v;panel.querySelectorAll('input,textarea,button').forEach(n=>n.disabled=v);};const data=()=>({version:current?.version,name:inputs.name.value,fields:fields.get(),serviceAreas:areas.get(),intro:inputs.intro.value,career:inputs.career.value,phone:inputs.phone.value,phonePublic:phonePublic.checked,consent:readConsent()});
+  const lock=v=>{busy=v;panel.querySelectorAll('input,textarea,button').forEach(n=>n.disabled=v);};const data=()=>({version:current?.version,name:inputs.name.value,fields:fields.get(),serviceAreas:areas.get(),intro:inputs.intro.value,career:inputs.career.value,phone:inputs.phone.value,phonePublic:phonePublic.checked,consent:consent.read()});
   function render(result){if(locked||!panel.isConnected)return;loaded=true;current=result.profile;const state=current?.publication_status||'none';syncProfileRows(profileId,current);badge.textContent=({approved:'공개 중',published:'공개 중',hidden:'일시 비공개',withdrawn:'공개 철회됨',none:'아직 공개하지 않음'})[state]||state;lifecycle.hidden=!current;panel.dataset.profileAction=current?'기술자 정보 수정':'기술자 추가';save.textContent=current?'수정 내용 저장':'기술자 공개 등록';preview.hidden=!['approved','published'].includes(state);saveHint.hidden=preview.hidden;hide.hidden=!['approved','published'].includes(state);restore.hidden=['approved','published'].includes(state);withdraw.hidden=state==='withdrawn';
-   const record=current||{name:application.company,fields:(application.fields||'').split(/[,，]+/),serviceAreas:(application.areas||'').split(/[,，]+/),intro:application.intro};inputs.name.value=record.name||'';fields.set(record.fields);areas.set(record.service_areas||record.serviceAreas);for(const key of ['intro','career','phone'])inputs[key].value=record[key]||'';phonePublic.checked=!!(record.phone_public??record.phonePublic);if(anchor)anchor.hidden=true;history.replaceChildren();for(const item of result.consents||[])history.append(el('p',[item.confirmedAt,(item.scope||[]).join(' · '),item.evidence].filter(Boolean).join(' / ')));if(!history.childNodes.length)history.append(el('p','동의 기록이 없습니다. 공개 여부와 근거 기록은 별개입니다.'));dirty=false;notice();const advice=document.querySelector('.next-action p');if(advice)advice.textContent=current?(state==='approved'?'이 업체는 이미 공개 중입니다. 신청 상태와 공개 상태는 다릅니다.':'현재 프로필은 공개되지 않습니다. 재공개는 동의 범위를 확인하세요.'):'공개할 정보와 사진 동의를 별도로 확인하세요.';
+   const record=current||{name:application.company,fields:(application.fields||'').split(/[,，]+/),serviceAreas:(application.areas||'').split(/[,，]+/),intro:application.intro};inputs.name.value=record.name||'';fields.set(record.fields);areas.set((record.service_areas||record.serviceAreas||[]).map(value=>window.YESSURI_NORMALIZE_REGION?.(value) ?? value));for(const key of ['intro','career','phone'])inputs[key].value=record[key]||'';phonePublic.checked=!!(record.phone_public??record.phonePublic);if(anchor)anchor.hidden=true;history.replaceChildren();for(const item of result.consents||[])history.append(el('p',[item.confirmedAt,(item.scope||[]).join(' · '),item.evidence].filter(Boolean).join(' / ')));if(!history.childNodes.length)history.append(el('p','동의 기록이 없습니다. 공개 여부와 근거 기록은 별개입니다.'));dirty=false;notice();const advice=document.querySelector('.next-action p');if(advice)advice.textContent=current?(state==='approved'?'이 업체는 이미 공개 중입니다. 신청 상태와 공개 상태는 다릅니다.':'현재 프로필은 공개되지 않습니다. 재공개는 동의 범위를 확인하세요.'):'공개할 정보와 사진 동의를 별도로 확인하세요.';
    if(host&&current&&transferPhoto){let marker=document.querySelector('#admin-public-profile');if(!marker){marker=el('section');marker.id='admin-public-profile';marker.hidden=true;(panel.closest('.admin-workspace')||panel).after(marker);const app={id:profileId.replace(/^technician-/,''),company:current.name};window.YESSURI_TECHNICIAN_PUBLIC_PHOTOS?.mount({application:app,api,transfer:transferPhoto});window.YESSURI_TECHNICIAN_WORK_CASES?.mount({application:app,api,transfer:transferPhoto});organizeDetail();}for(const id of ['admin-public-photos','admin-work-cases']){const section=document.getElementById(id);if(section)section.hidden=state!=='approved';}}
   }
-  async function mutate(action){if(busy)return;if(!loaded){status.textContent='공개 상태를 먼저 확인해야 합니다. 화면을 다시 열어 주세요.';return;}if(['hide','withdraw'].includes(action)&&dirty&&!confirm('편집 중인 내용은 저장하지 않고 공개 상태만 변경할까요?'))return;const messages={create:'동의 근거를 확인하고 공개 등록할까요?',update:'공개 정보와 동의 기록을 저장할까요?',hide:'검색·공개 프로필에서 숨길까요? 신청 원본은 유지됩니다.',restore:'동의 범위를 확인하고 다시 공개할까요?',withdraw:'공개를 철회할까요? 비공개 신청은 삭제하지 않습니다.'};if(!confirm(messages[action]))return;lock(true);try{render(await api(route,{action,...data()}));status.textContent='저장했습니다. 공개 상태와 변경 이력을 확인하세요.';}catch(e){status.textContent='저장하지 못했습니다: '+e.message+' 입력 내용은 유지됩니다.';}finally{lock(false);}}
+  async function mutate(action){if(busy)return;if(!loaded){status.textContent='공개 상태를 먼저 확인해야 합니다. 화면을 다시 열어 주세요.';return;}if(['hide','withdraw'].includes(action)&&dirty&&!confirm('편집 중인 내용은 저장하지 않고 공개 상태만 변경할까요?'))return;if (['create','update','restore'].includes(action)&&!consent.validate(status))return;const messages={create:'동의 근거를 확인하고 공개 등록할까요?',update:'공개 정보와 동의 기록을 저장할까요?',hide:'검색·공개 프로필에서 숨길까요? 신청 원본은 유지됩니다.',restore:'동의 범위를 확인하고 다시 공개할까요?',withdraw:'공개를 철회할까요? 비공개 신청은 삭제하지 않습니다.'};if(!confirm(messages[action]))return;lock(true);try{render(await api(route,{action,...data()}));status.textContent='저장했습니다. 공개 상태와 변경 이력을 확인하세요.';}catch(e){status.textContent='저장하지 못했습니다: '+e.message+' 입력 내용은 유지됩니다.';}finally{lock(false);}}
   form.addEventListener('input',mark);form.addEventListener('change',mark);form.onsubmit=e=>{e.preventDefault();mutate(current?'update':'create');};hide.onclick=()=>mutate('hide');restore.onclick=()=>mutate('restore');withdraw.onclick=()=>mutate('withdraw');lock(true);api(route).then(render).catch(e=>status.textContent='공개 상태 조회 실패: '+e.message).finally(()=>lock(false));notice();
  }
  function syncProfileRows(id,profile){if(!profile)return;for(const row of document.querySelectorAll('.manage-profile-row')){if(row.dataset.profileId!==id)continue;const name=row.querySelector('strong'),state=row.querySelector('.manage-list-state');if(name)name.textContent=profile.name||'업체명 없음';if(state)state.textContent=({approved:'공개 중',published:'공개 중',hidden:'일시 비공개',withdrawn:'공개 철회됨'})[profile.publication_status]||profile.publication_status||'확인 필요';}}

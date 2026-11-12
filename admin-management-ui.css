@@ -153,3 +153,21 @@
   #manage-profile-form .manage-consent-disclosure .consent-record{grid-template-columns:repeat(2,minmax(0,1fr))}
   #manage-profile-form .consent-record > :is(.hint,.manage-field:has(#manage-note)){grid-column:1 / -1}
 }
+
+#manage-profile-form > .consent-record {
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:6px 12px;
+  min-inline-size:0;
+  margin:8px 0;
+  padding:8px 10px;
+  border:1px solid #d7e5e7;
+  border-radius:10px;
+}
+#manage-profile-form > .consent-record > .manage-consent-disclosure {
+  margin:0;
+}
+@media(min-width:800px) {
+  #manage-profile-form > .consent-record {grid-template-columns:repeat(2,minmax(0,1fr))}
+  #manage-profile-form > .consent-record > :is(.check,.hint,details) {grid-column:1 / -1}
+}

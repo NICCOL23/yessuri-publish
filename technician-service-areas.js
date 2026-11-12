@@ -8,7 +8,7 @@
     const list = [citywide,...regions()], raw = value.trim();
     if (!raw) return {selected: [], note};
     const normalized = raw.replace(/부산(?:광역시)?\s*(전\s*지역|전체|전역)/g,'전체').replace(/부산광역시\s*|부산\s+/g,'');
-    const names = normalized.split(/[,，·/\s]+/).filter(name => name && name !== '및').map(name => name === '전체' ? citywide : name);
+    const names = normalized.split(/[,，·/\s]+/).filter(name => name && name !== '및').map(name => name === '전체' ? citywide : (window.YESSURI_NORMALIZE_REGION?.(name) ?? name));
     if (names.length && names.every(name => list.includes(name))) return {selected: list.filter(name => names.includes(name)), note};
     return {selected: [], note: note ? note+'\n'+raw : raw, legacy: true};
   }

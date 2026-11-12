@@ -7,7 +7,7 @@
   const norm = s => String(s || '').normalize('NFKC').toLocaleLowerCase('ko').replace(/\s+/g, '');
   const digits = s => String(s || '').replace(/\D/g, '');
   const values = v => Array.isArray(v) ? v : String(v || '').split(/,\s*|\n/).filter(Boolean);
-  const matches = (row, q) => (!q.company || norm(row.company).includes(norm(q.company))) && (!q.phone || digits(row.phone).includes(digits(q.phone))) && (!q.field || window.YESSURI_SERVICE_FIELDS?.matches(row.fields,q.field)) && (!q.area || values(row.areas).some(a => a === q.area || a === '전체'));
+  const matches = (row, q) => (!q.company || norm(row.company).includes(norm(q.company))) && (!q.phone || digits(row.phone).includes(digits(q.phone))) && (!q.field || window.YESSURI_SERVICE_FIELDS?.matches(row.fields,q.field)) && (!q.area || values(row.areas).some(a => window.YESSURI_NORMALIZE_REGION(a) === q.area || a === '전체'));
 
   function panel(kind) {
     const form = el('form', undefined, 'admin-search');

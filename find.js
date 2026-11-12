@@ -4,9 +4,11 @@ const directoryPresentation = window.YESSURI_EXPERT_PRESENTATION;
 // A provider's confirmed coverage flag is separate from their primary service areas.
 // Missing coverage data defaults to false; broad coverage is never inferred from an address.
 const servesAllBusan = expert => expert.serviceAllBusan === true || expert.serviceAreas?.includes('전체') === true;
-const servesRegion = (expert, region) => servesAllBusan(expert) || window.YESSURI_SERVES_REGION(expert, region);
+const servesRegion = (expert, region) => servesAllBusan(expert) || window.YESSURI_SERVES_REGION(expert, region) ||
+  (region === '부산진구' && expert.serviceAreas?.some(area => window.YESSURI_NORMALIZE_REGION(area) === region));
 const directoryExperts = () => window.YESSURI_PUBLIC_EXPERTS().map(window.YESSURI_EXPERT_CARD.present);
 const validRegions = window.YESSURI_REGIONS;
+const normalizeRegion = window.YESSURI_NORMALIZE_REGION;
 const validCategories = ['전체', ...window.YESSURI_SERVICE_FIELDS.allItems.map(f=>f.value)];
 const requestedField=new URLSearchParams(location.search).get('category');if(requestedField&&window.YESSURI_SERVICE_FIELDS.allItems.some(f=>f.value===requestedField)&&![...document.querySelector('#find-category').options].some(o=>o.value===requestedField)){const option=document.createElement('option');option.value=requestedField;option.textContent=window.YESSURI_SERVICE_FIELDS.label(requestedField)+' (비활성)';document.querySelector('#find-category').append(option);}
 const queryInput = document.querySelector('#find-query');
@@ -31,7 +33,16 @@ function saveSearch(){const state=captureSearch();searchState.write('yessuri:las
 function restoreSearch(state){if(!state||!searchState.safeFind(state.url)||searchState.keyFor(state.url)!==searchState.keyFor(location.href)||!Array.isArray(state.ids)||!Number.isSafeInteger(state.hour))return false;searchIds=[...new Set(state.ids.filter(id=>typeof id==='string'))];searchHour=state.hour;pendingRestore=state;return true;}
 function freshSearch(){searchIds=null;searchHour=searchState.hour();resultPage=1;}
 
-const readFilters = () => ({query:queryInput.value.trim().replace(/\s+/g," "),region:regionSelect.value,category:categorySelect.value,sort:sortSelect.value});
+const readFilters = () => {
+  const query = queryInput.value.trim().replace(/\s+/g, ' ');
+  const districtQuery = normalizeRegion(query) === '부산진구';
+  return {
+    query: districtQuery ? '' : query,
+    region: districtQuery ? '부산진구' : regionSelect.value,
+    category: categorySelect.value,
+    sort: sortSelect.value
+  };
+};
 let requestedCategories = [];
 let requestedService = '';
 const serviceNotice = document.createElement('p');
@@ -53,10 +64,15 @@ function loadFiltersFromUrl() {
   requestedCategories = (params.get('categories') || '').split(',').filter(field => validCategories.includes(field) && field !== '전체');
   requestedService = (params.get('service') || '').slice(0, 80);
   queryInput.value = (params.get('q') || '').slice(0, 80);
-  regionSelect.value = validRegions.includes(params.get('region')) ? params.get('region') : '전체';
+  const region = normalizeRegion(params.get('region'));
+  regionSelect.value = validRegions.includes(region) ? region : '전체';
   categorySelect.value = validCategories.includes(params.get('category')) ? params.get('category') : '전체';
   sortSelect.value = ['default', 'name', 'areas'].includes(params.get('sort')) ? params.get('sort') : 'default';
   appliedFilters = readFilters();
+  if (queryInput.value && !appliedFilters.query) {
+    queryInput.value = '';
+    regionSelect.value = appliedFilters.region;
+  }
 }
 
 function updateUrl(mode = "push") {
@@ -78,21 +94,25 @@ const returnState=searchState.read('yessuri:search-restore');
 if(!restoreSearch(returnState))restoreSearch(searchState.read('yessuri:search:'+searchState.keyFor(location.href)));
 searchState.write('yessuri:search-restore',null);
 
+async function loadPublicRegion(filters) {
+  const first=await window.YESSURI_PUBLIC_API.search({...filters,page:1});
+  const items=[...first.items];
+  const pages=Math.ceil(first.total/12);
+  for(let page=2;page<=pages;page+=4){
+    const batch=await Promise.allSettled(Array.from({length:Math.min(4,pages-page+1)},(_,offset)=>window.YESSURI_PUBLIC_API.search({...filters,page:page+offset})));
+    items.push(...batch.flatMap(result=>result.status==='fulfilled'?result.value.items:[]));
+  }
+  return items;
+}
+
 let renderVersion=0;
 async function renderDirectory(syncUrl = true) {
   const version=++renderVersion;
   await window.YESSURI_PUBLIC_READY;
-  let realItems=[];
-  try{
-    const filters={query:appliedFilters.query,region:appliedFilters.region,category:appliedFilters.category,sort:appliedFilters.sort,categories:requestedCategories.join(',')};
-    const first=await window.YESSURI_PUBLIC_API.search({...filters,page:1});
-    realItems=first.items;
-    const realPages=Math.ceil(first.total/12);
-    for(let page=2;page<=realPages;page+=4){
-      const pages=await Promise.all(Array.from({length:Math.min(4,realPages-page+1)},(_,offset)=>window.YESSURI_PUBLIC_API.search({...filters,page:page+offset})));
-      realItems.push(...pages.flatMap(result=>result.items));
-    }
-  }catch{}
+  const filters={query:appliedFilters.query,region:appliedFilters.region,category:appliedFilters.category,sort:appliedFilters.sort,categories:requestedCategories.join(',')};
+  const regions=filters.region==='부산진구' ? [filters.region,'진구','부산 진구'] : [filters.region];
+  const results=await Promise.allSettled(regions.map(region=>loadPublicRegion({...filters,region})));
+  const realItems=[...new Map(results.flatMap(result=>result.status==='fulfilled'?result.value:[]).map(item=>[item.id,item])).values()];
   if(version!==renderVersion)return;
   const query = appliedFilters.query.normalize('NFKC').toLocaleLowerCase('ko-KR');
   const examples = directoryExperts().filter(e=>e.isExample!==false).filter(expert =>
@@ -160,6 +180,10 @@ document.querySelector('#find-filter-form').addEventListener('submit', event => 
   freshSearch();
   if (categorySelect.value !== appliedFilters.category) { requestedCategories = []; requestedService = ''; }
   appliedFilters = readFilters();
+  if (queryInput.value.trim() && !appliedFilters.query) {
+    queryInput.value = '';
+    regionSelect.value = appliedFilters.region;
+  }
   renderDirectory();
   document.querySelector('.find-results-heading').scrollIntoView({behavior:'smooth',block:'start'});
 });

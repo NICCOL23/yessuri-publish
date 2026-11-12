@@ -4,6 +4,11 @@ window.YESSURI_REGIONS = Object.freeze([
   '사상구', '사하구', '서구', '수영구', '연제구', '영도구', '중구', '해운대구', '기장군'
 ]);
 
+window.YESSURI_NORMALIZE_REGION = value => {
+  const name = String(value ?? '').trim();
+  return /^(?:부산\s*)?진구$/.test(name) ? '부산진구' : name;
+};
+
 document.querySelectorAll('select[data-busan-regions]').forEach(select => {
   const placeholder = select.querySelector('option[value=""]');
   select.replaceChildren();
