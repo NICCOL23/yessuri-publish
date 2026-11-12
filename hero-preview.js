@@ -90,5 +90,7 @@
             document.getElementById('root').append(link);
         }
     }
-    start();
+    void Promise.resolve(window.YESSURI_ADMIN_SESSION_READY).then(() => {
+        if (!locked) return start();
+    });
 })();
