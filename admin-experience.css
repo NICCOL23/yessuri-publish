@@ -30,9 +30,13 @@
 }
 
 .admin-detail-actions > .admin-answer-editor {
-  flex: 1 1 14rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 6px 10px;
+  flex: 1 1 22rem;
   min-width: 0;
-  max-width: 22rem;
+  max-width: 30rem;
 }
 
 .admin-density .admin-answer-editor > .field {
@@ -42,7 +46,8 @@
 }
 
 .admin-density .admin-answer-editor > .actions {
-  margin: 6px 0 0;
+  grid-area: 1 / 2;
+  margin: calc(var(--ys-body, 1rem) * var(--ys-leading, 1.6) + 2px) 0 0;
   justify-content: flex-end;
 }
 
@@ -60,4 +65,20 @@
 #admin-detail-status-help,
 #admin-publication-status-help {
   border-left: 1px solid #cde7e1;
+}
+
+
+.admin-answer-editor > #admin-error {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 420px) {
+  .admin-detail-actions > .admin-answer-editor {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-density .admin-answer-editor > .actions {
+    grid-area: auto;
+    margin: 0;
+  }
 }
