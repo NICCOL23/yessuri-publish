@@ -18,3 +18,9 @@ body[data-technician-page="admin"] .admin-unified-navigation {
 body[data-technician-page="admin"] #independent-profile-list {
   scroll-margin-top: calc(var(--ys-page-back-scroll-offset, 90px) + var(--admin-menu-height, 0px) + 4px);
 }
+
+
+#root[data-admin-workspace="profiles"] > #admin-application-workspace,
+#root:not([data-admin-workspace="profiles"]) > #independent-profile-list {
+  display: none;
+}

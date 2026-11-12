@@ -32,12 +32,15 @@
   }
   new ResizeObserver(updateMenuHeight).observe(nav);
   let locked = false;
-  let anchorPending = location.hash === '#independent-profile-list';
+  const profileHash = '#independent-profile-list';
+  let anchorPending = location.hash === profileHash;
   function update() {
     nav.hidden = locked || !main.querySelector('.admin-session-bar, #admin-logout');
     updateMenuHeight();
-    const page = location.pathname.split('/').pop();
-    const active = page === 'guide-admin.html' ? 4 : page === 'hero-admin.html' ? 2 : page === 'field-admin.html' ? 3 : location.hash === '#independent-profile-list' ? 1 : 0;
+    const showingProfiles = location.hash === profileHash;
+    if (showingProfiles) root.dataset.adminWorkspace = 'profiles';
+    else delete root.dataset.adminWorkspace;
+    const active = showingProfiles ? 1 : 0;
     [...nav.children].forEach((link, index) => {
       if (index === active) link.setAttribute('aria-current', 'page');
       else link.removeAttribute('aria-current');
@@ -53,7 +56,7 @@
     }
   }
   new MutationObserver(update).observe(main, {childList: true, subtree: true});
-  addEventListener('hashchange', () => {anchorPending = location.hash === '#independent-profile-list'; update();});
+  addEventListener('hashchange', () => {anchorPending = location.hash === profileHash; update();});
   addEventListener('yessuri:admin-locked', () => {locked = true; nav.hidden = true;});
   update();
 })();
