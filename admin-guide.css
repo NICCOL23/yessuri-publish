@@ -106,3 +106,36 @@ body[data-technician-page="admin"] .today > .page-title {
 body[data-technician-page="admin"] .today > .page-title > .all-applications {
   margin-inline-start: auto;
 }
+
+#admin-application-workspace [data-application-status="접수"] {
+  --application-status-bg: #eaf3ff;
+  --application-status-text: #174b8a;
+}
+
+#admin-application-workspace [data-application-status="확인 중"] {
+  --application-status-bg: #e6f5f2;
+  --application-status-text: #006268;
+}
+
+#admin-application-workspace [data-application-status="자료 보완 요청"] {
+  --application-status-bg: #fff1e3;
+  --application-status-text: #8c420a;
+}
+
+#admin-application-workspace [data-application-status="검토 완료"] {
+  --application-status-bg: #eef1f4;
+  --application-status-text: #475569;
+}
+
+#admin-application-workspace :is(.today-card, .admin-table .status)[data-application-status] {
+  background-color: var(--application-status-bg, #eef1f4);
+  color: var(--application-status-text, #475569);
+}
+
+#admin-application-workspace .today-card[data-application-status] :is(strong, .hint) {
+  color: inherit;
+}
+
+#admin-application-workspace .today-card[data-application-status]:is(:hover, [aria-current]) {
+  border-color: currentColor;
+}
