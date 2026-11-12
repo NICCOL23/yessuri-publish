@@ -53,3 +53,31 @@ body[data-technician-page="admin"] .today.card {
 
 .admin-profile-disclosure > summary { min-height: 44px; align-content: center; cursor: pointer; }
 .admin-profile-disclosure > summary > h2 { display: inline; margin: 0; }
+
+body[data-technician-page="admin"] .today-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: 8px;
+}
+
+body[data-technician-page="admin"] .today-card strong {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+body[data-technician-page="admin"] .today-card .hint {
+  grid-column: 1 / -1;
+}
+
+body[data-technician-page="admin"] #admin-process-guide:not([open]) {
+  padding: 0;
+}
+
+body[data-technician-page="admin"] #admin-process-guide:not([open]) > summary {
+  box-sizing: border-box;
+  min-height: 3.5rem;
+  align-content: center;
+  padding: 0.25rem 0.875rem;
+}
