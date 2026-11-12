@@ -66,3 +66,12 @@
   max-height: 16rem;
   resize: vertical;
 }
+
+#profile-safety-panel {
+  border-top: 1px solid #dbe5ed;
+}
+
+#admin-detail-status-help,
+#admin-publication-status-help {
+  border-left: 1px solid #cde7e1;
+}
