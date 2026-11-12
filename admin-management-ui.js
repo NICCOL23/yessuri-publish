@@ -12,7 +12,7 @@
   const wrap=el('div',undefined,'field manage-field'),title=el('label',label),input=el(type==='textarea'?'textarea':'input');if(type!=='textarea')input.type=type;input.id='manage-'+key;input.name=key;title.htmlFor=input.id;wrap.append(title,input);parent.append(wrap);return input;
  }
  function picker(form,key,label,items){
-  const group=el('div',undefined,'manage-field'),button=el('button',label+' 선택','btn manage-picker-trigger'),summary=el('p','','hint');button.type='button';button.setAttribute('aria-haspopup','dialog');group.append(el('span',label,'manage-label'),button,summary);form.append(group);let selected=[],legacy=[],other=[];
+  const group=el('div',undefined,'manage-field'),button=el('button',label+' 선택','btn manage-picker-trigger'),summary=el('p','','hint');button.type='button';button.setAttribute('aria-haspopup','dialog');group.append(el('span',label+' *','manage-label'),button,summary);form.append(group);let selected=[],legacy=[],other=[];
   const update=()=>summary.textContent=[...selected.map(v=>items.find(i=>i.value===v)?.label||v),...legacy.map(v=>(window.YESSURI_SERVICE_FIELDS?.label(v)||v)+' (기존값 유지)'),...other].join(' · ')||'선택한 항목이 없습니다.';
   button.onclick=()=>{
    const dialog=el('dialog',undefined,'manage-picker-dialog'),title=el('h2',label+' 선택');title.id='picker-'+key;dialog.setAttribute('aria-labelledby',title.id);const grid=el('div',undefined,'manage-picker-grid'),choices=new Set(selected);
@@ -25,7 +25,7 @@
  }
  function consentFields(form,phonePublic){
   const box=el('fieldset',undefined,'consent-record');
-  box.append(el('legend','업체 공개 동의 확인'));
+  box.append(el('legend','업체 공개 동의 확인'),el('p','* 필수 항목','hint'));
   const scope=(text,parent)=>{
    const label=el('label',undefined,'check'),input=el('input');
    input.type='checkbox';
@@ -33,9 +33,11 @@
    parent.append(label);
    return input;
   };
-  const profile=scope('업체가 소개·전문 분야·출장 지역 공개에 동의했습니다.',box);
-  const date=field(box,'consentDate','확인 날짜','date');
-  const evidence=field(box,'evidence','동의 기록');
+  const profile=scope('업체가 소개·전문 분야·출장 지역 공개에 동의했습니다. *',box);
+  profile.setAttribute('aria-required','true');
+  const date=field(box,'consentDate','확인 날짜 *','date');
+  date.setAttribute('aria-required','true');
+  const evidence=field(box,'evidence','동의 기록 (선택)');
   evidence.placeholder='예: 문자 동의 01';
   evidence.maxLength=200;
   evidence.setAttribute('aria-describedby','manage-evidence-help');
@@ -53,12 +55,12 @@
   form.append(box);
   const scopes={profile,phone,photos};
   return {
-   read:()=>({confirmedAt:date.value,evidence:evidence.value,note:note.value,scope:Object.keys(scopes).filter(key=>scopes[key].checked)}),
+   read:()=>({confirmedAt:date.value,evidence:evidence.value.trim()||'관리자 공개 동의 확인 (별도 기록 미입력)',note:note.value,scope:Object.keys(scopes).filter(key=>scopes[key].checked)}),
    validate(status){
     let problem;
     if(!profile.checked)problem=[profile,'업체의 공개 동의를 확인하고 체크해 주세요.'];
     else if(!date.value)problem=[date,'확인 날짜를 입력해 주세요.'];
-    else if(evidence.value.trim().length<3)problem=[evidence,'동의 기록을 3자 이상 입력해 주세요.'];
+    else if(evidence.value.trim()&&evidence.value.trim().length<3)problem=[evidence,'동의 기록을 3자 이상 입력해 주세요.'];
     else if(phonePublic.checked&&!phone.checked){
      extras.open=true;
      problem=[phone,'연락처 공개 동의를 별도로 확인해 주세요.'];
@@ -76,7 +78,8 @@
   const panel=el('section',undefined,'card section manage-public');panel.id='profile-safety-panel';panel.append(el('h2','공개 상태와 공개 정보 관리'),el('p','신청서 만료·삭제와 관계없이 공개 업체를 별도로 관리합니다. 신청 원본을 복구하거나 보관 기간을 늘리지 않습니다.','hint'));
   const badge=el('strong','공개 상태 확인 중','publication-badge'),status=el('p','','hint');status.setAttribute('role','status');panel.append(badge,status);const anchor=document.querySelector('#admin-public-profile');if(host)host.append(panel);else if(anchor)anchor.before(panel);else root.append(panel);document.querySelectorAll('.process-steps a[href="#admin-public-profile"]').forEach(a=>a.href='#profile-safety-panel');
   const form=el('form');form.id='manage-profile-form';const profileFields=el('div',undefined,'manage-profile-fields');
-  const inputs={name:field(profileFields,'name','공개 업체명')};
+  const inputs={name:field(profileFields,'name','공개 업체명 *')};
+  inputs.name.setAttribute('aria-required','true');
   inputs.phone=field(profileFields,'phone','공개 연락처','tel');
   const phoneField=inputs.phone.parentElement;
   const phonePublic=el('input'),phoneLabel=el('label',undefined,'check');
