@@ -9,7 +9,7 @@
   const first=nodes.find(Boolean);if(!first||first.closest('.admin-workspace'))return;
   const d=create('details',null,'admin-workspace');d.open=!!open;d.append(create('summary',title));const content=create('div',null,'workspace-content');if(note)content.append(create('p',note,'workspace-note'));d.append(content);first.before(d);for(const n of nodes)if(n)content.append(n);
  }
- function controls(){return [...root.querySelectorAll('#admin-update textarea,#status,#admin-public-photos input[type="text"]')];}
+ function controls(){return [...root.querySelectorAll('#admin-body,#status,#admin-public-photos input[type="text"]')];}
  function key(n){if(n.id)return n.id;return 'caption:'+n.closest('figure')?.querySelector('img')?.getAttribute('src');}
  function decorate(){
   if(locked)return;
@@ -34,7 +34,10 @@
    const status = reply.querySelector('#status');
    const statusField = status.closest('label');
    status.setAttribute('form', 'admin-update');
-   actions.append(lifecycle, statusField, replyWorkspace);
+   const answer = reply.querySelector('#admin-body');
+   const answerField = answer.closest('label');
+   answer.setAttribute('form', 'admin-update');
+   actions.append(lifecycle, statusField, answerField, replyWorkspace);
   }
   for(const details of root.querySelectorAll('.admin-workspace')){const children=[...details.querySelector('.workspace-content').children].filter(n=>!n.classList.contains('workspace-note'));details.hidden=children.length>0&&children.every(n=>n.hidden);}
   for(const input of controls()){
