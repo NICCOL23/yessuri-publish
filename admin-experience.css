@@ -11,8 +11,8 @@
 }
 
 .admin-density .admin-detail-actions > .lifecycle {
-  align-self: flex-end;
   margin: 0;
+  margin-block-start: calc(var(--ys-body, 1rem) * var(--ys-leading, 1.6) + 2px);
   padding: 0;
   border: 0;
 }
@@ -27,10 +27,6 @@
   flex: 0 1 9rem;
   min-width: 0;
   gap: 2px;
-}
-
-.admin-density .admin-detail-actions > .field[for="status"] {
-  align-self: flex-end;
 }
 
 .admin-detail-actions > .admin-answer-editor {
