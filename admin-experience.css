@@ -17,26 +17,8 @@
   border: 0;
 }
 
-.admin-detail-actions > .admin-reply-disclosure {
-  margin: 0 0 0 auto;
-  border: 0;
-  max-width: 100%;
-}
-
-.admin-detail-actions > .admin-reply-disclosure[open] {
-  flex-basis: 100%;
-}
-
-.admin-detail-actions > .admin-reply-disclosure > summary {
-  width: fit-content;
-  margin-inline-start: auto;
-  min-height: 44px;
-  padding: 10px 0;
-  font-size: 1rem;
-}
-
-.admin-detail-actions > .admin-reply-disclosure > .workspace-content {
-  padding: 0;
+#profile-safety-panel > #admin-update:empty {
+  margin: 0;
 }
 
 .admin-density .admin-detail-actions > .field[for="status"] {
@@ -51,13 +33,21 @@
   align-self: flex-end;
 }
 
-.admin-density .admin-detail-actions > .field[for="admin-body"] {
+.admin-detail-actions > .admin-answer-editor {
   flex: 1 1 14rem;
   min-width: 0;
   max-width: 22rem;
+}
+
+.admin-density .admin-answer-editor > .field {
   margin: 0;
   padding: 0;
   gap: 2px;
+}
+
+.admin-density .admin-answer-editor > .actions {
+  margin: 6px 0 0;
+  justify-content: flex-end;
 }
 
 .admin-detail-actions #admin-body {

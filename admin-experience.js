@@ -23,13 +23,11 @@
    const summary=profile.closest('.admin-workspace')?.querySelector(':scope > summary');
    if(summary && summary.textContent!==title)summary.textContent=title;
   }
-  const reply = root.querySelector('#admin-update')?.closest('section');
-  group([reply], '상태·비공개 답변', null, false);
-  const replyWorkspace = reply?.closest('.admin-workspace');
+  const replyForm = root.querySelector('#admin-update');
+  const reply = replyForm?.closest('section');
   const lifecycle = profile?.querySelector('.lifecycle');
-  if (lifecycle && replyWorkspace && !replyWorkspace.classList.contains('admin-reply-disclosure')) {
+  if (lifecycle && reply && reply !== profile) {
    const actions = create('div', null, 'admin-detail-actions');
-   replyWorkspace.classList.add('admin-reply-disclosure');
    lifecycle.before(actions);
    const status = reply.querySelector('#status');
    const statusField = status.closest('label');
@@ -37,7 +35,16 @@
    const answer = reply.querySelector('#admin-body');
    const answerField = answer.closest('label');
    answer.setAttribute('form', 'admin-update');
-   actions.append(lifecycle, statusField, answerField, replyWorkspace);
+   const answerEditor = create('div', null, 'admin-answer-editor');
+   const saveActions = reply.querySelector('#admin-update .actions');
+   const save = saveActions.querySelector('button');
+   save.type = 'submit';
+   save.setAttribute('form', 'admin-update');
+   answerEditor.append(answerField, reply.querySelector('#admin-error'), saveActions);
+   actions.append(lifecycle, statusField, answerEditor);
+   actions.before(replyForm);
+   actions.after(...reply.children);
+   reply.remove();
   }
   for(const details of root.querySelectorAll('.admin-workspace')){const children=[...details.querySelector('.workspace-content').children].filter(n=>!n.classList.contains('workspace-note'));details.hidden=children.length>0&&children.every(n=>n.hidden);}
   for(const input of controls()){
