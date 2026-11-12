@@ -14,7 +14,6 @@
  function decorate(){
   if(locked)return;
   for(const details of root.querySelectorAll('.admin-workspace')){const content=details.querySelector('.workspace-content');if(content&&!content.querySelector(':scope > :not(.workspace-note)'))details.remove();}
-  const reply=root.querySelector('#admin-update')?.closest('section');group([reply],'신청 확인·비공개 답변','신청자와 관리자만 확인하는 답변입니다. 이 저장으로 공개 프로필은 바뀌지 않습니다.',true);
   group([root.querySelector('#admin-public-photos'),root.querySelector('#admin-work-cases')],'공개 사진·작업 사례','이 구획에서 저장한 정보는 공개 프로필에 반영됩니다. 신청서 원본 사진은 유지됩니다.',false);
   const profile=root.querySelector('#profile-safety-panel');
   if(profile){
@@ -23,6 +22,12 @@
    group([profile],title,null,true);
    const summary=profile.closest('.admin-workspace')?.querySelector(':scope > summary');
    if(summary && summary.textContent!==title)summary.textContent=title;
+  }
+  const reply = root.querySelector('#admin-update')?.closest('section');
+  group([reply], '신청 상태·비공개 답변', '신청자와 관리자만 확인하는 답변입니다. 이 저장으로 공개 프로필은 바뀌지 않습니다.', false);
+  const replyWorkspace = reply?.closest('.admin-workspace');
+  if (profile && replyWorkspace && profile.nextElementSibling !== replyWorkspace) {
+   profile.after(replyWorkspace);
   }
   for(const details of root.querySelectorAll('.admin-workspace')){const children=[...details.querySelector('.workspace-content').children].filter(n=>!n.classList.contains('workspace-note'));details.hidden=children.length>0&&children.every(n=>n.hidden);}
   for(const input of controls()){
