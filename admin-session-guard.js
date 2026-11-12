@@ -12,6 +12,30 @@
  const node=(tag,text,cls)=>{const n=document.createElement(tag);if(text)n.textContent=text;if(cls)n.className=cls;return n;};
  const millis=value=>Number.isFinite(value)?value:typeof value==='string'&&Number.isFinite(Date.parse(value))?Date.parse(value):null;
  function storedSession(){try{return JSON.parse(sessionStorage.getItem('technician-admin')||'null');}catch{return null;}}
+ const channel=cloud&&typeof BroadcastChannel==='function'?new BroadcastChannel('yessuri-technician-admin-session'):null;
+ const validSession=s=>typeof s?.token==='string'&&s.token.length>0&&(s.expiresAt===null||millis(s.expiresAt)>Date.now());
+ let receiveSession=null;
+ window.YESSURI_ADMIN_SESSION_READY=new Promise(resolve=>{
+  if(!channel||validSession(storedSession())){resolve();return;}
+  const timer=setTimeout(()=>{receiveSession=null;resolve();},750);
+  receiveSession=session=>{
+   if(!validSession(session))return;
+   try{sessionStorage.setItem('technician-admin',JSON.stringify(session));}catch{}
+   clearTimeout(timer);receiveSession=null;resolve();
+  };
+ });
+ channel?.addEventListener('message',({data})=>{
+  if(!data||locked)return;
+  if(data.type==='request'&&authenticated){
+   const session=storedSession();
+   if(validSession(session)&&expiresAt>Date.now())channel.postMessage({type:'session',session});
+  }else if(data.type==='session'){
+   receiveSession?.(data.session);
+  }else if(data.type==='logout'&&data.token&&storedSession()?.token===data.token){
+   lock('다른 관리자 탭에서 로그아웃했습니다.',false);
+  }
+ });
+ if(receiveSession)channel.postMessage({type:'request'});
  function authHeaders(){const h={};if(cloud){h.apikey=config.publishableKey;const s=storedSession();if(s?.token)h['x-admin-token']=s.token;}return h;}
  function request(route,init={}){return originalFetch(cloud?endpoint.href+'?route='+encodeURIComponent('/api/'+route):'/api/'+route,{...init,credentials:cloud?'omit':'same-origin',cache:'no-store',headers:{...authHeaders(),...(init.headers||{})}});}
  function routeOf(input){let u;try{u=new URL(typeof input==='string'?input:input.url,location.href);}catch{return null;}
@@ -23,10 +47,12 @@
   for(const e of root.querySelectorAll('input[type="file"]'))e.value='';
   if(root.childNodes.length)root.replaceChildren();
  }
- function lock(message){
+ function lock(message,endServerSession=true){
   if(locked)return;locked=true;authenticated=false;clearTimeout(retryTimer);
   // 인증 정보를 제거하기 전에 이 세션의 서버 종료 요청을 구성합니다.
-  const logout=request('logout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role:'admin'})}).catch(()=>{});
+  const token=storedSession()?.token;
+  if(endServerSession&&token)channel?.postMessage({type:'logout',token});
+  const logout=endServerSession?request('logout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role:'admin'})}).catch(()=>{}):null;
   try{sessionStorage.removeItem('technician-admin');}catch{}
   window.dispatchEvent(new Event('yessuri:admin-locked'));clearPrivateScreen();bar?.remove();
   const dialog=node('dialog',null,'admin-session-lock');dialog.id='admin-session-lock';dialog.setAttribute('aria-labelledby','admin-lock-title');dialog.setAttribute('aria-describedby','admin-lock-message');
@@ -72,5 +98,5 @@
  window.fetch=async function(input,init){const route=routeOf(input);if(route&&locked)throw Error('관리자 화면이 잠겼습니다. 다시 로그인해 주세요.');const response=await originalFetch(input,init);if(route){if(route==='/api/session'&&response.ok){try{activate(await response.clone().json());}catch{}}else if(authenticated&&(response.status===401||response.status===403)){// 업무상 거부를 세션 만료로 오인하지 않습니다.
     await checkSession();
    }}return response;};
- new MutationObserver(()=>{if(locked)clearPrivateScreen();}).observe(root,{childList:true,subtree:true});document.addEventListener('visibilitychange',()=>{expired();if(!document.hidden)void checkSession();});window.addEventListener('focus',()=>{expired();void checkSession();});window.addEventListener('online',()=>{void checkSession();});window.addEventListener('pageshow',event=>{if(event.persisted){expired();void checkSession();}});setInterval(expired,1000);setInterval(checkSession,30000);void checkSession();
+ new MutationObserver(()=>{if(locked)clearPrivateScreen();}).observe(root,{childList:true,subtree:true});document.addEventListener('visibilitychange',()=>{expired();if(!document.hidden)void checkSession();});window.addEventListener('focus',()=>{expired();void checkSession();});window.addEventListener('online',()=>{void checkSession();});window.addEventListener('pageshow',event=>{if(event.persisted){expired();void checkSession();}});setInterval(expired,1000);setInterval(checkSession,30000);void window.YESSURI_ADMIN_SESSION_READY.then(checkSession);
 })();
