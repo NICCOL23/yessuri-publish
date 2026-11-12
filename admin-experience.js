@@ -9,7 +9,7 @@
   const first=nodes.find(Boolean);if(!first||first.closest('.admin-workspace'))return;
   const d=create('details',null,'admin-workspace');d.open=!!open;d.append(create('summary',title));const content=create('div',null,'workspace-content');if(note)content.append(create('p',note,'workspace-note'));d.append(content);first.before(d);for(const n of nodes)if(n)content.append(n);
  }
- function controls(){return [...root.querySelectorAll('#admin-update textarea,#admin-update select,#admin-public-photos input[type="text"]')];}
+ function controls(){return [...root.querySelectorAll('#admin-update textarea,#status,#admin-public-photos input[type="text"]')];}
  function key(n){if(n.id)return n.id;return 'caption:'+n.closest('figure')?.querySelector('img')?.getAttribute('src');}
  function decorate(){
   if(locked)return;
@@ -24,10 +24,17 @@
    if(summary && summary.textContent!==title)summary.textContent=title;
   }
   const reply = root.querySelector('#admin-update')?.closest('section');
-  group([reply], '신청 상태·비공개 답변', '신청자와 관리자만 확인하는 답변입니다. 이 저장으로 공개 프로필은 바뀌지 않습니다.', false);
+  group([reply], '상태·비공개 답변', null, false);
   const replyWorkspace = reply?.closest('.admin-workspace');
-  if (profile && replyWorkspace && profile.nextElementSibling !== replyWorkspace) {
-   profile.after(replyWorkspace);
+  const lifecycle = profile?.querySelector('.lifecycle');
+  if (lifecycle && replyWorkspace && !replyWorkspace.classList.contains('admin-reply-disclosure')) {
+   const actions = create('div', null, 'admin-detail-actions');
+   replyWorkspace.classList.add('admin-reply-disclosure');
+   lifecycle.before(actions);
+   const status = reply.querySelector('#status');
+   const statusField = status.closest('label');
+   status.setAttribute('form', 'admin-update');
+   actions.append(lifecycle, statusField, replyWorkspace);
   }
   for(const details of root.querySelectorAll('.admin-workspace')){const children=[...details.querySelector('.workspace-content').children].filter(n=>!n.classList.contains('workspace-note'));details.hidden=children.length>0&&children.every(n=>n.hidden);}
   for(const input of controls()){
