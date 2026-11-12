@@ -127,7 +127,7 @@ body[data-technician-page="admin"] .today > .page-title > .all-applications {
   --application-status-text: #475569;
 }
 
-#admin-application-workspace :is(.today-card, .admin-table .status)[data-application-status] {
+#admin-application-workspace .today-card[data-application-status] {
   background-color: var(--application-status-bg, #eef1f4);
   color: var(--application-status-text, #475569);
 }
@@ -138,4 +138,9 @@ body[data-technician-page="admin"] .today > .page-title > .all-applications {
 
 #admin-application-workspace .today-card[data-application-status]:is(:hover, [aria-current]) {
   border-color: currentColor;
+}
+
+#admin-application-workspace .admin-table .status[data-application-status] {
+  background-color: var(--application-status-text, #475569);
+  color: #fff;
 }
