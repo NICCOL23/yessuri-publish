@@ -249,3 +249,21 @@ body.admin-density > .guide-header {
     padding-inline: 6px;
   }
 }
+
+.guide-admin-return {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-block-end: 8px;
+  padding: 6px 12px;
+  border: 1px solid #bbced6;
+  border-radius: 7px;
+  background: white;
+  font-size: 1.067rem;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+body.admin-density #main > .admin-unified-navigation {
+  top: 0;
+}

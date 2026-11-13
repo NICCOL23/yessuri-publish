@@ -3,6 +3,7 @@
   'use strict';
   const main = document.getElementById('main');
   const root = document.getElementById('root');
+  const headerSession = document.getElementById('guide-header-session');
   if (!main || !root || document.body.dataset.technicianPage !== 'admin') return;
   const nav = document.createElement('nav');
   nav.className = 'admin-unified-navigation';
@@ -38,7 +39,9 @@
   const showingProfiles = () => isTechnicianAdmin && location.hash === profileHash;
   let anchorPending = showingProfiles();
   function update() {
-    nav.hidden = locked || !main.querySelector('.admin-session-bar, #admin-logout');
+    const sessionBar = headerSession?.querySelector('.admin-session-bar')
+      || main.querySelector('.admin-session-bar, #admin-logout');
+    nav.hidden = locked || !sessionBar;
     updateMenuHeight();
     const profilesActive = showingProfiles();
     if (profilesActive) root.dataset.adminWorkspace = 'profiles';
@@ -58,7 +61,9 @@
       target.focus({preventScroll: true});
     }
   }
-  new MutationObserver(update).observe(main, {childList: true, subtree: true});
+  const observer = new MutationObserver(update);
+  observer.observe(main, {childList: true, subtree: true});
+  if (headerSession) observer.observe(headerSession, {childList: true, subtree: true});
   addEventListener('hashchange', () => {anchorPending = showingProfiles(); update();});
   addEventListener('yessuri:admin-locked', () => {locked = true; nav.hidden = true;});
   update();
