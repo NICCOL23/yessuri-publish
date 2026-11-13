@@ -190,29 +190,53 @@
   overflow-wrap: anywhere;
 }
 
-/* Keep the session guide next to the logout button. */
-#main > .admin-session-bar-with-disclosure > details > summary {
-  width: fit-content;
-  max-width: 100%;
-  margin-inline-start: auto;
-}
-
-body > header {
+.guide-header {
+  position: relative;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
 }
 .guide-header-brand {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 12px;
-}
-.guide-header-brand img {
   display: block;
-  width: clamp(106px, 12vw, 140px);
+  width: clamp(90px, 12vw, 140px);
   height: auto;
 }
-.guide-header-brand span {
-  color: #5d7585;
-  font-size: .875rem;
-  font-weight: 600;
+#guide-header-session {
+  margin-inline-start: auto;
+  max-width: 100%;
+}
+#guide-header-session .admin-session-bar {
+  grid-template-columns: auto auto;
+  align-items: center;
+  margin: 0;
+}
+#guide-header-session :is(summary, button) {
+  font-size: 1.067rem;
+  line-height: 1.5;
+}
+#guide-header-session details > p {
+  position: absolute;
+  inset-inline-end: 16px;
+  top: 100%;
+  z-index: 5;
+  width: min(32rem, calc(100% - 32px));
+  padding: 12px;
+  border: 1px solid #cde5df;
+  border-radius: 8px;
+  background: #eff8f5;
+}
+#guide-header-session .admin-expiry-warning {
+  grid-column: 1 / -1;
+}
+@media (max-width: 420px) {
+  body > .guide-header {
+    padding-inline: 8px;
+    column-gap: 6px;
+  }
+  .guide-header-brand {
+    width: 64px;
+  }
+  #guide-header-session button {
+    padding-inline: 8px;
+  }
 }

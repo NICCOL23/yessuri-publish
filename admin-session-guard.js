@@ -69,7 +69,7 @@
   } else {
    bar.append(notice, actions);
   }
-  document.getElementById('main').prepend(bar);}
+  (document.getElementById('guide-header-session') || document.getElementById('main')).prepend(bar);}
  function activate(data){if(locked)return;if(data.admin){if(!authenticated){expiresAt=Date.now()+ABSOLUTE_MS;}authenticated=true;const serverExpiry=millis(data.expiresAt),s=cloud?storedSession():null,savedExpiry=millis(s?.expiresAt);if(savedExpiry!==null)expiresAt=Math.min(expiresAt,savedExpiry);if(serverExpiry!==null)expiresAt=Math.min(expiresAt,serverExpiry);if(Date.now()>=expiresAt){lock('관리자 로그인 시간이 만료되었습니다.');return;}showBar();}else if(authenticated)lock('로그인 시간이 만료되었거나 관리자 권한이 종료되었습니다.');}
  function expired(){if(!authenticated||locked)return;const now=Date.now(),deadline=expiresAt;if(now>=deadline){lock('관리자 로그인 시간이 만료되었습니다.');return;}let warning=bar?.querySelector('.admin-expiry-warning');if(deadline-now<=120000){if(!warning){warning=node('p',null,'admin-expiry-warning');warning.setAttribute('role','status');bar?.append(warning);}warning.textContent='약 '+Math.ceil((deadline-now)/60000)+'분 뒤 잠깁니다. 작성 중인 내용을 저장해 주세요.';}else warning?.remove();}
  function retrySession(){
