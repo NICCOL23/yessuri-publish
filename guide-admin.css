@@ -189,3 +189,10 @@
   min-width: 0;
   overflow-wrap: anywhere;
 }
+
+/* Keep the session guide next to the logout button. */
+#main > .admin-session-bar-with-disclosure > details > summary {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline-start: auto;
+}
