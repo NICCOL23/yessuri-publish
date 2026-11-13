@@ -59,7 +59,7 @@
   const h=node('h2','관리자 화면을 잠갔습니다.');h.id='admin-lock-title';const p=node('p',message);p.id='admin-lock-message';const link=node('a','관리자 로그인으로','btn primary');link.href='technician-admin.html';
   dialog.append(h,p,node('p','신청 정보와 사진을 화면에서 지웠습니다. 저장하지 않은 내용은 저장되지 않았습니다.','hint'),link);document.body.append(dialog);dialog.addEventListener('cancel',e=>e.preventDefault());dialog.showModal();link.focus();void logout;
  }
- function showBar(){if(bar?.isConnected)return;bar=node('section',null,'admin-session-bar');bar.setAttribute('aria-label','관리자 세션 보안');const actions=node('div',null,'admin-session-actions');for(const[text,message]of [['관리자 로그아웃','관리자 조회를 종료했습니다. 다시 로그인해 주세요.']]){const b=node('button',text,'btn');b.type='button';b.addEventListener('click',()=>lock(message));actions.append(b);}
+ function showBar(){if(document.body.hasAttribute('data-hide-admin-session-bar')||bar?.isConnected)return;bar=node('section',null,'admin-session-bar');bar.setAttribute('aria-label','관리자 세션 보안');const actions=node('div',null,'admin-session-actions');for(const[text,message]of [['관리자 로그아웃','관리자 조회를 종료했습니다. 다시 로그인해 주세요.']]){const b=node('button',text,'btn');b.type='button';b.addEventListener('click',()=>lock(message));actions.append(b);}
   const notice = node('p','관리자 전용 · 시간에 따른 자동 종료 없음 · 사용을 마치면 로그아웃해 주세요. 세션이 종료되면 미저장 입력은 지워집니다.');
   if (location.pathname.endsWith('/technician-admin.html') || location.pathname.endsWith('/guide-admin.html')) {
    bar.classList.add('admin-session-bar-with-disclosure');
