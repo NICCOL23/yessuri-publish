@@ -61,7 +61,7 @@
  }
  function showBar(){if(bar?.isConnected)return;bar=node('section',null,'admin-session-bar');bar.setAttribute('aria-label','관리자 세션 보안');const actions=node('div',null,'admin-session-actions');for(const[text,message]of [['관리자 로그아웃','관리자 조회를 종료했습니다. 다시 로그인해 주세요.']]){const b=node('button',text,'btn');b.type='button';b.addEventListener('click',()=>lock(message));actions.append(b);}
   const notice = node('p','관리자 전용 · 시간에 따른 자동 종료 없음 · 사용을 마치면 로그아웃해 주세요. 세션이 종료되면 미저장 입력은 지워집니다.');
-  if (location.pathname.endsWith('/technician-admin.html')) {
+  if (location.pathname.endsWith('/technician-admin.html') || location.pathname.endsWith('/guide-admin.html')) {
    bar.classList.add('admin-session-bar-with-disclosure');
    const details = node('details');
    details.append(node('summary', '관리자 이용 안내'), notice);
