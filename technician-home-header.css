@@ -35,6 +35,8 @@
 
 @media (max-width: 900px) {
   body.technician-entry[data-technician-page="board"] .entry-hero {
+    width: 100%;
+    margin-inline: 0;
     padding-inline: 16px;
   }
 }
