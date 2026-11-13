@@ -27,7 +27,9 @@
   }
 
   body.technician-entry[data-technician-page="board"] .entry-hero {
-    padding-inline: max(20px, calc((var(--entry-viewport-width, 100%) - 1160px) / 2));
+    width: 100%;
+    margin-inline: 0;
+    padding-inline: 0;
   }
 }
 
