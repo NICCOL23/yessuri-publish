@@ -190,8 +190,10 @@
   overflow-wrap: anywhere;
 }
 
-.guide-header {
+body.admin-density > .guide-header {
+  --guide-header-gutter: max(24px, calc((100% - 1440px) / 2 + 24px));
   position: relative;
+  padding-inline: var(--guide-header-gutter);
   align-items: center;
   flex-wrap: wrap;
   gap: 4px 8px;
@@ -216,7 +218,7 @@
 }
 #guide-header-session details > p {
   position: absolute;
-  inset-inline-end: 16px;
+  inset-inline-end: var(--guide-header-gutter);
   top: 100%;
   z-index: 5;
   width: min(32rem, calc(100% - 32px));
@@ -228,13 +230,17 @@
 #guide-header-session .admin-expiry-warning {
   grid-column: 1 / -1;
 }
+@media (max-width: 760px) {
+  body.admin-density > .guide-header {
+    --guide-header-gutter: 12px;
+  }
+}
 @media (max-width: 420px) {
   body.admin-density > .guide-header {
-    padding-inline: 8px;
     column-gap: 4px;
   }
   .guide-header-brand {
-    width: 64px;
+    width: 58px;
   }
   #guide-header-session .admin-session-bar {
     column-gap: 4px;
