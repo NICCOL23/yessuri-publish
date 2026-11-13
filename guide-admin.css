@@ -26,3 +26,66 @@
   display: inline;
   margin: 0;
 }
+
+#guide-disclosures:has(> :not([hidden])) {
+  margin: 12px 0 18px;
+  border: 1px solid #c9e1e3;
+  border-radius: 10px;
+  background: #fff;
+}
+#guide-disclosures > :is(.admin-save-result, .publish-compare, .admin-quick-guide) {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+#guide-disclosures summary {
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+#guide-disclosures summary h2 {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+#guide-disclosures > :not([hidden]) + :not([hidden]) {
+  border-top: 1px solid #e1eaeb;
+}
+#guide-disclosures .guide-disclosure-content,
+#guide-disclosures .admin-quick-guide > ol {
+  min-width: 0;
+  margin: 0;
+  padding: 12px 14px;
+  border-top: 1px solid #e1eaeb;
+}
+@media (min-width: 900px) {
+  @supports selector(details::details-content) {
+    #guide-disclosures:has(> :not([hidden])) {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    #guide-disclosures > :not([hidden]),
+    #guide-disclosures > section > details,
+    #guide-disclosures details[open]::details-content {
+      display: contents;
+    }
+    #guide-disclosures details:not([open])::details-content {
+      display: none;
+    }
+    #guide-disclosures > :not([hidden]) + :not([hidden]) {
+      border-top: 0;
+    }
+    #guide-disclosures > section > details > summary,
+    #guide-disclosures > details > summary {
+      grid-row: 1;
+    }
+    #guide-disclosures .guide-save-disclosure > summary { grid-column: 1; }
+    #guide-disclosures .guide-compare-toggle { grid-column: 2; border-inline-start: 1px solid #e1eaeb; }
+    #guide-disclosures .admin-quick-guide > summary { grid-column: 3; border-inline-start: 1px solid #e1eaeb; }
+    #guide-disclosures .guide-disclosure-content,
+    #guide-disclosures .admin-quick-guide > ol {
+      grid-column: 1 / -1;
+    }
+  }
+}

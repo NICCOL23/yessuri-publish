@@ -14,9 +14,11 @@ if (location.pathname.endsWith('/guide-admin.html')) {
   const toggle = el('summary', undefined, 'guide-compare-toggle');
   summary = el('span');
   toggle.append(title, summary);
-  details.append(toggle, notice, list);
+  const content = el('div', undefined, 'guide-disclosure-content');
+  content.append(notice, list);
+  details.append(toggle, content);
   panel.append(details);
-  document.getElementById('status').after(panel);
+  document.getElementById('guide-disclosures').insertBefore(panel, document.querySelector('#guide-disclosures > .admin-quick-guide'));
   return;
 }
 details.append(summary);

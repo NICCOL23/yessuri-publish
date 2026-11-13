@@ -5,7 +5,7 @@ const isGuideAdmin=location.pathname.endsWith('/guide-admin.html');
 const wording=text=>(resultDisclosure||isGuideAdmin)?text.replaceAll('초안','수정 내용'):text;
 const labels={draft:'초안 저장',publish:'홈페이지 공개',restore:'공개 내용 복원'};
 function stable(v){return JSON.stringify(v,(_,x)=>x&&typeof x==='object'&&!Array.isArray(x)?Object.fromEntries(Object.keys(x).sort().map(k=>[k,x[k]])):x);}
-function mount(){const status=document.getElementById('status');if(!status)return;const slot=document.getElementById("field-save-panel");const heroSlot=document.getElementById("hero-save-panel");if(panel?.isConnected){if(!slot&&!heroSlot&&status.nextElementSibling!==panel)status.after(panel);return;}panel=el('section',undefined,'admin-save-result');panel.id='admin-save-result';panel.setAttribute('aria-labelledby','admin-save-result-title');const title=el('h2','저장과 홈페이지 공개는 달라요');title.id='admin-save-result-title';const steps=el('div',undefined,'admin-save-result-steps');steps.append(el('p',slot?'저장한 수정 내용은 게시해야 홈페이지에 반영됩니다.':(heroSlot||isGuideAdmin)?'① 수정 내용 저장: 관리자만 확인합니다.':'① 초안 저장: 관리자만 확인합니다.'),el('p','② 홈페이지 공개: 미리보기·비교 후 게시하면 방문자에게 반영됩니다.'));summary=el('p');summary.id='admin-save-summary';lastResult=el('strong','아직 이 화면에서 저장·게시한 결과가 없습니다.');lastDetail=el('p','아래 버튼으로 작업하면 처리 결과를 여기에 알려드립니다.');const feedback=el('div',undefined,'admin-save-feedback');feedback.id='admin-save-feedback';feedback.setAttribute('role','status');feedback.setAttribute('aria-live','polite');feedback.append(lastResult,lastDetail);publicCheck=el('div',undefined,'admin-public-check');publicCheck.hidden=true;const page=location.pathname.split('/').pop(),anchors={'hero-admin.html':'top','field-admin.html':'categories','guide-admin.html':'home-guide'};if(anchors[page]){const link=el('a','홈페이지에서 확인하기 ↗','admin-public-check-link');link.href='index.html#'+anchors[page];link.target='_blank';link.rel='noopener noreferrer';link.setAttribute('aria-label','홈페이지에서 확인하기 (새 탭)');const hint=el('p',page==='hero-admin.html'?'새 탭에서 메인 상단을 엽니다. 2·3번째 히어로는 홈페이지의 전환 순서에 따라 확인하세요.':'새 탭에서 홈페이지의 해당 영역을 엽니다. 관리자 화면은 그대로 유지됩니다.');publicCheck.append(link,hint);}let instructions=steps;
+function mount(){const status=document.getElementById('status');if(!status)return;const slot=document.getElementById("field-save-panel");const heroSlot=document.getElementById("hero-save-panel");if(panel?.isConnected){if(!slot&&!heroSlot&&!isGuideAdmin&&status.nextElementSibling!==panel)status.after(panel);return;}panel=el('section',undefined,'admin-save-result');panel.id='admin-save-result';panel.setAttribute('aria-labelledby','admin-save-result-title');const title=el('h2','저장과 홈페이지 공개는 달라요');title.id='admin-save-result-title';const steps=el('div',undefined,'admin-save-result-steps');steps.append(el('p',slot?'저장한 수정 내용은 게시해야 홈페이지에 반영됩니다.':(heroSlot||isGuideAdmin)?'① 수정 내용 저장: 관리자만 확인합니다.':'① 초안 저장: 관리자만 확인합니다.'),el('p','② 홈페이지 공개: 미리보기·비교 후 게시하면 방문자에게 반영됩니다.'));summary=el('p');summary.id='admin-save-summary';lastResult=el('strong','아직 이 화면에서 저장·게시한 결과가 없습니다.');lastDetail=el('p','아래 버튼으로 작업하면 처리 결과를 여기에 알려드립니다.');const feedback=el('div',undefined,'admin-save-feedback');feedback.id='admin-save-feedback';feedback.setAttribute('role','status');feedback.setAttribute('aria-live','polite');feedback.append(lastResult,lastDetail);publicCheck=el('div',undefined,'admin-public-check');publicCheck.hidden=true;const page=location.pathname.split('/').pop(),anchors={'hero-admin.html':'top','field-admin.html':'categories','guide-admin.html':'home-guide'};if(anchors[page]){const link=el('a','홈페이지에서 확인하기 ↗','admin-public-check-link');link.href='index.html#'+anchors[page];link.target='_blank';link.rel='noopener noreferrer';link.setAttribute('aria-label','홈페이지에서 확인하기 (새 탭)');const hint=el('p',page==='hero-admin.html'?'새 탭에서 메인 상단을 엽니다. 2·3번째 히어로는 홈페이지의 전환 순서에 따라 확인하세요.':'새 탭에서 홈페이지의 해당 영역을 엽니다. 관리자 화면은 그대로 유지됩니다.');publicCheck.append(link,hint);}let instructions=steps;
 if(slot){
   instructions=el('details',undefined,'field-save-disclosure');
   instructions.append(el('summary','저장·게시 방법'),steps);
@@ -14,10 +14,14 @@ if(heroSlot || isGuideAdmin){
   resultDisclosure=el('details',undefined,heroSlot?'hero-save-disclosure':'guide-save-disclosure');
   const toggle=el('summary');
   toggle.append(title);
-  resultDisclosure.append(toggle,steps,summary,feedback,publicCheck);
+  if (isGuideAdmin) {
+    const content = el('div', undefined, 'guide-disclosure-content');
+    content.append(steps,summary,feedback,publicCheck);
+    resultDisclosure.append(toggle,content);
+  } else resultDisclosure.append(toggle,steps,summary,feedback,publicCheck);
   panel.append(resultDisclosure);
   if (heroSlot) heroSlot.append(panel);
-  else status.after(panel);
+  else document.getElementById('guide-disclosures').prepend(panel);
   return;
 }
 panel.append(title,instructions,summary);
