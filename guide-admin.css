@@ -196,3 +196,23 @@
   max-width: 100%;
   margin-inline-start: auto;
 }
+
+body > header {
+  align-items: center;
+}
+.guide-header-brand {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+}
+.guide-header-brand img {
+  display: block;
+  width: clamp(106px, 12vw, 140px);
+  height: auto;
+}
+.guide-header-brand span {
+  color: #5d7585;
+  font-size: .875rem;
+  font-weight: 600;
+}
