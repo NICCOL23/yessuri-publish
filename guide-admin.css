@@ -229,14 +229,17 @@
   grid-column: 1 / -1;
 }
 @media (max-width: 420px) {
-  body > .guide-header {
+  body.admin-density > .guide-header {
     padding-inline: 8px;
-    column-gap: 6px;
+    column-gap: 4px;
   }
   .guide-header-brand {
     width: 64px;
   }
+  #guide-header-session .admin-session-bar {
+    column-gap: 4px;
+  }
   #guide-header-session button {
-    padding-inline: 8px;
+    padding-inline: 6px;
   }
 }
