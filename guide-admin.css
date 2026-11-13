@@ -3,3 +3,18 @@
 .admin-save-result:not([data-result="uncertain"]) .admin-save-feedback {
   border-left-width: 0;
 }
+
+.guide-save-disclosure > summary,
+.publish-compare .guide-compare-toggle {
+  cursor: pointer;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+.guide-save-disclosure > summary h2,
+.publish-compare .guide-compare-toggle h2 {
+  display: inline;
+  margin: 0;
+}
+.guide-compare-toggle > span {
+  margin-inline-start: 0.5em;
+}

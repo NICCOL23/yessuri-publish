@@ -10,13 +10,14 @@ if(slot){
   instructions=el('details',undefined,'field-save-disclosure');
   instructions.append(el('summary','저장·게시 방법'),steps);
 }
-if(heroSlot){
-  resultDisclosure=el('details',undefined,'hero-save-disclosure');
+if(heroSlot || isGuideAdmin){
+  resultDisclosure=el('details',undefined,heroSlot?'hero-save-disclosure':'guide-save-disclosure');
   const toggle=el('summary');
   toggle.append(title);
   resultDisclosure.append(toggle,steps,summary,feedback,publicCheck);
   panel.append(resultDisclosure);
-  heroSlot.append(panel);
+  if (heroSlot) heroSlot.append(panel);
+  else status.after(panel);
   return;
 }
 panel.append(title,instructions,summary);
@@ -37,6 +38,16 @@ function update({state,dirty,busy}){if(locked||!state?.draft||!state?.published)
 summary.textContent=wording((dirty?'입력 중 · 아직 저장하지 않은 변경이 있습니다. ':busy?'처리 중입니다. ':'저장된 자료를 보고 있습니다. ')+(differs?'저장된 초안과 현재 공개 내용이 다릅니다.':'저장된 초안과 현재 공개 내용이 같습니다.'));}
 function begin(kind){if(locked||!labels[kind])return;mount();if(!panel)return;if(resultDisclosure)resultDisclosure.open=true;publicCheck.hidden=true;action=kind;panel.dataset.result='pending';lastResult.textContent=wording(labels[kind])+' 처리 중';lastDetail.textContent='서버 응답을 확인하고 있습니다. 완료 안내가 나올 때까지 기다려 주세요.';}
 function success(kind,version){if(locked||!labels[kind])return;mount();if(!panel)return;if(resultDisclosure)resultDisclosure.open=true;publicCheck.hidden=kind!=='publish'||!publicCheck.children.length;action=null;panel.dataset.result=kind;lastResult.textContent='마지막 처리 결과: '+({draft:(resultDisclosure||isGuideAdmin)?'수정 내용 저장 완료':'초안만 저장 완료',publish:'홈페이지 공개 완료',restore:'이전 공개 내용으로 복원 완료'})[kind];lastDetail.textContent=wording({draft:'이번 저장으로 홈페이지는 바뀌지 않았습니다. 미리보기와 변경 비교를 확인한 뒤 게시하세요.',publish:'저장한 초안이 홈페이지에 반영됐습니다. 현재 게시본 미리보기에서 확인하세요.',restore:'홈페이지와 초안이 선택한 기록으로 바뀌었습니다. 현재 게시본을 확인하세요.'}[kind])+' (마지막 처리 버전 '+version+')';}
-function uncertain(){if(locked||!action)return;if(resultDisclosure)resultDisclosure.open=true;publicCheck.hidden=true;panel.dataset.result='uncertain';lastResult.textContent=wording(labels[action])+' 결과 확인 필요';lastDetail.textContent='완료 여부를 확인하지 못했습니다. 입력 내용은 기존 화면에서 확인하고, 다시 불러오기로 저장 상태를 먼저 확인하세요. 공개 여부를 확인하기 전에는 같은 게시 작업을 반복하지 마세요.';action=null;}
+function uncertain(error){if(locked)return;if(!action){
+  if (!isGuideAdmin) return;
+  mount();
+  if (!resultDisclosure) return;
+  resultDisclosure.open=true;
+  publicCheck.hidden=true;
+  panel.dataset.result='uncertain';
+  lastResult.textContent='오류가 발생했습니다.';
+  lastDetail.textContent=error;
+  return;
+}if(resultDisclosure)resultDisclosure.open=true;publicCheck.hidden=true;panel.dataset.result='uncertain';lastResult.textContent=wording(labels[action])+' 결과 확인 필요';lastDetail.textContent='완료 여부를 확인하지 못했습니다. 입력 내용은 기존 화면에서 확인하고, 다시 불러오기로 저장 상태를 먼저 확인하세요. 공개 여부를 확인하기 전에는 같은 게시 작업을 반복하지 마세요.';action=null;}
 window.YESSURI_SAVE_RESULT=Object.freeze({update,begin,success,uncertain});addEventListener('yessuri:admin-locked',()=>{locked=true;action=null;panel?.remove();});
 })();

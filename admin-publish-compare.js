@@ -9,6 +9,16 @@ else {const published=new Map(s.published.map((f,i)=>[f.id,{...f,position:i+1}])
 if(kind==='hero'||kind==='guide'){const colorLabels=kind==='hero'?Object.entries(heroLabels).filter(([k])=>['title1','title2','description1','description2'].includes(k)):(s.fields||[]).map(f=>[f.id,f.group+' · '+f.label]);for(const[k,label]of colorLabels)add(label+' 글자색',s.published.textColors?.[k]||'원래 색상',s.draft.textColors?.[k]||'원래 색상');}return result;}
 const wording=(text,kind)=>(kind==='fields'||kind==='hero'||kind==='guide')?text.replaceAll('초안','수정 내용'):text;
 function mount(){if(panel?.isConnected)return;panel=el('section',undefined,'publish-compare');panel.id='publish-compare';panel.setAttribute('aria-labelledby','publish-compare-title');const title=el('h2','게시 전 변경 내용 비교');title.id='publish-compare-title';notice=el('p');notice.setAttribute('role','status');const slot=document.getElementById('field-compare-panel');const details=el('details');details.open=!slot;summary=el('summary');list=el('div',undefined,'publish-compare-list');const help=el('p',wording('현재 공개 내용과 저장한 초안만 비교합니다. 이 안내는 내용을 저장하거나 게시하지 않습니다.',slot||document.getElementById('hero-compare-panel')?'fields':location.pathname.endsWith('/guide-admin.html')?'guide':''),'publish-compare-help');
+if (location.pathname.endsWith('/guide-admin.html')) {
+  details.open = false;
+  const toggle = el('summary', undefined, 'guide-compare-toggle');
+  summary = el('span');
+  toggle.append(title, summary);
+  details.append(toggle, notice, list);
+  panel.append(details);
+  document.getElementById('status').after(panel);
+  return;
+}
 details.append(summary);
 if(slot){
   details.append(help,list);
@@ -31,7 +41,7 @@ if(slot){
 }}
 function safePath(value){return typeof value==='string'&&/^(?:\/?assets\/|\/api\/hero-images\/)/.test(value)&&!value.includes('..')&&!/[\x00-\x1f]/.test(value);}
 async function photo(host,path,label,resolve,version){const fallback=el('p',safePath(path)?'사진을 불러오는 중입니다.':'미리보기에서 사진을 확인하세요.','publish-compare-help');host.append(fallback);if(!safePath(path))return;try{const source=resolve?await resolve(path):path;if(locked||version!==generation||!host.isConnected)return;const u=new URL(source,location.href);if(u.protocol!=='blob:'&&u.origin!==location.origin)throw Error();const img=el('img');img.alt=label;img.onload=()=>fallback.remove();img.onerror=()=>{img.remove();fallback.textContent='사진을 불러오지 못했습니다. 기존 미리보기에서 확인하세요.';};img.src=source;host.prepend(img);}catch{if(host.isConnected)fallback.textContent='사진을 불러오지 못했습니다. 기존 미리보기에서 확인하세요.';}}
-function update({kind,state:s,dirty,busy,imageSource}){if(locked||!s?.published||!s?.draft)return;mount();notice.textContent=wording(busy?'처리 중입니다. 완료 후 비교 내용을 다시 확인하세요.':dirty?'아직 저장하지 않은 입력이 있습니다. 아래 비교에는 포함되지 않습니다. 초안 저장 후 다시 확인하세요.':'저장된 초안 기준 · 버전 '+s.version,kind);const key=JSON.stringify([kind,s.version,s.published,s.draft]);if(key===lastKey)return;lastKey=key;const version=++generation,rows=changes(kind,s);summary.textContent=rows.length?'변경 '+rows.length+'항목 보기':'변경 없음';list.replaceChildren();if(!rows.length){list.append(el('p',wording('현재 공개 내용과 저장한 초안이 같습니다.',kind)));return;}
+function update({kind,state:s,dirty,busy,imageSource}){if(locked||!s?.published||!s?.draft)return;mount();notice.textContent=wording(busy?'처리 중입니다. 완료 후 비교 내용을 다시 확인하세요.':dirty?'아직 저장하지 않은 입력이 있습니다. 아래 비교에는 포함되지 않습니다. 초안 저장 후 다시 확인하세요.':'저장된 초안 기준 · 버전 '+s.version,kind);const key=JSON.stringify([kind,s.version,s.published,s.draft]);if(key===lastKey)return;lastKey=key;const version=++generation,rows=changes(kind,s);summary.textContent=rows.length?'변경 '+rows.length+(kind==='guide'?'개':'항목 보기'):'변경 없음';list.replaceChildren();if(!rows.length){list.append(el('p',wording('현재 공개 내용과 저장한 초안이 같습니다.',kind)));return;}
 for(const r of rows){const row=el('article',undefined,'publish-compare-row');row.append(el('h3',r.label));const pair=el('div',undefined,'publish-compare-pair');for(const [title,value]of [['현재 공개 내용',r.before],[wording('저장한 초안 · 게시 예정',kind),r.after]]){const cell=el('div',undefined,'publish-compare-cell');cell.append(el('h4',title));if(r.image){const image=el('div');cell.append(image);void photo(image,value,title+' · '+r.label,imageSource,version);cell.append(el('p',String(value).split('/').pop()||'사진 없음','publish-compare-help'));}else cell.append(el('p',String(value)||'(내용 없음)'));pair.append(cell);}row.append(pair);list.append(row);}}
 window.YESSURI_PUBLISH_COMPARE=Object.freeze({update,invalidate(){lastKey='';}});addEventListener('yessuri:admin-locked',()=>{locked=true;generation++;panel?.remove();lastKey='';});
 })();
