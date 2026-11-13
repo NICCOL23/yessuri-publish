@@ -18,3 +18,11 @@
 .guide-compare-toggle > span {
   margin-inline-start: 0.5em;
 }
+
+.admin-quick-guide > summary {
+  cursor: pointer;
+}
+.admin-quick-guide > summary h2 {
+  display: inline;
+  margin: 0;
+}
