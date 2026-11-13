@@ -33,16 +33,19 @@
   new ResizeObserver(updateMenuHeight).observe(nav);
   let locked = false;
   const profileHash = '#independent-profile-list';
-  let anchorPending = location.hash === profileHash;
+  const currentPage = location.pathname.split('/').pop();
+  const isTechnicianAdmin = currentPage === 'technician-admin.html';
+  const showingProfiles = () => isTechnicianAdmin && location.hash === profileHash;
+  let anchorPending = showingProfiles();
   function update() {
     nav.hidden = locked || !main.querySelector('.admin-session-bar, #admin-logout');
     updateMenuHeight();
-    const showingProfiles = location.hash === profileHash;
-    if (showingProfiles) root.dataset.adminWorkspace = 'profiles';
+    const profilesActive = showingProfiles();
+    if (profilesActive) root.dataset.adminWorkspace = 'profiles';
     else delete root.dataset.adminWorkspace;
-    const active = showingProfiles ? 1 : 0;
-    [...nav.children].forEach((link, index) => {
-      if (index === active) link.setAttribute('aria-current', 'page');
+    const activeHref = currentPage + (profilesActive ? profileHash : '');
+    [...nav.children].forEach(link => {
+      if (link.getAttribute('href') === activeHref) link.setAttribute('aria-current', 'page');
       else link.removeAttribute('aria-current');
     });
     // This existing section is created after the authenticated application list loads.
@@ -56,7 +59,7 @@
     }
   }
   new MutationObserver(update).observe(main, {childList: true, subtree: true});
-  addEventListener('hashchange', () => {anchorPending = location.hash === profileHash; update();});
+  addEventListener('hashchange', () => {anchorPending = showingProfiles(); update();});
   addEventListener('yessuri:admin-locked', () => {locked = true; nav.hidden = true;});
   update();
 })();
